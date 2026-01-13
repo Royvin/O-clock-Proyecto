@@ -451,3 +451,33 @@ FodyWeavers.xsd
 *.config
 *.vsidx
 
+# =========================
+# Visual Studio cache REAL
+# =========================
+
+# Carpeta .vs completa
+.vs/
+**/.vs/
+
+# Archivos de usuario y solución
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Layout y backups
+DocumentLayout.json
+DocumentLayout.backup.json
+
+# Cache de referencias
+*.cache
+*.vsidx
+
+# Build artifacts
+[Bb]in/
+[Oo]bj/
+**/bin/
+**/obj/
+
+# Archivos internos de build
+build.force
