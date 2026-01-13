@@ -426,3 +426,15 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# VS cache extra
+.vs/*
+**/.vs/*
+**/bin/*
+**/obj/*
+*.cache
+*.tmp
+
+# Archivos de cache y configuraciones locales
+*.config
+*.vsidx
