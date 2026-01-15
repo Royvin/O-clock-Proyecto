@@ -17,7 +17,8 @@
         }
 
         .container-custom {
-            max-width: 1400px;
+            width: 1200px;
+            max-width: 95%;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -137,52 +138,78 @@
             color: #718096;
             font-size: 14px;
         }
+
+
     </style>
 </head>
 <body>
 
     <div class="container-custom">
 
+        <!-- HEADER -->
+        <div class="header">
+            <div class="logo">
+                <div class="clock-icon"></div>
+                O'Clock
+            </div>
+
+            <div class="user-info">
+                <div>
+                    <div style="text-align: right; margin-bottom: 4px; font-weight: 600;">María González</div>
+                    <div style="font-size: 13px; opacity: 0.9;">Colaboradora</div>
+                </div>
+                <div class="avatar">MG</div>
+            </div>
+        </div>
+
+        <!-- MODULE MENU -->
         <div class="modules-section">
 
             <!-- Intro -->
-            <div class="text-center mb-5">
-                <h2 style="font-weight:700; color:#2d3748;">Bienvenido a O'Clock</h2>
-                <p style="color:#718096; max-width:520px; margin:0 auto;">
-                    Selecciona el tipo de acceso para continuar al panel correspondiente.
+            <div class="mb-5">
+                <h2 style="font-weight:700; color:#2d3748;">Panel de Administración</h2>
+                <p style="color:#718096; max-width:600px;">
+                    Bienvenido a tu panel O’clock.
                 </p>
             </div>
 
-            <!-- Role Selection -->
-            <div class="row g-4 justify-content-center">
+            <!-- Módulos principales -->
+            <div class="row g-4 mb-5">
 
-                <!-- EMPLEADO -->
                 <div class="col-md-4">
-                    <a href="/Empleado/Index" class="menu-link">
+                    <a href="/Empleado/Marcas" class="menu-link">
                         <div class="module-card">
-                            <div class="module-icon">👤</div>
-                            <div class="module-title">Empleado</div>
+                            <div class="module-icon">⏰</div>
+                            <div class="module-title">Marcas</div>
                         </div>
                     </a>
                 </div>
 
-                <!-- ADMIN -->
                 <div class="col-md-4">
-                    <a href="/Admin/Index" class="menu-link">
+                    <a href="/Empleado/HistorialMarcas" class="menu-link">
                         <div class="module-card">
-                            <div class="module-icon">🛠️</div>
-                            <div class="module-title">Administrador</div>
+                            <div class="module-icon">📝</div>
+                            <div class="module-title">Mi Historial</div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-4">
+                    <a href="/Empleado/Solicitudes" class="menu-link">
+                        <div class="module-card">
+                            <div class="module-icon">🗂️</div>
+                            <div class="module-title">Mis Solicitudes</div>
                         </div>
                     </a>
                 </div>
 
             </div>
 
-        </div>
+            
 
+        </div>
 
     </div>
 
 </body>
 </html>
-

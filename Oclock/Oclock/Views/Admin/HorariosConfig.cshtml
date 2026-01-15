@@ -1,0 +1,919 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O'clock - Sistema de Asistencia</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding-right: 0;
+            padding-left: 0;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .clock-icon {
+            width: 40px;
+            height: 40px;
+            border: 3px solid white;
+            border-radius: 50%;
+            position: relative;
+        }
+
+            .clock-icon::before {
+                content: '';
+                position: absolute;
+                width: 2px;
+                height: 12px;
+                background: white;
+                top: 6px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .clock-icon::after {
+                content: '';
+                position: absolute;
+                width: 2px;
+                height: 8px;
+                background: white;
+                top: 12px;
+                left: 50%;
+                transform: translateX(-50%) rotate(90deg);
+                transform-origin: top;
+            }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .main-layout {
+            display: flex;
+            min-height: 600px;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 30px 20px;
+            border-right: 1px solid #e0e0e0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+        }
+
+        .menu-item {
+            padding: 0;
+            margin: 4px 0;
+            border-radius: 10px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+            .menu-link:hover {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                transform: translateX(5px);
+            }
+
+            .menu-link.active {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            }
+
+                .menu-link.active::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    width: 4px;
+                    height: 24px;
+                    background: white;
+                    border-radius: 0 4px 4px 0;
+                }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Menu Expandible */
+        .menu-expandable {
+            cursor: pointer;
+        }
+
+        .menu-expandable-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            color: #4a5568;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+            .menu-expandable-header:hover {
+                background: #f0f0f0;
+                color: #667eea;
+            }
+
+            .menu-expandable-header.active {
+                background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+                color: #667eea;
+                font-weight: 600;
+            }
+
+        .menu-expandable-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-arrow {
+            font-size: 12px;
+            transition: transform 0.3s;
+        }
+
+        .menu-expandable.expanded .menu-arrow {
+            transform: rotate(90deg);
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            margin-left: 20px;
+            margin-top: 4px;
+        }
+
+            .submenu.show {
+                max-height: 500px;
+                transition: max-height 0.5s ease-in;
+            }
+
+        .submenu-item {
+            margin: 4px 0;
+        }
+
+        .submenu-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            padding-left: 40px;
+            color: #718096;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+            .submenu-link::before {
+                content: '';
+                position: absolute;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 6px;
+                height: 6px;
+                background: #cbd5e0;
+                border-radius: 50%;
+                transition: all 0.3s;
+            }
+
+            .submenu-link:hover {
+                background: #f7fafc;
+                color: #667eea;
+                transform: translateX(3px);
+            }
+
+                .submenu-link:hover::before {
+                    background: #667eea;
+                    transform: translateY(-50%) scale(1.3);
+                }
+
+            .submenu-link.active {
+                background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+                color: #667eea;
+                font-weight: 600;
+            }
+
+                .submenu-link.active::before {
+                    background: #667eea;
+                    width: 8px;
+                    height: 8px;
+                }
+
+        /* Main Content */
+        .content {
+            flex: 1;
+            padding: 40px;
+            background: #fafbfc;
+        }
+
+        .content-header {
+            margin-bottom: 30px;
+        }
+
+            .content-header h1 {
+                color: #2d3748;
+                font-size: 28px;
+                margin-bottom: 8px;
+            }
+
+            .content-header p {
+                color: #718096;
+            }
+
+        /* Enhanced Cards */
+        .config-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+            .config-card:hover {
+                box-shadow: 0 5px 25px rgba(0,0,0,0.12);
+            }
+
+        .card-header-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .card-header-custom h2 {
+                margin: 0;
+                font-size: 20px;
+                font-weight: 600;
+            }
+
+            .card-header-custom .badge {
+                background: rgba(255,255,255,0.25);
+                padding: 6px 15px;
+                border-radius: 20px;
+                font-size: 13px;
+            }
+
+        .card-body-custom {
+            padding: 25px;
+        }
+
+        /* Form Enhancements */
+        .form-label {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px 15px;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+            .form-control:focus, .form-select:focus {
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            }
+
+        /* Buttons */
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+            .btn-primary-custom:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            }
+
+        .btn-outline-custom {
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            background: white;
+            transition: all 0.3s;
+        }
+
+            .btn-outline-custom:hover {
+                background: #667eea;
+                color: white;
+            }
+
+        /* Table */
+        .table-custom {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+            .table-custom thead {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+            }
+
+                .table-custom thead th {
+                    border: none;
+                    padding: 15px;
+                    font-weight: 600;
+                }
+
+            .table-custom tbody td {
+                padding: 15px;
+                vertical-align: middle;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .table-custom tbody tr:hover {
+                background: #f7fafc;
+            }
+
+        /* Time Badge */
+        .time-badge {
+            background: #e6f2ff;
+            color: #0066cc;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            display: inline-block;
+        }
+
+        /* Status Badges */
+        .status-active {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-special {
+            background: #feebc8;
+            color: #7c2d12;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Action Buttons */
+        .btn-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0 3px;
+        }
+
+        .btn-edit {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+            .btn-edit:hover {
+                background: #90cdf4;
+                transform: scale(1.1);
+            }
+
+        .btn-delete {
+            background: #fed7d7;
+            color: #9b2c2c;
+        }
+
+            .btn-delete:hover {
+                background: #fc8181;
+                transform: scale(1.1);
+            }
+
+        /* Alert Custom */
+        .alert-custom {
+            border-left: 4px solid #667eea;
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-top: 15px;
+        }
+
+            .alert-custom i {
+                color: #667eea;
+                margin-right: 10px;
+            }
+
+        /* Stats Mini Cards */
+        .stat-mini {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .stat-mini-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-mini-label {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+
+            .empty-state i {
+                font-size: 64px;
+                margin-bottom: 20px;
+                opacity: 0.5;
+            }
+
+        /* Animations */
+        @@keyframes fadeIn {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="clock-icon"></div>
+                O'clock
+            </div>
+            <div class="user-info">
+                <div>
+                    <div style="text-align: right; margin-bottom: 4px; font-weight: 600;">Juan Pérez</div>
+                    <div style="font-size: 13px; opacity: 0.9;">Administrador</div>
+                </div>
+                <div class="avatar">JP</div>
+            </div>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="menu-item">
+                    <a href="/Admin/Admin" class="menu-link">
+                        <div class="icon">📊</div>
+                        Dashboard
+                    </a>
+                </div>
+
+                <div class="menu-item">
+                    <a href="/Admin/VerMarcas" class="menu-link">
+                        <div class="icon">⏰</div>
+                        Marcas de Asistencia
+                    </a>
+                </div>
+
+                <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
+                    <div class="menu-expandable-header active">
+                        <div class="menu-expandable-left">
+                            <div class="icon">⚙️</div>
+                            <span>Configuración y Políticas</span>
+                        </div>
+                        <div class="menu-arrow">▶</div>
+                    </div>
+                    <div class="submenu show">
+                        <div class="submenu-item">
+                            <a href="/Admin/HorariosConfig" class="submenu-link active">
+                                ⏰ Horarios
+                            </a>
+                        </div>
+                        <div class="submenu-item">
+                            <a href="/Admin/FeriadosConfig" class="submenu-link">
+                                📅 Feriados
+                            </a>
+                        </div>
+                        <div class="submenu-item">
+                            <a href="/Admin/BonosParametroConfig" class="submenu-link">
+                                🎁 Bonos
+                            </a>
+                        </div>
+                        <div class="submenu-item">
+                            <a href="/Admin/NotificacionesConfig" class="submenu-link">
+                                🔔 Notificaciones
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="menu-item">
+                    <a href="/Admin/Bonos" class="menu-link">
+                        <div class="icon">💵 </div>
+                        Bonos
+                    </a>
+                </div>
+
+                <div class="menu-item">
+                    <a href="/Admin/GestionDocumentos" class="menu-link">
+                        <div class="icon">📝</div>
+                        Gestion de Documentos de Empleados
+                    </a>
+                </div>
+
+                <div class="menu-item">
+                    <a href="/Admin/RankingPuntualidad" class="menu-link">
+                        <div class="icon">⏱️</div>
+                        Indicadores de Puntualidad
+                    </a>
+                </div>
+
+
+                <div class="menu-item">
+                    <a href="/Admin/Reportes" class="menu-link">
+                        <div class="icon">📄</div>
+                        Reportes
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Main Content -->
+            <div class="content">
+                <div class="content-header">
+                    <h1><i class="fas fa-clock me-2"></i>Configuración de Horarios</h1>
+                    <p>Gestiona horarios estándar y especiales para tu organización</p>
+                </div>
+
+                <!-- Stats Mini Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="stat-mini fade-in">
+                            <div class="stat-mini-value">1</div>
+                            <div class="stat-mini-label">Horario Activo</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-mini fade-in" style="animation-delay: 0.1s;">
+                            <div class="stat-mini-value">3</div>
+                            <div class="stat-mini-label">Horarios Especiales</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-mini fade-in" style="animation-delay: 0.2s;">
+                            <div class="stat-mini-value">45</div>
+                            <div class="stat-mini-label">Empleados Asignados</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Horario Estándar -->
+                <div class="config-card fade-in" style="animation-delay: 0.3s;">
+                    <div class="card-header-custom">
+                        <h2><i class="fas fa-business-time me-2"></i>Horario Estándar</h2>
+                        <span class="badge">Lun - Vie</span>
+                    </div>
+                    <div class="card-body-custom">
+                        <form id="standardScheduleForm">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">
+                                        <i class="fas fa-door-open text-success me-2"></i>Hora de Entrada
+                                    </label>
+                                    <input type="time" class="form-control" value="08:00" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">
+                                        <i class="fas fa-door-closed text-danger me-2"></i>Hora de Salida
+                                    </label>
+                                    <input type="time" class="form-control" value="17:00" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">
+                                        <i class="fas fa-coffee text-warning me-2"></i>Hora de Break
+                                    </label>
+                                    <input type="time" class="form-control" value="12:00" required>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        <i class="fas fa-hourglass-half text-info me-2"></i>Duración del Break
+                                    </label>
+                                    <select class="form-select">
+                                        <option value="30">30 minutos</option>
+                                        <option value="45">45 minutos</option>
+                                        <option value="60" selected>1 hora</option>
+                                        <option value="90">1.5 horas</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        <i class="fas fa-calendar-week text-primary me-2"></i>Días Laborales
+                                    </label>
+                                    <select class="form-select">
+                                        <option value="mon-fri" selected>Lunes a Viernes</option>
+                                        <option value="mon-sat">Lunes a Sábado</option>
+                                        <option value="custom">Personalizado</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="alert-custom mt-3">
+                                <i class="fas fa-info-circle"></i>
+                                <strong>Nota:</strong> El sistema validará automáticamente traslapes con horarios especiales
+                            </div>
+
+                            <div class="d-flex gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary-custom">
+                                    <i class="fas fa-save me-2"></i>Guardar Cambios
+                                </button>
+                                <button type="button" class="btn btn-outline-custom">
+                                    <i class="fas fa-undo me-2"></i>Restablecer
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Horarios Especiales -->
+                <div class="config-card fade-in" style="animation-delay: 0.4s;">
+                    <div class="card-header-custom">
+                        <h2><i class="fas fa-calendar-star me-2"></i>Horarios Especiales</h2>
+                        <span class="badge">Por Fecha</span>
+                    </div>
+                    <div class="card-body-custom">
+                        <form id="specialScheduleForm">
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-calendar-day text-primary me-2"></i>Fecha Especial
+                                    </label>
+                                    <input type="date" class="form-control" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-door-open text-success me-2"></i>Hora de Entrada
+                                    </label>
+                                    <input type="time" class="form-control" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-door-closed text-danger me-2"></i>Hora de Salida
+                                    </label>
+                                    <input type="time" class="form-control" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-coffee text-warning me-2"></i>Hora de Break
+                                    </label>
+                                    <input type="time" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <label class="form-label">
+                                        <i class="fas fa-comment-alt text-info me-2"></i>Descripción / Motivo
+                                    </label>
+                                    <input type="text" class="form-control" placeholder="Ej: Capacitación anual, Día festivo especial, etc.">
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary-custom">
+                                    <i class="fas fa-plus me-2"></i>Agregar Horario Especial
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Tabla de Horarios Especiales -->
+                        <div class="mt-4">
+                            <h5 class="mb-3"><i class="fas fa-list me-2"></i>Horarios Especiales Registrados</h5>
+                            <div class="table-responsive">
+                                <table class="table table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Entrada</th>
+                                            <th>Salida</th>
+                                            <th>Break</th>
+                                            <th>Descripción</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>24 Dic 2024</strong></td>
+                                            <td><span class="time-badge">08:00 AM</span></td>
+                                            <td><span class="time-badge">01:00 PM</span></td>
+                                            <td><span class="time-badge">-</span></td>
+                                            <td>Víspera de Navidad</td>
+                                            <td><span class="status-special">Próximo</span></td>
+                                            <td>
+                                                <button class="btn-icon btn-edit" title="Editar">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn-icon btn-delete" title="Eliminar">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>31 Dic 2024</strong></td>
+                                            <td><span class="time-badge">08:00 AM</span></td>
+                                            <td><span class="time-badge">12:00 PM</span></td>
+                                            <td><span class="time-badge">-</span></td>
+                                            <td>Fin de Año</td>
+                                            <td><span class="status-special">Próximo</span></td>
+                                            <td>
+                                                <button class="btn-icon btn-edit" title="Editar">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn-icon btn-delete" title="Eliminar">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>15 Ene 2025</strong></td>
+                                            <td><span class="time-badge">09:00 AM</span></td>
+                                            <td><span class="time-badge">05:00 PM</span></td>
+                                            <td><span class="time-badge">12:30 PM</span></td>
+                                            <td>Capacitación Anual</td>
+                                            <td><span class="status-special">Próximo</span></td>
+                                            <td>
+                                                <button class="btn-icon btn-edit" title="Editar">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn-icon btn-delete" title="Eliminar">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSubmenu(element) {
+            const submenu = element.querySelector('.submenu');
+            const header = element.querySelector('.menu-expandable-header');
+
+            // Toggle expanded class
+            element.classList.toggle('expanded');
+
+            // Toggle submenu visibility
+            submenu.classList.toggle('show');
+
+            // Toggle header active state
+            if (element.classList.contains('expanded')) {
+                header.classList.add('active');
+            } else {
+                header.classList.remove('active');
+            }
+        }
+
+        // Form submission handlers
+        document.getElementById('standardScheduleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('✅ Horario estándar guardado exitosamente');
+        });
+
+        document.getElementById('specialScheduleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('✅ Horario especial agregado exitosamente');
+            this.reset();
+        });
+
+        // Delete button handlers
+        document.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if(confirm('¿Estás seguro de eliminar este horario especial?')) {
+                    this.closest('tr').remove();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

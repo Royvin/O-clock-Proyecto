@@ -1,0 +1,1058 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O'clock - Sistema de Asistencia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding-right: 0;
+            padding-left: 0;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .clock-icon {
+            width: 40px;
+            height: 40px;
+            border: 3px solid white;
+            border-radius: 50%;
+            position: relative;
+        }
+
+            .clock-icon::before {
+                content: '';
+                position: absolute;
+                width: 2px;
+                height: 12px;
+                background: white;
+                top: 6px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .clock-icon::after {
+                content: '';
+                position: absolute;
+                width: 2px;
+                height: 8px;
+                background: white;
+                top: 12px;
+                left: 50%;
+                transform: translateX(-50%) rotate(90deg);
+                transform-origin: top;
+            }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Sidebar + Content Layout */
+        .main-layout {
+            display: flex;
+            min-height: 600px;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 30px 20px;
+            border-right: 1px solid #e0e0e0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+        }
+
+        .menu-item {
+            padding: 0;
+            margin: 4px 0;
+            border-radius: 10px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .menu-link:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .menu-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .menu-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 24px;
+            background: white;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Menu Expandible */
+        .menu-expandable {
+            cursor: pointer;
+        }
+
+        .menu-expandable-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            color: #4a5568;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .menu-expandable-header:hover {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+
+        .menu-expandable-header.active {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .menu-expandable-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-arrow {
+            font-size: 12px;
+            transition: transform 0.3s;
+        }
+
+        .menu-expandable.expanded .menu-arrow {
+            transform: rotate(90deg);
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            margin-left: 20px;
+            margin-top: 4px;
+        }
+
+        .submenu.show {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .submenu-item {
+            margin: 4px 0;
+        }
+
+        .submenu-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            padding-left: 40px;
+            color: #718096;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .submenu-link::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: #cbd5e0;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .submenu-link:hover {
+            background: #f7fafc;
+            color: #667eea;
+            transform: translateX(3px);
+        }
+
+        .submenu-link:hover::before {
+            background: #667eea;
+            transform: translateY(-50%) scale(1.3);
+        }
+
+        .submenu-link.active {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .submenu-link.active::before {
+            background: #667eea;
+            width: 8px;
+            height: 8px;
+        }
+
+        /* Main Content - MEJORADO */
+        .content {
+            flex: 1;
+            padding: 40px;
+            background: #f5f7fa;
+        }
+
+        .content-header {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .content-header h1 {
+                color: #2d3748;
+                font-size: 28px;
+                margin-bottom: 8px;
+            }
+
+            .content-header p {
+                color: #718096;
+                font-size: 14px;
+            }
+
+        /* Formulario de Nueva Regla - MEJORADO */
+        .form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+            .form-card h2 {
+                color: #2d3748;
+                margin-bottom: 25px;
+                font-size: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+            .form-group label {
+                color: #4a5568;
+                font-weight: 600;
+                font-size: 14px;
+            }
+
+            .form-group input,
+            .form-group select {
+                padding: 12px 15px;
+                border: 2px solid #e2e8f0;
+                border-radius: 8px;
+                font-size: 14px;
+                transition: all 0.3s;
+                background: white;
+            }
+
+                .form-group input:focus,
+                .form-group select:focus {
+                    outline: none;
+                    border-color: #667eea;
+                    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+            .btn-secondary:hover {
+                background: #cbd5e0;
+            }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+            .alert.show {
+                display: flex;
+            }
+
+        .alert-error {
+            background: #fed7d7;
+            color: #c53030;
+            border-left: 4px solid #c53030;
+        }
+
+        .alert-success {
+            background: #c6f6d5;
+            color: #22543d;
+            border-left: 4px solid #22543d;
+        }
+
+        /* Tabla de Reglas - MEJORADA */
+        .rules-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .rules-card h2 {
+                color: #2d3748;
+                margin-bottom: 20px;
+                font-size: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+        .rules-count {
+            font-size: 14px;
+            color: #718096;
+            font-weight: normal;
+        }
+
+        .rules-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .rules-table thead {
+                background: #f7fafc;
+            }
+
+            .rules-table th {
+                padding: 15px;
+                text-align: left;
+                font-size: 13px;
+                font-weight: 600;
+                color: #4a5568;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .rules-table td {
+                padding: 18px 15px;
+                border-bottom: 1px solid #e2e8f0;
+                color: #2d3748;
+            }
+
+            .rules-table tr:hover {
+                background: #f7fafc;
+            }
+
+        .rule-name {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .rule-range {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .rule-amount {
+            font-weight: 700;
+            color: #48bb78;
+            font-size: 16px;
+        }
+
+        .rule-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-icon {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+            background: #e2e8f0;
+        }
+
+            .btn-icon:hover {
+                transform: scale(1.1);
+            }
+
+        .btn-edit {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+            .btn-edit:hover {
+                background: #90cdf4;
+            }
+
+        .btn-delete {
+            background: #fed7d7;
+            color: #c53030;
+        }
+
+            .btn-delete:hover {
+                background: #fc8181;
+            }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .modal.show {
+                display: flex;
+            }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+            .modal-header h3 {
+                color: #2d3748;
+                font-size: 22px;
+            }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #718096;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+            .btn-close:hover {
+                background: #e2e8f0;
+                color: #2d3748;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="clock-icon"></div>
+                O'clock
+            </div>
+            <div class="user-info">
+                <div>
+                    <div style="text-align: right; margin-bottom: 4px; font-weight: 600;">Juan Pérez</div>
+                    <div style="font-size: 13px; opacity: 0.9;">Administrador</div>
+                </div>
+                <div class="avatar">JP</div>
+            </div>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="menu-item">
+                    <a href="/Admin/Admin" class="menu-link">
+                        <div class="icon">📊</div>
+                        Dashboard
+                    </a>
+                </div>
+
+                <div class="menu-item">
+                    <a href="/Admin/VerMarcas" class="menu-link">
+                        <div class="icon">⏰</div>
+                        Marcas de Asistencia
+                    </a>
+                </div>
+
+                <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
+                    <div class="menu-expandable-header active">
+                        <div class="menu-expandable-left">
+                            <div class="icon">⚙️</div>
+                            <span>Configuración y Políticas</span>
+                        </div>
+                        <div class="menu-arrow">▶</div>
+                    </div>
+                    <div class="submenu show">
+                        <div class="submenu-item">
+                            <a href="/Admin/HorariosConfig" class="submenu-link">
+                                ⏰ Horarios
+                            </a>
+                        </div>
+                        <div class="submenu-item">
+                            <a href="/Admin/FeriadosConfig" class="submenu-link">
+                                📅 Feriados
+                            </a>
+                        </div>
+                        <div class="submenu-item">
+                            <a href="/Admin/BonosParametroConfig" class="submenu-link active">
+                                🎁 Bonos
+                            </a>
+                        </div>
+                        <div class="submenu-item">
+                            <a href="/Admin/NotificacionesConfig" class="submenu-link">
+                                🔔 Notificaciones
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="menu-item">
+                    <a href="/Admin/Bonos" class="menu-link">
+                        <div class="icon">💵 </div>
+                        Bonos
+                    </a>
+                </div>
+
+                <div class="menu-item">
+                    <a href="/Admin/GestionDocumentos" class="menu-link">
+                        <div class="icon">📝</div>
+                        Gestion de Documentos de Empleados
+                    </a>
+                </div>
+
+                <div class="menu-item">
+                    <a href="/Admin/RankingPuntualidad" class="menu-link">
+                        <div class="icon">⏱️</div>
+                        Indicadores de Puntualidad
+                    </a>
+                </div>
+
+
+                <div class="menu-item">
+                    <a href="/Admin/Reportes" class="menu-link">
+                        <div class="icon">📄</div>
+                        Reportes
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Main Content -->
+            <div class="content">
+                <div class="content-header">
+                    <div>
+                        <h1>Parámetros de Bonos</h1>
+                        <p>Configure las reglas y rangos para el cálculo de bonificaciones</p>
+                    </div>
+                </div>
+
+                <!-- Formulario de Nueva Regla -->
+                <div class="form-card">
+                    <h2>✨ Nueva Regla de Bono</h2>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nombre del Bono</label>
+                            <input type="text" id="nombre" placeholder="Ej: Bono Puntualidad">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Horas Mínimas</label>
+                            <input type="number" id="horasMin" placeholder="40" min="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Horas Máximas</label>
+                            <input type="number" id="horasMax" placeholder="48" min="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tipo de Bono</label>
+                            <select id="tipoBono">
+                                <option value="monto">Monto Fijo</option>
+                                <option value="porcentaje">Porcentaje</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Valor</label>
+                            <input type="number" id="valor" placeholder="100" min="0" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="alert alert-error" id="alertError">
+                        ⚠️ <span id="errorMessage">Por favor complete todos los campos correctamente</span>
+                    </div>
+
+                    <div class="alert alert-success" id="alertSuccess">
+                        ✅ Regla guardada exitosamente
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="guardarRegla()">
+                            💾 Guardar Regla
+                        </button>
+                        <button class="btn btn-secondary" onclick="limpiarFormulario()">
+                            🔄 Limpiar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tabla de Reglas -->
+                <div class="rules-card">
+                    <h2>
+                        📋 Reglas Registradas
+                        <span class="rules-count" id="rulesCount">0 reglas</span>
+                    </h2>
+
+                    <div id="tableContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Edición -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>✏️ Editar Regla</h3>
+                <button class="btn-close" onclick="cerrarModal()">×</button>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Nombre del Bono</label>
+                    <input type="text" id="editNombre">
+                </div>
+
+                <div class="form-group">
+                    <label>Horas Mínimas</label>
+                    <input type="number" id="editHorasMin" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Horas Máximas</label>
+                    <input type="number" id="editHorasMax" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de Bono</label>
+                    <select id="editTipoBono">
+                        <option value="monto">Monto Fijo</option>
+                        <option value="porcentaje">Porcentaje</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Valor</label>
+                    <input type="number" id="editValor" min="0" step="0.01">
+                </div>
+            </div>
+
+            <div class="alert alert-error" id="editAlertError">
+                ⚠️ <span id="editErrorMessage">Error al actualizar</span>
+            </div>
+
+            <div class="form-actions" style="margin-top: 25px;">
+                <button class="btn btn-primary" onclick="actualizarRegla()">
+                    💾 Actualizar
+                </button>
+                <button class="btn btn-secondary" onclick="cerrarModal()">
+                    ❌ Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let reglas = [];
+        let editingIndex = -1;
+
+        function toggleSubmenu(element) {
+             const submenu = element.querySelector('.submenu');
+             const header = element.querySelector('.menu-expandable-header');
+
+             // Toggle expanded class
+             element.classList.toggle('expanded');
+
+             // Toggle submenu visibility
+             submenu.classList.toggle('show');
+
+             // Toggle header active state
+             if (element.classList.contains('expanded')) {
+                 header.classList.add('active');
+             } else {
+                 header.classList.remove('active');
+             }
+         }
+
+        function validarFormulario(nombre, horasMin, horasMax, valor) {
+            if (!nombre.trim()) {
+                return "El nombre del bono es requerido";
+            }
+            if (horasMin === '' || horasMin < 0) {
+                return "Las horas mínimas deben ser un valor positivo";
+            }
+            if (horasMax === '' || horasMax < 0) {
+                return "Las horas máximas deben ser un valor positivo";
+            }
+            if (parseFloat(horasMin) >= parseFloat(horasMax)) {
+                return "Las horas máximas deben ser mayores a las mínimas";
+            }
+            if (valor === '' || valor <= 0) {
+                return "El valor debe ser mayor a 0";
+            }
+            return null;
+        }
+
+        function guardarRegla() {
+            const nombre = document.getElementById('nombre').value;
+            const horasMin = document.getElementById('horasMin').value;
+            const horasMax = document.getElementById('horasMax').value;
+            const tipoBono = document.getElementById('tipoBono').value;
+            const valor = document.getElementById('valor').value;
+
+            const error = validarFormulario(nombre, horasMin, horasMax, valor);
+
+            if (error) {
+                mostrarAlerta('alertError', error);
+                return;
+            }
+
+            const regla = {
+                nombre,
+                horasMin: parseFloat(horasMin),
+                horasMax: parseFloat(horasMax),
+                tipoBono,
+                valor: parseFloat(valor)
+            };
+
+            reglas.push(regla);
+            actualizarTabla();
+            limpiarFormulario();
+            mostrarAlerta('alertSuccess');
+
+            setTimeout(() => {
+                ocultarAlerta('alertSuccess');
+            }, 3000);
+        }
+
+        function limpiarFormulario() {
+            document.getElementById('nombre').value = '';
+            document.getElementById('horasMin').value = '';
+            document.getElementById('horasMax').value = '';
+            document.getElementById('tipoBono').value = 'monto';
+            document.getElementById('valor').value = '';
+            ocultarAlerta('alertError');
+        }
+
+        function mostrarAlerta(alertId, mensaje = null) {
+            const alert = document.getElementById(alertId);
+            if (mensaje && alertId === 'alertError') {
+                document.getElementById('errorMessage').textContent = mensaje;
+            }
+            alert.classList.add('show');
+        }
+
+        function ocultarAlerta(alertId) {
+            document.getElementById(alertId).classList.remove('show');
+        }
+
+        function actualizarTabla() {
+            const container = document.getElementById('tableContainer');
+            document.getElementById('rulesCount').textContent =
+                `${reglas.length} ${reglas.length === 1 ? 'regla' : 'reglas'}`;
+
+            if (reglas.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <h3>No hay reglas configuradas</h3>
+                        <p>Comience agregando una nueva regla de bono</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <table class="rules-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre del Bono</th>
+                            <th>Rango de Horas</th>
+                            <th>Tipo</th>
+                            <th>Valor</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            reglas.forEach((regla, index) => {
+                const simbolo = regla.tipoBono === 'porcentaje' ? '%' : '$';
+                html += `
+                    <tr>
+                        <td class="rule-name">${regla.nombre}</td>
+                        <td>
+                            <div class="rule-range">
+                                <span>${regla.horasMin}h</span>
+                                <span style="color: #cbd5e0;">→</span>
+                                <span>${regla.horasMax}h</span>
+                            </div>
+                        </td>
+                        <td>${regla.tipoBono === 'monto' ? 'Monto Fijo' : 'Porcentaje'}</td>
+                        <td class="rule-amount">${simbolo}${regla.valor.toFixed(2)}</td>
+                        <td>
+                            <div class="rule-actions">
+                                <button class="btn-icon btn-edit" onclick="editarRegla(${index})" title="Editar">
+                                    ✏️
+                                </button>
+                                <button class="btn-icon btn-delete" onclick="eliminarRegla(${index})" title="Eliminar">
+                                    🗑️
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function editarRegla(index) {
+            editingIndex = index;
+            const regla = reglas[index];
+
+            document.getElementById('editNombre').value = regla.nombre;
+            document.getElementById('editHorasMin').value = regla.horasMin;
+            document.getElementById('editHorasMax').value = regla.horasMax;
+            document.getElementById('editTipoBono').value = regla.tipoBono;
+            document.getElementById('editValor').value = regla.valor;
+
+            document.getElementById('editModal').classList.add('show');
+            ocultarAlerta('editAlertError');
+        }
+
+        function actualizarRegla() {
+            const nombre = document.getElementById('editNombre').value;
+            const horasMin = document.getElementById('editHorasMin').value;
+            const horasMax = document.getElementById('editHorasMax').value;
+            const tipoBono = document.getElementById('editTipoBono').value;
+            const valor = document.getElementById('editValor').value;
+
+            const error = validarFormulario(nombre, horasMin, horasMax, valor);
+
+            if (error) {
+                document.getElementById('editErrorMessage').textContent = error;
+                mostrarAlerta('editAlertError');
+                return;
+            }
+
+            reglas[editingIndex] = {
+                nombre,
+                horasMin: parseFloat(horasMin),
+                horasMax: parseFloat(horasMax),
+                tipoBono,
+                valor: parseFloat(valor)
+            };
+
+            actualizarTabla();
+            cerrarModal();
+        }
+
+        function cerrarModal() {
+            document.getElementById('editModal').classList.remove('show');
+            editingIndex = -1;
+        }
+
+        function eliminarRegla(index) {
+            if (confirm('¿Está seguro de eliminar esta regla?')) {
+                reglas.splice(index, 1);
+                actualizarTabla();
+            }
+        }
+
+        // Inicializar tabla vacía
+        actualizarTabla();
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('editModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarModal();
+            }
+        });
+    </script>
+</body>
+</html>

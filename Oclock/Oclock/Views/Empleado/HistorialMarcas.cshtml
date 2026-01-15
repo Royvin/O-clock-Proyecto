@@ -1,0 +1,1131 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O'clock - Sistema de Asistencia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding-right: 0;
+            padding-left: 0;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .clock-icon {
+            width: 40px;
+            height: 40px;
+            border: 3px solid white;
+            border-radius: 50%;
+            position: relative;
+        }
+
+            .clock-icon::before {
+                content: '';
+                position: absolute;
+                width: 2px;
+                height: 12px;
+                background: white;
+                top: 6px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .clock-icon::after {
+                content: '';
+                position: absolute;
+                width: 2px;
+                height: 8px;
+                background: white;
+                top: 12px;
+                left: 50%;
+                transform: translateX(-50%) rotate(90deg);
+                transform-origin: top;
+            }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Sidebar + Content Layout */
+        .main-layout {
+            display: flex;
+            min-height: 600px;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 30px 20px;
+            border-right: 1px solid #e0e0e0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+        }
+
+        .menu-item {
+            padding: 0;
+            margin: 4px 0;
+            border-radius: 10px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+            .menu-link:hover {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                transform: translateX(5px);
+            }
+
+            .menu-link.active {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            }
+
+                .menu-link.active::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    width: 4px;
+                    height: 24px;
+                    background: white;
+                    border-radius: 0 4px 4px 0;
+                }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Menu Expandible */
+        .menu-expandable {
+            cursor: pointer;
+        }
+
+        .menu-expandable-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            color: #4a5568;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+            .menu-expandable-header:hover {
+                background: #f0f0f0;
+                color: #667eea;
+            }
+
+            .menu-expandable-header.active {
+                background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+                color: #667eea;
+                font-weight: 600;
+            }
+
+        .menu-expandable-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-arrow {
+            font-size: 12px;
+            transition: transform 0.3s;
+        }
+
+        .menu-expandable.expanded .menu-arrow {
+            transform: rotate(90deg);
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            margin-left: 20px;
+            margin-top: 4px;
+        }
+
+            .submenu.show {
+                max-height: 500px;
+                transition: max-height 0.5s ease-in;
+            }
+
+        .submenu-item {
+            margin: 4px 0;
+        }
+
+        .submenu-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            padding-left: 40px;
+            color: #718096;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+            .submenu-link::before {
+                content: '';
+                position: absolute;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 6px;
+                height: 6px;
+                background: #cbd5e0;
+                border-radius: 50%;
+                transition: all 0.3s;
+            }
+
+            .submenu-link:hover {
+                background: #f7fafc;
+                color: #667eea;
+                transform: translateX(3px);
+            }
+
+                .submenu-link:hover::before {
+                    background: #667eea;
+                    transform: translateY(-50%) scale(1.3);
+                }
+
+            .submenu-link.active {
+                background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+                color: #667eea;
+                font-weight: 600;
+            }
+
+                .submenu-link.active::before {
+                    background: #667eea;
+                    width: 8px;
+                    height: 8px;
+                }
+
+        /* Main Content */
+        .content {
+            flex: 1;
+            padding: 40px;
+            background: #f5f7fa;
+        }
+
+        .content-header {
+            margin-bottom: 30px;
+        }
+
+            .content-header h1 {
+                color: #2d3748;
+                font-size: 28px;
+                margin-bottom: 8px;
+            }
+
+            .content-header p {
+                color: #718096;
+                font-size: 14px;
+            }
+
+        /* Current Time Display */
+        .time-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .current-time {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .current-date {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        /* Marking Buttons Grid */
+        .marking-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .marking-button {
+            background: white;
+            border: 3px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .marking-button:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            }
+
+            .marking-button.entrada {
+                border-color: #48bb78;
+            }
+
+                .marking-button.entrada:hover {
+                    background: #48bb78;
+                    color: white;
+                }
+
+            .marking-button.salida {
+                border-color: #e53e3e;
+            }
+
+                .marking-button.salida:hover {
+                    background: #e53e3e;
+                    color: white;
+                }
+
+            .marking-button.almuerzo {
+                border-color: #ed8936;
+            }
+
+                .marking-button.almuerzo:hover {
+                    background: #ed8936;
+                    color: white;
+                }
+
+            .marking-button.descanso {
+                border-color: #4299e1;
+            }
+
+                .marking-button.descanso:hover {
+                    background: #4299e1;
+                    color: white;
+                }
+
+            .marking-button.disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                pointer-events: none;
+            }
+
+        .marking-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .marking-label {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .marking-description {
+            font-size: 13px;
+            color: #718096;
+        }
+
+        .marking-button:hover .marking-description {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Status Info */
+        .status-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+            .status-section h2 {
+                color: #2d3748;
+                font-size: 20px;
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .status-item {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .status-item-label {
+            color: #718096;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .status-item-value {
+            color: #2d3748;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* History Section */
+        .history-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+            .history-section h2 {
+                color: #2d3748;
+                font-size: 20px;
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding-bottom: 15px;
+                border-bottom: 2px solid #f0f0f0;
+            }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+
+            .history-item:hover {
+                background: #e8edf3;
+                transform: translateX(5px);
+            }
+
+        .history-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .history-info {
+            flex: 1;
+        }
+
+        .history-title {
+            color: #2d3748;
+            font-weight: 700;
+            margin-bottom: 6px;
+            font-size: 16px;
+        }
+
+        .history-details {
+            color: #718096;
+            font-size: 13px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .history-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .badge-info {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+        .badge-warning {
+            background: #feebc8;
+            color: #7c2d12;
+        }
+
+        .badge-danger {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+
+
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .modal.show {
+                display: flex;
+            }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+            .modal-header h3 {
+                color: #2d3748;
+                font-size: 22px;
+            }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #718096;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+            .btn-close:hover {
+                background: #e2e8f0;
+                color: #2d3748;
+            }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #c6f6d5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 20px;
+        }
+
+        .modal-message {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+            .modal-message h4 {
+                color: #2d3748;
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+
+            .modal-message p {
+                color: #718096;
+                font-size: 14px;
+            }
+
+        .modal-details {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+            .detail-row:last-child {
+                border-bottom: none;
+            }
+
+        .detail-label {
+            color: #718096;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .detail-value {
+            color: #2d3748;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        /* Alert Banner */
+        .alert-banner {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .alert-banner-icon {
+            font-size: 24px;
+        }
+
+        .alert-banner-content {
+            flex: 1;
+        }
+
+        .alert-banner-title {
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 4px;
+        }
+
+        .alert-banner-text {
+            font-size: 14px;
+            color: #78350f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="clock-icon"></div>
+                O'clock
+            </div>
+            <div class="user-info">
+                <div>
+                    <div style="text-align: right; margin-bottom: 4px; font-weight: 600;">María González</div>
+                    <div style="font-size: 13px; opacity: 0.9;">Colaboradora</div>
+                </div>
+                <div class="avatar">MG</div>
+            </div>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="menu-item">
+                    <a href="/Empleado/Marcas" class="menu-link">
+                        <div class="icon">⏰</div>
+                        Marcas
+                    </a>
+                </div>
+
+                <div class="menu-item">
+                    <a href="/Empleado/HistorialMarcas" class="menu-link active">
+                        <div class="icon">📝</div>
+                        Mi Historial
+                    </a>
+                </div>
+
+                <div class="menu-item">
+                    <a href="/Empleado/Solicitudes" class="menu-link">
+                        <div class="icon">🗂️ </div>
+                        Mis Solicitudes
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="content">
+
+                <!-- Header -->
+
+                <div class="content-header">
+                    <h1>Mi Historial de Asistencia</h1>
+                    <p>Consulta todas tus marcas de asistencia registradas en el sistema</p>
+                </div>
+
+                <!-- Alert: Unauthorized Access (simulado) -->
+
+                <div class="alert-banner" id="unauthorizedBanner" style="display:none;">
+                    <div class="alert-banner-icon">⛔</div>
+                    <div class="alert-banner-content">
+                        <div class="alert-banner-title">Acceso no autorizado</div>
+                        <div class="alert-banner-text">No tienes permisos para visualizar registros de otro colaborador.</div>
+                    </div>
+                </div>
+
+                <!-- History Table Section -->
+
+                <div class="history-section">
+                    <h2>📋 Historial de Marcas</h2>
+
+                    ```
+                    <div style="overflow-x:auto;">
+                        <table style="width:100%; border-collapse: collapse; font-size:14px;">
+                            <thead>
+                                <tr style="background:#f1f5f9; text-align:left;">
+                                    <th style="padding:14px;">Fecha</th>
+                                    <th style="padding:14px;">Entrada</th>
+                                    <th style="padding:14px;">Salida</th>
+                                    <th style="padding:14px;">Tipo</th>
+                                    <th style="padding:14px;">Duración</th>
+                                    <th style="padding:14px;">Estado</th>
+                                    <th style="padding:14px;">Comentario</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Registro 1 -->
+                                <tr style="border-bottom:1px solid #e5e7eb;">
+                                    <td style="padding:14px;">15/12/2025</td>
+                                    <td style="padding:14px;">08:01</td>
+                                    <td style="padding:14px;">17:02</td>
+                                    <td style="padding:14px;">Jornada Completa</td>
+                                    <td style="padding:14px;">8h 1m</td>
+                                    <td style="padding:14px;">
+                                        <span class="badge badge-success">Completado</span>
+                                    </td>
+                                    <td style="padding:14px;">—</td>
+                                </tr>
+
+                                <!-- Registro 2 -->
+                                <tr style="border-bottom:1px solid #e5e7eb;">
+                                    <td style="padding:14px;">14/12/2025</td>
+                                    <td style="padding:14px;">08:10</td>
+                                    <td style="padding:14px;">16:45</td>
+                                    <td style="padding:14px;">Jornada Completa</td>
+                                    <td style="padding:14px;">7h 35m</td>
+                                    <td style="padding:14px;">
+                                        <span class="badge badge-warning">Incompleto</span>
+                                    </td>
+                                    <td style="padding:14px;">Salida anticipada</td>
+                                </tr>
+
+                                <!-- Registro 3 -->
+                                <tr style="border-bottom:1px solid #e5e7eb;">
+                                    <td style="padding:14px;">13/12/2025</td>
+                                    <td style="padding:14px;">—</td>
+                                    <td style="padding:14px;">—</td>
+                                    <td style="padding:14px;">Ausencia</td>
+                                    <td style="padding:14px;">0h</td>
+                                    <td style="padding:14px;">
+                                        <span class="badge badge-danger">Ausente</span>
+                                    </td>
+                                    <td style="padding:14px;">Sin registro</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div style="display:flex; justify-content:flex-end; margin-top:20px; gap:10px;">
+                        <button class="btn" style="width:auto; background:#e2e8f0;">◀ Anterior</button>
+                        <button class="btn btn-primary" style="width:auto;">Siguiente ▶</button>
+                    </div>
+                    ```
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>✅ Marca Registrada</h3>
+                <button class="btn-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="success-icon">✅</div>
+            <div class="modal-message">
+                <h4>¡Marca registrada exitosamente!</h4>
+                <p>Tu marca ha sido guardada correctamente en el sistema</p>
+            </div>
+            <div class="modal-details" id="modalDetails">
+                <!-- Details will be inserted here -->
+            </div>
+            <button class="btn btn-primary" onclick="closeModal()">Continuar</button>
+        </div>
+    </div>
+
+    <script>
+
+
+        function toggleSubmenu(element) {
+            const submenu = element.querySelector('.submenu');
+            const header = element.querySelector('.menu-expandable-header');
+
+            // Toggle expanded class
+            element.classList.toggle('expanded');
+
+            // Toggle submenu visibility
+            submenu.classList.toggle('show');
+
+            // Toggle header active state
+            if (element.classList.contains('expanded')) {
+                header.classList.add('active');
+            } else {
+                header.classList.remove('active');
+            }
+        }
+
+        // =========================
+        // Mock Data Storage
+        // =========================
+        let todayMarks = [];
+
+        // =========================
+        // Clock Update
+        // =========================
+        function updateClock() {
+            const now = new Date();
+
+            // Update time
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('currentTime').textContent = `${hours}:${minutes}:${seconds}`;
+
+            // Update date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateStr = now.toLocaleDateString('es-CR', options);
+            document.getElementById('currentDate').textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+        }
+
+        // =========================
+        // Register Mark
+        // =========================
+        function registerMark(type) {
+            const now = new Date();
+            const timestamp = now.toISOString();
+            const time = now.toLocaleTimeString('es-CR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+            // Get geolocation (simulated)
+            const location = "San José, Costa Rica"; // In real app, use navigator.geolocation
+
+            const mark = {
+                id: todayMarks.length + 1,
+                type: type,
+                timestamp: timestamp,
+                time: time,
+                date: now.toLocaleDateString('es-CR'),
+                location: location,
+                employeeId: "EMP001",
+                employeeName: "María González"
+            };
+
+            todayMarks.push(mark);
+
+            // Update UI
+            updateStatusSection();
+            renderTodayHistory();
+            showSuccessModal(mark);
+
+            // Show alert if needed
+            checkScheduleAlerts();
+        }
+
+        // =========================
+        // Update Status Section
+        // =========================
+        function updateStatusSection() {
+            const entradaMark = todayMarks.find(m => m.type === 'entrada');
+            const salidaMark = todayMarks.find(m => m.type === 'salida');
+
+            // Update entrance time
+            if (entradaMark) {
+                document.getElementById('entradaTime').textContent = entradaMark.time.substring(0, 5);
+            }
+
+            // Update exit time
+            if (salidaMark) {
+                document.getElementById('salidaTime').textContent = salidaMark.time.substring(0, 5);
+            }
+
+            // Calculate worked time
+            if (entradaMark && salidaMark) {
+                const entrada = new Date(entradaMark.timestamp);
+                const salida = new Date(salidaMark.timestamp);
+                const diff = salida - entrada;
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById('workedTime').textContent = `${hours}h ${minutes}m`;
+            }
+
+            // Update current status
+            const statusEl = document.getElementById('currentStatus');
+            const lastMark = todayMarks[todayMarks.length - 1];
+
+            if (!lastMark) {
+                statusEl.innerHTML = '<span class="badge badge-info" style="font-size: 14px;">Sin marcar</span>';
+            } else if (lastMark.type === 'entrada') {
+                statusEl.innerHTML = '<span class="badge badge-success" style="font-size: 14px;">Trabajando</span>';
+            } else if (lastMark.type === 'almuerzo') {
+                statusEl.innerHTML = '<span class="badge badge-warning" style="font-size: 14px;">En almuerzo</span>';
+            } else if (lastMark.type === 'descanso') {
+                statusEl.innerHTML = '<span class="badge badge-info" style="font-size: 14px;">En descanso</span>';
+            } else if (lastMark.type === 'salida') {
+                statusEl.innerHTML = '<span class="badge badge-danger" style="font-size: 14px;">Fuera de turno</span>';
+            }
+        }
+
+        // =========================
+        // Render Today History
+        // =========================
+        function renderTodayHistory() {
+            const container = document.getElementById('todayHistory');
+
+            if (todayMarks.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⏰</div>
+                        <h3>Sin marcas registradas</h3>
+                        <p>Aún no has registrado ninguna marca el día de hoy</p>
+                    </div>`;
+                return;
+            }
+
+            const markIcons = {
+                entrada: { icon: '🚪', color: '#c6f6d5', text: '#22543d', label: 'Entrada' },
+                salida: { icon: '🏠', color: '#fed7d7', text: '#742a2a', label: 'Salida' },
+                almuerzo: { icon: '🍽️', color: '#feebc8', text: '#7c2d12', label: 'Almuerzo' },
+                descanso: { icon: '☕', color: '#bee3f8', text: '#2c5282', label: 'Descanso' }
+            };
+
+            container.innerHTML = todayMarks.reverse().map(mark => {
+                const config = markIcons[mark.type];
+                return `
+                    <div class="history-item">
+                        <div class="history-icon" style="background:${config.color};color:${config.text};">
+                            ${config.icon}
+                        </div>
+                        <div class="history-info">
+                            <div class="history-title">${config.label}</div>
+                            <div class="history-details">
+                                <div class="history-detail-item">🕐 <strong>${mark.time}</strong></div>
+                                <div class="history-detail-item">📍 ${mark.location}</div>
+                                <div class="history-detail-item">✅ Registrado correctamente</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            todayMarks.reverse(); // Restore original order
+        }
+
+         // =========================
+        // Show Success Modal
+        // =========================
+        function showSuccessModal(mark) {
+            const modal = document.getElementById('successModal');
+            const details = document.getElementById('modalDetails');
+
+            const markLabels = {
+                entrada: 'Entrada',
+                salida: 'Salida',
+                almuerzo: 'Almuerzo',
+                descanso: 'Descanso'
+            };
+
+            details.innerHTML = `
+                <div class="detail-row">
+                    <div class="detail-label">Tipo de Marca</div>
+                    <div class="detail-value">${markLabels[mark.type]}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Fecha</div>
+                    <div class="detail-value">${mark.date}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Hora</div>
+                    <div class="detail-value">${mark.time}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Ubicación</div>
+                    <div class="detail-value">${mark.location}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Colaborador</div>
+                    <div class="detail-value">${mark.employeeName}</div>
+                </div>
+            `;
+
+            modal.style.display = 'flex';
+        }
+
+        // =========================
+        // Close Modal
+        // =========================
+        function closeModal() {
+            const modal = document.getElementById('successModal');
+            modal.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
