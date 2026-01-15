@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36811.4 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oclock", "Oclock\Oclock.csproj", "{FCCF4BC6-646E-492A-B4A0-EA1B0592DAB5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oclock", "Oclock\Oclock.csproj", "{A837CDB6-0B70-4117-A4E5-E8A0CDF32A0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FCCF4BC6-646E-492A-B4A0-EA1B0592DAB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FCCF4BC6-646E-492A-B4A0-EA1B0592DAB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FCCF4BC6-646E-492A-B4A0-EA1B0592DAB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FCCF4BC6-646E-492A-B4A0-EA1B0592DAB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A837CDB6-0B70-4117-A4E5-E8A0CDF32A0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A837CDB6-0B70-4117-A4E5-E8A0CDF32A0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A837CDB6-0B70-4117-A4E5-E8A0CDF32A0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A837CDB6-0B70-4117-A4E5-E8A0CDF32A0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {421D27BB-A61A-44F2-99E9-B4FBE390BF85}
+		SolutionGuid = {6DB1A3D4-C0CE-45B4-A7A1-D804AC149B0C}
 	EndGlobalSection
 EndGlobal
