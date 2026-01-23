@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace Oclock.Models;
 
-public partial class NOTIFICACION
+public partial class Notificacion
 {
-    public int id_notificacion { get; set; }
+    public int IdNotificacion { get; set; }
 
-    public int id_usuario { get; set; }
+    public int IdUsuario { get; set; }
 
-    public DateTime? fecha_notificacion { get; set; }
+    public DateTime? FechaNotificacion { get; set; }
 
-    public string mensaje { get; set; } = null!;
+    public string Mensaje { get; set; } = null!;
 
-    public bool? leida { get; set; }
+    public bool? Leida { get; set; }
 
-    public virtual USUARIO id_usuarioNavigation { get; set; } = null!;
+    public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
 }

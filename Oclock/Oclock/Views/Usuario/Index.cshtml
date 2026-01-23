@@ -1,0 +1,396 @@
+﻿@model Oclock.Models.Usuario
+
+@{
+    ViewData["Title"] = "O'Clock - Acceso";
+    Layout = null;
+    var showRegister = ViewBag.ShowRegister ?? false;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>O'Clock - Acceso al Sistema</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', sans-serif;
+            padding: 2rem 0;
+        }
+
+        .auth-container {
+            background: #ffffff;
+            width: 850px;
+            max-width: 95%;
+            max-height: 90vh;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            animation: fadeIn 0.5s ease-in-out;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tabs-container {
+            display: flex;
+            background: #f8f9fa;
+            flex-shrink: 0;
+        }
+
+        .tab-link {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #718096;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            display: block;
+        }
+
+            .tab-link:hover {
+                background: #e2e8f0;
+                color: #667eea;
+            }
+
+            .tab-link.active {
+                color: #667eea;
+                background: #ffffff;
+                border-bottom: 3px solid #667eea;
+            }
+
+        .tab-content {
+            padding: 1.5rem 2rem;
+            animation: fadeIn 0.3s ease-in-out;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .auth-title {
+            color: #2d3748;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-title {
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .form-control, .form-select {
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 0.8rem;
+            font-size: 0.95rem;
+        }
+
+            .form-control:focus, .form-select:focus {
+                border-color: #667eea;
+                box-shadow: 0 0 8px rgba(102,126,234,0.4);
+            }
+
+        .form-label {
+            color: #718096;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        .text-danger-custom {
+            color: #e53e3e;
+            font-weight: 600;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 12px;
+            padding: 0.6rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+            transition: 0.25s;
+        }
+
+            .btn-primary-custom:hover {
+                box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+                transform: translateY(-2px);
+                color: white;
+            }
+
+        .btn-secondary-custom {
+            background: #e2e8f0;
+            border: none;
+            border-radius: 12px;
+            padding: 0.6rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #4a5568;
+            transition: 0.25s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+            .btn-secondary-custom:hover {
+                background: #cbd5e0;
+                transform: translateY(-2px);
+                color: #4a5568;
+            }
+
+        .logo-circle {
+            width: 100px;
+            height: 60px;
+            border-radius: 50%;
+            background: #f1f3f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 1rem auto;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .form-check-input:checked {
+            background-color: #667eea;
+            border-color: #667eea;
+        }
+
+        .section-container {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .forgot-link {
+            color: #718096;
+            text-decoration: none;
+        }
+
+            .forgot-link:hover {
+                text-decoration: underline;
+                color: #667eea;
+            }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .validation-message {
+            color: #e53e3e;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+            .divider::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                width: 100%;
+                height: 1px;
+                background: #e2e8f0;
+            }
+
+            .divider span {
+                background: white;
+                padding: 0 1rem;
+                position: relative;
+                color: #718096;
+            }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <!-- Tabs de navegación -->
+        <div class="tabs-container">
+            <a href="@Url.Action("Index", "Usuario", new { tab = "login" })" class="tab-link @(showRegister ? "" : "active")">
+                <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+            </a>
+            <a href="@Url.Action("Index", "Usuario", new { tab = "register" })" class="tab-link @(showRegister ? "active" : "")">
+                <i class="fas fa-user-plus me-2"></i>Registrarse
+            </a>
+        </div>
+
+        @if (!showRegister)
+        {
+            <!-- Contenido de Login -->
+            <div class="tab-content">
+                <div class="logo-circle">
+                    <span style="font-size: 1.5rem; color: #667eea; font-weight: 700;">O'clock</span>
+                </div>
+                <h2 class="text-center auth-title">Bienvenido de nuevo</h2>
+
+                <form asp-action="Login" asp-controller="Account" method="post">
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @ViewBag.ErrorMessage
+                        </div>
+                    }
+
+                    <div class="mb-3">
+                        <label class="form-label">Correo electrónico</label>
+                        <input type="email" name="email" class="form-control" placeholder="usuario@empresa.com" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña</label>
+                        <input type="password" name="password" class="form-control" placeholder="••••••••" required />
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
+                        <label class="form-check-label" for="rememberMe">
+                            Recordarme
+                        </label>
+                    </div>
+                    <button type="submit" class="btn-primary-custom mt-3">
+                        <i class="fas fa-sign-in-alt me-2"></i>Ingresar
+                    </button>
+                    <div class="mt-3 text-center">
+                        <a href="@Url.Action("ForgotPassword", "Account")" class="forgot-link">¿Olvidaste tu contraseña?</a>
+                    </div>
+                </form>
+            </div>
+        }
+        else
+        {
+            <!-- Contenido de Registro -->
+            <div class="tab-content">
+                <div class="logo-circle">
+                    <span style="font-size: 2rem; color: #667eea; font-weight: 700;">O'clock</span>
+                </div>
+                <h2 class="text-center auth-title">Crear cuenta nueva</h2>
+
+                <form asp-action="Register" asp-controller="Account" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    @if (ViewBag.SuccessMessage != null)
+                    {
+                        <div class="alert alert-success" role="alert">
+                            @ViewBag.SuccessMessage
+                        </div>
+                    }
+
+                    <!-- Información Personal -->
+                    <div class="section-container">
+                        <h5 class="section-title">
+                            <i class="fas fa-id-card me-2"></i>Información Personal
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Nombre" class="form-label">
+                                    Nombre <span class="text-danger-custom">*</span>
+                                </label>
+                                <input asp-for="Nombre" class="form-control" placeholder="Ingrese el nombre" required />
+                                <span asp-validation-for="Nombre" class="validation-message"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Apellido" class="form-label">
+                                    Apellido <span class="text-danger-custom">*</span>
+                                </label>
+                                <input asp-for="Apellido" class="form-control" placeholder="Ingrese el apellido" required />
+                                <span asp-validation-for="Apellido" class="validation-message"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Email" class="form-label">
+                                    Correo Electrónico <span class="text-danger-custom">*</span>
+                                </label>
+                                <input asp-for="Email" type="email" class="form-control" placeholder="usuario@empresa.com" required />
+                                <span asp-validation-for="Email" class="validation-message"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Telefono" class="form-label">
+                                    Teléfono
+                                </label>
+                                <input asp-for="Telefono" type="tel" class="form-control" placeholder="8888-8888" />
+                                <span asp-validation-for="Telefono" class="validation-message"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seguridad -->
+                    <div class="section-container">
+                        <h5 class="section-title">
+                            <i class="fas fa-lock me-2"></i>Seguridad
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Contraseña" class="form-label">
+                                    Contraseña <span class="text-danger-custom">*</span>
+                                </label>
+                                <input asp-for="Contraseña" type="password" class="form-control" placeholder="••••••••" required minlength="8" />
+                                <span asp-validation-for="Contraseña" class="validation-message"></span>
+                                <small class="text-muted">Mínimo 8 caracteres</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="confirmar_contraseña" class="form-label">
+                                    Confirmar Contraseña <span class="text-danger-custom">*</span>
+                                </label>
+                                <input type="password" id="confirmar_contraseña" name="confirmar_contraseña" class="form-control" placeholder="••••••••" required minlength="8" />
+                                <small class="text-muted">Debe coincidir con la contraseña</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información Laboral -->
+                    <div class="section-container">
+                        <h5 class="section-title">
+                            <i class="fas fa-briefcase me-2"></i>Información Laboral
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FechaContratacion" class="form-label">
+                                    Fecha de Contratación
+                                </label>
+                                <input asp-for="FechaContratacion" type="date" class="form-control" />
+                                <span asp-validation-for="FechaContratacion" class="validation-message"></span>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <!-- Botones de Acción -->
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <button type="submit" class="btn-primary-custom" style="width: auto;">
+                            <i class="fas fa-save me-2"></i>Registrar Usuario
+                        </button>
+                        <button type="reset" class="btn-secondary-custom">
+                            <i class="fas fa-eraser me-2"></i>Limpiar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        }
+    </div>
+</body>
+</html>

@@ -3,21 +3,21 @@ using System.Collections.Generic;
 
 namespace Oclock.Models;
 
-public partial class DOCUMENTO
+public partial class Documento
 {
-    public int id_documento { get; set; }
+    public int IdDocumento { get; set; }
 
-    public int id_usuario { get; set; }
+    public int IdUsuario { get; set; }
 
-    public int id_tipo_documento { get; set; }
+    public int IdTipoDocumento { get; set; }
 
-    public string nombre_archivo { get; set; } = null!;
+    public string NombreArchivo { get; set; } = null!;
 
-    public string ruta_archivo { get; set; } = null!;
+    public string RutaArchivo { get; set; } = null!;
 
-    public DateTime? fecha_subida { get; set; }
+    public DateTime? FechaSubida { get; set; }
 
-    public virtual TIPO_DOCUMENTO id_tipo_documentoNavigation { get; set; } = null!;
+    public virtual TipoDocumento IdTipoDocumentoNavigation { get; set; } = null!;
 
-    public virtual USUARIO id_usuarioNavigation { get; set; } = null!;
+    public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
 }

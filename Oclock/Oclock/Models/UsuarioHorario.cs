@@ -3,23 +3,19 @@ using System.Collections.Generic;
 
 namespace Oclock.Models;
 
-public partial class Capacitacion
+public partial class UsuarioHorario
 {
-    public int IdCapacitacion { get; set; }
+    public int IdUsuarioHorario { get; set; }
 
     public int IdUsuario { get; set; }
 
-    public string NombreCurso { get; set; } = null!;
-
-    public string? Institucion { get; set; }
+    public int IdHorario { get; set; }
 
     public DateOnly? FechaInicio { get; set; }
 
     public DateOnly? FechaFin { get; set; }
 
-    public bool? Certificado { get; set; }
-
-    public int? Horas { get; set; }
+    public virtual Horario IdHorarioNavigation { get; set; } = null!;
 
     public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
 }

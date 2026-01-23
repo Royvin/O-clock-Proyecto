@@ -3,39 +3,43 @@ using System.Collections.Generic;
 
 namespace Oclock.Models;
 
-public partial class USUARIO
+public partial class Usuario
 {
-    public int id_usuario { get; set; }
+    public int IdUsuario { get; set; }
 
-    public string nombre { get; set; } = null!;
+    public string Nombre { get; set; } = null!;
 
-    public string apellido { get; set; } = null!;
+    public string Apellido { get; set; } = null!;
 
-    public string email { get; set; } = null!;
+    public string Email { get; set; } = null!;
 
-    public string contraseña { get; set; } = null!;
+    public string Contraseña { get; set; } = null!;
 
-    public string? telefono { get; set; }
+    public string? Telefono { get; set; }
 
-    public DateOnly? fecha_contratacion { get; set; }
+    public DateOnly? FechaContratacion { get; set; }
 
-    public string? estado { get; set; }
+    public string? Estado { get; set; }
 
-    public bool? activo { get; set; }
+    public bool? Activo { get; set; }
 
-    public virtual ICollection<BONO> BONOs { get; set; } = new List<BONO>();
+    public int IdRol { get; set; }
 
-    public virtual ICollection<CAPACITACION> CAPACITACIONs { get; set; } = new List<CAPACITACION>();
+    public virtual ICollection<Bono> Bonos { get; set; } = new List<Bono>();
 
-    public virtual ICollection<DOCUMENTO> DOCUMENTOs { get; set; } = new List<DOCUMENTO>();
+    public virtual ICollection<Capacitacion> Capacitacions { get; set; } = new List<Capacitacion>();
 
-    public virtual ICollection<EXPEDIENTE> EXPEDIENTEs { get; set; } = new List<EXPEDIENTE>();
+    public virtual ICollection<Documento> Documentos { get; set; } = new List<Documento>();
 
-    public virtual MARCA? MARCA { get; set; }
+    public virtual ICollection<Expediente> Expedientes { get; set; } = new List<Expediente>();
 
-    public virtual ICollection<NOTIFICACION> NOTIFICACIONs { get; set; } = new List<NOTIFICACION>();
+    public virtual Rol IdRolNavigation { get; set; } = null!;
 
-    public virtual ICollection<SOLICITUD> SOLICITUDs { get; set; } = new List<SOLICITUD>();
+    public virtual Marca? Marca { get; set; }
 
-    public virtual ICollection<USUARIO_HORARIO> USUARIO_HORARIOs { get; set; } = new List<USUARIO_HORARIO>();
+    public virtual ICollection<Notificacion> Notificacions { get; set; } = new List<Notificacion>();
+
+    public virtual ICollection<Solicitud> Solicituds { get; set; } = new List<Solicitud>();
+
+    public virtual ICollection<UsuarioHorario> UsuarioHorarios { get; set; } = new List<UsuarioHorario>();
 }

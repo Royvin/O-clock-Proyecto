@@ -3,25 +3,25 @@ using System.Collections.Generic;
 
 namespace Oclock.Models;
 
-public partial class EXPEDIENTE
+public partial class Expediente
 {
-    public int id_expediente { get; set; }
+    public int IdExpediente { get; set; }
 
-    public int id_usuario { get; set; }
+    public int IdUsuario { get; set; }
 
-    public string? direccion { get; set; }
+    public string? Direccion { get; set; }
 
-    public string? ciudad { get; set; }
+    public string? Ciudad { get; set; }
 
-    public string? estado { get; set; }
+    public string? Estado { get; set; }
 
-    public string? cedula { get; set; }
+    public string? Cedula { get; set; }
 
-    public string? estado_civil { get; set; }
+    public string? EstadoCivil { get; set; }
 
-    public string? contacto_emergencia { get; set; }
+    public string? ContactoEmergencia { get; set; }
 
-    public string? telefono_emergencia { get; set; }
+    public string? TelefonoEmergencia { get; set; }
 
-    public virtual USUARIO id_usuarioNavigation { get; set; } = null!;
+    public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
 }

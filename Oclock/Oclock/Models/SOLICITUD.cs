@@ -3,27 +3,27 @@ using System.Collections.Generic;
 
 namespace Oclock.Models;
 
-public partial class SOLICITUD
+public partial class Solicitud
 {
-    public int id_solicitud { get; set; }
+    public int IdSolicitud { get; set; }
 
-    public int id_usuario { get; set; }
+    public int IdUsuario { get; set; }
 
-    public int id_tipo_solicitud { get; set; }
+    public int IdTipoSolicitud { get; set; }
 
-    public string? descripcion { get; set; }
+    public string? Descripcion { get; set; }
 
-    public DateOnly fecha_solicitud { get; set; }
+    public DateOnly FechaSolicitud { get; set; }
 
-    public DateOnly? fecha_inicio { get; set; }
+    public DateOnly? FechaInicio { get; set; }
 
-    public DateOnly? fecha_fin { get; set; }
+    public DateOnly? FechaFin { get; set; }
 
-    public string? descripcion_estado { get; set; }
+    public string? DescripcionEstado { get; set; }
 
-    public string? estado { get; set; }
+    public string? Estado { get; set; }
 
-    public virtual TIPO_SOLICITUD id_tipo_solicitudNavigation { get; set; } = null!;
+    public virtual TipoSolicitud IdTipoSolicitudNavigation { get; set; } = null!;
 
-    public virtual USUARIO id_usuarioNavigation { get; set; } = null!;
+    public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
 }

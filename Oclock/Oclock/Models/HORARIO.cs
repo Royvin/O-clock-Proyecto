@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace Oclock.Models;
 
-public partial class HORARIO
+public partial class Horario
 {
-    public int id_horario { get; set; }
+    public int IdHorario { get; set; }
 
-    public string nombre_horario { get; set; } = null!;
+    public string NombreHorario { get; set; } = null!;
 
-    public TimeOnly hora_entrada { get; set; }
+    public TimeOnly HoraEntrada { get; set; }
 
-    public TimeOnly hora_salida { get; set; }
+    public TimeOnly HoraSalida { get; set; }
 
-    public string? dias { get; set; }
+    public string? Dias { get; set; }
 
-    public virtual ICollection<USUARIO_HORARIO> USUARIO_HORARIOs { get; set; } = new List<USUARIO_HORARIO>();
+    public virtual ICollection<UsuarioHorario> UsuarioHorarios { get; set; } = new List<UsuarioHorario>();
 }
