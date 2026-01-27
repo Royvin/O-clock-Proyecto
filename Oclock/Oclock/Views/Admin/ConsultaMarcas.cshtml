@@ -1,0 +1,651 @@
+﻿@{
+    ViewData["Title"] = "Consulta de Marcas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .admin-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background: white;
+    }
+
+    .main-layout {
+        display: flex;
+        min-height: 600px;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+        width: 280px;
+        background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+        padding: 30px 20px;
+        border-right: 1px solid #e0e0e0;
+    }
+
+    .menu-item {
+        padding: 0;
+        margin: 4px 0;
+        border-radius: 10px;
+    }
+
+    .menu-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 20px;
+        color: #4a5568;
+        text-decoration: none;
+        font-weight: 500;
+        border-radius: 10px;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+        .menu-link:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .menu-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+            .menu-link.active::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 4px;
+                height: 24px;
+                background: white;
+                border-radius: 0 4px 4px 0;
+            }
+
+    .icon {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .menu-expandable {
+        cursor: pointer;
+    }
+
+    .menu-expandable-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 20px;
+        color: #4a5568;
+        font-weight: 500;
+        border-radius: 10px;
+        transition: all 0.3s;
+    }
+
+        .menu-expandable-header:hover {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+
+        .menu-expandable-header.active {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            color: #667eea;
+            font-weight: 600;
+        }
+
+    .menu-expandable-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .menu-arrow {
+        font-size: 12px;
+        transition: transform 0.3s;
+    }
+
+    .menu-expandable.expanded .menu-arrow {
+        transform: rotate(90deg);
+    }
+
+    .submenu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+        margin-left: 20px;
+        margin-top: 4px;
+    }
+
+        .submenu.show {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+    .submenu-item {
+        margin: 4px 0;
+    }
+
+    .submenu-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        padding-left: 40px;
+        color: #718096;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+        .submenu-link::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: #cbd5e0;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .submenu-link:hover {
+            background: #f7fafc;
+            color: #667eea;
+            transform: translateX(3px);
+        }
+
+            .submenu-link:hover::before {
+                background: #667eea;
+                transform: translateY(-50%) scale(1.3);
+            }
+
+    .content {
+        flex: 1;
+        padding: 40px;
+        background: #fafbfc;
+    }
+
+    .content-header {
+        margin-bottom: 30px;
+    }
+
+        .content-header h1 {
+            color: #2d3748;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .content-header p {
+            color: #718096;
+        }
+
+    .quick-actions {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        margin-bottom: 35px;
+    }
+
+        .quick-actions h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+    .actions-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+    }
+
+        .actions-buttons label {
+            display: block;
+            margin-bottom: 5px;
+            color: #4a5568;
+            font-weight: 600;
+        }
+
+        .actions-buttons select,
+        .actions-buttons input {
+            padding: 12px;
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+    .btn {
+        padding: 12px 25px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+
+    .btn-primary {
+        background: #667eea;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+    .btn-secondary {
+        background: #edf2f7;
+        color: #333;
+    }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+    .btn-success {
+        background: #48bb78;
+        color: white;
+    }
+
+        .btn-success:hover {
+            background: #38a169;
+        }
+
+    .recent-activity {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        margin-bottom: 30px;
+    }
+
+        .recent-activity h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background: #f1f5f9;
+    }
+
+    th {
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        color: #2d3748;
+    }
+
+    td {
+        padding: 15px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    tbody tr:hover {
+        background: #f7fafc;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .badge-success {
+        background: #c6f6d5;
+        color: #22543d;
+    }
+
+    .badge-warning {
+        background: #fefcbf;
+        color: #744210;
+    }
+
+    .badge-danger {
+        background: #fed7d7;
+        color: #9b2c2c;
+    }
+
+    .empty-state {
+        padding: 40px 20px;
+        text-align: center;
+        color: #718096;
+    }
+
+    .empty-state-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
+</style>
+
+<div class="admin-container">
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="menu-item">
+                <a href="/Home/AdminHome" class="menu-link">
+                    <div class="icon">📊</div>
+                    Dashboard
+                </a>
+            </div>
+
+            <div class="menu-item">
+                <a href="/Admin/VerMarcas" class="menu-link active">
+                    <div class="icon">⏰</div>
+                    Marcas de Asistencia
+                </a>
+            </div>
+
+            <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
+                <div class="menu-expandable-header">
+                    <div class="menu-expandable-left">
+                        <div class="icon">⚙️</div>
+                        <span>Configuración</span>
+                    </div>
+                    <div class="menu-arrow">▶</div>
+                </div>
+                <div class="submenu show">
+                    <div class="submenu-item">
+                        <a href="/Admin/HorariosConfig" class="submenu-link">⏰ Horarios</a>
+                    </div>
+                    <div class="submenu-item">
+                        <a href="/Admin/FeriadosConfig" class="submenu-link">📅 Feriados</a>
+                    </div>
+                    <div class="submenu-item">
+                        <a href="/Admin/BonosParametroConfig" class="submenu-link">🎁 Bonos</a>
+                    </div>
+                    <div class="submenu-item">
+                        <a href="/Admin/NotificacionesConfig" class="submenu-link">🔔 Notificaciones</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <a href="/Admin/Bonos" class="menu-link">
+                    <div class="icon">💵</div>
+                    Bonos
+                </a>
+            </div>
+
+            <div class="menu-item">
+                <a href="/Admin/GestionDocumentos" class="menu-link">
+                    <div class="icon">📝</div>
+                    Documentos
+                </a>
+            </div>
+
+            <div class="menu-item">
+                <a href="/Admin/RankingPuntualidad" class="menu-link">
+                    <div class="icon">⏱️</div>
+                    Puntualidad
+                </a>
+            </div>
+
+            <div class="menu-item">
+                <a href="/Admin/Reportes" class="menu-link">
+                    <div class="icon">📄</div>
+                    Reportes
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <div class="content-header">
+                <h1>Consulta de Marcas</h1>
+                <p>Visualización y exportación de marcas de empleados</p>
+            </div>
+
+            <!-- FILTROS -->
+            <div class="quick-actions">
+                <h2>Filtros de Búsqueda</h2>
+
+                <div class="actions-buttons">
+                    <div>
+                        <label>Empleado:</label>
+                        <select id="filterEmpleado">
+                            <option value="">Todos</option>
+                            <option>Juan Pérez</option>
+                            <option>Carolina Méndez</option>
+                            <option>Samuel Vargas</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Fecha Inicio:</label>
+                        <input type="date" id="filterFechaInicio">
+                    </div>
+
+                    <div>
+                        <label>Fecha Final:</label>
+                        <input type="date" id="filterFechaFin">
+                    </div>
+
+                    <div>
+                        <label>Estado:</label>
+                        <select id="filterEstado">
+                            <option value="">Todos</option>
+                            <option value="valida">Válida</option>
+                            <option value="fuera">Fuera de horario</option>
+                            <option value="inconsistente">Inconsistente</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; display: flex; gap: 15px;">
+                    <button class="btn btn-primary" onclick="buscarMarcas()">Buscar</button>
+                    <button class="btn btn-secondary" onclick="limpiarFiltros()">Limpiar Filtros</button>
+                </div>
+            </div>
+
+            <!-- RESULTADOS DE MARCAS -->
+            <div class="recent-activity">
+                <h2>Marcas Registradas</h2>
+
+                <div style="overflow-x:auto;">
+                    <table id="tablaMarcas">
+                        <thead>
+                            <tr>
+                                <th>Empleado</th>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Hora</th>
+                                <th>Estado</th>
+                                <th>Comentario</th>
+                            </tr>
+                        </thead>
+                        <tbody id="marcasBody">
+                            <!-- Se llenará dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <div class="empty-state-icon">📭</div>
+                    <h3>No se encontraron marcas</h3>
+                    <p>No hay marcas en el rango seleccionado</p>
+                </div>
+
+                <div id="totalHoras" style="margin-top: 15px; font-weight: bold; color:#4a5568; display: none;">
+                    Total horas trabajadas: <span id="horasTotales">0</span>h
+                </div>
+            </div>
+
+            <!-- EXPORTACIÓN -->
+            <div class="quick-actions">
+                <h2>Exportar Resultados</h2>
+
+                <div style="display:flex; gap:20px;">
+                    <button class="btn btn-primary" onclick="exportarCSV()">
+                        📊 Exportar CSV
+                    </button>
+
+                    <button class="btn btn-success" onclick="exportarPowerBI()">
+                        📈 Exportar PowerBI
+                    </button>
+                </div>
+
+                <div id="noDataExport" class="empty-state" style="display: none;">
+                    <p>No hay marcas para exportar</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Datos de ejemplo
+    const marcasData = [
+        { empleado: 'Juan Pérez', fecha: '2025-01-10', tipo: 'Entrada', hora: '07:58', estado: 'valida', comentario: 'Llegó puntual' },
+        { empleado: 'Carolina Méndez', fecha: '2025-01-10', tipo: 'Salida', hora: '17:32', estado: 'fuera', comentario: 'Salida tardía autorizada' },
+        { empleado: 'Samuel Vargas', fecha: '2025-01-09', tipo: 'Entrada', hora: '08:25', estado: 'inconsistente', comentario: 'Marca duplicada' },
+        { empleado: 'Juan Pérez', fecha: '2025-01-09', tipo: 'Salida', hora: '17:00', estado: 'valida', comentario: 'Salida puntual' },
+        { empleado: 'Carolina Méndez', fecha: '2025-01-09', tipo: 'Entrada', hora: '08:02', estado: 'valida', comentario: 'Entrada normal' }
+    ];
+
+    let marcasFiltradas = [...marcasData];
+
+    function toggleSubmenu(element) {
+        const submenu = element.querySelector('.submenu');
+        const header = element.querySelector('.menu-expandable-header');
+
+        element.classList.toggle('expanded');
+        submenu.classList.toggle('show');
+
+        if (element.classList.contains('expanded')) {
+            header.classList.add('active');
+        } else {
+            header.classList.remove('active');
+        }
+    }
+
+    function renderMarcas() {
+        const tbody = document.getElementById('marcasBody');
+        const emptyState = document.getElementById('emptyState');
+        const totalHoras = document.getElementById('totalHoras');
+        const noDataExport = document.getElementById('noDataExport');
+
+        if (marcasFiltradas.length === 0) {
+            tbody.innerHTML = '';
+            emptyState.style.display = 'block';
+            totalHoras.style.display = 'none';
+            noDataExport.style.display = 'block';
+            return;
+        }
+
+        emptyState.style.display = 'none';
+        totalHoras.style.display = 'block';
+        noDataExport.style.display = 'none';
+
+        const estadoBadges = {
+            valida: '<span class="badge badge-success">Válida</span>',
+            fuera: '<span class="badge badge-warning">Fuera de horario</span>',
+            inconsistente: '<span class="badge badge-danger">Inconsistente</span>'
+        };
+
+        tbody.innerHTML = marcasFiltradas.map(marca => `
+            <tr>
+                <td>${marca.empleado}</td>
+                <td>${formatearFecha(marca.fecha)}</td>
+                <td>${marca.tipo}</td>
+                <td>${marca.hora}</td>
+                <td>${estadoBadges[marca.estado]}</td>
+                <td>${marca.comentario}</td>
+            </tr>
+        `).join('');
+
+        // Calcular total de horas (ejemplo)
+        const horas = marcasFiltradas.length * 8;
+        document.getElementById('horasTotales').textContent = horas;
+    }
+
+    function formatearFecha(fecha) {
+        const date = new Date(fecha + 'T00:00:00');
+        return date.toLocaleDateString('es-CR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+    }
+
+    function buscarMarcas() {
+        const empleado = document.getElementById('filterEmpleado').value;
+        const fechaInicio = document.getElementById('filterFechaInicio').value;
+        const fechaFin = document.getElementById('filterFechaFin').value;
+        const estado = document.getElementById('filterEstado').value;
+
+        marcasFiltradas = marcasData.filter(marca => {
+            let cumple = true;
+
+            if (empleado && marca.empleado !== empleado) cumple = false;
+            if (fechaInicio && marca.fecha < fechaInicio) cumple = false;
+            if (fechaFin && marca.fecha > fechaFin) cumple = false;
+            if (estado && marca.estado !== estado) cumple = false;
+
+            return cumple;
+        });
+
+        renderMarcas();
+    }
+
+    function limpiarFiltros() {
+        document.getElementById('filterEmpleado').value = '';
+        document.getElementById('filterFechaInicio').value = '';
+        document.getElementById('filterFechaFin').value = '';
+        document.getElementById('filterEstado').value = '';
+
+        marcasFiltradas = [...marcasData];
+        renderMarcas();
+    }
+
+    function exportarCSV() {
+        if (marcasFiltradas.length === 0) {
+            alert('No hay marcas para exportar');
+            return;
+        }
+
+        let csv = 'Empleado,Fecha,Tipo,Hora,Estado,Comentario\n';
+        marcasFiltradas.forEach(marca => {
+            csv += `${marca.empleado},${marca.fecha},${marca.tipo},${marca.hora},${marca.estado},${marca.comentario}\n`;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'marcas_' + new Date().toISOString().split('T')[0] + '.csv';
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+
+    function exportarPowerBI() {
+        if (marcasFiltradas.length === 0) {
+            alert('No hay marcas para exportar');
+            return;
+        }
+
+        alert('Exportando a formato PowerBI...');
+        // Aquí iría la lógica real de exportación a PowerBI
+    }
+
+    // Inicializar
+    document.addEventListener('DOMContentLoaded', function() {
+        renderMarcas();
+    });
+</script>

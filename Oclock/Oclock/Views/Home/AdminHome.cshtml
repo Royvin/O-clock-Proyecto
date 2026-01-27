@@ -1,99 +1,12 @@
-﻿<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O'clock - Sistema de Asistencia</title>
+﻿﻿@{
+ViewData["Title"] = "Dashboard";
+Layout = "~/Views/Shared/_Layout.cshtml";
+}
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            padding-right: 0;
-            padding-left: 0;
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 32px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .clock-icon {
-            width: 40px;
-            height: 40px;
-            border: 3px solid white;
-            border-radius: 50%;
-            position: relative;
-        }
-
-            .clock-icon::before {
-                content: '';
-                position: absolute;
-                width: 2px;
-                height: 12px;
-                background: white;
-                top: 6px;
-                left: 50%;
-                transform: translateX(-50%);
-            }
-
-            .clock-icon::after {
-                content: '';
-                position: absolute;
-                width: 2px;
-                height: 8px;
-                background: white;
-                top: 12px;
-                left: 50%;
-                transform: translateX(-50%) rotate(90deg);
-                transform-origin: top;
-            }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .avatar {
-            width: 45px;
-            height: 45px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #667eea;
-            font-weight: bold;
         }
 
         /* Sidebar + Content Layout */
@@ -133,33 +46,31 @@
             text-decoration: none;
             color: inherit;
             display: block;
-        
-        
         }
 
-        .menu-link:hover {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            transform: translateX(5px);
-        }
+            .menu-link:hover {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                transform: translateX(5px);
+            }
 
-        .menu-link.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
+            .menu-link.active {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            }
 
-        .menu-link.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 4px;
-            height: 24px;
-            background: white;
-            border-radius: 0 4px 4px 0;
-        }
+                .menu-link.active::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    width: 4px;
+                    height: 24px;
+                    background: white;
+                    border-radius: 0 4px 4px 0;
+                }
 
         .icon {
             width: 24px;
@@ -186,16 +97,16 @@
             transition: all 0.3s;
         }
 
-        .menu-expandable-header:hover {
-            background: #f0f0f0;
-            color: #667eea;
-        }
+            .menu-expandable-header:hover {
+                background: #f0f0f0;
+                color: #667eea;
+            }
 
-        .menu-expandable-header.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            color: #667eea;
-            font-weight: 600;
-        }
+            .menu-expandable-header.active {
+                background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+                color: #667eea;
+                font-weight: 600;
+            }
 
         .menu-expandable-left {
             display: flex;
@@ -220,10 +131,10 @@
             margin-top: 4px;
         }
 
-        .submenu.show {
-            max-height: 500px;
-            transition: max-height 0.5s ease-in;
-        }
+            .submenu.show {
+                max-height: 500px;
+                transition: max-height 0.5s ease-in;
+            }
 
         .submenu-item {
             margin: 4px 0;
@@ -244,41 +155,41 @@
             position: relative;
         }
 
-        .submenu-link::before {
-            content: '';
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 6px;
-            height: 6px;
-            background: #cbd5e0;
-            border-radius: 50%;
-            transition: all 0.3s;
-        }
+            .submenu-link::before {
+                content: '';
+                position: absolute;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 6px;
+                height: 6px;
+                background: #cbd5e0;
+                border-radius: 50%;
+                transition: all 0.3s;
+            }
 
-        .submenu-link:hover {
-            background: #f7fafc;
-            color: #667eea;
-            transform: translateX(3px);
-        }
+            .submenu-link:hover {
+                background: #f7fafc;
+                color: #667eea;
+                transform: translateX(3px);
+            }
 
-        .submenu-link:hover::before {
-            background: #667eea;
-            transform: translateY(-50%) scale(1.3);
-        }
+                .submenu-link:hover::before {
+                    background: #667eea;
+                    transform: translateY(-50%) scale(1.3);
+                }
 
-        .submenu-link.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-            color: #667eea;
-            font-weight: 600;
-        }
+            .submenu-link.active {
+                background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+                color: #667eea;
+                font-weight: 600;
+            }
 
-        .submenu-link.active::before {
-            background: #667eea;
-            width: 8px;
-            height: 8px;
-        }
+                .submenu-link.active::before {
+                    background: #667eea;
+                    width: 8px;
+                    height: 8px;
+                }
 
         /* Main Content - MEJORADO */
         .content {
@@ -779,30 +690,12 @@
             flex-wrap: wrap;
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="logo">
-                <div class="clock-icon"></div>
-                O'clock
-            </div>
-            <div class="user-info">
-                <div>
-                    <div style="text-align: right; margin-bottom: 4px; font-weight: 600;">Juan Pérez</div>
-                    <div style="font-size: 13px; opacity: 0.9;">Administrador</div>
-                </div>
-                <div class="avatar">JP</div>
-            </div>
-        </div>
-
         <!-- Main Layout -->
         <div class="main-layout">
             <!-- Sidebar -->
             <div class="sidebar">
                 <div class="menu-item">
-                    <a href="/Admin/Admin" class="menu-link active">
+                    <a href="/Home/AdminHome" class="menu-link active">
                         <div class="icon">📊</div>
                         Dashboard
                     </a>
@@ -985,12 +878,11 @@
                         </div>
 
                         <div id="pendingRequests">
-                            
                         </div>
                     </div>
                 </div>
 
-               
+
                 <div id="allTab" class="tab-content">
                     <div class="requests-section">
                         <div class="section-header">
@@ -1009,14 +901,13 @@
                                     </tr>
                                 </thead>
                                 <tbody id="allRequestsTable">
-                                   
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-               
+
                 <div id="historyTab" class="tab-content">
                     <div class="requests-section">
                         <div class="section-header">
@@ -1036,14 +927,13 @@
                                     </tr>
                                 </thead>
                                 <tbody id="historyTable">
-                                   
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-               
+
                 <div class="filter-section">
                     <h2>📊 Generar Reporte</h2>
                     <p style="color: #718096; margin-bottom: 20px; font-size: 14px;">
@@ -1060,9 +950,8 @@
                 </div>
             </div>
         </div>
-    </div>
 
-  
+
 
     <script>
 
@@ -1085,7 +974,7 @@
                 header.classList.remove('active');
             }
         }
-   
+
         const requests = [
             { id: 1, employee: 'Ana López', type: 'Vacaciones', startDate: '2025-11-20', endDate: '2025-11-25', status: 'pending', reason: 'Vacaciones familiares', observations: '' },
             { id: 2, employee: 'Carlos Ramírez', type: 'Permiso', startDate: '2025-11-17', endDate: '2025-11-17', status: 'pending', reason: 'Cita médica', observations: '' },
@@ -1102,7 +991,7 @@
             updateCounters();
         });
 
-    
+
         function switchTab(tabName, element) {
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
             element.classList.add('active');
@@ -1111,7 +1000,7 @@
             document.getElementById(tabName + 'Tab').classList.add('active');
         }
 
-       
+
         function renderPendingRequests() {
             const container = document.getElementById('pendingRequests');
             const pending = requests.filter(r => r.status === 'pending');
@@ -1202,7 +1091,7 @@
             updateCounters();
         }
 
-   
+
         function openModal(id) {
             const req = requests.find(r => r.id === id);
             const modal = document.getElementById("requestModal");
@@ -1223,7 +1112,7 @@
             document.getElementById("requestModal").classList.remove("show");
         }
 
-     
+
         function formatDate(date) {
             return new Date(date).toLocaleDateString("es-CR");
         }
@@ -1249,8 +1138,5 @@
             document.getElementById("totalCount").textContent = requests.length;
         }
 
-       
-    </script>
 
-</body>
-</html>
+    </script>

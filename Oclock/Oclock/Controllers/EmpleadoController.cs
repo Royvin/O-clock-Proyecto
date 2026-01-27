@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Oclock.Filters;
 
 namespace Oclock.Controllers
 {
+    [AuthorizeRole(2)]
     public class EmpleadoController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
 
         public IActionResult HistorialMarcas()
         {

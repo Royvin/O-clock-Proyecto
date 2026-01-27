@@ -1,99 +1,12 @@
-﻿<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O'clock - Sistema de Asistencia</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+﻿@{
+    ViewData["Title"] = "Configuracion de Feriados";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        .container-fluid {
-            max-width: 1400px;
-            margin: auto;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 32px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .clock-icon {
-            width: 40px;
-            height: 40px;
-            border: 3px solid white;
-            border-radius: 50%;
-            position: relative;
-        }
-
-            .clock-icon::before {
-                content: '';
-                position: absolute;
-                width: 2px;
-                height: 12px;
-                background: white;
-                top: 6px;
-                left: 50%;
-                transform: translateX(-50%);
-            }
-
-            .clock-icon::after {
-                content: '';
-                position: absolute;
-                width: 2px;
-                height: 8px;
-                background: white;
-                top: 12px;
-                left: 50%;
-                transform: translateX(-50%) rotate(90deg);
-                transform-origin: top;
-            }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .avatar {
-            width: 45px;
-            height: 45px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #667eea;
-            font-weight: bold;
         }
 
         /* Sidebar + Content Layout */
@@ -600,30 +513,13 @@
             gap: 8px;
         }
     </style>
-</head>
-<body>
-    <div class="container-fluid">
-        <!-- Header -->
-        <div class="header">
-            <div class="logo">
-                <div class="clock-icon"></div>
-                O'clock
-            </div>
-            <div class="user-info">
-                <div>
-                    <div style="text-align: right; margin-bottom: 4px; font-weight: 600;">Juan Pérez</div>
-                    <div style="font-size: 13px; opacity: 0.9;">Administrador</div>
-                </div>
-                <div class="avatar">JP</div>
-            </div>
-        </div>
 
         <!-- Main Layout -->
         <div class="main-layout">
             <!-- Sidebar -->
             <div class="sidebar">
                 <div class="menu-item">
-                    <a href="/Admin/Admin" class="menu-link">
+                    <a href="/Home/AdminHome" class="menu-link">
                         <div class="icon">📊</div>
                         Dashboard
                     </a>
@@ -804,7 +700,6 @@
 
             </div>
         </div>
-    </div>
 
     <!-- Modal para Editar Feriado -->
     <div class="modal fade" id="editModal" tabindex="-1">
@@ -999,6 +894,5 @@
             }
 
     </script>
-</body>
-    </html>
+
                  

@@ -1,6 +1,7 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Oclock.Filters;
 using Oclock.Models;
+using System.Diagnostics;
 
 namespace Oclock.Controllers
 {
@@ -13,7 +14,14 @@ namespace Oclock.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        [AuthorizeRole(1)]
+        public IActionResult AdminHome()
+        {
+            return View();
+        }
+
+        [AuthorizeRole(2)]
+        public IActionResult ColaboradorHome()
         {
             return View();
         }

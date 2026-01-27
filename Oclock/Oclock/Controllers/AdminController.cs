@@ -1,25 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Oclock.Filters;
 
 namespace Oclock.Controllers
 {
+    [AuthorizeRole(1)]
     public class AdminController : Controller
     {
-        public IActionResult Admin()
+
+        public IActionResult Dashboard()
         {
             return View();
         }
-
         public IActionResult Bonos()
         {
             return View();
         }
-
         public IActionResult BonosParametroConfig()
-        {
-            return View();
-        }
-
-        public IActionResult Index()
         {
             return View();
         }
@@ -54,5 +50,7 @@ namespace Oclock.Controllers
         {
             return View();
         }
+
+        
     }
 }
