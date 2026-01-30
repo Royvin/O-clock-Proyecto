@@ -1,12 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Oclock.Data;
+using Oclock.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Configurar DbContext
 builder.Services.AddDbContext<By5rqco0trg7fpqgnpvmContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -14,7 +13,6 @@ builder.Services.AddDbContext<By5rqco0trg7fpqgnpvmContext>(options =>
     )
 );
 
-// Configurar sesiones
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromHours(2);
@@ -22,9 +20,10 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddSingleton<EmailService>();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -36,7 +35,6 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Habilitar sesiones
 app.UseSession();
 
 app.UseAuthorization();

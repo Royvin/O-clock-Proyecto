@@ -179,6 +179,8 @@
         .forgot-link {
             color: #718096;
             text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
         }
 
             .forgot-link:hover {
@@ -203,11 +205,35 @@
             font-size: 0.875rem;
             margin-top: 0.25rem;
         }
+
+        .password-wrap {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #718096;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+            .password-toggle:hover {
+                color: #667eea;
+            }
+
+            .password-toggle:focus {
+                outline: none;
+            }
     </style>
 </head>
 <body>
     <div class="auth-container">
-        <!-- Tabs de navegación -->
         <div class="tabs-container">
             <a href="@Url.Action("Index", "Usuario", new { tab = "login" })" class="tab-link @(showRegister ? "" : "active")">
                 <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
@@ -219,12 +245,18 @@
 
         @if (!showRegister)
         {
-            <!-- Contenido de Login -->
             <div class="tab-content">
                 <div class="logo-circle">
                     <span style="font-size: 1.5rem; color: #667eea; font-weight: 700;">O'clock</span>
                 </div>
                 <h2 class="text-center auth-title">Bienvenido de nuevo</h2>
+
+                @if (ViewBag.SuccessMessage != null)
+                {
+                    <div class="alert alert-success" role="alert">
+                        @ViewBag.SuccessMessage
+                    </div>
+                }
 
                 <form asp-action="Login" asp-controller="Usuario" method="post">
                     @if (ViewBag.ErrorMessage != null)
@@ -238,17 +270,31 @@
                         <label class="form-label">Correo electrónico</label>
                         <input type="email" name="email" class="form-control" placeholder="usuario@empresa.com" required />
                     </div>
-                    <div class="mb-3">
+
+                    <div class="mb-2">
                         <label class="form-label">Contraseña</label>
-                        <input type="password" name="password" class="form-control" placeholder="••••••••" required />
+                        <div class="password-wrap">
+                            <input id="loginPassword" type="password" name="password" class="form-control" placeholder="••••••••" required />
+                            <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)" aria-label="Mostrar contraseña">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
-                        <label class="form-check-label" for="rememberMe">
-                            Recordarme
-                        </label>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
+                            <label class="form-check-label" for="rememberMe">
+                                Recordarme
+                            </label>
+                        </div>
+
+                        <a class="forgot-link" href="@Url.Action("ForgotPassword", "Usuario")">
+                            Olvidé la contraseña
+                        </a>
                     </div>
-                    <button type="submit" class="btn-primary-custom mt-3">
+
+                    <button type="submit" class="btn-primary-custom mt-2">
                         <i class="fas fa-sign-in-alt me-2"></i>Ingresar
                     </button>
                 </form>
@@ -256,7 +302,6 @@
         }
         else
         {
-            <!-- Contenido de Registro -->
             <div class="tab-content">
                 <div class="logo-circle">
                     <span style="font-size: 2rem; color: #667eea; font-weight: 700;">O'clock</span>
@@ -273,7 +318,6 @@
                         </div>
                     }
 
-                    <!-- Información Personal -->
                     <div class="section-container">
                         <h5 class="section-title">
                             <i class="fas fa-id-card me-2"></i>Información Personal
@@ -312,7 +356,6 @@
                         </div>
                     </div>
 
-                    <!-- Seguridad -->
                     <div class="section-container">
                         <h5 class="section-title">
                             <i class="fas fa-lock me-2"></i>Seguridad
@@ -322,7 +365,12 @@
                                 <label asp-for="Contraseña" class="form-label">
                                     Contraseña <span class="text-danger-custom">*</span>
                                 </label>
-                                <input asp-for="Contraseña" type="password" class="form-control" placeholder="••••••••" required minlength="8" />
+                                <div class="password-wrap">
+                                    <input id="registerPassword" asp-for="Contraseña" type="password" class="form-control" placeholder="••••••••" required minlength="8" />
+                                    <button type="button" class="password-toggle" onclick="togglePassword('registerPassword', this)" aria-label="Mostrar contraseña">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </div>
                                 <span asp-validation-for="Contraseña" class="validation-message"></span>
                                 <small class="text-muted">Mínimo 8 caracteres</small>
                             </div>
@@ -330,13 +378,17 @@
                                 <label for="confirmar_contraseña" class="form-label">
                                     Confirmar Contraseña <span class="text-danger-custom">*</span>
                                 </label>
-                                <input type="password" id="confirmar_contraseña" name="confirmar_contraseña" class="form-control" placeholder="••••••••" required minlength="8" />
+                                <div class="password-wrap">
+                                    <input id="confirmPassword" type="password" name="confirmar_contraseña" class="form-control" placeholder="••••••••" required minlength="8" />
+                                    <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword', this)" aria-label="Mostrar contraseña">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </div>
                                 <small class="text-muted">Debe coincidir con la contraseña</small>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Información Laboral -->
                     <div class="section-container">
                         <h5 class="section-title">
                             <i class="fas fa-briefcase me-2"></i>Información Laboral
@@ -352,7 +404,6 @@
                         </div>
                     </div>
 
-                    <!-- Botones de Acción -->
                     <div class="d-flex justify-content-center gap-3 mt-4">
                         <button type="submit" class="btn-primary-custom" style="width: auto;">
                             <i class="fas fa-save me-2"></i>Registrar Usuario
@@ -366,10 +417,23 @@
         }
     </div>
 
-    @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    <script>
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+
+            const icon = btn.querySelector('i');
+            const isHidden = input.type === 'password';
+
+            input.type = isHidden ? 'text' : 'password';
+
+            if (icon) {
+                icon.classList.toggle('fa-eye', !isHidden);
+                icon.classList.toggle('fa-eye-slash', isHidden);
+            }
+
+            btn.setAttribute('aria-label', isHidden ? 'Ocultar contraseña' : 'Mostrar contraseña');
         }
-    }
+    </script>
 </body>
 </html>
