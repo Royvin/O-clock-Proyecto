@@ -238,9 +238,12 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
 
             entity.ToTable("MARCA");
 
+            entity.HasIndex(e => e.IdUsuario, "fk_marca_usuario");
+
             entity.Property(e => e.IdMarca)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("id_marca");
+            entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
             entity.Property(e => e.Comentario)
                 .HasColumnType("text")
                 .HasColumnName("comentario");
@@ -256,9 +259,13 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
             entity.Property(e => e.Ubicancia)
                 .HasMaxLength(200)
                 .HasColumnName("ubicancia");
+            entity.Property(e => e.Fecha)
+                .HasColumnType("date")
+                .HasColumnName("fecha")
+                .HasDefaultValueSql("CURRENT_DATE");
 
-            entity.HasOne(d => d.IdMarcaNavigation).WithOne(p => p.Marca)
-                .HasForeignKey<Marca>(d => d.IdMarca)
+            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Marcas)
+                .HasForeignKey(d => d.IdUsuario)
                 .HasConstraintName("fk_marca_usuario");
         });
 

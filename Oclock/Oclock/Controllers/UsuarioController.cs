@@ -61,7 +61,7 @@ namespace Oclock.Controllers
                 }
                 else if (usuario.IdRol == 2) 
                 {
-                    return RedirectToAction("ColaboradorHome", "Home");
+                    return RedirectToAction("Marcas", "Empleado");
                 }
                 else
                 {

@@ -499,10 +499,6 @@
                     <button class="btn btn-primary" onclick="exportarCSV()">
                         📊 Exportar CSV
                     </button>
-
-                    <button class="btn btn-success" onclick="exportarPowerBI()">
-                        📈 Exportar PowerBI
-                    </button>
                 </div>
 
                 <div id="noDataExport" class="empty-state" style="display: none;">
@@ -633,15 +629,6 @@
         a.click();
         window.URL.revokeObjectURL(url);
     }
-
-    function exportarPowerBI() {
-        if (marcasFiltradas.length === 0) {
-            alert('No hay marcas para exportar');
-            return;
-        }
-
-        alert('Exportando a formato PowerBI...');
-        // Aquí iría la lógica real de exportación a PowerBI
     }
 
     // Inicializar

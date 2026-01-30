@@ -2,176 +2,175 @@
     ViewData["Title"] = "Solicitudes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        /* Sidebar + Content Layout */
-        .main-layout {
-            display: flex;
-            min-height: 500px;
-        }
+    .main-layout {
+        display: flex;
+        min-height: 600px;
+    }
 
-        /* SIDEBAR */
-        .sidebar {
-            width: 220px;
-            background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
-            padding: 20px 15px;
-            border-right: 1px solid #e0e0e0;
-            box-shadow: 2px 0 8px rgba(0,0,0,0.02);
-        }
+    .sidebar {
+        width: 280px;
+        background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+        padding: 30px 20px;
+        border-right: 1px solid #e0e0e0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+    }
 
-        .menu-item {
-            padding: 0;
-            margin: 3px 0;
-            border-radius: 8px;
-        }
+    .menu-item {
+        padding: 0;
+        margin: 4px 0;
+        border-radius: 10px;
+        transition: all 0.3s;
+        position: relative;
+    }
 
-        .menu-link {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 15px;
-            color: #4a5568;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            border-radius: 8px;
-            transition: all 0.3s;
-            position: relative;
-        }
+    .menu-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 20px;
+        color: #4a5568;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 15px; /* <- Ajuste para igualar fuente */
+        border-radius: 10px;
+        transition: all 0.3s;
+        position: relative;
+    }
 
         .menu-link:hover {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            transform: translateX(3px);
+            transform: translateX(5px);
         }
 
         .menu-link.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
 
-        .menu-link.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 3px;
-            height: 18px;
-            background: white;
-            border-radius: 0 3px 3px 0;
-        }
+            .menu-link.active::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 4px;
+                height: 24px;
+                background: white;
+                border-radius: 0 4px 4px 0;
+            }
 
-        .icon {
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
+    .icon {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
 
-        /* Main Content */
-        .content {
-            flex: 1;
-            padding: 25px;
-            background: #f5f7fa;
-        }
+    .content {
+        flex: 1;
+        padding: 40px; /* <- Igual al resto */
+        background: #f5f7fa;
+    }
 
-        .content-header {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .content-header {
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
         .content-header h1 {
             color: #2d3748;
-            font-size: 22px;
-            margin-bottom: 5px;
+            font-size: 28px; /* <- Igual que Marcas */
+            margin-bottom: 8px;
         }
 
         .content-header p {
             color: #718096;
-            font-size: 13px;
+            font-size: 14px;
         }
 
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
+    /* Stats Cards */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
 
-        .stat-card {
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            transition: transform 0.3s;
-        }
+    .stat-card {
+        background: white;
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        transition: transform 0.3s;
+    }
 
         .stat-card:hover {
             transform: translateY(-3px);
         }
 
-        .stat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
+    .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
 
-        .stat-icon {
-            font-size: 20px;
-        }
+    .stat-icon {
+        font-size: 20px;
+    }
 
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2d3748;
-            margin-bottom: 3px;
-        }
+    .stat-value {
+        font-size: 24px;
+        font-weight: bold;
+        color: #2d3748;
+        margin-bottom: 3px;
+    }
 
-        .stat-label {
-            color: #718096;
-            font-size: 11px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
+    .stat-label {
+        color: #718096;
+        font-size: 11px;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
 
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            background: white;
-            padding: 8px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
+    /* Tabs */
+    .tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+        background: white;
+        padding: 8px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
 
-        .tab {
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: #4a5568;
-            font-weight: 600;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex: 1;
-            justify-content: center;
-        }
+    .tab {
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        color: #4a5568;
+        font-weight: 600;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex: 1;
+        justify-content: center;
+    }
 
         .tab:hover {
             background: #f7fafc;
@@ -182,22 +181,22 @@
             color: white;
         }
 
-        .tab-content {
-            display: none;
-        }
+    .tab-content {
+        display: none;
+    }
 
         .tab-content.active {
             display: block;
         }
 
-        /* Form Section */
-        .form-section {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            margin-bottom: 20px;
-        }
+    /* Form Section */
+    .form-section {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        margin-bottom: 20px;
+    }
 
         .form-section h2 {
             color: #2d3748;
@@ -208,18 +207,18 @@
             gap: 8px;
         }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
-        }
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 15px;
+    }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
 
         .form-group label {
             color: #4a5568;
@@ -227,10 +226,10 @@
             font-size: 13px;
         }
 
-        .form-group label .required {
-            color: #e53e3e;
-            margin-left: 2px;
-        }
+            .form-group label .required {
+                color: #e53e3e;
+                margin-left: 2px;
+            }
 
         .form-group select,
         .form-group input,
@@ -243,13 +242,13 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .form-group select:focus,
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
+            .form-group select:focus,
+            .form-group input:focus,
+            .form-group textarea:focus {
+                outline: none;
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            }
 
         .form-group.error input,
         .form-group.error select,
@@ -257,185 +256,185 @@
             border-color: #e53e3e;
         }
 
-        .error-message {
-            color: #e53e3e;
-            font-size: 11px;
-            margin-top: 3px;
-        }
+    .error-message {
+        color: #e53e3e;
+        font-size: 11px;
+        margin-top: 3px;
+    }
 
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
+    .form-group textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
 
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
 
-        /* File Upload */
-        .file-upload {
-            border: 2px dashed #cbd5e0;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
+    /* File Upload */
+    .file-upload {
+        border: 2px dashed #cbd5e0;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
 
         .file-upload:hover {
             border-color: #667eea;
             background: #f7fafc;
         }
 
-        .file-upload-icon {
-            font-size: 32px;
-            margin-bottom: 10px;
-            opacity: 0.5;
-        }
+    .file-upload-icon {
+        font-size: 32px;
+        margin-bottom: 10px;
+        opacity: 0.5;
+    }
 
-        .file-upload-text {
-            color: #4a5568;
-            font-weight: 600;
-            font-size: 13px;
-            margin-bottom: 4px;
-        }
+    .file-upload-text {
+        color: #4a5568;
+        font-weight: 600;
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
 
-        .file-upload-hint {
-            color: #718096;
-            font-size: 11px;
-        }
+    .file-upload-hint {
+        color: #718096;
+        font-size: 11px;
+    }
 
-        .file-input {
-            display: none;
-        }
+    .file-input {
+        display: none;
+    }
 
-        .uploaded-files {
-            margin-top: 15px;
-        }
+    .uploaded-files {
+        margin-top: 15px;
+    }
 
-        .uploaded-file {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background: #f7fafc;
-            border-radius: 8px;
-            margin-bottom: 8px;
-        }
+    .uploaded-file {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        background: #f7fafc;
+        border-radius: 8px;
+        margin-bottom: 8px;
+    }
 
-        .file-icon {
-            font-size: 20px;
-        }
+    .file-icon {
+        font-size: 20px;
+    }
 
-        .file-info {
-            flex: 1;
-        }
+    .file-info {
+        flex: 1;
+    }
 
-        .file-name {
-            color: #2d3748;
-            font-weight: 600;
-            font-size: 13px;
-            margin-bottom: 3px;
-        }
+    .file-name {
+        color: #2d3748;
+        font-weight: 600;
+        font-size: 13px;
+        margin-bottom: 3px;
+    }
 
-        .file-size {
-            color: #718096;
-            font-size: 11px;
-        }
+    .file-size {
+        color: #718096;
+        font-size: 11px;
+    }
 
-        .file-remove {
-            background: #fed7d7;
-            color: #c53030;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
+    .file-remove {
+        background: #fed7d7;
+        color: #c53030;
+        border: none;
+        padding: 6px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 11px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
 
         .file-remove:hover {
             background: #fc8181;
             color: white;
         }
 
-        /* Buttons */
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 13px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
+    /* Buttons */
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 13px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
 
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
 
-        .btn-secondary {
-            background: #e2e8f0;
-            color: #4a5568;
-        }
+    .btn-secondary {
+        background: #e2e8f0;
+        color: #4a5568;
+    }
 
         .btn-secondary:hover {
             background: #cbd5e0;
         }
 
-        .btn-success {
-            background: #48bb78;
-            color: white;
-        }
+    .btn-success {
+        background: #48bb78;
+        color: white;
+    }
 
         .btn-success:hover {
             background: #38a169;
         }
 
-        .btn-danger {
-            background: #e53e3e;
-            color: white;
-        }
+    .btn-danger {
+        background: #e53e3e;
+        color: white;
+    }
 
         .btn-danger:hover {
             background: #c53030;
         }
 
-        .btn-info {
-            background: #667eea;
-            color: white;
-            padding: 6px 12px;
-            font-size: 12px;
-        }
+    .btn-info {
+        background: #667eea;
+        color: white;
+        padding: 6px 12px;
+        font-size: 12px;
+    }
 
         .btn-info:hover {
             background: #5a67d8;
         }
 
-        .btn-group {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
+    .btn-group {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
 
-        /* Filter Section */
-        .filter-section {
-            background: white;
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            margin-bottom: 20px;
-        }
+    /* Filter Section */
+    .filter-section {
+        background: white;
+        padding: 15px 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        margin-bottom: 20px;
+    }
 
         .filter-section h3 {
             color: #2d3748;
@@ -446,29 +445,29 @@
             gap: 8px;
         }
 
-        .filter-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 12px;
-            margin-bottom: 12px;
-        }
+    .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 12px;
+        margin-bottom: 12px;
+    }
 
-        /* Request Cards */
-        .requests-section {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
+    /* Request Cards */
+    .requests-section {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
 
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #f0f0f0;
-        }
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #f0f0f0;
+    }
 
         .section-header h2 {
             color: #2d3748;
@@ -478,17 +477,17 @@
             gap: 8px;
         }
 
-        .request-card {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            border-left: 3px solid #667eea;
-            transition: all 0.3s;
-        }
+    .request-card {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        margin-bottom: 12px;
+        border-left: 3px solid #667eea;
+        transition: all 0.3s;
+    }
 
         .request-card:hover {
             background: #e8edf3;
@@ -511,465 +510,324 @@
             border-left-color: #718096;
         }
 
-        .request-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
+    .request-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        flex-shrink: 0;
+    }
 
-        .request-info {
-            flex: 1;
-        }
+    .request-info {
+        flex: 1;
+    }
 
-        .request-title {
-            color: #2d3748;
-            font-weight: 700;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
+    .request-title {
+        color: #2d3748;
+        font-weight: 700;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
 
-        .request-details {
-            color: #718096;
-            font-size: 12px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
+    .request-details {
+        color: #718096;
+        font-size: 12px;
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
 
-        .request-detail-item {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
+    .request-detail-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
 
-        .request-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
+    .request-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
 
-        /* Badges */
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 11px;
-            font-weight: 600;
-        }
+    /* Badges */
+    .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 11px;
+        font-weight: 600;
+    }
 
-        .badge-warning {
-            background: #feebc8;
-            color: #7c2d12;
-        }
+    .badge-warning {
+        background: #feebc8;
+        color: #7c2d12;
+    }
 
-        .badge-success {
-            background: #c6f6d5;
-            color: #22543d;
-        }
+    .badge-success {
+        background: #c6f6d5;
+        color: #22543d;
+    }
 
-        .badge-danger {
-            background: #fed7d7;
-            color: #742a2a;
-        }
+    .badge-danger {
+        background: #fed7d7;
+        color: #742a2a;
+    }
 
-        .badge-info {
-            background: #bee3f8;
-            color: #2c5282;
-        }
+    .badge-info {
+        background: #bee3f8;
+        color: #2c5282;
+    }
 
-        .badge-secondary {
-            background: #e2e8f0;
-            color: #4a5568;
-        }
+    .badge-secondary {
+        background: #e2e8f0;
+        color: #4a5568;
+    }
 
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #718096;
-        }
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #718096;
+    }
 
-        .empty-state-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
+    .empty-state-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
 
-        .empty-state h3 {
-            color: #4a5568;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
+    .empty-state h3 {
+        color: #4a5568;
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
 
-        .empty-state p {
-            font-size: 13px;
-        }
+    .empty-state p {
+        font-size: 13px;
+    }
 
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
 
         .modal.show {
             display: flex;
         }
 
-        .modal-content {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-        }
+    .modal-content {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #f0f0f0;
-        }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #f0f0f0;
+    }
 
         .modal-header h3 {
             color: #2d3748;
             font-size: 18px;
         }
 
-        .btn-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #718096;
-            padding: 0;
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s;
-        }
+    .btn-close {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #718096;
+        padding: 0;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s;
+    }
 
         .btn-close:hover {
             background: #e2e8f0;
             color: #2d3748;
         }
 
-        .detail-row {
-            display: flex;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
+    .detail-row {
+        display: flex;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
 
         .detail-row:last-child {
             border-bottom: none;
         }
 
-        .detail-label {
-            font-weight: 700;
-            color: #4a5568;
-            width: 130px;
-            flex-shrink: 0;
-            font-size: 13px;
-        }
+    .detail-label {
+        font-weight: 700;
+        color: #4a5568;
+        width: 130px;
+        flex-shrink: 0;
+        font-size: 13px;
+    }
 
-        .detail-value {
-            color: #2d3748;
-            flex: 1;
-            font-size: 13px;
-        }
+    .detail-value {
+        color: #2d3748;
+        flex: 1;
+        font-size: 13px;
+    }
 
-        /* Alert Messages */
-        .alert {
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-        }
+    /* Alert Messages */
+    .alert {
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+    }
 
-        .alert-success {
-            background: #c6f6d5;
-            color: #22543d;
-            border-left: 3px solid #48bb78;
-        }
+    .alert-success {
+        background: #c6f6d5;
+        color: #22543d;
+        border-left: 3px solid #48bb78;
+    }
 
-        .alert-error {
-            background: #fed7d7;
-            color: #742a2a;
-            border-left: 3px solid #e53e3e;
-        }
+    .alert-error {
+        background: #fed7d7;
+        color: #742a2a;
+        border-left: 3px solid #e53e3e;
+    }
 
-        .alert-warning {
-            background: #feebc8;
-            color: #7c2d12;
-            border-left: 3px solid #f59e0b;
-        }
+    .alert-warning {
+        background: #feebc8;
+        color: #7c2d12;
+        border-left: 3px solid #f59e0b;
+    }
 
-        .alert-info {
-            background: #bee3f8;
-            color: #2c5282;
-            border-left: 3px solid #4299e1;
-        }
-    </style>
-        <!-- Main Layout -->
-        <div class="main-layout">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <div class="menu-item">
-                    <a href="/Home/ColaboradorHome" class="menu-link">
-                        <div class="icon">⏰</div>
-                        Marcas
-                    </a>
-                </div>
+    .alert-info {
+        background: #bee3f8;
+        color: #2c5282;
+        border-left: 3px solid #4299e1;
+    }
+</style>
 
-                <div class="menu-item">
-                    <a href="/Empleado/HistorialMarcas" class="menu-link">
-                        <div class="icon">📝</div>
-                        Mi Historial
-                    </a>
-                </div>
-
-                <div class="menu-item">
-                    <a href="/Empleado/Solicitudes" class="menu-link active">
-                        <div class="icon">🗂️</div>
-                        Mis Solicitudes
-                    </a>
-                </div>
-            </div>
-
-            <!-- Main Content -->
-            <div class="content">
-                <!-- Header -->
-                <div class="content-header">
-                    <div>
-                        <h1>Mis Solicitudes de Permisos</h1>
-                        <p>Gestiona tus solicitudes de ausencias y permisos</p>
-                    </div>
-                </div>
-
-                <!-- Statistics -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <div class="stat-icon">📌</div>
-                        </div>
-                        <div class="stat-value" id="pendingCount">3</div>
-                        <div class="stat-label">Pendientes</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <div class="stat-icon">✅</div>
-                        </div>
-                        <div class="stat-value" id="approvedCount">8</div>
-                        <div class="stat-label">Aprobadas</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <div class="stat-icon">❌</div>
-                        </div>
-                        <div class="stat-value" id="rejectedCount">1</div>
-                        <div class="stat-label">Rechazadas</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <div class="stat-icon">📊</div>
-                        </div>
-                        <div class="stat-value" id="totalCount">12</div>
-                        <div class="stat-label">Total</div>
-                    </div>
-                </div>
-
-                <!-- Tabs -->
-                <div class="tabs">
-                    <div class="tab active" onclick="switchTab('nueva', this)">
-                        ➕ Nueva Solicitud
-                    </div>
-                    <div class="tab" onclick="switchTab('mis', this)">
-                        📄 Mis Solicitudes
-                    </div>
-                </div>
-
-                <!-- Nueva Solicitud Tab -->
-                <div id="nuevaTab" class="tab-content active">
-                    <div id="alertMessage" style="display: none;"></div>
-
-                    <div class="form-section">
-                        <h2>📝 Registrar Nueva Solicitud</h2>
-                        <form id="solicitudForm">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label>Tipo de Solicitud <span class="required">*</span></label>
-                                    <select id="tipoSolicitud" required>
-                                        <option value="">Seleccione un tipo</option>
-                                        <option value="vacaciones">Vacaciones</option>
-                                        <option value="permiso">Permiso Personal</option>
-                                        <option value="incapacidad">Incapacidad</option>
-                                        <option value="licencia">Licencia</option>
-                                    </select>
-                                    <span class="error-message" id="tipoError"></span>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Prioridad <span class="required">*</span></label>
-                                    <select id="prioridad" required>
-                                        <option value="">Seleccione prioridad</option>
-                                        <option value="normal">Normal</option>
-                                        <option value="urgente">Urgente</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Fecha Inicio <span class="required">*</span></label>
-                                    <input type="date" id="fechaInicio" required>
-                                    <span class="error-message" id="fechaInicioError"></span>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Fecha Fin <span class="required">*</span></label>
-                                    <input type="date" id="fechaFin" required>
-                                    <span class="error-message" id="fechaFinError"></span>
-                                </div>
-
-                                <div class="form-group full-width">
-                                    <label>Motivo / Descripción <span class="required">*</span></label>
-                                    <textarea id="motivo" placeholder="Describa el motivo de su solicitud..." required></textarea>
-                                    <span class="error-message" id="motivoError"></span>
-                                </div>
-
-                                <div class="form-group full-width">
-                                    <label>Adjuntar Documentos de Respaldo</label>
-                                    <div class="file-upload" onclick="document.getElementById('fileInput').click()">
-                                        <div class="file-upload-icon">📎</div>
-                                        <div class="file-upload-text">Haz clic para adjuntar archivos</div>
-                                        <div class="file-upload-hint">PDF, JPG, PNG (Máximo 5MB)</div>
-                                    </div>
-                                    <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileSelect(event)">
-                                    <span class="error-message" id="fileError"></span>
-                                    <div id="uploadedFiles" class="uploaded-files"></div>
-                                </div>
-                            </div>
-
-                            <div class="btn-group">
-                                <button type="submit" class="btn btn-primary">
-                                    ✅ Registrar Solicitud
-                                </button>
-                                <button type="button" class="btn btn-secondary" onclick="clearForm()">
-                                    🔄 Limpiar
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Mis Solicitudes Tab -->
-                <div id="misTab" class="tab-content">
-                    <!-- Filters -->
-                    <div class="filter-section">
-                        <h3>🔍 Filtrar Solicitudes</h3>
-                        <div class="filter-grid">
-                            <div class="form-group">
-                                <label>Estado</label>
-                                <select id="filterEstado" onchange="applyFilters()">
-                                    <option value="">Todos</option>
-                                    <option value="pendiente">Pendiente</option>
-                                    <option value="aprobada">Aprobada</option>
-                                    <option value="rechazada">Rechazada</option>
-                                    <option value="cancelada">Cancelada</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Tipo</label>
-                                <select id="filterTipo" onchange="applyFilters()">
-                                    <option value="">Todos</option>
-                                    <option value="vacaciones">Vacaciones</option>
-                                    <option value="permiso">Permiso</option>
-                                    <option value="incapacidad">Incapacidad</option>
-                                    <option value="licencia">Licencia</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Desde</label>
-                                <input type="date" id="filterDesde" onchange="applyFilters()">
-                            </div>
-                            <div class="form-group">
-                                <label>Hasta</label>
-                                <input type="date" id="filterHasta" onchange="applyFilters()">
-                            </div>
-                        </div>
-                        <button class="btn btn-secondary" onclick="clearFilters()">
-                            🔄 Limpiar Filtros
-                        </button>
-                    </div>
-
-                    <!-- Solicitudes List -->
-                    <div class="requests-section">
-                        <div class="section-header">
-                            <h2>📄 Mis Solicitudes</h2>
-                            <span class="badge badge-info" id="totalBadge">12 solicitudes</span>
-                        </div>
-
-                        <div id="solicitudesList"></div>
-                    </div>
-                </div>
-            </div>
+<div class="main-layout">
+    <div class="sidebar">
+        <div class="menu-item">
+            <a href="/Home/ColaboradorHome" class="menu-link">
+                <div class="icon">⏰</div>
+                Marcas
+            </a>
         </div>
 
-    <!-- Modal Ver Detalle -->
-    <div class="modal" id="detailModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>📋 Detalle de Solicitud</h3>
-                <button class="btn-close" onclick="closeModal('detailModal')">×</button>
-            </div>
-            <div id="detailContent"></div>
+        <div class="menu-item">
+            <a href="/Empleado/HistorialMarcas" class="menu-link">
+                <div class="icon">📝</div>
+                Mi Historial
+            </a>
+        </div>
+
+        <div class="menu-item">
+            <a href="/Empleado/Solicitudes" class="menu-link active">
+                <div class="icon">🗂️</div>
+                Mis Solicitudes
+            </a>
         </div>
     </div>
 
-    <!-- Modal Editar -->
-    <div class="modal" id="editModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>✏️ Editar Solicitud</h3>
-                <button class="btn-close" onclick="closeModal('editModal')">×</button>
+    <div class="content">
+        <div class="content-header">
+            <div>
+                <h1>Mis Solicitudes de Permisos</h1>
+                <p>Gestiona tus solicitudes de ausencias y permisos</p>
             </div>
-            <div id="editContent">
-                <form id="editForm">
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">📌</div>
+                </div>
+                <div class="stat-value" id="pendingCount">3</div>
+                <div class="stat-label">Pendientes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">✅</div>
+                </div>
+                <div class="stat-value" id="approvedCount">8</div>
+                <div class="stat-label">Aprobadas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">❌</div>
+                </div>
+                <div class="stat-value" id="rejectedCount">1</div>
+                <div class="stat-label">Rechazadas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">📊</div>
+                </div>
+                <div class="stat-value" id="totalCount">12</div>
+                <div class="stat-label">Total</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('nueva', this)">
+                ➕ Nueva Solicitud
+            </div>
+            <div class="tab" onclick="switchTab('mis', this)">
+                📄 Mis Solicitudes
+            </div>
+        </div>
+
+        <div id="nuevaTab" class="tab-content active">
+            <div id="alertMessage" style="display: none;"></div>
+
+            <div class="form-section">
+                <h2>📝 Registrar Nueva Solicitud</h2>
+                <form id="solicitudForm">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Tipo <span class="required">*</span></label>
-                            <select id="editTipo" required>
+                            <label>Tipo de Solicitud <span class="required">*</span></label>
+                            <select id="tipoSolicitud" required>
+                                <option value="">Seleccione un tipo</option>
                                 <option value="vacaciones">Vacaciones</option>
-                                <option value="permiso">Permiso</option>
+                                <option value="permiso">Permiso Personal</option>
                                 <option value="incapacidad">Incapacidad</option>
                                 <option value="licencia">Licencia</option>
                             </select>
+                            <span class="error-message" id="tipoError"></span>
                         </div>
 
                         <div class="form-group">
                             <label>Prioridad <span class="required">*</span></label>
-                            <select id="editPrioridad" required>
+                            <select id="prioridad" required>
+                                <option value="">Seleccione prioridad</option>
                                 <option value="normal">Normal</option>
                                 <option value="urgente">Urgente</option>
                             </select>
@@ -977,428 +835,525 @@
 
                         <div class="form-group">
                             <label>Fecha Inicio <span class="required">*</span></label>
-                            <input type="date" id="editFechaInicio" required>
+                            <input type="date" id="fechaInicio" required>
+                            <span class="error-message" id="fechaInicioError"></span>
                         </div>
 
                         <div class="form-group">
                             <label>Fecha Fin <span class="required">*</span></label>
-                            <input type="date" id="editFechaFin" required>
+                            <input type="date" id="fechaFin" required>
+                            <span class="error-message" id="fechaFinError"></span>
                         </div>
 
                         <div class="form-group full-width">
-                            <label>Motivo <span class="required">*</span></label>
-                            <textarea id="editMotivo" required></textarea>
+                            <label>Motivo / Descripción <span class="required">*</span></label>
+                            <textarea id="motivo" placeholder="Describa el motivo de su solicitud..." required></textarea>
+                            <span class="error-message" id="motivoError"></span>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Adjuntar Documentos de Respaldo</label>
+                            <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                                <div class="file-upload-icon">📎</div>
+                                <div class="file-upload-text">Haz clic para adjuntar archivos</div>
+                                <div class="file-upload-hint">PDF, JPG, PNG (Máximo 5MB)</div>
+                            </div>
+                            <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileSelect(event)">
+                            <span class="error-message" id="fileError"></span>
+                            <div id="uploadedFiles" class="uploaded-files"></div>
                         </div>
                     </div>
 
-                    <div class="btn-group" style="margin-top: 15px;">
-                        <button type="submit" class="btn btn-success">
-                            💾 Guardar
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">
+                            ✅ Registrar Solicitud
                         </button>
-                        <button type="button" class="btn btn-secondary" onclick="closeModal('editModal')">
-                            ❌ Cancelar
+                        <button type="button" class="btn btn-secondary" onclick="clearForm()">
+                            🔄 Limpiar
                         </button>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
 
-    <!-- Modal Confirmar Cancelación -->
-    <div class="modal" id="cancelModal">
-        <div class="modal-content" style="max-width: 450px;">
-            <div class="modal-header">
-                <h3>⚠️ Confirmar Cancelación</h3>
-                <button class="btn-close" onclick="closeModal('cancelModal')">×</button>
-            </div>
-            <div style="padding: 15px 0;">
-                <p style="color: #4a5568; margin-bottom: 15px; font-size: 13px;">
-                    ¿Está seguro que desea cancelar esta solicitud? Esta acción no se puede deshacer.
-                </p>
-                <div class="btn-group">
-                    <button class="btn btn-danger" onclick="confirmCancel()">
-                        ✅ Sí, Cancelar
-                    </button>
-                    <button class="btn btn-secondary" onclick="closeModal('cancelModal')">
-                        ❌ No, Mantener
-                    </button>
+        <div id="misTab" class="tab-content">
+            <div class="filter-section">
+                <h3>🔍 Filtrar Solicitudes</h3>
+                <div class="filter-grid">
+                    <div class="form-group">
+                        <label>Estado</label>
+                        <select id="filterEstado" onchange="applyFilters()">
+                            <option value="">Todos</option>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="aprobada">Aprobada</option>
+                            <option value="rechazada">Rechazada</option>
+                            <option value="cancelada">Cancelada</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select id="filterTipo" onchange="applyFilters()">
+                            <option value="">Todos</option>
+                            <option value="vacaciones">Vacaciones</option>
+                            <option value="permiso">Permiso</option>
+                            <option value="incapacidad">Incapacidad</option>
+                            <option value="licencia">Licencia</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Desde</label>
+                        <input type="date" id="filterDesde" onchange="applyFilters()">
+                    </div>
+                    <div class="form-group">
+                        <label>Hasta</label>
+                        <input type="date" id="filterHasta" onchange="applyFilters()">
+                    </div>
                 </div>
+                <button class="btn btn-secondary" onclick="clearFilters()">
+                    🔄 Limpiar Filtros
+                </button>
+            </div>
+
+            <div class="requests-section">
+                <div class="section-header">
+                    <h2>📄 Mis Solicitudes</h2>
+                    <span class="badge badge-info" id="totalBadge">12 solicitudes</span>
+                </div>
+
+                <div id="solicitudesList"></div>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        let solicitudes = [
-            { id: 1, tipo: 'vacaciones', fechaInicio: '2025-12-20', fechaFin: '2025-12-27', motivo: 'Vacaciones de fin de año', estado: 'pendiente', prioridad: 'normal', fechaSolicitud: '2025-12-01', archivos: ['justificante.pdf'] },
-            { id: 2, tipo: 'permiso', fechaInicio: '2025-12-15', fechaFin: '2025-12-15', motivo: 'Cita médica', estado: 'aprobada', prioridad: 'urgente', fechaSolicitud: '2025-12-10', observaciones: 'Aprobado sin inconvenientes', archivos: [] },
-            { id: 3, tipo: 'incapacidad', fechaInicio: '2025-11-28', fechaFin: '2025-11-30', motivo: 'Gripe fuerte', estado: 'aprobada', prioridad: 'urgente', fechaSolicitud: '2025-11-28', archivos: ['incapacidad.pdf'] },
-            { id: 4, tipo: 'permiso', fechaInicio: '2025-11-20', fechaFin: '2025-11-20', motivo: 'Trámite bancario', estado: 'rechazada', prioridad: 'normal', fechaSolicitud: '2025-11-15', observaciones: 'No cumple con requisitos de anticipación', archivos: [] },
-            { id: 5, tipo: 'vacaciones', fechaInicio: '2025-12-18', fechaFin: '2025-12-19', motivo: 'Asuntos personales', estado: 'pendiente', prioridad: 'normal', fechaSolicitud: '2025-12-05', archivos: [] },
-            { id: 6, tipo: 'licencia', fechaInicio: '2026-01-10', fechaFin: '2026-01-15', motivo: 'Licencia por matrimonio', estado: 'pendiente', prioridad: 'normal', fechaSolicitud: '2025-12-08', archivos: ['acta_matrimonio.pdf'] }
-        ];
+<div class="modal" id="detailModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>📋 Detalle de Solicitud</h3>
+            <button class="btn-close" onclick="closeModal('detailModal')">×</button>
+        </div>
+        <div id="detailContent"></div>
+    </div>
+</div>
 
-        let uploadedFiles = [];
-        let currentEditId = null;
-        let currentCancelId = null;
+<div class="modal" id="editModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>✏️ Editar Solicitud</h3>
+            <button class="btn-close" onclick="closeModal('editModal')">×</button>
+        </div>
+        <div id="editContent">
+            <form id="editForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Tipo <span class="required">*</span></label>
+                        <select id="editTipo" required>
+                            <option value="vacaciones">Vacaciones</option>
+                            <option value="permiso">Permiso</option>
+                            <option value="incapacidad">Incapacidad</option>
+                            <option value="licencia">Licencia</option>
+                        </select>
+                    </div>
 
-        document.addEventListener('DOMContentLoaded', () => {
+                    <div class="form-group">
+                        <label>Prioridad <span class="required">*</span></label>
+                        <select id="editPrioridad" required>
+                            <option value="normal">Normal</option>
+                            <option value="urgente">Urgente</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fecha Inicio <span class="required">*</span></label>
+                        <input type="date" id="editFechaInicio" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fecha Fin <span class="required">*</span></label>
+                        <input type="date" id="editFechaFin" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Motivo <span class="required">*</span></label>
+                        <textarea id="editMotivo" required></textarea>
+                    </div>
+                </div>
+
+                <div class="btn-group" style="margin-top: 15px;">
+                    <button type="submit" class="btn btn-success">
+                        💾 Guardar
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('editModal')">
+                        ❌ Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="cancelModal">
+    <div class="modal-content" style="max-width: 450px;">
+        <div class="modal-header">
+            <h3>⚠️ Confirmar Cancelación</h3>
+            <button class="btn-close" onclick="closeModal('cancelModal')">×</button>
+        </div>
+        <div style="padding: 15px 0;">
+            <p style="color: #4a5568; margin-bottom: 15px; font-size: 13px;">
+                ¿Está seguro que desea cancelar esta solicitud? Esta acción no se puede deshacer.
+            </p>
+            <div class="btn-group">
+                <button class="btn btn-danger" onclick="confirmCancel()">
+                    ✅ Sí, Cancelar
+                </button>
+                <button class="btn btn-secondary" onclick="closeModal('cancelModal')">
+                    ❌ No, Mantener
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let solicitudes = [
+        { id: 1, tipo: 'vacaciones', fechaInicio: '2025-12-20', fechaFin: '2025-12-27', motivo: 'Vacaciones de fin de año', estado: 'pendiente', prioridad: 'normal', fechaSolicitud: '2025-12-01', archivos: ['justificante.pdf'] },
+        { id: 2, tipo: 'permiso', fechaInicio: '2025-12-15', fechaFin: '2025-12-15', motivo: 'Cita médica', estado: 'aprobada', prioridad: 'urgente', fechaSolicitud: '2025-12-10', observaciones: 'Aprobado sin inconvenientes', archivos: [] },
+        { id: 3, tipo: 'incapacidad', fechaInicio: '2025-11-28', fechaFin: '2025-11-30', motivo: 'Gripe fuerte', estado: 'aprobada', prioridad: 'urgente', fechaSolicitud: '2025-11-28', archivos: ['incapacidad.pdf'] },
+        { id: 4, tipo: 'permiso', fechaInicio: '2025-11-20', fechaFin: '2025-11-20', motivo: 'Trámite bancario', estado: 'rechazada', prioridad: 'normal', fechaSolicitud: '2025-11-15', observaciones: 'No cumple con requisitos de anticipación', archivos: [] },
+        { id: 5, tipo: 'vacaciones', fechaInicio: '2025-12-18', fechaFin: '2025-12-19', motivo: 'Asuntos personales', estado: 'pendiente', prioridad: 'normal', fechaSolicitud: '2025-12-05', archivos: [] },
+        { id: 6, tipo: 'licencia', fechaInicio: '2026-01-10', fechaFin: '2026-01-15', motivo: 'Licencia por matrimonio', estado: 'pendiente', prioridad: 'normal', fechaSolicitud: '2025-12-08', archivos: ['acta_matrimonio.pdf'] }
+    ];
+
+    let uploadedFiles = [];
+    let currentEditId = null;
+    let currentCancelId = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderSolicitudes();
+        updateCounters();
+        document.getElementById('solicitudForm').addEventListener('submit', handleFormSubmit);
+        document.getElementById('editForm').addEventListener('submit', handleEditSubmit);
+    });
+
+    function switchTab(tabName, element) {
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        element.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        document.getElementById(tabName + 'Tab').classList.add('active');
+    }
+
+    function handleFileSelect(event) {
+        const files = Array.from(event.target.files);
+        const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+        const maxSize = 5 * 1024 * 1024;
+        document.getElementById('fileError').textContent = '';
+
+        for (const file of files) {
+            if (!allowedTypes.includes(file.type)) {
+                showError('fileError', 'Formato no permitido. Use PDF, JPG o PNG.');
+                continue;
+            }
+            if (file.size > maxSize) {
+                showError('fileError', 'Archivo excede 5MB máximo.');
+                continue;
+            }
+            uploadedFiles.push(file);
+        }
+        renderUploadedFiles();
+        event.target.value = '';
+    }
+
+    function renderUploadedFiles() {
+        const container = document.getElementById('uploadedFiles');
+        if (uploadedFiles.length === 0) {
+            container.innerHTML = '';
+            return;
+        }
+        container.innerHTML = uploadedFiles.map((file, index) => `
+            <div class="uploaded-file">
+                <div class="file-icon">📄</div>
+                <div class="file-info">
+                    <div class="file-name">${file.name}</div>
+                    <div class="file-size">${formatFileSize(file.size)}</div>
+                </div>
+                <button type="button" class="file-remove" onclick="removeFile(${index})">🗑️</button>
+            </div>
+        `).join('');
+    }
+
+    function removeFile(index) {
+        uploadedFiles.splice(index, 1);
+        renderUploadedFiles();
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+        return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+    }
+
+    function handleFormSubmit(event) {
+        event.preventDefault();
+        clearErrors();
+
+        const tipo = document.getElementById('tipoSolicitud').value;
+        const prioridad = document.getElementById('prioridad').value;
+        const fechaInicio = document.getElementById('fechaInicio').value;
+        const fechaFin = document.getElementById('fechaFin').value;
+        const motivo = document.getElementById('motivo').value;
+
+        let isValid = true;
+
+        if (!tipo) { showError('tipoError', 'Campo obligatorio'); isValid = false; }
+        if (!fechaInicio) { showError('fechaInicioError', 'Campo obligatorio'); isValid = false; }
+        if (!fechaFin) { showError('fechaFinError', 'Campo obligatorio'); isValid = false; }
+        if (!motivo.trim()) { showError('motivoError', 'Campo obligatorio'); isValid = false; }
+
+        if (fechaInicio && fechaFin) {
+            const inicio = new Date(fechaInicio);
+            const fin = new Date(fechaFin);
+            if (fin < inicio) { showError('fechaFinError', 'Fecha fin debe ser posterior'); isValid = false; }
+            const today = new Date(); today.setHours(0, 0, 0, 0);
+            if (inicio < today) { showError('fechaInicioError', 'No puede ser anterior a hoy'); isValid = false; }
+        }
+
+        if (!isValid) {
+            showAlert('Complete todos los campos obligatorios', 'error');
+            return;
+        }
+
+        const newSolicitud = {
+            id: solicitudes.length + 1,
+            tipo, fechaInicio, fechaFin, motivo,
+            estado: 'pendiente',
+            prioridad,
+            fechaSolicitud: new Date().toISOString().split('T')[0],
+            archivos: uploadedFiles.map(f => f.name)
+        };
+
+        solicitudes.push(newSolicitud);
+        clearForm();
+        renderSolicitudes();
+        updateCounters();
+        showAlert('Solicitud registrada correctamente', 'success');
+        setTimeout(() => document.querySelectorAll('.tab')[1].click(), 1500);
+    }
+
+    function showError(elementId, message) {
+        const errorElement = document.getElementById(elementId);
+        if (errorElement) {
+            errorElement.textContent = message;
+            errorElement.parentElement.classList.add('error');
+        }
+    }
+
+    function clearErrors() {
+        document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+        document.querySelectorAll('.form-group').forEach(el => el.classList.remove('error'));
+    }
+
+    function showAlert(message, type) {
+        const alertDiv = document.getElementById('alertMessage');
+        alertDiv.className = `alert alert-${type}`;
+        alertDiv.innerHTML = `
+            <span style="font-size: 18px;">${type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️'}</span>
+            <span>${message}</span>
+        `;
+        alertDiv.style.display = 'flex';
+        setTimeout(() => alertDiv.style.display = 'none', 5000);
+    }
+
+    function clearForm() {
+        document.getElementById('solicitudForm').reset();
+        uploadedFiles = [];
+        renderUploadedFiles();
+        clearErrors();
+    }
+
+    function renderSolicitudes() {
+        const container = document.getElementById('solicitudesList');
+        let filtered = [...solicitudes];
+
+        const filterEstado = document.getElementById('filterEstado')?.value;
+        const filterTipo = document.getElementById('filterTipo')?.value;
+        const filterDesde = document.getElementById('filterDesde')?.value;
+        const filterHasta = document.getElementById('filterHasta')?.value;
+
+        if (filterEstado) filtered = filtered.filter(s => s.estado === filterEstado);
+        if (filterTipo) filtered = filtered.filter(s => s.tipo === filterTipo);
+        if (filterDesde) filtered = filtered.filter(s => s.fechaInicio >= filterDesde);
+        if (filterHasta) filtered = filtered.filter(s => s.fechaFin <= filterHasta);
+
+        if (filtered.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">📭</div>
+                    <h3>No se encontraron solicitudes</h3>
+                    <p>No hay solicitudes que coincidan con los filtros</p>
+                </div>`;
+            return;
+        }
+
+        const tipoLabels = { vacaciones: 'Vacaciones', permiso: 'Permiso Personal', incapacidad: 'Incapacidad', licencia: 'Licencia' };
+        const tipoIcons = { vacaciones: '🏖️', permiso: '📝', incapacidad: '🏥', licencia: '📄' };
+        const estadoColors = { pendiente: '#feebc8', aprobada: '#c6f6d5', rechazada: '#fed7d7', cancelada: '#e2e8f0' };
+
+        filtered.sort((a, b) => new Date(b.fechaSolicitud) - new Date(a.fechaSolicitud));
+
+        container.innerHTML = filtered.map(sol => `
+            <div class="request-card ${sol.estado}">
+                <div class="request-icon" style="background:${estadoColors[sol.estado]};color:#2d3748;">
+                    ${tipoIcons[sol.tipo]}
+                </div>
+                <div class="request-info">
+                    <div class="request-title">${tipoLabels[sol.tipo]}</div>
+                    <div class="request-details">
+                        <div class="request-detail-item">📅 <strong>${formatDate(sol.fechaInicio)}</strong> al <strong>${formatDate(sol.fechaFin)}</strong></div>
+                        <div class="request-detail-item">${getStatusBadge(sol.estado)}</div>
+                        ${sol.archivos.length > 0 ? `<div class="request-detail-item">📎 ${sol.archivos.length} archivo(s)</div>` : ''}
+                    </div>
+                </div>
+                <div class="request-actions">
+                    <button class="btn btn-info" onclick="viewDetail(${sol.id})">👁️ Ver</button>
+                    ${sol.estado === 'pendiente' ? `
+                        <button class="btn btn-success" onclick="editSolicitud(${sol.id})">✏️</button>
+                        <button class="btn btn-danger" onclick="cancelSolicitud(${sol.id})">❌</button>
+                    ` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function getStatusBadge(estado) {
+        const badges = {
+            pendiente: '<span class="badge badge-warning">Pendiente</span>',
+            aprobada: '<span class="badge badge-success">Aprobada</span>',
+            rechazada: '<span class="badge badge-danger">Rechazada</span>',
+            cancelada: '<span class="badge badge-secondary">Cancelada</span>'
+        };
+        return badges[estado];
+    }
+
+    function formatDate(dateStr) {
+        const date = new Date(dateStr + 'T00:00:00');
+        return date.toLocaleDateString('es-CR', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    function viewDetail(id) {
+        const sol = solicitudes.find(s => s.id === id);
+        if (!sol) return;
+
+        const tipoLabels = { vacaciones: 'Vacaciones', permiso: 'Permiso Personal', incapacidad: 'Incapacidad', licencia: 'Licencia' };
+        const content = document.getElementById('detailContent');
+        content.innerHTML = `
+            <div class="detail-row">
+                <div class="detail-label">ID Solicitud</div>
+                <div class="detail-value">#${sol.id}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Tipo</div>
+                <div class="detail-value">${tipoLabels[sol.tipo]}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Fecha Inicio</div>
+                <div class="detail-value">${formatDate(sol.fechaInicio)}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Fecha Fin</div>
+                <div class="detail-value">${formatDate(sol.fechaFin)}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Motivo</div>
+                <div class="detail-value">${sol.motivo}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Estado</div>
+                <div class="detail-value">${getStatusBadge(sol.estado)}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Prioridad</div>
+                <div class="detail-value">${sol.prioridad === 'urgente' ? '🔴 Urgente' : '🟢 Normal'}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Fecha Solicitud</div>
+                <div class="detail-value">${formatDate(sol.fechaSolicitud)}</div>
+            </div>
+            ${sol.observaciones ? `<div class="detail-row"><div class="detail-label">Observaciones</div><div class="detail-value">${sol.observaciones}</div></div>` : ''}
+            ${sol.archivos.length > 0 ? `<div class="detail-row"><div class="detail-label">Archivos</div><div class="detail-value">${sol.archivos.map(f => `📎 ${f}`).join('<br>')}</div></div>` : ''}
+        `;
+        openModal('detailModal');
+    }
+
+    function editSolicitud(id) {
+        const sol = solicitudes.find(s => s.id === id);
+        if (!sol || sol.estado !== 'pendiente') { showAlert('No es posible editar solicitudes ya atendidas', 'error'); return; }
+
+        currentEditId = id;
+        document.getElementById('editTipo').value = sol.tipo;
+        document.getElementById('editPrioridad').value = sol.prioridad;
+        document.getElementById('editFechaInicio').value = sol.fechaInicio;
+        document.getElementById('editFechaFin').value = sol.fechaFin;
+        document.getElementById('editMotivo').value = sol.motivo;
+        openModal('editModal');
+    }
+
+    function handleEditSubmit(event) {
+        event.preventDefault();
+        const sol = solicitudes.find(s => s.id === currentEditId);
+        if (!sol) return;
+
+        sol.tipo = document.getElementById('editTipo').value;
+        sol.prioridad = document.getElementById('editPrioridad').value;
+        sol.fechaInicio = document.getElementById('editFechaInicio').value;
+        sol.fechaFin = document.getElementById('editFechaFin').value;
+        sol.motivo = document.getElementById('editMotivo').value;
+
+        closeModal('editModal');
+        renderSolicitudes();
+        showAlert('Solicitud actualizada correctamente', 'success');
+    }
+
+    function cancelSolicitud(id) {
+        const sol = solicitudes.find(s => s.id === id);
+        if (!sol || sol.estado !== 'pendiente') { showAlert('Solo se pueden cancelar solicitudes pendientes', 'error'); return; }
+        currentCancelId = id;
+        openModal('cancelModal');
+    }
+
+    function confirmCancel() {
+        const sol = solicitudes.find(s => s.id === currentCancelId);
+        if (sol) {
+            sol.estado = 'cancelada';
+            sol.fechaCancelacion = new Date().toISOString().split('T')[0];
+            closeModal('cancelModal');
             renderSolicitudes();
             updateCounters();
-            document.getElementById('solicitudForm').addEventListener('submit', handleFormSubmit);
-            document.getElementById('editForm').addEventListener('submit', handleEditSubmit);
-        });
-
-        function switchTab(tabName, element) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            element.classList.add('active');
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            document.getElementById(tabName + 'Tab').classList.add('active');
+            showAlert('Solicitud cancelada correctamente', 'success');
         }
+    }
 
-        function handleFileSelect(event) {
-            const files = Array.from(event.target.files);
-            const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
-            const maxSize = 5 * 1024 * 1024;
-            document.getElementById('fileError').textContent = '';
+    function applyFilters() { renderSolicitudes(); }
 
-            for (const file of files) {
-                if (!allowedTypes.includes(file.type)) {
-                    showError('fileError', 'Formato no permitido. Use PDF, JPG o PNG.');
-                    continue;
-                }
-                if (file.size > maxSize) {
-                    showError('fileError', 'Archivo excede 5MB máximo.');
-                    continue;
-                }
-                uploadedFiles.push(file);
-            }
-            renderUploadedFiles();
-            event.target.value = '';
-        }
+    function clearFilters() {
+        document.getElementById('filterEstado').value = '';
+        document.getElementById('filterTipo').value = '';
+        document.getElementById('filterDesde').value = '';
+        document.getElementById('filterHasta').value = '';
+        renderSolicitudes();
+    }
 
-        function renderUploadedFiles() {
-            const container = document.getElementById('uploadedFiles');
-            if (uploadedFiles.length === 0) {
-                container.innerHTML = '';
-                return;
-            }
-            container.innerHTML = uploadedFiles.map((file, index) => `
-                <div class="uploaded-file">
-                    <div class="file-icon">📄</div>
-                    <div class="file-info">
-                        <div class="file-name">${file.name}</div>
-                        <div class="file-size">${formatFileSize(file.size)}</div>
-                    </div>
-                    <button type="button" class="file-remove" onclick="removeFile(${index})">🗑️</button>
-                </div>
-            `).join('');
-        }
+    function updateCounters() {
+        const pendientes = solicitudes.filter(s => s.estado === 'pendiente').length;
+        const aprobadas = solicitudes.filter(s => s.estado === 'aprobada').length;
+        const rechazadas = solicitudes.filter(s => s.estado === 'rechazada').length;
 
-        function removeFile(index) {
-            uploadedFiles.splice(index, 1);
-            renderUploadedFiles();
-        }
+        document.getElementById('pendingCount').textContent = pendientes;
+        document.getElementById('approvedCount').textContent = aprobadas;
+        document.getElementById('rejectedCount').textContent = rechazadas;
+        document.getElementById('totalCount').textContent = solicitudes.length;
+        document.getElementById('totalBadge').textContent = `${solicitudes.length} solicitudes`;
+    }
 
-        function formatFileSize(bytes) {
-            if (bytes < 1024) return bytes + ' B';
-            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
-            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
-        }
-
-        function handleFormSubmit(event) {
-            event.preventDefault();
-            clearErrors();
-
-            const tipo = document.getElementById('tipoSolicitud').value;
-            const prioridad = document.getElementById('prioridad').value;
-            const fechaInicio = document.getElementById('fechaInicio').value;
-            const fechaFin = document.getElementById('fechaFin').value;
-            const motivo = document.getElementById('motivo').value;
-
-            let isValid = true;
-
-            if (!tipo) {
-                showError('tipoError', 'Campo obligatorio');
-                isValid = false;
-            }
-            if (!fechaInicio) {
-                showError('fechaInicioError', 'Campo obligatorio');
-                isValid = false;
-            }
-            if (!fechaFin) {
-                showError('fechaFinError', 'Campo obligatorio');
-                isValid = false;
-            }
-            if (!motivo.trim()) {
-                showError('motivoError', 'Campo obligatorio');
-                isValid = false;
-            }
-
-            if (fechaInicio && fechaFin) {
-                const inicio = new Date(fechaInicio);
-                const fin = new Date(fechaFin);
-                if (fin < inicio) {
-                    showError('fechaFinError', 'Fecha fin debe ser posterior');
-                    isValid = false;
-                }
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                if (inicio < today) {
-                    showError('fechaInicioError', 'No puede ser anterior a hoy');
-                    isValid = false;
-                }
-            }
-
-            if (!isValid) {
-                showAlert('Complete todos los campos obligatorios', 'error');
-                return;
-            }
-
-            const newSolicitud = {
-                id: solicitudes.length + 1,
-                tipo, fechaInicio, fechaFin, motivo,
-                estado: 'pendiente',
-                prioridad,
-                fechaSolicitud: new Date().toISOString().split('T')[0],
-                archivos: uploadedFiles.map(f => f.name)
-            };
-
-            solicitudes.push(newSolicitud);
-            clearForm();
-            renderSolicitudes();
-            updateCounters();
-            showAlert('Solicitud registrada correctamente', 'success');
-            setTimeout(() => document.querySelectorAll('.tab')[1].click(), 1500);
-        }
-
-        function showError(elementId, message) {
-            const errorElement = document.getElementById(elementId);
-            if (errorElement) {
-                errorElement.textContent = message;
-                errorElement.parentElement.classList.add('error');
-            }
-        }
-
-        function clearErrors() {
-            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-            document.querySelectorAll('.form-group').forEach(el => el.classList.remove('error'));
-        }
-
-        function showAlert(message, type) {
-            const alertDiv = document.getElementById('alertMessage');
-            alertDiv.className = `alert alert-${type}`;
-            alertDiv.innerHTML = `
-                <span style="font-size: 18px;">${type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️'}</span>
-                <span>${message}</span>
-            `;
-            alertDiv.style.display = 'flex';
-            setTimeout(() => alertDiv.style.display = 'none', 5000);
-        }
-
-        function clearForm() {
-            document.getElementById('solicitudForm').reset();
-            uploadedFiles = [];
-            renderUploadedFiles();
-            clearErrors();
-        }
-
-        function renderSolicitudes() {
-            const container = document.getElementById('solicitudesList');
-            let filtered = [...solicitudes];
-
-            const filterEstado = document.getElementById('filterEstado')?.value;
-            const filterTipo = document.getElementById('filterTipo')?.value;
-            const filterDesde = document.getElementById('filterDesde')?.value;
-            const filterHasta = document.getElementById('filterHasta')?.value;
-
-            if (filterEstado) filtered = filtered.filter(s => s.estado === filterEstado);
-            if (filterTipo) filtered = filtered.filter(s => s.tipo === filterTipo);
-            if (filterDesde) filtered = filtered.filter(s => s.fechaInicio >= filterDesde);
-            if (filterHasta) filtered = filtered.filter(s => s.fechaFin <= filterHasta);
-
-            if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📭</div>
-                        <h3>No se encontraron solicitudes</h3>
-                        <p>No hay solicitudes que coincidan con los filtros</p>
-                    </div>`;
-                return;
-            }
-
-            const tipoLabels = { vacaciones: 'Vacaciones', permiso: 'Permiso Personal', incapacidad: 'Incapacidad', licencia: 'Licencia' };
-            const tipoIcons = { vacaciones: '🏖️', permiso: '📝', incapacidad: '🏥', licencia: '📄' };
-            const estadoColors = { pendiente: '#feebc8', aprobada: '#c6f6d5', rechazada: '#fed7d7', cancelada: '#e2e8f0' };
-
-            filtered.sort((a, b) => new Date(b.fechaSolicitud) - new Date(a.fechaSolicitud));
-
-            container.innerHTML = filtered.map(sol => `
-                <div class="request-card ${sol.estado}">
-                    <div class="request-icon" style="background:${estadoColors[sol.estado]};color:#2d3748;">
-                        ${tipoIcons[sol.tipo]}
-                    </div>
-                    <div class="request-info">
-                        <div class="request-title">${tipoLabels[sol.tipo]}</div>
-                        <div class="request-details">
-                            <div class="request-detail-item">📅 <strong>${formatDate(sol.fechaInicio)}</strong> al <strong>${formatDate(sol.fechaFin)}</strong></div>
-                            <div class="request-detail-item">${getStatusBadge(sol.estado)}</div>
-                            ${sol.archivos.length > 0 ? `<div class="request-detail-item">📎 ${sol.archivos.length} archivo(s)</div>` : ''}
-                        </div>
-                    </div>
-                    <div class="request-actions">
-                        <button class="btn btn-info" onclick="viewDetail(${sol.id})">👁️ Ver</button>
-                        ${sol.estado === 'pendiente' ? `
-                            <button class="btn btn-success" onclick="editSolicitud(${sol.id})">✏️</button>
-                            <button class="btn btn-danger" onclick="cancelSolicitud(${sol.id})">❌</button>
-                        ` : ''}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function getStatusBadge(estado) {
-            const badges = {
-                pendiente: '<span class="badge badge-warning">Pendiente</span>',
-                aprobada: '<span class="badge badge-success">Aprobada</span>',
-                rechazada: '<span class="badge badge-danger">Rechazada</span>',
-                cancelada: '<span class="badge badge-secondary">Cancelada</span>'
-            };
-            return badges[estado];
-        }
-
-        function formatDate(dateStr) {
-            const date = new Date(dateStr + 'T00:00:00');
-            return date.toLocaleDateString('es-CR', { year: 'numeric', month: 'short', day: 'numeric' });
-        }
-
-        function viewDetail(id) {
-            const sol = solicitudes.find(s => s.id === id);
-            if (!sol) return;
-
-            const tipoLabels = { vacaciones: 'Vacaciones', permiso: 'Permiso Personal', incapacidad: 'Incapacidad', licencia: 'Licencia' };
-            const content = document.getElementById('detailContent');
-            content.innerHTML = `
-                <div class="detail-row">
-                    <div class="detail-label">ID Solicitud</div>
-                    <div class="detail-value">#${sol.id}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Tipo</div>
-                    <div class="detail-value">${tipoLabels[sol.tipo]}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Fecha Inicio</div>
-                    <div class="detail-value">${formatDate(sol.fechaInicio)}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Fecha Fin</div>
-                    <div class="detail-value">${formatDate(sol.fechaFin)}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Motivo</div>
-                    <div class="detail-value">${sol.motivo}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Estado</div>
-                    <div class="detail-value">${getStatusBadge(sol.estado)}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Prioridad</div>
-                    <div class="detail-value">${sol.prioridad === 'urgente' ? '🔴 Urgente' : '🟢 Normal'}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Fecha Solicitud</div>
-                    <div class="detail-value">${formatDate(sol.fechaSolicitud)}</div>
-                </div>
-                ${sol.observaciones ? `<div class="detail-row"><div class="detail-label">Observaciones</div><div class="detail-value">${sol.observaciones}</div></div>` : ''}
-                ${sol.archivos.length > 0 ? `<div class="detail-row"><div class="detail-label">Archivos</div><div class="detail-value">${sol.archivos.map(f => `📎 ${f}`).join('<br>')}</div></div>` : ''}
-            `;
-            openModal('detailModal');
-        }
-
-        function editSolicitud(id) {
-            const sol = solicitudes.find(s => s.id === id);
-            if (!sol || sol.estado !== 'pendiente') {
-                showAlert('No es posible editar solicitudes ya atendidas', 'error');
-                return;
-            }
-
-            currentEditId = id;
-            document.getElementById('editTipo').value = sol.tipo;
-            document.getElementById('editPrioridad').value = sol.prioridad;
-            document.getElementById('editFechaInicio').value = sol.fechaInicio;
-            document.getElementById('editFechaFin').value = sol.fechaFin;
-            document.getElementById('editMotivo').value = sol.motivo;
-            openModal('editModal');
-        }
-
-        function handleEditSubmit(event) {
-            event.preventDefault();
-            const sol = solicitudes.find(s => s.id === currentEditId);
-            if (!sol) return;
-
-            sol.tipo = document.getElementById('editTipo').value;
-            sol.prioridad = document.getElementById('editPrioridad').value;
-            sol.fechaInicio = document.getElementById('editFechaInicio').value;
-            sol.fechaFin = document.getElementById('editFechaFin').value;
-            sol.motivo = document.getElementById('editMotivo').value;
-
-            closeModal('editModal');
-            renderSolicitudes();
-            showAlert('Solicitud actualizada correctamente', 'success');
-        }
-
-        function cancelSolicitud(id) {
-            const sol = solicitudes.find(s => s.id === id);
-            if (!sol || sol.estado !== 'pendiente') {
-                showAlert('Solo se pueden cancelar solicitudes pendientes', 'error');
-                return;
-            }
-            currentCancelId = id;
-            openModal('cancelModal');
-        }
-
-        function confirmCancel() {
-            const sol = solicitudes.find(s => s.id === currentCancelId);
-            if (sol) {
-                sol.estado = 'cancelada';
-                sol.fechaCancelacion = new Date().toISOString().split('T')[0];
-                closeModal('cancelModal');
-                renderSolicitudes();
-                updateCounters();
-                showAlert('Solicitud cancelada correctamente', 'success');
-            }
-        }
-
-        function applyFilters() {
-            renderSolicitudes();
-        }
-
-        function clearFilters() {
-            document.getElementById('filterEstado').value = '';
-            document.getElementById('filterTipo').value = '';
-            document.getElementById('filterDesde').value = '';
-            document.getElementById('filterHasta').value = '';
-            renderSolicitudes();
-        }
-
-        function updateCounters() {
-            const pendientes = solicitudes.filter(s => s.estado === 'pendiente').length;
-            const aprobadas = solicitudes.filter(s => s.estado === 'aprobada').length;
-            const rechazadas = solicitudes.filter(s => s.estado === 'rechazada').length;
-
-            document.getElementById('pendingCount').textContent = pendientes;
-            document.getElementById('approvedCount').textContent = aprobadas;
-            document.getElementById('rejectedCount').textContent = rechazadas;
-            document.getElementById('totalCount').textContent = solicitudes.length;
-            document.getElementById('totalBadge').textContent = `${solicitudes.length} solicitudes`;
-        }
-
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('show');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('show');
-        }
-    </script>
+    function openModal(modalId) { document.getElementById(modalId).classList.add('show'); }
+    function closeModal(modalId) { document.getElementById(modalId).classList.remove('show'); }
+</script>

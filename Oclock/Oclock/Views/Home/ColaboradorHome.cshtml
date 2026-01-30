@@ -2,670 +2,682 @@
     ViewData["Title"] = "Menu Colaborador";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        /* Sidebar + Content Layout */
-        .main-layout {
-            display: flex;
-            min-height: 500px;
-        }
+    /* Sidebar + Content Layout */
+    .main-layout {
+        display: flex;
+        min-height: 500px;
+    }
 
-        /* SIDEBAR */
-        .sidebar {
-            width: 220px;
-            background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
-            padding: 20px 15px;
-            border-right: 1px solid #e0e0e0;
-            box-shadow: 2px 0 8px rgba(0,0,0,0.02);
-        }
+    /* SIDEBAR */
+    .sidebar {
+        width: 220px;
+        background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+        padding: 20px 15px;
+        border-right: 1px solid #e0e0e0;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.02);
+    }
 
-        .menu-item {
-            padding: 0;
-            margin: 3px 0;
-            border-radius: 8px;
-        }
+    .menu-item {
+        padding: 0;
+        margin: 3px 0;
+        border-radius: 8px;
+    }
 
-        .menu-link {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 15px;
-            color: #4a5568;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 14px;
-            border-radius: 8px;
-            transition: all 0.3s;
-            position: relative;
-        }
+    .menu-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 15px;
+        color: #4a5568;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        position: relative;
+    }
 
-            .menu-link:hover {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                transform: translateX(3px);
-            }
-
-            .menu-link.active {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
-            }
-
-                .menu-link.active::before {
-                    content: '';
-                    position: absolute;
-                    left: 0;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    width: 3px;
-                    height: 18px;
-                    background: white;
-                    border-radius: 0 3px 3px 0;
-                }
-
-        .icon {
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-
-        /* Main Content */
-        .content {
-            flex: 1;
-            padding: 25px;
-            background: #f5f7fa;
-        }
-
-        .content-header {
-            margin-bottom: 20px;
-        }
-
-            .content-header h1 {
-                color: #2d3748;
-                font-size: 22px;
-                margin-bottom: 5px;
-            }
-
-            .content-header p {
-                color: #718096;
-                font-size: 13px;
-            }
-
-        /* Current Time Display */
-        .time-display {
+        .menu-link:hover {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.25);
-            margin-bottom: 20px;
-            text-align: center;
+            transform: translateX(3px);
         }
 
-        .current-time {
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 6px;
-            letter-spacing: 1px;
+        .menu-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
         }
 
-        .current-date {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        /* Marking Buttons Grid */
-        .marking-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .marking-button {
-            background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-        }
-
-            .marking-button:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            .menu-link.active::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 3px;
+                height: 18px;
+                background: white;
+                border-radius: 0 3px 3px 0;
             }
 
-            .marking-button.entrada {
-                border-color: #48bb78;
-            }
+    .icon {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+    }
 
-                .marking-button.entrada:hover {
-                    background: #48bb78;
-                    color: white;
-                }
+    /* Main Content */
+    .content {
+        flex: 1;
+        padding: 25px;
+        background: #f5f7fa;
+    }
 
-            .marking-button.salida {
-                border-color: #e53e3e;
-            }
+    .content-header {
+        margin-bottom: 20px;
+    }
 
-                .marking-button.salida:hover {
-                    background: #e53e3e;
-                    color: white;
-                }
-
-            .marking-button.almuerzo {
-                border-color: #ed8936;
-            }
-
-                .marking-button.almuerzo:hover {
-                    background: #ed8936;
-                    color: white;
-                }
-
-            .marking-button.descanso {
-                border-color: #4299e1;
-            }
-
-                .marking-button.descanso:hover {
-                    background: #4299e1;
-                    color: white;
-                }
-
-        .marking-icon {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        .marking-label {
-            font-size: 15px;
-            font-weight: 700;
+        .content-header h1 {
+            color: #2d3748;
+            font-size: 22px;
             margin-bottom: 5px;
         }
 
-        .marking-description {
-            font-size: 11px;
+        .content-header p {
             color: #718096;
+            font-size: 13px;
         }
 
-        .marking-button:hover .marking-description {
-            color: rgba(255, 255, 255, 0.9);
+    /* Current Time Display */
+    .time-display {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.25);
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .current-time {
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 6px;
+        letter-spacing: 1px;
+    }
+
+    .current-date {
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    /* Marking Buttons Grid */
+    .marking-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .marking-button {
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-align: center;
+    }
+
+        .marking-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
         }
 
-        /* Status Info */
-        .status-section {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            margin-bottom: 20px;
+        .marking-button.entrada {
+            border-color: #48bb78;
         }
 
-            .status-section h2 {
-                color: #2d3748;
-                font-size: 16px;
-                margin-bottom: 15px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
+            .marking-button.entrada:hover {
+                background: #48bb78;
+                color: white;
             }
 
-        .status-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
+        .marking-button.salida {
+            border-color: #e53e3e;
         }
 
-        .status-item {
-            background: #f7fafc;
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 3px solid #667eea;
+            .marking-button.salida:hover {
+                background: #e53e3e;
+                color: white;
+            }
+
+        .marking-button.almuerzo {
+            border-color: #ed8936;
         }
 
-        .status-item-label {
-            color: #718096;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 6px;
+            .marking-button.almuerzo:hover {
+                background: #ed8936;
+                color: white;
+            }
+
+        .marking-button.descanso {
+            border-color: #4299e1;
         }
 
-        .status-item-value {
+            .marking-button.descanso:hover {
+                background: #4299e1;
+                color: white;
+            }
+
+    .marking-icon {
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+
+    .marking-label {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .marking-description {
+        font-size: 11px;
+        color: #718096;
+    }
+
+    .marking-button:hover .marking-description {
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Status Info */
+    .status-section {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        margin-bottom: 20px;
+    }
+
+        .status-section h2 {
             color: #2d3748;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        /* History Section */
-        .history-section {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            margin-bottom: 20px;
-        }
-
-            .history-section h2 {
-                color: #2d3748;
-                font-size: 16px;
-                margin-bottom: 15px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                padding-bottom: 12px;
-                border-bottom: 2px solid #f0f0f0;
-            }
-
-        .history-item {
+            font-size: 16px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            border-left: 3px solid #667eea;
-            transition: all 0.3s;
+            gap: 8px;
         }
 
-            .history-item:hover {
-                background: #e8edf3;
-                transform: translateX(3px);
-            }
+    .status-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+    }
 
-        .history-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
+    .status-item {
+        background: #f7fafc;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 3px solid #667eea;
+    }
 
-        .history-info {
-            flex: 1;
-        }
+    .status-item-label {
+        color: #718096;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+    }
 
-        .history-title {
+    .status-item-value {
+        color: #2d3748;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    /* History Section */
+    .history-section {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        margin-bottom: 20px;
+    }
+
+        .history-section h2 {
             color: #2d3748;
-            font-weight: 700;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-
-        .history-details {
-            color: #718096;
-            font-size: 12px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .history-detail-item {
+            font-size: 16px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 4px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .badge-success {
-            background: #c6f6d5;
-            color: #22543d;
-        }
-
-        .badge-info {
-            background: #bee3f8;
-            color: #2c5282;
-        }
-
-        .badge-warning {
-            background: #feebc8;
-            color: #7c2d12;
-        }
-
-        .badge-danger {
-            background: #fed7d7;
-            color: #742a2a;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-            .modal.show {
-                display: flex;
-            }
-
-        .modal-content {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            max-width: 450px;
-            width: 90%;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+            gap: 8px;
             padding-bottom: 12px;
             border-bottom: 2px solid #f0f0f0;
         }
 
-            .modal-header h3 {
-                color: #2d3748;
-                font-size: 18px;
-            }
+    .history-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        margin-bottom: 12px;
+        border-left: 3px solid #667eea;
+        transition: all 0.3s;
+    }
 
-        .btn-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #718096;
-            padding: 0;
-            width: 28px;
-            height: 28px;
+        .history-item:hover {
+            background: #e8edf3;
+            transform: translateX(3px);
+        }
+
+    .history-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+
+    .history-info {
+        flex: 1;
+    }
+
+    .history-title {
+        color: #2d3748;
+        font-weight: 700;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+
+    .history-details {
+        color: #718096;
+        font-size: 12px;
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .history-detail-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .badge-success {
+        background: #c6f6d5;
+        color: #22543d;
+    }
+
+    .badge-info {
+        background: #bee3f8;
+        color: #2c5282;
+    }
+
+    .badge-warning {
+        background: #feebc8;
+        color: #7c2d12;
+    }
+
+    .badge-danger {
+        background: #fed7d7;
+        color: #742a2a;
+    }
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .modal.show {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s;
         }
 
-            .btn-close:hover {
-                background: #e2e8f0;
-                color: #2d3748;
-            }
+    .modal-content {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        max-width: 450px;
+        width: 90%;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
 
-        .success-icon {
-            width: 60px;
-            height: 60px;
-            background: #c6f6d5;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            margin: 0 auto 15px;
-        }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #f0f0f0;
+    }
 
-        .modal-message {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-            .modal-message h4 {
-                color: #2d3748;
-                font-size: 17px;
-                margin-bottom: 8px;
-            }
-
-            .modal-message p {
-                color: #718096;
-                font-size: 13px;
-            }
-
-        .modal-details {
-            background: #f7fafc;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-            .detail-row:last-child {
-                border-bottom: none;
-            }
-
-        .detail-label {
-            color: #718096;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .detail-value {
+        .modal-header h3 {
             color: #2d3748;
-            font-weight: 700;
-            font-size: 13px;
+            font-size: 18px;
         }
 
-        .btn {
-            padding: 10px 24px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 13px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            width: 100%;
-            justify-content: center;
+    .btn-close {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #718096;
+        padding: 0;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s;
+    }
+
+        .btn-close:hover {
+            background: #e2e8f0;
+            color: #2d3748;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
+    .success-icon {
+        width: 60px;
+        height: 60px;
+        background: #c6f6d5;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        margin: 0 auto 15px;
+    }
 
-            .btn-primary:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-            }
+    .modal-message {
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #718096;
-        }
-
-        .empty-state-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
-
-        .empty-state h3 {
-            color: #4a5568;
+        .modal-message h4 {
+            color: #2d3748;
+            font-size: 17px;
             margin-bottom: 8px;
-            font-size: 16px;
         }
 
-        .empty-state p {
+        .modal-message p {
+            color: #718096;
             font-size: 13px;
         }
-    </style>
 
-        <!-- Main Layout -->
-        <div class="main-layout">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <div class="menu-item">
-                    <a href="/Empleado/Marcas" class="menu-link active">
-                        <div class="icon">⏰</div>
-                        Marcas
-                    </a>
-                </div>
+    .modal-details {
+        background: #f7fafc;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
 
-                <div class="menu-item">
-                    <a href="/Empleado/HistorialMarcas" class="menu-link">
-                        <div class="icon">📝</div>
-                        Mi Historial
-                    </a>
-                </div>
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #e2e8f0;
+    }
 
-                <div class="menu-item">
-                    <a href="/Empleado/Solicitudes" class="menu-link">
-                        <div class="icon">🗂️</div>
-                        Mis Solicitudes
-                    </a>
-                </div>
-            </div>
+        .detail-row:last-child {
+            border-bottom: none;
+        }
 
-            <!-- Main Content -->
-            <div class="content">
-                <!-- Header -->
-                <div class="content-header">
-                    <h1>Registro de Asistencia</h1>
-                    <p>Marca tu entrada, salida, almuerzo y descansos del día</p>
-                </div>
+    .detail-label {
+        color: #718096;
+        font-weight: 600;
+        font-size: 13px;
+    }
 
-                <!-- Current Time Display -->
-                <div class="time-display">
-                    <div class="current-time" id="currentTime">00:00:00</div>
-                    <div class="current-date" id="currentDate">Cargando...</div>
-                </div>
+    .detail-value {
+        color: #2d3748;
+        font-weight: 700;
+        font-size: 13px;
+    }
 
-                <!-- Marking Buttons -->
-                <div class="marking-grid">
-                    <div class="marking-button entrada" onclick="registerMark('entrada')">
-                        <div class="marking-icon">🚪</div>
-                        <div class="marking-label">Marcar Entrada</div>
-                        <div class="marking-description">Registra tu llegada</div>
-                    </div>
+    .btn {
+        padding: 10px 24px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 13px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        width: 100%;
+        justify-content: center;
+    }
 
-                    <div class="marking-button almuerzo" onclick="registerMark('almuerzo')">
-                        <div class="marking-icon">🍽️</div>
-                        <div class="marking-label">Marcar Almuerzo</div>
-                        <div class="marking-description">Hora de almuerzo</div>
-                    </div>
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
 
-                    <div class="marking-button descanso" onclick="registerMark('descanso')">
-                        <div class="marking-icon">☕</div>
-                        <div class="marking-label">Marcar Descanso</div>
-                        <div class="marking-description">Tiempo de descanso</div>
-                    </div>
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
 
-                    <div class="marking-button salida" onclick="registerMark('salida')">
-                        <div class="marking-icon">🏠</div>
-                        <div class="marking-label">Marcar Salida</div>
-                        <div class="marking-description">Registra tu salida</div>
-                    </div>
-                </div>
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #718096;
+    }
 
-                <!-- Status Today -->
-                <div class="status-section">
-                    <h2>📊 Resumen del Día</h2>
-                    <div class="status-grid">
-                        <div class="status-item">
-                            <div class="status-item-label">Hora de Entrada</div>
-                            <div class="status-item-value" id="entradaTime">--:--</div>
-                        </div>
-                        <div class="status-item">
-                            <div class="status-item-label">Hora de Salida</div>
-                            <div class="status-item-value" id="salidaTime">--:--</div>
-                        </div>
-                        <div class="status-item">
-                            <div class="status-item-label">Tiempo Trabajado</div>
-                            <div class="status-item-value" id="workedTime">0h 0m</div>
-                        </div>
-                        <div class="status-item">
-                            <div class="status-item-label">Estado Actual</div>
-                            <div class="status-item-value" id="currentStatus">
-                                <span class="badge badge-info" style="font-size: 12px;">Sin marcar</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    .empty-state-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
 
-                <!-- Today's History -->
-                <div class="history-section">
-                    <h2>📝 Marcas de Hoy</h2>
-                    <div id="todayHistory">
-                        <div class="empty-state">
-                            <div class="empty-state-icon">⏰</div>
-                            <h3>Sin marcas registradas</h3>
-                            <p>Aún no has registrado ninguna marca el día de hoy</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    .empty-state h3 {
+        color: #4a5568;
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+
+    .empty-state p {
+        font-size: 13px;
+    }
+</style>
+
+<!-- Main Layout -->
+<div class="main-layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="menu-item">
+            <a href="/Empleado/Marcas" class="menu-link active">
+                <div class="icon">⏰</div>
+                Marcas
+            </a>
         </div>
 
-    <!-- Success Modal -->
-    <div class="modal" id="successModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>✅ Marca Registrada</h3>
-                <button class="btn-close" onclick="closeModal()">×</button>
-            </div>
-            <div class="success-icon">✅</div>
-            <div class="modal-message">
-                <h4>¡Marca registrada exitosamente!</h4>
-                <p>Tu marca ha sido guardada correctamente</p>
-            </div>
-            <div class="modal-details" id="modalDetails"></div>
-            <button class="btn btn-primary" onclick="closeModal()">Continuar</button>
+        <div class="menu-item">
+            <a href="/Empleado/HistorialMarcas" class="menu-link">
+                <div class="icon">📝</div>
+                Mi Historial
+            </a>
+        </div>
+
+        <div class="menu-item">
+            <a href="/Empleado/Solicitudes" class="menu-link">
+                <div class="icon">🗂️</div>
+                Mis Solicitudes
+            </a>
         </div>
     </div>
 
-    <script>
-        let todayMarks = [];
+    <!-- Main Content -->
+    <div class="content">
+        <div class="content-header">
+            <h1>Registro de Asistencia</h1>
+            <p>Marca tu entrada, salida, almuerzo y descansos del día</p>
+        </div>
 
-        function updateClock() {
+        <div class="time-display">
+            <div class="current-time" id="currentTime">00:00:00</div>
+            <div class="current-date" id="currentDate">Cargando...</div>
+        </div>
+
+        <div class="marking-grid">
+            <div class="marking-button entrada" onclick="registerMark('entrada')">
+                <div class="marking-icon">🚪</div>
+                <div class="marking-label">Marcar Entrada</div>
+                <div class="marking-description">Registra tu llegada</div>
+            </div>
+
+            <div class="marking-button almuerzo" onclick="registerMark('almuerzo')">
+                <div class="marking-icon">🍽️</div>
+                <div class="marking-label">Marcar Almuerzo</div>
+                <div class="marking-description">Hora de almuerzo</div>
+            </div>
+
+            <div class="marking-button descanso" onclick="registerMark('descanso')">
+                <div class="marking-icon">☕</div>
+                <div class="marking-label">Marcar Descanso</div>
+                <div class="marking-description">Tiempo de descanso</div>
+            </div>
+
+            <div class="marking-button salida" onclick="registerMark('salida')">
+                <div class="marking-icon">🏠</div>
+                <div class="marking-label">Marcar Salida</div>
+                <div class="marking-description">Registra tu salida</div>
+            </div>
+        </div>
+
+        <div class="status-section">
+            <h2>📊 Resumen del Día</h2>
+            <div class="status-grid">
+                <div class="status-item">
+                    <div class="status-item-label">Hora de Entrada</div>
+                    <div class="status-item-value" id="entradaTime">--:--</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-item-label">Hora de Salida</div>
+                    <div class="status-item-value" id="salidaTime">--:--</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-item-label">Tiempo Trabajado</div>
+                    <div class="status-item-value" id="workedTime">0h 0m</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-item-label">Estado Actual</div>
+                    <div class="status-item-value" id="currentStatus">
+                        <span class="badge badge-info" style="font-size: 12px;">Sin marcar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="history-section">
+            <h2>📝 Marcas de Hoy</h2>
+            <div id="todayHistory">
+                <div class="empty-state">
+                    <div class="empty-state-icon">⏰</div>
+                    <h3>Sin marcas registradas</h3>
+                    <p>Aún no has registrado ninguna marca el día de hoy</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal" id="successModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>✅ Marca Registrada</h3>
+            <button class="btn-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="success-icon">✅</div>
+        <div class="modal-message">
+            <h4>¡Marca registrada exitosamente!</h4>
+            <p>Tu marca ha sido guardada correctamente</p>
+        </div>
+        <div class="modal-details" id="modalDetails"></div>
+        <button class="btn btn-primary" onclick="closeModal()">Continuar</button>
+    </div>
+</div>
+
+<script>
+    let todayMarks = [];
+
+    function updateClock() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        document.getElementById('currentTime').textContent = `${hours}:${minutes}:${seconds}`;
+
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const dateStr = now.toLocaleDateString('es-CR', options);
+        document.getElementById('currentDate').textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+    }
+
+    async function registerMark(type) {
+        try {
+            const body = new URLSearchParams();
+            body.append('tipo', type);
+
+            const response = await fetch('/Empleado/RegistrarMarca', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                body: body.toString()
+            });
+
+            const data = await response.json();
+
+            if (!data.success) {
+                alert((data.message || 'No se pudo registrar la marca.') + (data.detail ? ("\n\nDetalle: " + data.detail) : ""));
+                return;
+            }
+
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('currentTime').textContent = `${hours}:${minutes}:${seconds}`;
-
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const dateStr = now.toLocaleDateString('es-CR', options);
-            document.getElementById('currentDate').textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
-        }
-
-        function registerMark(type) {
-            const now = new Date();
-            const timestamp = now.toISOString();
-            const time = now.toLocaleTimeString('es-CR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            const location = "San José, Costa Rica";
+            const time = data.marca && data.marca.hora ? data.marca.hora : now.toLocaleTimeString('es-CR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
             const mark = {
                 id: todayMarks.length + 1,
                 type: type,
-                timestamp: timestamp,
+                timestamp: now.toISOString(),
                 time: time,
                 date: now.toLocaleDateString('es-CR'),
-                location: location,
+                location: "San José, Costa Rica",
                 employeeId: "EMP001",
                 employeeName: "María González"
             };
@@ -674,126 +686,129 @@
             updateStatusSection();
             renderTodayHistory();
             showSuccessModal(mark);
+        } catch (e) {
+            alert('Ocurrió un error al registrar la marca.');
+        }
+    }
+
+    function updateStatusSection() {
+        const entradaMark = todayMarks.find(m => m.type === 'entrada');
+        const salidaMark = todayMarks.find(m => m.type === 'salida');
+
+        if (entradaMark) {
+            document.getElementById('entradaTime').textContent = entradaMark.time.substring(0, 5);
         }
 
-        function updateStatusSection() {
-            const entradaMark = todayMarks.find(m => m.type === 'entrada');
-            const salidaMark = todayMarks.find(m => m.type === 'salida');
-
-            if (entradaMark) {
-                document.getElementById('entradaTime').textContent = entradaMark.time.substring(0, 5);
-            }
-
-            if (salidaMark) {
-                document.getElementById('salidaTime').textContent = salidaMark.time.substring(0, 5);
-            }
-
-            if (entradaMark && salidaMark) {
-                const entrada = new Date(entradaMark.timestamp);
-                const salida = new Date(salidaMark.timestamp);
-                const diff = salida - entrada;
-                const hours = Math.floor(diff / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                document.getElementById('workedTime').textContent = `${hours}h ${minutes}m`;
-            }
-
-            const statusEl = document.getElementById('currentStatus');
-            const lastMark = todayMarks[todayMarks.length - 1];
-
-            if (!lastMark) {
-                statusEl.innerHTML = '<span class="badge badge-info" style="font-size: 12px;">Sin marcar</span>';
-            } else if (lastMark.type === 'entrada') {
-                statusEl.innerHTML = '<span class="badge badge-success" style="font-size: 12px;">Trabajando</span>';
-            } else if (lastMark.type === 'almuerzo') {
-                statusEl.innerHTML = '<span class="badge badge-warning" style="font-size: 12px;">En almuerzo</span>';
-            } else if (lastMark.type === 'descanso') {
-                statusEl.innerHTML = '<span class="badge badge-info" style="font-size: 12px;">En descanso</span>';
-            } else if (lastMark.type === 'salida') {
-                statusEl.innerHTML = '<span class="badge badge-danger" style="font-size: 12px;">Fuera de turno</span>';
-            }
+        if (salidaMark) {
+            document.getElementById('salidaTime').textContent = salidaMark.time.substring(0, 5);
         }
 
-        function renderTodayHistory() {
-            const container = document.getElementById('todayHistory');
+        if (entradaMark && salidaMark) {
+            const entrada = new Date(entradaMark.timestamp);
+            const salida = new Date(salidaMark.timestamp);
+            const diff = salida - entrada;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById('workedTime').textContent = `${hours}h ${minutes}m`;
+        }
 
-            if (todayMarks.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">⏰</div>
-                        <h3>Sin marcas registradas</h3>
-                        <p>Aún no has registrado ninguna marca el día de hoy</p>
-                    </div>`;
-                return;
-            }
+        const statusEl = document.getElementById('currentStatus');
+        const lastMark = todayMarks[todayMarks.length - 1];
 
-            const markIcons = {
-                entrada: { icon: '🚪', color: '#c6f6d5', text: '#22543d', label: 'Entrada' },
-                salida: { icon: '🏠', color: '#fed7d7', text: '#742a2a', label: 'Salida' },
-                almuerzo: { icon: '🍽️', color: '#feebc8', text: '#7c2d12', label: 'Almuerzo' },
-                descanso: { icon: '☕', color: '#bee3f8', text: '#2c5282', label: 'Descanso' }
-            };
+        if (!lastMark) {
+            statusEl.innerHTML = '<span class="badge badge-info" style="font-size: 12px;">Sin marcar</span>';
+        } else if (lastMark.type === 'entrada') {
+            statusEl.innerHTML = '<span class="badge badge-success" style="font-size: 12px;">Trabajando</span>';
+        } else if (lastMark.type === 'almuerzo') {
+            statusEl.innerHTML = '<span class="badge badge-warning" style="font-size: 12px;">En almuerzo</span>';
+        } else if (lastMark.type === 'descanso') {
+            statusEl.innerHTML = '<span class="badge badge-info" style="font-size: 12px;">En descanso</span>';
+        } else if (lastMark.type === 'salida') {
+            statusEl.innerHTML = '<span class="badge badge-danger" style="font-size: 12px;">Fuera de turno</span>';
+        }
+    }
 
-            container.innerHTML = todayMarks.slice().reverse().map(mark => {
-                const config = markIcons[mark.type];
-                return `
-                    <div class="history-item">
-                        <div class="history-icon" style="background:${config.color};color:${config.text};">
-                            ${config.icon}
-                        </div>
-                        <div class="history-info">
-                            <div class="history-title">${config.label}</div>
-                            <div class="history-details">
-                                <div class="history-detail-item">🕐 <strong>${mark.time}</strong></div>
-                                <div class="history-detail-item">📍 ${mark.location}</div>
-                                <div class="history-detail-item">✅ Registrado</div>
-                            </div>
+    function renderTodayHistory() {
+        const container = document.getElementById('todayHistory');
+
+        if (todayMarks.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⏰</div>
+                    <h3>Sin marcas registradas</h3>
+                    <p>Aún no has registrado ninguna marca el día de hoy</p>
+                </div>`;
+            return;
+        }
+
+        const markIcons = {
+            entrada: { icon: '🚪', color: '#c6f6d5', text: '#22543d', label: 'Entrada' },
+            salida: { icon: '🏠', color: '#fed7d7', text: '#742a2a', label: 'Salida' },
+            almuerzo: { icon: '🍽️', color: '#feebc8', text: '#7c2d12', label: 'Almuerzo' },
+            descanso: { icon: '☕', color: '#bee3f8', text: '#2c5282', label: 'Descanso' }
+        };
+
+        container.innerHTML = todayMarks.slice().reverse().map(mark => {
+            const config = markIcons[mark.type];
+            return `
+                <div class="history-item">
+                    <div class="history-icon" style="background:${config.color};color:${config.text};">
+                        ${config.icon}
+                    </div>
+                    <div class="history-info">
+                        <div class="history-title">${config.label}</div>
+                        <div class="history-details">
+                            <div class="history-detail-item">🕐 <strong>${mark.time}</strong></div>
+                            <div class="history-detail-item">📍 ${mark.location}</div>
+                            <div class="history-detail-item">✅ Registrado</div>
                         </div>
                     </div>
-                `;
-            }).join('');
-        }
-
-        function showSuccessModal(mark) {
-            const modal = document.getElementById('successModal');
-            const details = document.getElementById('modalDetails');
-
-            const markLabels = {
-                entrada: 'Entrada',
-                salida: 'Salida',
-                almuerzo: 'Almuerzo',
-                descanso: 'Descanso'
-            };
-
-            details.innerHTML = `
-                <div class="detail-row">
-                    <div class="detail-label">Tipo de Marca</div>
-                    <div class="detail-value">${markLabels[mark.type]}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Fecha</div>
-                    <div class="detail-value">${mark.date}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Hora</div>
-                    <div class="detail-value">${mark.time}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Ubicación</div>
-                    <div class="detail-value">${mark.location}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Colaborador</div>
-                    <div class="detail-value">${mark.employeeName}</div>
                 </div>
             `;
+        }).join('');
+    }
 
-            modal.style.display = 'flex';
-        }
+    function showSuccessModal(mark) {
+        const modal = document.getElementById('successModal');
+        const details = document.getElementById('modalDetails');
 
-        function closeModal() {
-            document.getElementById('successModal').style.display = 'none';
-        }
+        const markLabels = {
+            entrada: 'Entrada',
+            salida: 'Salida',
+            almuerzo: 'Almuerzo',
+            descanso: 'Descanso'
+        };
 
-        setInterval(updateClock, 1000);
-        updateClock();
-    </script>
+        details.innerHTML = `
+            <div class="detail-row">
+                <div class="detail-label">Tipo de Marca</div>
+                <div class="detail-value">${markLabels[mark.type]}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Fecha</div>
+                <div class="detail-value">${mark.date}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Hora</div>
+                <div class="detail-value">${mark.time}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Ubicación</div>
+                <div class="detail-value">${mark.location}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Colaborador</div>
+                <div class="detail-value">${mark.employeeName}</div>
+            </div>
+        `;
+
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('successModal').style.display = 'none';
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+</script>

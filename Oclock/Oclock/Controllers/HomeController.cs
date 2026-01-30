@@ -23,7 +23,7 @@ namespace Oclock.Controllers
         [AuthorizeRole(2)]
         public IActionResult ColaboradorHome()
         {
-            return View();
+            return RedirectToAction("Marcas", "Empleado");
         }
 
         public IActionResult Privacy()

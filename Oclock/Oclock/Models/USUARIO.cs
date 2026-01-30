@@ -35,7 +35,7 @@ public partial class Usuario
 
     public virtual Rol IdRolNavigation { get; set; } = null!;
 
-    public virtual Marca? Marca { get; set; }
+    public virtual ICollection<Marca> Marcas { get; set; } = new List<Marca>();
 
     public virtual ICollection<Notificacion> Notificacions { get; set; } = new List<Notificacion>();
 

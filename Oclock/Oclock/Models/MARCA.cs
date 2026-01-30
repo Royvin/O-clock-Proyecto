@@ -17,5 +17,9 @@ public partial class Marca
 
     public string? Comentario { get; set; }
 
-    public virtual Usuario IdMarcaNavigation { get; set; } = null!;
+    public int? IdUsuario { get; set; }
+
+    public virtual Usuario? IdUsuarioNavigation { get; set; }
+
+    public DateOnly Fecha { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 }
