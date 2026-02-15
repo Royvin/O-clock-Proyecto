@@ -63,9 +63,15 @@ namespace Oclock.Controllers
             return View();
         }
 
+        // ✅ PAGINACIÓN: 10 por página
         [HttpGet]
-        public IActionResult VerMarcas(int? idUsuario, DateOnly? desde, DateOnly? hasta, string? tipo)
+        public IActionResult VerMarcas(int? idUsuario, DateOnly? desde, DateOnly? hasta, string? tipo, int page = 1)
         {
+            const int pageSize = 10;
+
+            if (page < 1)
+                page = 1;
+
             ViewBag.Empleados = _context.Usuarios
                 .Where(u => u.IdRol == 2 && u.Activo == true)
                 .OrderBy(u => u.Nombre)
@@ -79,7 +85,7 @@ namespace Oclock.Controllers
             ViewBag.FiltroIdUsuario = idUsuario;
             ViewBag.FiltroDesde = desde;
             ViewBag.FiltroHasta = hasta;
-            ViewBag.FiltroTipo = tipo;
+            ViewBag.FiltroTipo = tipo ?? "";
 
             var query = _context.Marcas
                 .Include(m => m.IdUsuarioNavigation)
@@ -100,11 +106,22 @@ namespace Oclock.Controllers
                 query = query.Where(m => m.Nombre == t);
             }
 
+            int totalRegistros = query.Count();
+            int totalPaginas = (int)Math.Ceiling(totalRegistros / (double)pageSize);
+
+            if (totalPaginas > 0 && page > totalPaginas)
+                page = totalPaginas;
+
             var marcas = query
                 .OrderByDescending(m => m.Fecha)
                 .ThenByDescending(m => m.IdMarca)
-                .Take(300)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPaginas;
+            ViewBag.TotalRecords = totalRegistros;
 
             return View(marcas);
         }

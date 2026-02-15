@@ -208,24 +208,9 @@
             color: #718096;
         }
 
-    .badge-success {
-        background: #c6f6d5;
-        color: #22543d;
-    }
-
-    .badge-warning {
-        background: #feebc8;
-        color: #7c2d12;
-    }
-
     .badge-info {
         background: #bee3f8;
         color: #2c5282;
-    }
-
-    .badge-danger {
-        background: #fed7d7;
-        color: #742a2a;
     }
 
     .quick-actions {
@@ -260,6 +245,66 @@
             margin-bottom: 20px;
             font-size: 20px;
         }
+
+    /* ✅ Paginación */
+    .pagination-wrap {
+        margin-top: 18px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .pagination {
+        list-style: none;
+        display: flex;
+        gap: 6px;
+        padding: 0;
+        margin: 0;
+    }
+
+    .page-item a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 38px;
+        height: 38px;
+        padding: 0 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #4a5568;
+        background: #ffffff;
+        font-weight: 600;
+        transition: 0.2s;
+    }
+
+        .page-item a:hover {
+            border-color: #667eea;
+            color: #667eea;
+            box-shadow: 0 4px 10px rgba(102,126,234,0.15);
+            transform: translateY(-1px);
+        }
+
+    .page-item.active a {
+        background: #667eea;
+        border-color: #667eea;
+        color: #ffffff;
+        box-shadow: 0 6px 14px rgba(102,126,234,0.25);
+    }
+
+    .page-item.disabled a {
+        opacity: 0.45;
+        pointer-events: none;
+    }
+
+    /* Debug opcional */
+    .debug-box {
+        margin: 10px 0 0 0;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: #f7fafc;
+        color: #4a5568;
+        font-size: 13px;
+    }
 </style>
 
 @{
@@ -268,18 +313,12 @@
     DateOnly? filtroHasta = ViewBag.FiltroHasta as DateOnly?;
     string filtroTipo = (ViewBag.FiltroTipo as string) ?? "";
 
-    string qsIdUsuario = Context.Request.Query["idUsuario"];
-    bool vieneIdEnUrl = !string.IsNullOrWhiteSpace(qsIdUsuario);
-
-    int idParsed;
-    int? filtroIdUsuarioEfectivo = null;
-    if (vieneIdEnUrl && int.TryParse(qsIdUsuario, out idParsed))
-    {
-        filtroIdUsuarioEfectivo = idParsed;
-    }
-
     string desdeValue = filtroDesde.HasValue ? filtroDesde.Value.ToString("yyyy-MM-dd") : "";
     string hastaValue = filtroHasta.HasValue ? filtroHasta.Value.ToString("yyyy-MM-dd") : "";
+
+    int currentPage = ViewBag.CurrentPage != null ? (int)ViewBag.CurrentPage : 1;
+    int totalPages = ViewBag.TotalPages != null ? (int)ViewBag.TotalPages : 0;
+    int totalRecords = ViewBag.TotalRecords != null ? (int)ViewBag.TotalRecords : 0;
 
     var marcasCalc = Model ?? new List<Oclock.Models.Marca>();
 
@@ -320,7 +359,7 @@
     bool hayDatos = (Model != null && Model.Count > 0);
 
     string exportUrl = "/Admin/ExportarCsv"
-        + "?idUsuario=" + (filtroIdUsuarioEfectivo.HasValue ? filtroIdUsuarioEfectivo.Value.ToString() : "")
+        + "?idUsuario=" + (filtroIdUsuario.HasValue ? filtroIdUsuario.Value.ToString() : "")
         + "&desde=" + desdeValue
         + "&hasta=" + hastaValue
         + "&tipo=" + filtroTipo;
@@ -351,55 +390,27 @@
                 <div class="menu-arrow">▶</div>
             </div>
             <div class="submenu show">
-                <div class="submenu-item">
-                    <a href="/Admin/HorariosConfig" class="submenu-link">
-                        ⏰ Horarios
-                    </a>
-                </div>
-                <div class="submenu-item">
-                    <a href="/Admin/FeriadosConfig" class="submenu-link">
-                        📅 Feriados
-                    </a>
-                </div>
-                <div class="submenu-item">
-                    <a href="/Admin/BonosParametroConfig" class="submenu-link">
-                        🎁 Bonos
-                    </a>
-                </div>
-                <div class="submenu-item">
-                    <a href="/Admin/NotificacionesConfig" class="submenu-link">
-                        🔔 Notificaciones
-                    </a>
-                </div>
+                <div class="submenu-item"><a href="/Admin/HorariosConfig" class="submenu-link">⏰ Horarios</a></div>
+                <div class="submenu-item"><a href="/Admin/FeriadosConfig" class="submenu-link">📅 Feriados</a></div>
+                <div class="submenu-item"><a href="/Admin/BonosParametroConfig" class="submenu-link">🎁 Bonos</a></div>
+                <div class="submenu-item"><a href="/Admin/NotificacionesConfig" class="submenu-link">🔔 Notificaciones</a></div>
             </div>
         </div>
 
         <div class="menu-item">
-            <a href="/Admin/Bonos" class="menu-link">
-                <div class="icon">💵 </div>
-                Bonos
-            </a>
+            <a href="/Admin/Bonos" class="menu-link"><div class="icon">💵 </div>Bonos</a>
         </div>
 
         <div class="menu-item">
-            <a href="/Admin/GestionDocumentos" class="menu-link">
-                <div class="icon">📝</div>
-                Gestion de Documentos de Empleados
-            </a>
+            <a href="/Admin/GestionDocumentos" class="menu-link"><div class="icon">📝</div>Gestion de Documentos de Empleados</a>
         </div>
 
         <div class="menu-item">
-            <a href="/Admin/RankingPuntualidad" class="menu-link">
-                <div class="icon">⏱️</div>
-                Indicadores de Puntualidad
-            </a>
+            <a href="/Admin/RankingPuntualidad" class="menu-link"><div class="icon">⏱️</div>Indicadores de Puntualidad</a>
         </div>
 
         <div class="menu-item">
-            <a href="/Admin/Reportes" class="menu-link">
-                <div class="icon">📄</div>
-                Reportes
-            </a>
+            <a href="/Admin/Reportes" class="menu-link"><div class="icon">📄</div>Reportes</a>
         </div>
     </div>
 
@@ -418,7 +429,7 @@
                     <div>
                         <label>Empleado:</label>
                         <select id="selectEmpleado" name="idUsuario" autocomplete="off" style="padding: 12px; width: 100%; border-radius: 10px; border: 1px solid #ddd;">
-                            @if (!filtroIdUsuarioEfectivo.HasValue)
+                            @if (!filtroIdUsuario.HasValue)
                             {
                                 <option value="" selected="selected">Todos</option>
                             }
@@ -431,7 +442,7 @@
                             {
                                 foreach (var e in ViewBag.Empleados)
                                 {
-                                    if (filtroIdUsuarioEfectivo.HasValue && (int)e.IdUsuario == filtroIdUsuarioEfectivo.Value)
+                                    if (filtroIdUsuario.HasValue && (int)e.IdUsuario == filtroIdUsuario.Value)
                                     {
                                         <option value="@e.IdUsuario" selected="selected">@e.NombreCompleto</option>
                                     }
@@ -517,9 +528,8 @@
                     </a>
                 </div>
             </form>
-        </div>
 
-        <div class="recent-activity">
+            <div class="recent-activity">
             <h2>Marcas Registradas</h2>
 
             <div style="overflow-x:auto;">
@@ -537,7 +547,7 @@
                     <tbody>
                         @if (Model != null && Model.Count > 0)
                         {
-                            foreach (var m in Model.OrderByDescending(x => x.Fecha).ThenByDescending(x => x.IdMarca))
+                            foreach (var m in Model)
                             {
                                 var tipo = (m.Nombre ?? "").ToLower();
 
@@ -581,6 +591,34 @@
             {
                 <div style="padding: 20px; color:#718096; text-align:center;">
                     No se encontraron marcas en el rango seleccionado.
+                </div>
+            }
+
+            @if (totalPages > 1)
+            {
+                <div class="pagination-wrap">
+                    <ul class="pagination">
+
+                        <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                            <a href="@Url.Action("VerMarcas", new { idUsuario = filtroIdUsuario, desde = desdeValue, hasta = hastaValue, tipo = filtroTipo, page = currentPage - 1 })" aria-label="Previous">
+                                &laquo;
+                            </a>
+                        </li>
+
+                        @for (int i = 1; i <= totalPages; i++)
+                        {
+                            <li class="page-item @(i == currentPage ? "active" : "")">
+                                <a href="@Url.Action("VerMarcas", new { idUsuario = filtroIdUsuario, desde = desdeValue, hasta = hastaValue, tipo = filtroTipo, page = i })">@i</a>
+                            </li>
+                        }
+
+                        <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                            <a href="@Url.Action("VerMarcas", new { idUsuario = filtroIdUsuario, desde = desdeValue, hasta = hastaValue, tipo = filtroTipo, page = currentPage + 1 })" aria-label="Next">
+                                &raquo;
+                            </a>
+                        </li>
+
+                    </ul>
                 </div>
             }
 
