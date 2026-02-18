@@ -770,28 +770,28 @@
                 <div class="stat-header">
                     <div class="stat-icon">📌</div>
                 </div>
-                <div class="stat-value" id="pendingCount">3</div>
+                <div class="stat-value" id="pendingCount"></div>
                 <div class="stat-label">Pendientes</div>
             </div>
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon">✅</div>
                 </div>
-                <div class="stat-value" id="approvedCount">8</div>
+                <div class="stat-value" id="approvedCount"></div>
                 <div class="stat-label">Aprobadas</div>
             </div>
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon">❌</div>
                 </div>
-                <div class="stat-value" id="rejectedCount">1</div>
+                <div class="stat-value" id="rejectedCount"></div>
                 <div class="stat-label">Rechazadas</div>
             </div>
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon">📊</div>
                 </div>
-                <div class="stat-value" id="totalCount">12</div>
+                <div class="stat-value" id="totalCount"></div>
                 <div class="stat-label">Total</div>
             </div>
         </div>
@@ -947,11 +947,8 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Tipo <span class="required">*</span></label>
-                        <select id="editTipo" required>
-                            <option value="vacaciones">Vacaciones</option>
-                            <option value="permiso">Permiso</option>
-                            <option value="incapacidad">Incapacidad</option>
-                            <option value="licencia">Licencia</option>
+                        <select id="editTipoSolicitud" required>
+                            <option value="">Seleccione un tipo</option>
                         </select>
                     </div>
 
@@ -1015,25 +1012,60 @@
 </div>
 
 <script>
-    let solicitudes = [
-        { id: 1, tipo: 'vacaciones', fechaInicio: '2025-12-20', fechaFin: '2025-12-27', motivo: 'Vacaciones de fin de año', estado: 'pendiente', prioridad: 'normal', fechaSolicitud: '2025-12-01', archivos: ['justificante.pdf'] },
-        { id: 2, tipo: 'permiso', fechaInicio: '2025-12-15', fechaFin: '2025-12-15', motivo: 'Cita médica', estado: 'aprobada', prioridad: 'urgente', fechaSolicitud: '2025-12-10', observaciones: 'Aprobado sin inconvenientes', archivos: [] },
-        { id: 3, tipo: 'incapacidad', fechaInicio: '2025-11-28', fechaFin: '2025-11-30', motivo: 'Gripe fuerte', estado: 'aprobada', prioridad: 'urgente', fechaSolicitud: '2025-11-28', archivos: ['incapacidad.pdf'] },
-        { id: 4, tipo: 'permiso', fechaInicio: '2025-11-20', fechaFin: '2025-11-20', motivo: 'Trámite bancario', estado: 'rechazada', prioridad: 'normal', fechaSolicitud: '2025-11-15', observaciones: 'No cumple con requisitos de anticipación', archivos: [] },
-        { id: 5, tipo: 'vacaciones', fechaInicio: '2025-12-18', fechaFin: '2025-12-19', motivo: 'Asuntos personales', estado: 'pendiente', prioridad: 'normal', fechaSolicitud: '2025-12-05', archivos: [] },
-        { id: 6, tipo: 'licencia', fechaInicio: '2026-01-10', fechaFin: '2026-01-15', motivo: 'Licencia por matrimonio', estado: 'pendiente', prioridad: 'normal', fechaSolicitud: '2025-12-08', archivos: ['acta_matrimonio.pdf'] }
-    ];
+
+    let solicitudes = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+        cargarTiposSolicitud();
+        cargarSolicitudes();
+
+        document.getElementById('solicitudForm')
+            .addEventListener('submit', handleFormSubmit);
+
+        document.getElementById('editForm')
+            .addEventListener('submit', handleEditSubmit);
+
+    });
+
+
+    //Funcion para obtener los tipos de solicitud
+           async function cargarTiposSolicitud() {
+        try {
+            const response = await fetch('/Empleado/ObtenerTiposSolicitud');
+            const tipos = await response.json();
+
+            const selects = [
+                document.getElementById('tipoSolicitud'),
+                document.getElementById('editTipoSolicitud')
+            ];
+
+            selects.forEach(select => {
+                if (!select) return;
+
+                select.innerHTML = '<option value="">Seleccione un tipo</option>';
+
+                tipos.forEach(tipo => {
+                    select.innerHTML += `
+                        <option value="${tipo.idTipoSolicitud}">
+                            ${tipo.nombreSolicitud}
+                        </option>
+                    `;
+                });
+            });
+
+        } catch (error) {
+            console.error("Error cargando tipos:", error);
+        }
+    }
+
+
+
 
     let uploadedFiles = [];
     let currentEditId = null;
     let currentCancelId = null;
 
-    document.addEventListener('DOMContentLoaded', () => {
-        renderSolicitudes();
-        updateCounters();
-        document.getElementById('solicitudForm').addEventListener('submit', handleFormSubmit);
-        document.getElementById('editForm').addEventListener('submit', handleEditSubmit);
-    });
 
     function switchTab(tabName, element) {
         document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
@@ -1092,29 +1124,55 @@
         return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
     }
 
-    function handleFormSubmit(event) {
+        async function handleFormSubmit(event) {
         event.preventDefault();
         clearErrors();
 
         const tipo = document.getElementById('tipoSolicitud').value;
-        const prioridad = document.getElementById('prioridad').value;
+        const prioridad = document.getElementById('prioridad').value; // si luego decides guardarla en BD
         const fechaInicio = document.getElementById('fechaInicio').value;
         const fechaFin = document.getElementById('fechaFin').value;
         const motivo = document.getElementById('motivo').value;
 
         let isValid = true;
 
-        if (!tipo) { showError('tipoError', 'Campo obligatorio'); isValid = false; }
-        if (!fechaInicio) { showError('fechaInicioError', 'Campo obligatorio'); isValid = false; }
-        if (!fechaFin) { showError('fechaFinError', 'Campo obligatorio'); isValid = false; }
-        if (!motivo.trim()) { showError('motivoError', 'Campo obligatorio'); isValid = false; }
+        // 🔎 Validaciones frontend
+        if (!tipo) {
+            showError('tipoError', 'Campo obligatorio');
+            isValid = false;
+        }
+
+        if (!fechaInicio) {
+            showError('fechaInicioError', 'Campo obligatorio');
+            isValid = false;
+        }
+
+        if (!fechaFin) {
+            showError('fechaFinError', 'Campo obligatorio');
+            isValid = false;
+        }
+
+        if (!motivo.trim()) {
+            showError('motivoError', 'Campo obligatorio');
+            isValid = false;
+        }
 
         if (fechaInicio && fechaFin) {
             const inicio = new Date(fechaInicio);
             const fin = new Date(fechaFin);
-            if (fin < inicio) { showError('fechaFinError', 'Fecha fin debe ser posterior'); isValid = false; }
-            const today = new Date(); today.setHours(0, 0, 0, 0);
-            if (inicio < today) { showError('fechaInicioError', 'No puede ser anterior a hoy'); isValid = false; }
+
+            if (fin < inicio) {
+                showError('fechaFinError', 'La fecha fin debe ser posterior a la fecha inicio');
+                isValid = false;
+            }
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (inicio < today) {
+                showError('fechaInicioError', 'No puede registrar fechas anteriores a hoy');
+                isValid = false;
+            }
         }
 
         if (!isValid) {
@@ -1122,22 +1180,64 @@
             return;
         }
 
-        const newSolicitud = {
-            id: solicitudes.length + 1,
-            tipo, fechaInicio, fechaFin, motivo,
-            estado: 'pendiente',
-            prioridad,
-            fechaSolicitud: new Date().toISOString().split('T')[0],
-            archivos: uploadedFiles.map(f => f.name)
+        // 🔥 Objeto que coincide con SolicitudViewModel
+        const solicitud = {
+            IdTipoSolicitud: parseInt(tipo),
+            Descripcion: motivo,
+            FechaInicio: fechaInicio,
+            FechaFin: fechaFin
         };
 
-        solicitudes.push(newSolicitud);
-        clearForm();
-        renderSolicitudes();
-        updateCounters();
-        showAlert('Solicitud registrada correctamente', 'success');
-        setTimeout(() => document.querySelectorAll('.tab')[1].click(), 1500);
+        try {
+            const response = await fetch('/Empleado/RegistrarSolicitud', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(solicitud)
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showAlert(data.message, 'success');
+                clearForm();
+
+                // Opcional: aquí luego puedes recargar la lista real
+                // await cargarSolicitudes();
+            } else {
+                showAlert(data.message, 'error');
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+            showAlert('Error al registrar la solicitud', 'error');
+        }
     }
+
+
+
+        async function cargarSolicitudes() {
+        try {
+            const response = await fetch('/Empleado/SolicitudesEmpleado');
+            const data = await response.json();
+
+            if (!Array.isArray(data)) {
+                console.log("No autorizado o error");
+                return;
+            }
+
+            solicitudes = data; // 🔥 aquí simulamos el array original
+            renderSolicitudes();
+            updateCounters();
+
+        } catch (error) {
+            console.error("Error cargando solicitudes:", error);
+        }
+    }
+
+
+
 
     function showError(elementId, message) {
         const errorElement = document.getElementById(elementId);
@@ -1179,10 +1279,17 @@
         const filterDesde = document.getElementById('filterDesde')?.value;
         const filterHasta = document.getElementById('filterHasta')?.value;
 
-        if (filterEstado) filtered = filtered.filter(s => s.estado === filterEstado);
-        if (filterTipo) filtered = filtered.filter(s => s.tipo === filterTipo);
-        if (filterDesde) filtered = filtered.filter(s => s.fechaInicio >= filterDesde);
-        if (filterHasta) filtered = filtered.filter(s => s.fechaFin <= filterHasta);
+           if (filterEstado)
+        filtered = filtered.filter(s => s.estado === filterEstado);
+
+    if (filterTipo)
+        filtered = filtered.filter(s => s.tipoNombre === filterTipo);
+
+    if (filterDesde)
+        filtered = filtered.filter(s => s.fechaInicio >= filterDesde);
+
+    if (filterHasta)
+        filtered = filtered.filter(s => s.fechaFin <= filterHasta);
 
         if (filtered.length === 0) {
             container.innerHTML = `
@@ -1203,14 +1310,14 @@
         container.innerHTML = filtered.map(sol => `
             <div class="request-card ${sol.estado}">
                 <div class="request-icon" style="background:${estadoColors[sol.estado]};color:#2d3748;">
-                    ${tipoIcons[sol.tipo]}
+                    ${tipoIcons[sol.tipoNombre]}
                 </div>
                 <div class="request-info">
-                    <div class="request-title">${tipoLabels[sol.tipo]}</div>
+                    <div class="request-title">${tipoLabels[sol.tipoNombre]}</div>
                     <div class="request-details">
                         <div class="request-detail-item">📅 <strong>${formatDate(sol.fechaInicio)}</strong> al <strong>${formatDate(sol.fechaFin)}</strong></div>
                         <div class="request-detail-item">${getStatusBadge(sol.estado)}</div>
-                        ${sol.archivos.length > 0 ? `<div class="request-detail-item">📎 ${sol.archivos.length} archivo(s)</div>` : ''}
+                        ${sol.archivos && sol.archivos.length > 0 ? `<div class="request-detail-item">📎 ${sol.archivos.length} archivo(s)</div>` : ''}
                     </div>
                 </div>
                 <div class="request-actions">
@@ -1229,7 +1336,7 @@
             pendiente: '<span class="badge badge-warning">Pendiente</span>',
             aprobada: '<span class="badge badge-success">Aprobada</span>',
             rechazada: '<span class="badge badge-danger">Rechazada</span>',
-            cancelada: '<span class="badge badge-secondary">Cancelada</span>'
+            cancelado: '<span class="badge badge-secondary">Cancelado</span>'
         };
         return badges[estado];
     }
@@ -1252,7 +1359,7 @@
             </div>
             <div class="detail-row">
                 <div class="detail-label">Tipo</div>
-                <div class="detail-value">${tipoLabels[sol.tipo]}</div>
+               <div class="detail-value">${tipoLabels[sol.tipoNombre]}</div>
             </div>
             <div class="detail-row">
                 <div class="detail-label">Fecha Inicio</div>
@@ -1279,38 +1386,79 @@
                 <div class="detail-value">${formatDate(sol.fechaSolicitud)}</div>
             </div>
             ${sol.observaciones ? `<div class="detail-row"><div class="detail-label">Observaciones</div><div class="detail-value">${sol.observaciones}</div></div>` : ''}
-            ${sol.archivos.length > 0 ? `<div class="detail-row"><div class="detail-label">Archivos</div><div class="detail-value">${sol.archivos.map(f => `📎 ${f}`).join('<br>')}</div></div>` : ''}
+            ${sol.archivos && sol.archivos.length > 0 ? `<div class="detail-row"><div class="detail-label">Archivos</div><div class="detail-value">${sol.archivos.map(f => `📎 ${f}`).join('<br>')}</div></div>` : ''}
         `;
         openModal('detailModal');
     }
 
-    function editSolicitud(id) {
+           function editSolicitud(id) {
+
         const sol = solicitudes.find(s => s.id === id);
-        if (!sol || sol.estado !== 'pendiente') { showAlert('No es posible editar solicitudes ya atendidas', 'error'); return; }
+
+        if (!sol || sol.estado !== 'pendiente') {
+            showAlert('No es posible editar solicitudes ya atendidas', 'error');
+            return;
+        }
 
         currentEditId = id;
-        document.getElementById('editTipo').value = sol.tipo;
-        document.getElementById('editPrioridad').value = sol.prioridad;
+
+        // 🔥 IMPORTANTE: usamos sol.tipo (que es el ID numérico)
+        document.getElementById('editTipoSolicitud').value = sol.tipo;
+        document.getElementById('editPrioridad').value = sol.prioridad ?? "normal";
         document.getElementById('editFechaInicio').value = sol.fechaInicio;
         document.getElementById('editFechaFin').value = sol.fechaFin;
         document.getElementById('editMotivo').value = sol.motivo;
+
         openModal('editModal');
     }
 
-    function handleEditSubmit(event) {
+                    async function handleEditSubmit(event) {
+
         event.preventDefault();
-        const sol = solicitudes.find(s => s.id === currentEditId);
-        if (!sol) return;
 
-        sol.tipo = document.getElementById('editTipo').value;
-        sol.prioridad = document.getElementById('editPrioridad').value;
-        sol.fechaInicio = document.getElementById('editFechaInicio').value;
-        sol.fechaFin = document.getElementById('editFechaFin').value;
-        sol.motivo = document.getElementById('editMotivo').value;
+        const model = {
+            IdSolicitud: currentEditId,
+            IdTipoSolicitud: parseInt(document.getElementById('editTipoSolicitud').value),
+            FechaInicio: document.getElementById('editFechaInicio').value,
+            FechaFin: document.getElementById('editFechaFin').value,
+            Descripcion: document.getElementById('editMotivo').value
+        };
 
-        closeModal('editModal');
-        renderSolicitudes();
-        showAlert('Solicitud actualizada correctamente', 'success');
+        if (!model.IdTipoSolicitud || !model.FechaInicio || !model.FechaFin || !model.Descripcion.trim()) {
+            showAlert("Todos los campos son obligatorios", "error");
+            return;
+        }
+
+        try {
+
+            const response = await fetch('/Empleado/EditarSolicitud', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify(model)
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.log(errorText);
+                showAlert("Error al actualizar la solicitud", "error");
+                return;
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+                showAlert("Solicitud actualizada correctamente", "success");
+                closeModal('editModal');
+                await cargarSolicitudes();
+            }
+
+        } catch (error) {
+            console.error(error);
+            showAlert("Error inesperado", "error");
+        }
     }
 
     function cancelSolicitud(id) {
@@ -1320,17 +1468,36 @@
         openModal('cancelModal');
     }
 
-    function confirmCancel() {
-        const sol = solicitudes.find(s => s.id === currentCancelId);
-        if (sol) {
-            sol.estado = 'cancelada';
-            sol.fechaCancelacion = new Date().toISOString().split('T')[0];
-            closeModal('cancelModal');
-            renderSolicitudes();
-            updateCounters();
-            showAlert('Solicitud cancelada correctamente', 'success');
+           async function confirmCancel() {
+
+        try {
+
+            const response = await fetch(`/Empleado/CancelarSolicitud?id=${currentCancelId}`, {
+                method: 'PUT',
+                credentials: 'same-origin'
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.log(errorText);
+                showAlert("Error al cancelar la solicitud", "error");
+                return;
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+                showAlert("Solicitud cancelada correctamente", "success");
+                closeModal('cancelModal');
+                await cargarSolicitudes();
+            }
+
+        } catch (error) {
+            console.error(error);
+            showAlert("Error inesperado", "error");
         }
     }
+
 
     function applyFilters() { renderSolicitudes(); }
 

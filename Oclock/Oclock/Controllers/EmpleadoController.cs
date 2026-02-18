@@ -4,9 +4,11 @@ using Oclock.Data;
 using Oclock.Models;
 using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Oclock.Controllers
 {
+    
     [AuthorizeRole(2)]
     public class EmpleadoController : Controller
     {
@@ -172,5 +174,156 @@ namespace Oclock.Controllers
         {
             return View();
         }
+
+
+        [HttpGet]
+        public IActionResult ObtenerTiposSolicitud()
+        {
+            var tipos = _context.TipoSolicituds
+                .Select(t => new
+                {
+                    idTipoSolicitud = t.IdTipoSolicitud,
+                    nombreSolicitud = t.NombreSolicitud
+                })
+                .ToList();
+
+            return Json(tipos);
+        }
+
+
+
+
+        [HttpPost]
+        public IActionResult RegistrarSolicitud([FromBody] SolicitudPost model)
+        {
+            int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
+
+            if (idUsuario == null)
+            {
+                return Json(new { success = false, message = "Sesión no válida." });
+            }
+
+            if (model.FechaFin < model.FechaInicio)
+            {
+                return Json(new { success = false, message = "El rango de fechas es inválido." });
+            }
+
+            if (model.FechaInicio.Date < DateTime.Today)
+            {
+                return Json(new { success = false, message = "No puede registrar fechas pasadas." });
+            }
+
+            // 🔥 AQUÍ convertimos ViewModel → Entidad BD
+            var nuevaSolicitud = new Solicitud
+            {
+                IdUsuario = idUsuario.Value,
+                IdTipoSolicitud = model.IdTipoSolicitud,
+                Descripcion = model.Descripcion,
+                FechaSolicitud = DateOnly.FromDateTime(DateTime.Now),
+                FechaInicio = DateOnly.FromDateTime(model.FechaInicio),
+                FechaFin = DateOnly.FromDateTime(model.FechaFin),
+                Estado = "pendiente",
+                DescripcionEstado = "Pendiente de aprobación"
+            };
+
+            _context.Solicituds.Add(nuevaSolicitud);
+            _context.SaveChanges();
+
+            return Json(new { success = true, message = "Solicitud registrada correctamente." });
+        }
+
+        [HttpGet]
+        public IActionResult SolicitudesEmpleado()
+        {
+            int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
+
+            if (idUsuario == null)
+            {
+                return Json(new { success = false });
+            }
+
+            var solicitudes = _context.Solicituds
+       .Include(s => s.IdTipoSolicitudNavigation)
+       .Where(s => s.IdUsuario == idUsuario)
+       .Select(s => new
+       {
+           id = s.IdSolicitud,
+           tipo = s.IdTipoSolicitud,
+           tipoNombre = s.IdTipoSolicitudNavigation.NombreSolicitud.ToLower(),
+           fechaInicio = s.FechaInicio.Value.ToString("yyyy-MM-dd"),
+           fechaFin = s.FechaFin.Value.ToString("yyyy-MM-dd"),
+           estado = s.Estado.ToLower(),
+           fechaSolicitud = s.FechaSolicitud.ToString("yyyy-MM-dd"),
+           motivo = s.Descripcion,
+           prioridad = "normal",
+           archivos = new List<string>()
+       })
+       .ToList();
+
+            return Json(solicitudes);
+        }
+
+
+        [HttpPut]
+        public IActionResult EditarSolicitud([FromBody] SolicitudPut model)
+        {
+            int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
+
+            if (idUsuario == null)
+                return Unauthorized();
+
+            var solicitud = _context.Solicituds
+                .FirstOrDefault(s => s.IdSolicitud == model.IdSolicitud
+                                  && s.IdUsuario == idUsuario.Value);
+
+            if (solicitud == null)
+                return NotFound();
+
+            if (solicitud.Estado.ToLower() != "pendiente")
+                return BadRequest("Solo se pueden editar solicitudes pendientes.");
+
+            if (model.FechaFin < model.FechaInicio)
+                return BadRequest("Rango de fechas inválido.");
+
+            solicitud.IdTipoSolicitud = model.IdTipoSolicitud;
+            solicitud.FechaInicio = DateOnly.FromDateTime(model.FechaInicio);
+            solicitud.FechaFin = DateOnly.FromDateTime(model.FechaFin);
+            solicitud.Descripcion = model.Descripcion;
+
+            _context.SaveChanges();
+
+            return Json(new { success = true });
+        }
+
+
+
+        [HttpPut]
+        public IActionResult CancelarSolicitud(int id)
+        {
+            int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
+
+            if (idUsuario == null)
+                return Unauthorized();
+
+            var solicitud = _context.Solicituds
+                .FirstOrDefault(s => s.IdSolicitud == id
+                                  && s.IdUsuario == idUsuario.Value);
+
+            if (solicitud == null)
+                return NotFound();
+
+            if (solicitud.Estado.ToLower() != "pendiente")
+                return BadRequest("Solo se pueden cancelar solicitudes pendientes.");
+
+            solicitud.Estado = "cancelado";
+            solicitud.DescripcionEstado = "Cancelada por el usuario";
+
+            _context.SaveChanges();
+
+            return Json(new { success = true });
+        }
+
+
+
     }
 }
