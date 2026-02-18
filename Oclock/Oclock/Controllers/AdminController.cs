@@ -38,11 +38,6 @@ namespace Oclock.Controllers
             return View();
         }
 
-        public IActionResult GestionDocumentos()
-        {
-            return View();
-        }
-
         public IActionResult HorariosConfig()
         {
             return View();
@@ -63,7 +58,6 @@ namespace Oclock.Controllers
             return View();
         }
 
-        // ✅ PAGINACIÓN: 10 por página
         [HttpGet]
         public IActionResult VerMarcas(int? idUsuario, DateOnly? desde, DateOnly? hasta, string? tipo, int page = 1)
         {
