@@ -194,7 +194,7 @@ namespace Oclock.Controllers
 
 
         [HttpPost]
-        public IActionResult RegistrarSolicitud([FromBody] SolicitudPost model)
+        public async Task<IActionResult> RegistrarSolicitud(SolicitudPost model, IFormFile archivo)
         {
             int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
 
@@ -213,7 +213,7 @@ namespace Oclock.Controllers
                 return Json(new { success = false, message = "No puede registrar fechas pasadas." });
             }
 
-            // 🔥 AQUÍ convertimos ViewModel → Entidad BD
+            // 1️⃣ Crear solicitud
             var nuevaSolicitud = new Solicitud
             {
                 IdUsuario = idUsuario.Value,
@@ -227,7 +227,45 @@ namespace Oclock.Controllers
             };
 
             _context.Solicituds.Add(nuevaSolicitud);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+
+            // 2️⃣ Ahora ya tenemos el ID generado
+            int idSolicitud = nuevaSolicitud.IdSolicitud;
+
+            // 3️⃣ Si viene archivo
+            if (archivo != null && archivo.Length > 0)
+            {
+                string carpetaBase = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot/uploads/solicitudes",
+                    idSolicitud.ToString()
+                );
+
+                if (!Directory.Exists(carpetaBase))
+                {
+                    Directory.CreateDirectory(carpetaBase);
+                }
+
+                string nombreArchivo = Guid.NewGuid().ToString() + Path.GetExtension(archivo.FileName);
+                string rutaCompleta = Path.Combine(carpetaBase, nombreArchivo);
+
+                using (var stream = new FileStream(rutaCompleta, FileMode.Create))
+                {
+                    await archivo.CopyToAsync(stream);
+                }
+
+                var documento = new Documento
+                {
+                    IdUsuario = idUsuario.Value,
+                    NombreArchivo = archivo.FileName,
+                    RutaArchivo = $"/uploads/solicitudes/{idSolicitud}/{nombreArchivo}",
+                    FechaSubida = DateTime.Now,
+                    IdSolicitud = idSolicitud
+                };
+
+                _context.Documentos.Add(documento);
+                await _context.SaveChangesAsync();
+            }
 
             return Json(new { success = true, message = "Solicitud registrada correctamente." });
         }

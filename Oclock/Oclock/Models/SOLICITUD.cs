@@ -26,4 +26,7 @@ public partial class Solicitud
     public virtual TipoSolicitud IdTipoSolicitudNavigation { get; set; } = null!;
 
     public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
+
+    public virtual ICollection<Documento> Documentos { get; set; } = new List<Documento>();
+
 }

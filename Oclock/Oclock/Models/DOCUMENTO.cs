@@ -9,7 +9,9 @@ public partial class Documento
 
     public int IdUsuario { get; set; }
 
-    public int IdTipoDocumento { get; set; }
+
+    //  NUEVA FK
+    public int IdSolicitud { get; set; }
 
     public string NombreArchivo { get; set; } = null!;
 
@@ -17,7 +19,10 @@ public partial class Documento
 
     public DateTime? FechaSubida { get; set; }
 
-    public virtual TipoDocumento IdTipoDocumentoNavigation { get; set; } = null!;
+    //  Nueva navegación
+    public virtual Solicitud IdSolicitudNavigation { get; set; }
+
 
     public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
 }
+

@@ -13,5 +13,5 @@ public partial class TipoDocumento
 
     public bool? Obligatorio { get; set; }
 
-    public virtual ICollection<Documento> Documentos { get; set; } = new List<Documento>();
+
 }

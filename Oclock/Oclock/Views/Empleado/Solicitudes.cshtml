@@ -1124,19 +1124,18 @@
         return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
     }
 
-        async function handleFormSubmit(event) {
+            async function handleFormSubmit(event) {
         event.preventDefault();
         clearErrors();
 
         const tipo = document.getElementById('tipoSolicitud').value;
-        const prioridad = document.getElementById('prioridad').value; // si luego decides guardarla en BD
+        const prioridad = document.getElementById('prioridad').value;
         const fechaInicio = document.getElementById('fechaInicio').value;
         const fechaFin = document.getElementById('fechaFin').value;
         const motivo = document.getElementById('motivo').value;
 
         let isValid = true;
 
-        // 🔎 Validaciones frontend
         if (!tipo) {
             showError('tipoError', 'Campo obligatorio');
             isValid = false;
@@ -1157,44 +1156,29 @@
             isValid = false;
         }
 
-        if (fechaInicio && fechaFin) {
-            const inicio = new Date(fechaInicio);
-            const fin = new Date(fechaFin);
-
-            if (fin < inicio) {
-                showError('fechaFinError', 'La fecha fin debe ser posterior a la fecha inicio');
-                isValid = false;
-            }
-
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            if (inicio < today) {
-                showError('fechaInicioError', 'No puede registrar fechas anteriores a hoy');
-                isValid = false;
-            }
-        }
-
         if (!isValid) {
             showAlert('Complete todos los campos obligatorios', 'error');
             return;
         }
 
-        // 🔥 Objeto que coincide con SolicitudViewModel
-        const solicitud = {
-            IdTipoSolicitud: parseInt(tipo),
-            Descripcion: motivo,
-            FechaInicio: fechaInicio,
-            FechaFin: fechaFin
-        };
+        // 🔥 Ahora usamos FormData
+        let formData = new FormData();
+
+        formData.append("IdTipoSolicitud", parseInt(tipo));
+        formData.append("Descripcion", motivo);
+        formData.append("FechaInicio", fechaInicio);
+        formData.append("FechaFin", fechaFin);
+        formData.append("Prioridad", prioridad);
+
+        // 🔥 Agregamos archivos (puedes permitir múltiples)
+        uploadedFiles.forEach(file => {
+            formData.append("archivo", file);
+        });
 
         try {
             const response = await fetch('/Empleado/RegistrarSolicitud', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(solicitud)
+                body: formData
             });
 
             const data = await response.json();
@@ -1202,9 +1186,7 @@
             if (data.success) {
                 showAlert(data.message, 'success');
                 clearForm();
-
-                // Opcional: aquí luego puedes recargar la lista real
-                // await cargarSolicitudes();
+                await cargarSolicitudes();
             } else {
                 showAlert(data.message, 'error');
             }
@@ -1214,6 +1196,7 @@
             showAlert('Error al registrar la solicitud', 'error');
         }
     }
+
 
 
 
