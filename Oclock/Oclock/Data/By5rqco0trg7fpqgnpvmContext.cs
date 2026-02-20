@@ -39,8 +39,6 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
 
     public virtual DbSet<Solicitud> Solicituds { get; set; }
 
-    public virtual DbSet<TipoDocumento> TipoDocumentos { get; set; }
-
     public virtual DbSet<TipoSolicitud> TipoSolicituds { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
@@ -128,6 +126,7 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
 
             entity.HasIndex(e => e.IdUsuario, "fk_documento_usuario");
 
+<<<<<<< HEAD
             entity.Property(e => e.IdDocumento)
                 .HasColumnName("id_documento");
 
@@ -146,14 +145,26 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
                 .HasMaxLength(500)
                 .HasColumnName("RutaArchivo");
 
+=======
+            entity.Property(e => e.IdDocumento).HasColumnName("id_documento");
+            entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
+            entity.Property(e => e.NombreArchivo).HasMaxLength(255).HasColumnName("nombre_archivo");
+            entity.Property(e => e.Categoria).HasMaxLength(100).HasColumnName("categoria");
+            entity.Property(e => e.ContenidoArchivo).HasColumnName("contenido_archivo");
+            entity.Property(e => e.TipoMime).HasMaxLength(100).HasColumnName("tipo_mime");
+>>>>>>> origin/dev
             entity.Property(e => e.FechaSubida)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("fecha_subida");
 
+<<<<<<< HEAD
             // Relación con Usuario
             entity.HasOne(d => d.IdUsuarioNavigation)
                 .WithMany(p => p.Documentos)
+=======
+            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Documentos)
+>>>>>>> origin/dev
                 .HasForeignKey(d => d.IdUsuario)
                 .HasConstraintName("fk_documento_usuario");
 
@@ -375,24 +386,6 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Solicituds)
                 .HasForeignKey(d => d.IdUsuario)
                 .HasConstraintName("fk_solicitud_usuario");
-        });
-
-        modelBuilder.Entity<TipoDocumento>(entity =>
-        {
-            entity.HasKey(e => e.IdTipoDocumento).HasName("PRIMARY");
-
-            entity.ToTable("TIPO_DOCUMENTO");
-
-            entity.Property(e => e.IdTipoDocumento).HasColumnName("id_tipo_documento");
-            entity.Property(e => e.Descripcion)
-                .HasColumnType("text")
-                .HasColumnName("descripcion");
-            entity.Property(e => e.NombreTipo)
-                .HasMaxLength(100)
-                .HasColumnName("nombre_tipo");
-            entity.Property(e => e.Obligatorio)
-                .HasDefaultValueSql("'0'")
-                .HasColumnName("obligatorio");
         });
 
         modelBuilder.Entity<TipoSolicitud>(entity =>

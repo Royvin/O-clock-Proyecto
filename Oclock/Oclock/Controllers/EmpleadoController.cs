@@ -135,7 +135,7 @@ namespace Oclock.Controllers
             }
         }
 
-        // ✅ HU07: historial con filtro por fechas
+      
         // Se usa por querystring: /Empleado/HistorialMarcas?desde=2026-01-01&hasta=2026-01-31
         public IActionResult HistorialMarcas(DateTime? desde, DateTime? hasta)
         {
