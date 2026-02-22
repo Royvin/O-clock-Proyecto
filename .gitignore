@@ -475,3 +475,9 @@ DocumentLayout.backup.json
 
 # Archivos internos de build
 build.force
+Oclock/Oclock/wwwroot/uploads/solicitudes/*
+# Excepción: mantener el archivo marcador
+!Oclock/Oclock/wwwroot/uploads/solicitudes/.gitkeep
+
+
+
