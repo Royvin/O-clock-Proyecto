@@ -23,10 +23,12 @@ public partial class Solicitud
 
     public string? Estado { get; set; }
 
+    public string? RutaArchivo { get; set; }
+
+    public string? NombreArchivo { get; set; }
+
     public virtual TipoSolicitud IdTipoSolicitudNavigation { get; set; } = null!;
 
     public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
-
-    public virtual ICollection<Documento> Documentos { get; set; } = new List<Documento>();
 
 }

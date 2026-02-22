@@ -9,5 +9,10 @@
         public DateTime FechaFin { get; set; }
         public string Descripcion { get; set; }
 
+        public IFormFile? Archivo { get; set; }
+
+    
+        public bool EliminarArchivo { get; set; }
+
     }
 }

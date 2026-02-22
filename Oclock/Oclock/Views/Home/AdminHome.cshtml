@@ -785,28 +785,28 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                         <div class="stat-header">
                             <div class="stat-icon">📌</div>
                         </div>
-                        <div class="stat-value" id="pendingCount">5</div>
+                        <div class="stat-value" id="pendingCount"></div>
                         <div class="stat-label">Pendientes</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-header">
                             <div class="stat-icon">✅</div>
                         </div>
-                        <div class="stat-value" id="approvedCount">12</div>
+                        <div class="stat-value" id="approvedCount"></div>
                         <div class="stat-label">Aprobadas Este Mes</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-header">
                             <div class="stat-icon">❌</div>
                         </div>
-                        <div class="stat-value" id="rejectedCount">2</div>
+                        <div class="stat-value" id="rejectedCount"></div>
                         <div class="stat-label">Rechazadas</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-header">
                             <div class="stat-icon">📊</div>
                         </div>
-                        <div class="stat-value" id="totalCount">19</div>
+                        <div class="stat-value" id="totalCount"></div>
                         <div class="stat-label">Total Solicitudes</div>
                     </div>
                 </div>
@@ -817,21 +817,17 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                     <div class="filter-grid">
                         <div class="form-group">
                             <label>Estado</label>
-                            <select id="filterStatus">
-                                <option value="">Todos</option>
-                                <option value="pending">Pendiente</option>
-                                <option value="approved">Aprobada</option>
-                                <option value="rejected">Rechazada</option>
-                            </select>
+                    <select id="filterStatus">
+                        <option value="">Todos</option>
+                        <option value="aprobada">Aprobada</option>
+                        <option value="rechazada">Rechazada</option>
+                        <option value="cancelada">Cancelada</option>
+                    </select>
                         </div>
                         <div class="form-group">
                             <label>Colaborador</label>
                             <select id="filterEmployee">
                                 <option value="">Todos</option>
-                                <option value="maria">María González</option>
-                                <option value="carlos">Carlos Ramírez</option>
-                                <option value="ana">Ana López</option>
-                                <option value="pedro">Pedro Martínez</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -855,23 +851,20 @@ Layout = "~/Views/Shared/_Layout.cshtml";
 
                 <!-- Tabs -->
                 <div class="tabs">
-                    <div class="tab active" onclick="switchTab('pending')">
-                        📌 Solicitudes Pendientes
-                    </div>
-                    <div class="tab" onclick="switchTab('all')">
-                        📄 Todas las Solicitudes
-                    </div>
-                    <div class="tab" onclick="switchTab('history')">
-                        📚 Historial
-                    </div>
+            <div class="tab active" onclick="switchTab('pendientes', this)">
+                📌 Solicitudes Pendientes
+            </div>
+            <div class="tab" onclick="switchTab('historial', this)">
+                📚 Historial
+            </div>
                 </div>
 
                 <!-- Pending Requests -->
-                <div id="pendingTab" class="tab-content active">
+        <div id="pendientesTab" class="tab-content active">
                     <div class="requests-section">
                         <div class="section-header">
                             <h2>📌 Solicitudes Pendientes</h2>
-                            <span class="badge badge-warning">5 pendientes</span>
+                 
                         </div>
 
                         <div id="pendingRequests">
@@ -880,32 +873,8 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                 </div>
 
 
-                <div id="allTab" class="tab-content">
-                    <div class="requests-section">
-                        <div class="section-header">
-                            <h2>📄 Todas las Solicitudes</h2>
-                        </div>
 
-                        <div class="table-container">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>Colaborador</th>
-                                        <th>Tipo</th>
-                                        <th>Fecha</th>
-                                        <th>Estado</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="allRequestsTable">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div id="historyTab" class="tab-content">
+        <div id="historialTab" class="tab-content">
                     <div class="requests-section">
                         <div class="section-header">
                             <h2>📚 Historial de Solicitudes</h2>
@@ -920,7 +889,6 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                                         <th>Fecha</th>
                                         <th>Estado</th>
                                         <th>Observaciones</th>
-                                        <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody id="historyTable">
@@ -948,192 +916,294 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             </div>
         </div>
 
+<div class="modal" id="detailModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>📋 Detalle de Solicitud</h3>
+            <button class="btn-close" onclick="closeModal('detailModal')">×</button>
+        </div>
+        <div id="detailContent"></div>
+    </div>
+</div>
 
+<script>
 
-    <script>
+    let archivoActualRuta = null;
+    let solicitudesActuales = [];
+    let currentTab = "pendientes";
+    let currentPage = 1;
 
+       document.addEventListener("DOMContentLoaded", () => {
+        cargarColaboradores();
+        cargarSolicitudes();
+        cargarEstadisticas();
+    });
 
+    function cargarSolicitudes(page = 1) {
 
-        function toggleSubmenu(element) {
-            const submenu = element.querySelector('.submenu');
-            const header = element.querySelector('.menu-expandable-header');
+        currentPage = page;
 
-            // Toggle expanded class
-            element.classList.toggle('expanded');
+        const estado = document.getElementById("filterStatus").value;
+        const idUsuario = document.getElementById("filterEmployee").value;
+        const desde = document.getElementById("filterDateStart").value;
+        const hasta = document.getElementById("filterDateEnd").value;
 
-            // Toggle submenu visibility
-            submenu.classList.toggle('show');
+        fetch(`/Admin/ObtenerSolicitudes?tab=${currentTab}&estado=${estado}&idUsuario=${idUsuario}&desde=${desde}&hasta=${hasta}&page=${page}`)
+            .then(res => res.json())
+            .then(data => {
 
-            // Toggle header active state
-            if (element.classList.contains('expanded')) {
-                header.classList.add('active');
-            } else {
-                header.classList.remove('active');
-            }
-        }
+                renderData(data.data);
+                updateCounters(data);
 
-        const requests = [
-            { id: 1, employee: 'Ana López', type: 'Vacaciones', startDate: '2025-11-20', endDate: '2025-11-25', status: 'pending', reason: 'Vacaciones familiares', observations: '' },
-            { id: 2, employee: 'Carlos Ramírez', type: 'Permiso', startDate: '2025-11-17', endDate: '2025-11-17', status: 'pending', reason: 'Cita médica', observations: '' },
-            { id: 3, employee: 'María González', type: 'Vacaciones', startDate: '2025-11-10', endDate: '2025-11-15', status: 'approved', reason: 'Viaje personal', observations: 'Autorizado sin inconvenientes' },
-            { id: 4, employee: 'Pedro Martínez', type: 'Permiso', startDate: '2025-10-15', endDate: '2025-10-15', status: 'rejected', reason: 'Asuntos personales', observations: 'No cumple requisitos' },
-            { id: 5, employee: 'Ana López', type: 'Permiso', startDate: '2025-11-22', endDate: '2025-11-22', status: 'pending', reason: 'Trámite bancario', observations: '' },
-            { id: 6, employee: 'Carlos Ramírez', type: 'Vacaciones', startDate: '2025-09-01', endDate: '2025-09-10', status: 'approved', reason: 'Descanso anual', observations: 'Aprobado' }
-        ];
+            });
+    }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            renderPendingRequests();
-            renderAllRequests();
-            renderHistory();
-            updateCounters();
-        });
+    function renderData(data) {
 
+        solicitudesActuales = data;
+      
+        if (currentTab === "pendientes") {
 
-        function switchTab(tabName, element) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            element.classList.add('active');
+            const container = document.getElementById("pendingRequests");
 
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            document.getElementById(tabName + 'Tab').classList.add('active');
-        }
-
-
-        function renderPendingRequests() {
-            const container = document.getElementById('pendingRequests');
-            const pending = requests.filter(r => r.status === 'pending');
-
-            if (pending.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📭</div>
-                        <h3>No hay solicitudes pendientes</h3>
-                        <p>Todas las solicitudes han sido procesadas</p>
-                    </div>`;
+            if (data.length === 0) {
+                container.innerHTML = `<div class="empty-state">
+                    <div class="empty-state-icon">📭</div>
+                    <h3>No hay solicitudes pendientes</h3>
+                    <p>Todas las solicitudes han sido procesadas</p>
+                </div>`;
                 return;
             }
 
-            container.innerHTML = pending.map(req => `
-                <div class="request-card">
-                    <div class="request-icon" style="background:#bee3f8;color:#2c5282;">
-                        ${req.type === 'Vacaciones' ? '🏖️' : '📝'}
-                    </div>
-                    <div class="request-info">
-                        <div class="request-title">${req.type} - ${req.employee}</div>
-                        <div class="request-details">
-                            <div class="request-detail-item">📅 <strong>Inicio:</strong> ${formatDate(req.startDate)}</div>
-                            <div class="request-detail-item">📅 <strong>Fin:</strong> ${formatDate(req.endDate)}</div>
-                        </div>
-                    </div>
-                    <div class="request-actions">
-                        <button class="btn btn-success" onclick="approveRequest(${req.id})">Aprobar</button>
-                        <button class="btn btn-danger" onclick="rejectRequest(${req.id})">Rechazar</button>
-                        <button class="btn btn-info" onclick="openModal(${req.id})">Ver</button>
-                    </div>
+                container.innerHTML = data.map(req => `
+        <div class="request-card">
+            <div class="request-info">
+                <div class="request-title">${req.tipo} - ${req.colaborador}</div>
+                <div class="request-details">
+                    <div>📅 Inicio: ${formatDate(req.fechaInicio)}</div>
+                    <div>📅 Fin: ${formatDate(req.fechaFin)}</div>
                 </div>
-            `).join("");
+            </div>
+                <div class="request-actions">
+        <button class="btn btn-info" onclick="verSolicitud(${req.idSolicitud})">Ver</button>
+        <button class="btn btn-success" onclick="cambiarEstado(${req.idSolicitud}, 'aprobada')">Aprobar</button>
+        <button class="btn btn-danger" onclick="abrirModalRechazo(${req.idSolicitud})">Rechazar</button>
+    </div>
+        </div>
+    `).join("");
         }
 
-        function renderAllRequests() {
-            const tbody = document.getElementById("allRequestsTable");
+        if (currentTab === "historial") {
 
-            tbody.innerHTML = requests.map(req => `
-                <tr>
-                    <td>${req.employee}</td>
-                    <td>${req.type}</td>
-                    <td>${formatDate(req.startDate)}</td>
-                    <td>${statusBadge(req.status)}</td>
-                    <td>
-                        <button class="btn btn-info" onclick="openModal(${req.id})">Ver</button>
-                    </td>
-                </tr>
-            `).join("");
-        }
-
-        function renderHistory() {
             const tbody = document.getElementById("historyTable");
-            const history = requests.filter(r => r.status !== 'pending');
 
-            tbody.innerHTML = history.map(req => `
+            tbody.innerHTML = data.map(req => `
                 <tr>
-                    <td>${req.employee}</td>
-                    <td>${req.type}</td>
-                    <td>${formatDate(req.startDate)}</td>
-                    <td>${statusBadge(req.status)}</td>
-                    <td>${req.observations || '-'}</td>
-                    <td>
-                        <button class="btn btn-info" onclick="openModal(${req.id})">Ver</button>
-                    </td>
+                    <td>${req.colaborador}</td>
+                    <td>${req.tipo}</td>
+                    <td>${formatDate(req.fechaInicio)}</td>
+                    <td>${badgeEstado(req.estado)}</td>
+                    <td>${req.observaciones ?? "-"}</td>
                 </tr>
             `).join("");
         }
+    }
 
-        function approveRequest(id) {
-            const req = requests.find(r => r.id === id);
-            req.status = "approved";
-            req.observations = "Aprobado por administrador";
-            refresh();
-        }
+    function cambiarEstado(id, estado) {
 
-        function rejectRequest(id) {
-            const req = requests.find(r => r.id === id);
-            req.status = "rejected";
-            req.observations = "Rechazado por administrador";
-            refresh();
-        }
+        fetch("/Admin/CambiarEstadoSolicitud", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `idSolicitud=${id}&nuevoEstado=${estado}`
+        })
+        .then(res => res.json())
+        .then(response => {
+            alert(response.message);
+            cargarSolicitudes(currentPage);
+            cargarEstadisticas();
+        });
+    }
 
-        function refresh() {
-            renderPendingRequests();
-            renderAllRequests();
-            renderHistory();
-            updateCounters();
-        }
+
+            function verSolicitud(id) {
+
+        const sol = solicitudesActuales.find(s => s.idSolicitud === id);
+        if (!sol) return;
+
+        archivoActualRuta = sol.rutaArchivo ?? null;
+
+        document.getElementById('detailContent').innerHTML = `
+            <div class="detail-row">
+                <div class="detail-label">ID</div>
+                <div class="detail-value">#${sol.idSolicitud}</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Colaborador</div>
+                <div class="detail-value">${sol.colaborador}</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Tipo</div>
+                <div class="detail-value">${sol.tipo}</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Fecha Inicio</div>
+                <div class="detail-value">${formatDate(sol.fechaInicio)}</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Fecha Fin</div>
+                <div class="detail-value">${formatDate(sol.fechaFin)}</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Estado</div>
+                <div class="detail-value">${badgeEstado(sol.estado)}</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Observaciones</div>
+                <div class="detail-value">${sol.observaciones ?? "-"}</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Documento</div>
+                <div class="detail-value">
+                    ${archivoActualRuta
+                        ? `<button class="btn btn-info" onclick="descargarArchivoActual()">Descargar ${sol.nombreArchivo ?? ""}</button>`
+                        : "N/A"}
+                </div>
+            </div>
+
+            <div style="margin-top:20px; display:flex; gap:10px;">
+                <button class="btn btn-success" onclick="cambiarEstado(${sol.idSolicitud}, 'aprobada'); closeModal('detailModal')">Aprobar</button>
+                <button class="btn btn-danger" onclick="abrirModalRechazo(${sol.idSolicitud}); closeModal('detailModal')">Rechazar</button>
+            </div>
+        `;
+
+        openModal('detailModal');
+    }
+
+
+
+    function abrirModalRechazo(id) {
+
+        const observacion = prompt("Indique la razón del rechazo:");
+
+        if (!observacion) return;
+
+        fetch("/Admin/CambiarEstadoSolicitud", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `idSolicitud=${id}&nuevoEstado=rechazada&observacion=${encodeURIComponent(observacion)}`
+        })
+        .then(res => res.json())
+        .then(response => {
+            alert(response.message);
+            cargarSolicitudes(currentPage);
+        });
+    }
+
+        function switchTab(tabName, element) {
+
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        element.classList.add('active');
+
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        document.getElementById(tabName + 'Tab').classList.add('active');
+
+        currentTab = tabName;
+
+        cargarSolicitudes(1);
+    }
+
+    function applyFilters() {
+        cargarSolicitudes(1);
+    }
+
+    function clearFilters() {
+        document.getElementById("filterStatus").value = "";
+        document.getElementById("filterEmployee").value = "";
+        document.getElementById("filterDateStart").value = "";
+        document.getElementById("filterDateEnd").value = "";
+        cargarSolicitudes(1);
+    }
+
+        function cargarColaboradores() {
+
+        fetch("/Admin/ObtenerColaboradores")
+            .then(res => res.json())
+            .then(data => {
+
+                const select = document.getElementById("filterEmployee");
+
+                data.forEach(col => {
+                    select.innerHTML += `<option value="${col.idUsuario}">${col.nombreCompleto}</option>`;
+                });
+            });
+    }
+
+    function formatDate(date) {
+        return new Date(date).toLocaleDateString("es-CR");
+    }
+
+    function badgeEstado(estado) {
+
+        if (estado === "Aprobada")
+            return `<span class="badge badge-success">Aprobada</span>`;
+
+        if (estado === "Rechazada")
+            return `<span class="badge badge-danger">Rechazada</span>`;
+
+        if (estado === "Cancelada")
+            return `<span class="badge badge-secondary">Cancelada</span>`;
+
+        return `<span class="badge badge-warning">Pendiente</span>`;
+    }
+
+    function updateCounters(data) {
+
+        document.getElementById("pendingCount").textContent =
+            currentTab === "pendientes" ? data.totalRegistros : 0;
+
+        document.getElementById("totalCount").textContent = data.totalRegistros;
+    }
 
 
         function openModal(id) {
-            const req = requests.find(r => r.id === id);
-            const modal = document.getElementById("requestModal");
+        document.getElementById(id).classList.add("show");
+    }
 
-            document.getElementById("modalContent").innerHTML = `
-                <div class="detail-row"><div class="detail-label">Empleado</div><div class="detail-value">${req.employee}</div></div>
-                <div class="detail-row"><div class="detail-label">Tipo</div><div class="detail-value">${req.type}</div></div>
-                <div class="detail-row"><div class="detail-label">Inicio</div><div class="detail-value">${formatDate(req.startDate)}</div></div>
-                <div class="detail-row"><div class="detail-label">Fin</div><div class="detail-value">${formatDate(req.endDate)}</div></div>
-                <div class="detail-row"><div class="detail-label">Motivo</div><div class="detail-value">${req.reason}</div></div>
-                <div class="detail-row"><div class="detail-label">Estado</div><div class="detail-value">${statusText(req.status)}</div></div>
-            `;
-
-            modal.classList.add("show");
-        }
-
-        function closeModal() {
-            document.getElementById("requestModal").classList.remove("show");
-        }
+    function closeModal(id) {
+        document.getElementById(id).classList.remove("show");
+    }
 
 
-        function formatDate(date) {
-            return new Date(date).toLocaleDateString("es-CR");
-        }
-
-        function statusBadge(status) {
-            const map = {
-                pending: '<span class="badge badge-warning">Pendiente</span>',
-                approved: '<span class="badge badge-success">Aprobada</span>',
-                rejected: '<span class="badge badge-danger">Rechazada</span>'
-            };
-            return map[status];
-        }
-
-        function statusText(status) {
-            return status === "approved" ? "Aprobada" :
-                   status === "rejected" ? "Rechazada" : "Pendiente";
-        }
-
-        function updateCounters() {
-            document.getElementById("pendingCount").textContent = requests.filter(r => r.status === "pending").length;
-            document.getElementById("approvedCount").textContent = requests.filter(r => r.status === "approved").length;
-            document.getElementById("rejectedCount").textContent = requests.filter(r => r.status === "rejected").length;
-            document.getElementById("totalCount").textContent = requests.length;
-        }
+        function descargarArchivoActual() {
+        if (!archivoActualRuta) return;
+        window.open(archivoActualRuta, "_blank");
+    }
 
 
-    </script>
+        function cargarEstadisticas() {
+
+        fetch("/Admin/ObtenerEstadisticasSolicitudes")
+            .then(res => res.json())
+            .then(data => {
+
+                document.getElementById("pendingCount").textContent = data.pendientes;
+                document.getElementById("approvedCount").textContent = data.aprobadasMes;
+                document.getElementById("rejectedCount").textContent = data.rechazadas;
+                document.getElementById("totalCount").textContent = data.total;
+
+            });
+    }
+
+
+</script>

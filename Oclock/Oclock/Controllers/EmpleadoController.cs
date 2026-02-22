@@ -194,7 +194,7 @@ namespace Oclock.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> RegistrarSolicitud(SolicitudPost model, IFormFile archivo)
+        public async Task<IActionResult> RegistrarSolicitud(SolicitudPost model)
         {
             int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
 
@@ -213,7 +213,7 @@ namespace Oclock.Controllers
                 return Json(new { success = false, message = "No puede registrar fechas pasadas." });
             }
 
-            // 1️⃣ Crear solicitud
+            // 1️⃣ Crear solicitud primero (sin archivo aún)
             var nuevaSolicitud = new Solicitud
             {
                 IdUsuario = idUsuario.Value,
@@ -227,13 +227,12 @@ namespace Oclock.Controllers
             };
 
             _context.Solicituds.Add(nuevaSolicitud);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(); // Necesario para obtener IdSolicitud
 
-            // 2️⃣ Ahora ya tenemos el ID generado
             int idSolicitud = nuevaSolicitud.IdSolicitud;
 
-            // 3️⃣ Si viene archivo
-            if (archivo != null && archivo.Length > 0)
+            // 2️⃣ Si viene archivo
+            if (model.Archivo != null && model.Archivo.Length > 0)
             {
                 string carpetaBase = Path.Combine(
                     Directory.GetCurrentDirectory(),
@@ -246,24 +245,22 @@ namespace Oclock.Controllers
                     Directory.CreateDirectory(carpetaBase);
                 }
 
-                string nombreArchivo = Guid.NewGuid().ToString() + Path.GetExtension(archivo.FileName);
-                string rutaCompleta = Path.Combine(carpetaBase, nombreArchivo);
+                string nombreUnico = Guid.NewGuid().ToString() +
+                                     Path.GetExtension(model.Archivo.FileName);
+
+                string rutaCompleta = Path.Combine(carpetaBase, nombreUnico);
 
                 using (var stream = new FileStream(rutaCompleta, FileMode.Create))
                 {
-                    await archivo.CopyToAsync(stream);
+                    await model.Archivo.CopyToAsync(stream);
                 }
 
-                var documento = new Documento
-                {
-                    IdUsuario = idUsuario.Value,
-                    NombreArchivo = archivo.FileName,
-                    RutaArchivo = $"/uploads/solicitudes/{idSolicitud}/{nombreArchivo}",
-                    FechaSubida = DateTime.Now,
-                    IdSolicitud = idSolicitud
-                };
+                // 3️⃣ Guardar ruta en la misma solicitud
+                nuevaSolicitud.RutaArchivo =
+                    $"/uploads/solicitudes/{idSolicitud}/{nombreUnico}";
 
-                _context.Documentos.Add(documento);
+                nuevaSolicitud.NombreArchivo = model.Archivo.FileName;
+
                 await _context.SaveChangesAsync();
             }
 
@@ -294,7 +291,10 @@ namespace Oclock.Controllers
            fechaSolicitud = s.FechaSolicitud.ToString("yyyy-MM-dd"),
            motivo = s.Descripcion,
            prioridad = "normal",
-           archivos = new List<string>()
+           archivos = new List<string>(),
+           RutaArchivo = s.RutaArchivo,
+           NombreArchivo = s.NombreArchivo,
+
        })
        .ToList();
 
@@ -303,16 +303,16 @@ namespace Oclock.Controllers
 
 
         [HttpPut]
-        public IActionResult EditarSolicitud([FromBody] SolicitudPut model)
+        public async Task<IActionResult> EditarSolicitud(SolicitudPut model)
         {
             int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
 
             if (idUsuario == null)
                 return Unauthorized();
 
-            var solicitud = _context.Solicituds
-                .FirstOrDefault(s => s.IdSolicitud == model.IdSolicitud
-                                  && s.IdUsuario == idUsuario.Value);
+            var solicitud = await _context.Solicituds
+                .FirstOrDefaultAsync(s => s.IdSolicitud == model.IdSolicitud
+                                       && s.IdUsuario == idUsuario.Value);
 
             if (solicitud == null)
                 return NotFound();
@@ -323,14 +323,82 @@ namespace Oclock.Controllers
             if (model.FechaFin < model.FechaInicio)
                 return BadRequest("Rango de fechas inválido.");
 
+            // 🔹 Actualizar datos normales
             solicitud.IdTipoSolicitud = model.IdTipoSolicitud;
             solicitud.FechaInicio = DateOnly.FromDateTime(model.FechaInicio);
             solicitud.FechaFin = DateOnly.FromDateTime(model.FechaFin);
             solicitud.Descripcion = model.Descripcion;
 
-            _context.SaveChanges();
+            string carpetaBase = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot/uploads/solicitudes",
+                solicitud.IdSolicitud.ToString()
+            );
 
-            return Json(new { success = true });
+            // 🔥 1️⃣ Si el usuario pidió eliminar el archivo
+            if (model.EliminarArchivo && !string.IsNullOrEmpty(solicitud.RutaArchivo))
+            {
+                string rutaFisica = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot",
+                    solicitud.RutaArchivo.TrimStart('/')
+                );
+
+                if (System.IO.File.Exists(rutaFisica))
+                {
+                    System.IO.File.Delete(rutaFisica);
+                }
+
+                solicitud.RutaArchivo = null;
+                solicitud.NombreArchivo = null;
+            }
+
+            // 🔥 2️⃣ Si viene un archivo nuevo (reemplazo)
+            if (model.Archivo != null && model.Archivo.Length > 0)
+            {
+                if (!Directory.Exists(carpetaBase))
+                {
+                    Directory.CreateDirectory(carpetaBase);
+                }
+
+                // Si había archivo anterior, borrarlo
+                if (!string.IsNullOrEmpty(solicitud.RutaArchivo))
+                {
+                    string rutaAnterior = Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "wwwroot",
+                        solicitud.RutaArchivo.TrimStart('/')
+                    );
+
+                    if (System.IO.File.Exists(rutaAnterior))
+                    {
+                        System.IO.File.Delete(rutaAnterior);
+                    }
+                }
+
+                string nombreUnico = Guid.NewGuid().ToString() +
+                                     Path.GetExtension(model.Archivo.FileName);
+
+                string rutaCompleta = Path.Combine(carpetaBase, nombreUnico);
+
+                using (var stream = new FileStream(rutaCompleta, FileMode.Create))
+                {
+                    await model.Archivo.CopyToAsync(stream);
+                }
+
+                solicitud.RutaArchivo =
+                    $"/uploads/solicitudes/{solicitud.IdSolicitud}/{nombreUnico}";
+
+                solicitud.NombreArchivo = model.Archivo.FileName;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Json(new
+            {
+                success = true,
+                message = "Solicitud actualizada correctamente"
+            });
         }
 
 
@@ -353,6 +421,25 @@ namespace Oclock.Controllers
             if (solicitud.Estado.ToLower() != "pendiente")
                 return BadRequest("Solo se pueden cancelar solicitudes pendientes.");
 
+            // 🔥 Si tiene archivo, eliminarlo
+            if (!string.IsNullOrEmpty(solicitud.RutaArchivo))
+            {
+                string rutaFisica = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot",
+                    solicitud.RutaArchivo.TrimStart('/')
+                );
+
+                if (System.IO.File.Exists(rutaFisica))
+                {
+                    System.IO.File.Delete(rutaFisica);
+                }
+
+                // 🔥 Limpiar columnas en BD
+                solicitud.RutaArchivo = null;
+                solicitud.NombreArchivo = null;
+            }
+
             solicitud.Estado = "cancelado";
             solicitud.DescripcionEstado = "Cancelada por el usuario";
 
@@ -360,6 +447,10 @@ namespace Oclock.Controllers
 
             return Json(new { success = true });
         }
+
+
+      
+
 
 
 

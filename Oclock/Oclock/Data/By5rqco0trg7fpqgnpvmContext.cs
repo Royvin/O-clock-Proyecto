@@ -126,53 +126,25 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
 
             entity.HasIndex(e => e.IdUsuario, "fk_documento_usuario");
 
-<<<<<<< HEAD
-            entity.Property(e => e.IdDocumento)
-                .HasColumnName("id_documento");
 
-            entity.Property(e => e.IdUsuario)
-                .HasColumnName("id_usuario");
-
-            // 🔥 ESTA ES LA PARTE IMPORTANTE
-            entity.Property(e => e.IdSolicitud)
-                .HasColumnName("id_solicitud");
-
-            entity.Property(e => e.NombreArchivo)
-                .HasMaxLength(255)
-                .HasColumnName("nombre_archivo");
-
-            entity.Property(e => e.RutaArchivo)
-                .HasMaxLength(500)
-                .HasColumnName("RutaArchivo");
-
-=======
             entity.Property(e => e.IdDocumento).HasColumnName("id_documento");
             entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
             entity.Property(e => e.NombreArchivo).HasMaxLength(255).HasColumnName("nombre_archivo");
             entity.Property(e => e.Categoria).HasMaxLength(100).HasColumnName("categoria");
             entity.Property(e => e.ContenidoArchivo).HasColumnName("contenido_archivo");
             entity.Property(e => e.TipoMime).HasMaxLength(100).HasColumnName("tipo_mime");
->>>>>>> origin/dev
             entity.Property(e => e.FechaSubida)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("fecha_subida");
 
-<<<<<<< HEAD
-            // Relación con Usuario
-            entity.HasOne(d => d.IdUsuarioNavigation)
-                .WithMany(p => p.Documentos)
-=======
+
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Documentos)
->>>>>>> origin/dev
+
                 .HasForeignKey(d => d.IdUsuario)
                 .HasConstraintName("fk_documento_usuario");
 
-            // 🔥 RELACIÓN CON SOLICITUD (ESTO TE ESTABA FALTANDO)
-            entity.HasOne(d => d.IdSolicitudNavigation)
-                .WithMany(p => p.Documentos)
-                .HasForeignKey(d => d.IdSolicitud)
-                .HasConstraintName("fk_documento_solicitud");
+           
         });
 
 
@@ -378,6 +350,13 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
             entity.Property(e => e.FechaSolicitud).HasColumnName("fecha_solicitud");
             entity.Property(e => e.IdTipoSolicitud).HasColumnName("id_tipo_solicitud");
             entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
+            entity.Property(e => e.RutaArchivo)
+            .HasMaxLength(500)
+            .HasColumnName("RutaArchivo");
+
+            entity.Property(e => e.NombreArchivo)
+                .HasMaxLength(255)
+                .HasColumnName("NombreArchivo");
 
             entity.HasOne(d => d.IdTipoSolicitudNavigation).WithMany(p => p.Solicituds)
                 .HasForeignKey(d => d.IdTipoSolicitud)
@@ -386,6 +365,9 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Solicituds)
                 .HasForeignKey(d => d.IdUsuario)
                 .HasConstraintName("fk_solicitud_usuario");
+
+
+
         });
 
         modelBuilder.Entity<TipoSolicitud>(entity =>
