@@ -19,7 +19,7 @@
 
     .sidebar {
         width: 280px;
-        background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+        background: #ffffff;
         padding: 30px 20px;
         border-right: 1px solid #e0e0e0;
         box-shadow: 2px 0 10px rgba(0,0,0,0.03);
@@ -47,13 +47,13 @@
     }
 
         .menu-link:hover {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #667eea;
             color: white;
             transform: translateX(5px);
         }
 
         .menu-link.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #667eea;
             color: white;
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
@@ -100,7 +100,7 @@
         }
 
         .menu-expandable-header.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            background: rgba(102, 126, 234, 0.1);
             color: #667eea;
             font-weight: 600;
         }
@@ -177,7 +177,7 @@
             }
 
         .submenu-link.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            background: rgba(102, 126, 234, 0.15);
             color: #667eea;
             font-weight: 600;
         }
@@ -295,7 +295,6 @@
         pointer-events: none;
     }
 
-    /* Debug opcional */
     .debug-box {
         margin: 10px 0 0 0;
         padding: 10px 12px;
@@ -532,130 +531,131 @@
             </form>
 
             <div class="recent-activity">
-            <h2>Marcas Registradas</h2>
+                <h2>Marcas Registradas</h2>
 
-            <div style="overflow-x:auto;">
-                <table style="width:100%; border-collapse: collapse;">
-                    <thead>
-                        <tr style="background:#f1f5f9; text-align:left;">
-                            <th style="padding:15px;">Empleado</th>
-                            <th style="padding:15px;">Fecha</th>
-                            <th style="padding:15px;">Tipo</th>
-                            <th style="padding:15px;">Hora</th>
-                            <th style="padding:15px;">Estado</th>
-                            <th style="padding:15px;">Comentario</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model != null && Model.Count > 0)
-                        {
-                            foreach (var m in Model)
+                <div style="overflow-x:auto;">
+                    <table style="width:100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background:#f1f5f9; text-align:left;">
+                                <th style="padding:15px;">Empleado</th>
+                                <th style="padding:15px;">Fecha</th>
+                                <th style="padding:15px;">Tipo</th>
+                                <th style="padding:15px;">Hora</th>
+                                <th style="padding:15px;">Estado</th>
+                                <th style="padding:15px;">Comentario</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Count > 0)
                             {
-                                var tipo = (m.Nombre ?? "").ToLower();
-
-                                string labelTipo = m.Nombre ?? "";
-                                if (tipo == "entrada") labelTipo = "Entrada";
-                                else if (tipo == "salida") labelTipo = "Salida";
-                                else if (tipo == "almuerzo") labelTipo = "Almuerzo";
-                                else if (tipo == "descanso") labelTipo = "Descanso";
-
-                                string hora = "--:--";
-                                if (m.HoraEntrada.HasValue) hora = m.HoraEntrada.Value.ToString("HH:mm:ss");
-                                else if (m.HoraSalida.HasValue) hora = m.HoraSalida.Value.ToString("HH:mm:ss");
-
-                                string estadoHtml = "<span class=\"badge badge-info\">Registrada</span>";
-
-                                string nombreEmpleado = "";
-                                if (m.IdUsuarioNavigation != null)
+                                foreach (var m in Model)
                                 {
-                                    nombreEmpleado = (m.IdUsuarioNavigation.Nombre ?? "") + " " + (m.IdUsuarioNavigation.Apellido ?? "");
-                                }
-                                else
-                                {
-                                    nombreEmpleado = "Usuario " + (m.IdUsuario.HasValue ? m.IdUsuario.Value.ToString() : "");
-                                }
+                                    var tipo = (m.Nombre ?? "").ToLower();
 
-                                <tr style="border-bottom:1px solid #e5e7eb;">
-                                    <td style="padding:15px;">@nombreEmpleado</td>
-                                    <td style="padding:15px;">@m.Fecha.ToString("dd/MM/yyyy")</td>
-                                    <td style="padding:15px;">@labelTipo</td>
-                                    <td style="padding:15px;">@hora</td>
-                                    <td style="padding:15px;">@Html.Raw(estadoHtml)</td>
-                                    <td style="padding:15px;">@(string.IsNullOrWhiteSpace(m.Comentario) ? "—" : m.Comentario)</td>
-                                </tr>
+                                    string labelTipo = m.Nombre ?? "";
+                                    if (tipo == "entrada") labelTipo = "Entrada";
+                                    else if (tipo == "salida") labelTipo = "Salida";
+                                    else if (tipo == "almuerzo") labelTipo = "Almuerzo";
+                                    else if (tipo == "descanso") labelTipo = "Descanso";
+
+                                    string hora = "--:--";
+                                    if (m.HoraEntrada.HasValue) hora = m.HoraEntrada.Value.ToString("HH:mm:ss");
+                                    else if (m.HoraSalida.HasValue) hora = m.HoraSalida.Value.ToString("HH:mm:ss");
+
+                                    string estadoHtml = "<span class=\"badge badge-info\">Registrada</span>";
+
+                                    string nombreEmpleado = "";
+                                    if (m.IdUsuarioNavigation != null)
+                                    {
+                                        nombreEmpleado = (m.IdUsuarioNavigation.Nombre ?? "") + " " + (m.IdUsuarioNavigation.Apellido ?? "");
+                                    }
+                                    else
+                                    {
+                                        nombreEmpleado = "Usuario " + (m.IdUsuario.HasValue ? m.IdUsuario.Value.ToString() : "");
+                                    }
+
+                                    <tr style="border-bottom:1px solid #e5e7eb;">
+                                        <td style="padding:15px;">@nombreEmpleado</td>
+                                        <td style="padding:15px;">@m.Fecha.ToString("dd/MM/yyyy")</td>
+                                        <td style="padding:15px;">@labelTipo</td>
+                                        <td style="padding:15px;">@hora</td>
+                                        <td style="padding:15px;">@Html.Raw(estadoHtml)</td>
+                                        <td style="padding:15px;">@(string.IsNullOrWhiteSpace(m.Comentario) ? "—" : m.Comentario)</td>
+                                    </tr>
+                                }
                             }
-                        }
-                    </tbody>
-                </table>
-            </div>
-
-            @if (Model == null || Model.Count == 0)
-            {
-                <div style="padding: 20px; color:#718096; text-align:center;">
-                    No se encontraron marcas en el rango seleccionado.
+                        </tbody>
+                    </table>
                 </div>
-            }
 
-            @if (totalPages > 1)
-            {
-                <div class="pagination-wrap">
-                    <ul class="pagination">
+                @if (Model == null || Model.Count == 0)
+                {
+                    <div style="padding: 20px; color:#718096; text-align:center;">
+                        No se encontraron marcas en el rango seleccionado.
+                    </div>
+                }
 
-                        <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-                            <a href="@Url.Action("VerMarcas", new { idUsuario = filtroIdUsuario, desde = desdeValue, hasta = hastaValue, tipo = filtroTipo, page = currentPage - 1 })" aria-label="Previous">
-                                &laquo;
-                            </a>
-                        </li>
+                @if (totalPages > 1)
+                {
+                    <div class="pagination-wrap">
+                        <ul class="pagination">
 
-                        @for (int i = 1; i <= totalPages; i++)
-                        {
-                            <li class="page-item @(i == currentPage ? "active" : "")">
-                                <a href="@Url.Action("VerMarcas", new { idUsuario = filtroIdUsuario, desde = desdeValue, hasta = hastaValue, tipo = filtroTipo, page = i })">@i</a>
+                            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                                <a href="@Url.Action("VerMarcas", new { idUsuario = filtroIdUsuario, desde = desdeValue, hasta = hastaValue, tipo = filtroTipo, page = currentPage - 1 })" aria-label="Previous">
+                                    &laquo;
+                                </a>
                             </li>
-                        }
 
-                        <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-                            <a href="@Url.Action("VerMarcas", new { idUsuario = filtroIdUsuario, desde = desdeValue, hasta = hastaValue, tipo = filtroTipo, page = currentPage + 1 })" aria-label="Next">
-                                &raquo;
-                            </a>
-                        </li>
+                            @for (int i = 1; i <= totalPages; i++)
+                            {
+                                <li class="page-item @(i == currentPage ? "active" : "")">
+                                    <a href="@Url.Action("VerMarcas", new { idUsuario = filtroIdUsuario, desde = desdeValue, hasta = hastaValue, tipo = filtroTipo, page = i })">@i</a>
+                                </li>
+                            }
 
-                    </ul>
+                            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                                <a href="@Url.Action("VerMarcas", new { idUsuario = filtroIdUsuario, desde = desdeValue, hasta = hastaValue, tipo = filtroTipo, page = currentPage + 1 })" aria-label="Next">
+                                    &raquo;
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                }
+
+                <div style="margin-top: 15px; font-weight: bold; color:#4a5568;">
+                    Total horas trabajadas: @totalHoras h @totalMin m
                 </div>
-            }
-
-            <div style="margin-top: 15px; font-weight: bold; color:#4a5568;">
-                Total horas trabajadas: @totalHoras h @totalMin m
-            </div>
-        </div>
-
-        <br>
-
-        <div class="quick-actions">
-            <h2>Exportar Resultados</h2>
-
-            <div style="display:flex; gap:20px; flex-wrap:wrap;">
-                @if (hayDatos)
-                {
-                    <a href="@exportUrl"
-                       style="padding: 15px 25px; background:#667eea; color:white; border:none; border-radius:10px; cursor:pointer; text-decoration:none; display:inline-block;">
-                        Exportar CSV
-                    </a>
-                }
-                else
-                {
-                    <span style="padding: 15px 25px; background:#a0aec0; color:white; border:none; border-radius:10px; display:inline-block; opacity:0.7;">
-                        Exportar CSV
-                    </span>
-                }
             </div>
 
-            @if (!hayDatos)
-            {
-                <div style="padding: 20px; color:#718096; text-align:center;">
-                    No hay marcas para exportar.
+            <br>
+
+            <div class="quick-actions">
+                <h2>Exportar Resultados</h2>
+
+                <div style="display:flex; gap:20px; flex-wrap:wrap;">
+                    @if (hayDatos)
+                    {
+                        <a href="@exportUrl"
+                           style="padding: 15px 25px; background:#667eea; color:white; border:none; border-radius:10px; cursor:pointer; text-decoration:none; display:inline-block;">
+                            Exportar CSV
+                        </a>
+                    }
+                    else
+                    {
+                        <span style="padding: 15px 25px; background:#a0aec0; color:white; border:none; border-radius:10px; display:inline-block; opacity:0.7;">
+                            Exportar CSV
+                        </span>
+                    }
                 </div>
-            }
+
+                @if (!hayDatos)
+                {
+                    <div style="padding: 20px; color:#718096; text-align:center;">
+                        No hay marcas para exportar.
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </div>

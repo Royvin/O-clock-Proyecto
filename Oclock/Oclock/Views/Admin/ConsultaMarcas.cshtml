@@ -18,7 +18,7 @@
     /* SIDEBAR */
     .sidebar {
         width: 280px;
-        background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+        background: #ffffff;
         padding: 30px 20px;
         border-right: 1px solid #e0e0e0;
     }
@@ -43,15 +43,15 @@
     }
 
         .menu-link:hover {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #2F6FED;
             color: white;
             transform: translateX(5px);
         }
 
         .menu-link.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #2457C8;
             color: white;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 12px rgba(36, 87, 200, 0.25);
         }
 
             .menu-link.active::before {
@@ -91,13 +91,13 @@
     }
 
         .menu-expandable-header:hover {
-            background: #f0f0f0;
-            color: #667eea;
+            background: #f3f6ff; 
+            color: #2F6FED;
         }
 
         .menu-expandable-header.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            color: #667eea;
+            background: #eef4ff;
+            color: #2F6FED;
             font-weight: 600;
         }
 
@@ -163,19 +163,19 @@
 
         .submenu-link:hover {
             background: #f7fafc;
-            color: #667eea;
+            color: #2F6FED;
             transform: translateX(3px);
         }
 
             .submenu-link:hover::before {
-                background: #667eea;
+                background: #2F6FED; 
                 transform: translateY(-50%) scale(1.3);
             }
 
     .content {
         flex: 1;
         padding: 40px;
-        background: #fafbfc;
+        background: #F6F8FB; 
     }
 
     .content-header {
@@ -237,12 +237,12 @@
     }
 
     .btn-primary {
-        background: #667eea;
+        background: #2F6FED;
         color: white;
     }
 
         .btn-primary:hover {
-            background: #5568d3;
+            background: #2457C8; 
         }
 
     .btn-secondary {
@@ -457,8 +457,6 @@
                     <button class="btn btn-secondary" onclick="limpiarFiltros()">Limpiar Filtros</button>
                 </div>
             </div>
-
-            <!-- RESULTADOS DE MARCAS -->
             <div class="recent-activity">
                 <h2>Marcas Registradas</h2>
 
@@ -475,7 +473,6 @@
                             </tr>
                         </thead>
                         <tbody id="marcasBody">
-                            <!-- Se llenará dinámicamente -->
                         </tbody>
                     </table>
                 </div>
@@ -490,8 +487,6 @@
                     Total horas trabajadas: <span id="horasTotales">0</span>h
                 </div>
             </div>
-
-            <!-- EXPORTACIÓN -->
             <div class="quick-actions">
                 <h2>Exportar Resultados</h2>
 
@@ -510,7 +505,6 @@
 </div>
 
 <script>
-    // Datos de ejemplo
     const marcasData = [
         { empleado: 'Juan Pérez', fecha: '2025-01-10', tipo: 'Entrada', hora: '07:58', estado: 'valida', comentario: 'Llegó puntual' },
         { empleado: 'Carolina Méndez', fecha: '2025-01-10', tipo: 'Salida', hora: '17:32', estado: 'fuera', comentario: 'Salida tardía autorizada' },
@@ -570,7 +564,6 @@
             </tr>
         `).join('');
 
-        // Calcular total de horas (ejemplo)
         const horas = marcasFiltradas.length * 8;
         document.getElementById('horasTotales').textContent = horas;
     }
@@ -629,10 +622,7 @@
         a.click();
         window.URL.revokeObjectURL(url);
     }
-    }
-
-    // Inicializar
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         renderMarcas();
     });
 </script>
