@@ -14,9 +14,8 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Header Styles */
         .app-header {
-            background: #2F6FED; /* SIN gradiente */
+            background: #2F6FED;
             color: white;
             padding: 15px 25px;
             display: flex;
@@ -37,7 +36,7 @@
         }
 
             .header-logo:hover {
-                color: rgba(255, 255, 255, 0.85) !important;
+                color: rgba(255,255,255,0.85) !important;
                 text-decoration: none !important;
             }
 
@@ -76,28 +75,31 @@
                 transform-origin: top;
             }
 
-        .user-info {
+        /* Prefijo hdr- para evitar colisiones con vistas */
+        .hdr-user-info {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .user-details {
+        .hdr-user-details {
             text-align: right;
         }
 
-        .user-name {
+        .hdr-user-name {
             font-weight: 600;
             font-size: 13px;
             margin-bottom: 2px;
+            color: white;
         }
 
-        .user-role {
+        .hdr-user-role {
             font-size: 11px;
             opacity: 0.9;
+            color: white;
         }
 
-        .user-avatar {
+        .hdr-user-avatar {
             width: 35px;
             height: 35px;
             background: white;
@@ -105,7 +107,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #2F6FED; /* antes #667eea */
+            color: #2F6FED;
             font-weight: bold;
             font-size: 13px;
         }
@@ -141,13 +143,11 @@
                     color: #2F6FED !important;
                 }
 
-        /* Main Content Area */
         main {
             min-height: calc(100vh - 120px);
             padding-bottom: 80px;
         }
 
-        /* Footer */
         .footer {
             background: #f8f9fa;
             padding: 15px 0;
@@ -164,57 +164,38 @@
         var usuarioEmail = Context.Session.GetString("UsuarioEmail");
         var usuarioRol = Context.Session.GetInt32("UsuarioRol");
 
-        // Determinar el nombre del rol
         string rolNombre = "Usuario";
-        if (usuarioRol == 1)
-        {
-            rolNombre = "Administrador";
-        }
-        else if (usuarioRol == 2)
-        {
-            rolNombre = "Colaborador";
-        }
+        if (usuarioRol == 1) rolNombre = "Administrador";
+        else if (usuarioRol == 2) rolNombre = "Colaborador";
 
-        // Obtener iniciales para el avatar
         string iniciales = "U";
         if (!string.IsNullOrEmpty(usuarioNombre))
         {
             var partes = usuarioNombre.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             if (partes.Length >= 2 && partes[0].Length > 0 && partes[1].Length > 0)
-            {
                 iniciales = partes[0].Substring(0, 1).ToUpper() + partes[1].Substring(0, 1).ToUpper();
-            }
             else if (partes.Length == 1 && partes[0].Length >= 2)
-            {
                 iniciales = partes[0].Substring(0, 2).ToUpper();
-            }
-            else if (partes.Length == 1 && partes[0].Length == 1)
-            {
-                iniciales = partes[0].ToUpper();
-            }
             else if (partes.Length > 0 && partes[0].Length > 0)
-            {
                 iniciales = partes[0].Substring(0, 1).ToUpper();
-            }
         }
     }
 
     @if (usuarioId.HasValue)
     {
-        <!-- Header con información del usuario -->
         <header class="app-header">
             <a href="@(usuarioRol == 1 ? "/Home/AdminHome" : "/Home/ColaboradorHome")" class="header-logo">
                 <div class="clock-icon"></div>
                 O'clock
             </a>
-
-            <div class="user-info">
-                <div class="user-details">
-                    <div class="user-name">@usuarioNombre</div>
-                    <div class="user-role">@rolNombre</div>
+            <div class="hdr-user-info">
+                <div class="hdr-user-details">
+                    <div class="hdr-user-name">@usuarioNombre</div>
+                    <div class="hdr-user-role">@rolNombre</div>
                 </div>
-                <div class="user-avatar">@iniciales</div>
-                <a href="/Usuario/Logout" class="logout-btn" onclick="return confirm('¿Está seguro que desea cerrar sesión?')">
+                <div class="hdr-user-avatar">@iniciales</div>
+                <a href="/Usuario/Logout" class="logout-btn"
+                   onclick="return confirm('¿Está seguro que desea cerrar sesión?')">
                     🚪 Cerrar Sesión
                 </a>
             </div>
