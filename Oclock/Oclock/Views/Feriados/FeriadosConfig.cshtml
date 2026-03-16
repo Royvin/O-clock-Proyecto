@@ -1,0 +1,1090 @@
+﻿@{
+    ViewData["Title"] = "Configuracion de Feriados";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .main-layout {
+        display: flex;
+        min-height: 600px;
+    }
+
+    .sidebar {
+        width: 280px;
+        background: #ffffff;
+        padding: 30px 20px;
+        border-right: 1px solid #e0e0e0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+    }
+
+    .menu-item {
+        padding: 0;
+        margin: 4px 0;
+        border-radius: 10px;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+    .menu-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 20px;
+        color: #4a5568;
+        text-decoration: none;
+        font-weight: 500;
+        border-radius: 10px;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+        .menu-link:hover {
+            background: #2F6FED;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .menu-link.active {
+            background: #2457C8;
+            color: white;
+            box-shadow: 0 4px 12px rgba(36,87,200,0.25);
+        }
+
+            .menu-link.active::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 4px;
+                height: 24px;
+                background: white;
+                border-radius: 0 4px 4px 0;
+            }
+
+    .icon {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .menu-expandable {
+        cursor: pointer;
+    }
+
+    .menu-expandable-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 20px;
+        color: #4a5568;
+        font-weight: 500;
+        border-radius: 10px;
+        transition: all 0.3s;
+    }
+
+        .menu-expandable-header:hover {
+            background: #f3f6ff;
+            color: #2F6FED;
+        }
+
+        .menu-expandable-header.active {
+            background: #EEF4FF;
+            color: #2F6FED;
+            font-weight: 600;
+        }
+
+    .menu-expandable-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .menu-arrow {
+        font-size: 12px;
+        transition: transform 0.3s;
+    }
+
+    .menu-expandable.expanded .menu-arrow {
+        transform: rotate(90deg);
+    }
+
+    .submenu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+        margin-left: 20px;
+        margin-top: 4px;
+    }
+
+        .submenu.show {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+    .submenu-item {
+        margin: 4px 0;
+    }
+
+    .submenu-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        padding-left: 40px;
+        color: #718096;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+        .submenu-link::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: #cbd5e0;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .submenu-link:hover {
+            background: #f7fafc;
+            color: #2F6FED;
+            transform: translateX(3px);
+        }
+
+            .submenu-link:hover::before {
+                background: #2F6FED;
+                transform: translateY(-50%) scale(1.3);
+            }
+
+        .submenu-link.active {
+            background: #EEF4FF;
+            color: #2F6FED;
+            font-weight: 600;
+        }
+
+            .submenu-link.active::before {
+                background: #2F6FED;
+                width: 8px;
+                height: 8px;
+            }
+
+    .content {
+        flex: 1;
+        padding: 40px;
+        background: #F6F8FB;
+    }
+
+    .content-header {
+        margin-bottom: 30px;
+    }
+
+        .content-header h1 {
+            color: #2d3748;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .content-header p {
+            color: #718096;
+        }
+
+    .config-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        margin-bottom: 25px;
+        overflow: hidden;
+        transition: all 0.3s;
+    }
+
+        .config-card:hover {
+            box-shadow: 0 5px 25px rgba(0,0,0,0.12);
+        }
+
+    .card-header-custom {
+        background: #2457C8;
+        color: white;
+        padding: 20px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .card-header-custom h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .card-header-custom .badge {
+            background: rgba(255,255,255,0.22);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+    .card-body-custom {
+        padding: 25px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .form-control, .form-select {
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 12px 15px;
+        transition: all 0.3s;
+        font-size: 14px;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #2F6FED;
+            box-shadow: 0 0 0 3px rgba(47,111,237,0.12);
+        }
+
+    .btn-primary-custom {
+        background: #2F6FED;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+
+        .btn-primary-custom:hover {
+            background: #2457C8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(36,87,200,0.25);
+        }
+
+    .btn-outline-custom {
+        border: 2px solid #2F6FED;
+        color: #2F6FED;
+        padding: 12px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        background: white;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+
+        .btn-outline-custom:hover {
+            background: #2F6FED;
+            color: white;
+        }
+
+    .stat-mini {
+        background: #2F6FED;
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .stat-mini-value {
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .stat-mini-label {
+        font-size: 13px;
+        opacity: 0.9;
+    }
+
+    .alert-danger-custom {
+        border-left: 4px solid #e53e3e;
+        background: #fff5f5;
+        border-radius: 10px;
+        padding: 15px 20px;
+        margin-top: 15px;
+        color: #742a2a;
+    }
+
+    .alert-success-custom {
+        border-left: 4px solid #38a169;
+        background: #f0fff4;
+        border-radius: 10px;
+        padding: 15px 20px;
+        margin-top: 15px;
+        color: #22543d;
+    }
+
+    .modal-header.oc-modal-header {
+        background: #2457C8 !important;
+        color: white !important;
+        border-radius: 15px 15px 0 0;
+        border-bottom: none;
+    }
+
+    .calendar-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+        .calendar-nav h3 {
+            font-size: 20px;
+            color: #2d3748;
+            font-weight: 700;
+        }
+
+    .nav-btn {
+        background: #EEF4FF;
+        border: none;
+        color: #2F6FED;
+        font-weight: 700;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 18px;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .nav-btn:hover {
+            background: #2F6FED;
+            color: white;
+            transform: scale(1.1);
+        }
+
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+    }
+
+    .cal-header {
+        text-align: center;
+        padding: 10px 4px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #718096;
+        letter-spacing: 0.05em;
+    }
+
+    .cal-day {
+        min-height: 70px;
+        border-radius: 10px;
+        border: 1px solid #f0f0f0;
+        padding: 6px;
+        cursor: default;
+        transition: all 0.2s;
+        position: relative;
+        background: white;
+    }
+
+        .cal-day.empty {
+            background: transparent;
+            border-color: transparent;
+        }
+
+        .cal-day.today {
+            border: 2px solid #2F6FED;
+            background: #EEF4FF;
+        }
+
+        .cal-day.holiday {
+            background: linear-gradient(135deg, #fff5f0, #fff0e6);
+            border: 2px solid #f97316;
+            cursor: pointer;
+        }
+
+            .cal-day.holiday:hover {
+                transform: scale(1.04);
+                box-shadow: 0 4px 16px rgba(249,115,22,0.25);
+                z-index: 2;
+            }
+
+        .cal-day.weekend {
+            background: #fafafa;
+        }
+
+        .cal-day.other-month {
+            opacity: 0.35;
+        }
+
+    .day-number {
+        font-size: 13px;
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 4px;
+        display: block;
+    }
+
+    .cal-day.today .day-number {
+        color: #2F6FED;
+    }
+
+    .cal-day.holiday .day-number {
+        color: #c2410c;
+    }
+
+    .holiday-dot {
+        font-size: 10px;
+        font-weight: 700;
+        color: #f97316;
+        background: #ffedd5;
+        padding: 2px 5px;
+        border-radius: 4px;
+        display: block;
+        line-height: 1.4;
+        margin-top: 2px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 100%;
+    }
+
+    .holiday-icon {
+        font-size: 14px;
+    }
+
+    .months-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .month-card {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        transition: box-shadow 0.2s;
+    }
+
+        .month-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+    .month-title {
+        text-align: center;
+        font-weight: 700;
+        font-size: 14px;
+        color: #2457C8;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .mini-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 2px;
+    }
+
+    .mini-header {
+        font-size: 9px;
+        text-align: center;
+        color: #a0aec0;
+        font-weight: 700;
+        padding: 2px 0;
+    }
+
+    .mini-day {
+        font-size: 10px;
+        text-align: center;
+        padding: 3px 1px;
+        border-radius: 4px;
+        cursor: default;
+        color: #4a5568;
+    }
+
+        .mini-day.holiday-mini {
+            background: #f97316;
+            color: white;
+            font-weight: 700;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+            .mini-day.holiday-mini:hover {
+                transform: scale(1.3);
+            }
+
+        .mini-day.today-mini {
+            outline: 2px solid #2F6FED;
+            border-radius: 50%;
+        }
+
+        .mini-day.weekend-mini {
+            color: #a0aec0;
+        }
+
+        .mini-day.empty-mini {
+            color: transparent;
+        }
+
+    .view-toggle {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .toggle-btn {
+        padding: 8px 20px;
+        border-radius: 8px;
+        border: 2px solid #2F6FED;
+        background: white;
+        color: #2F6FED;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .toggle-btn.active {
+            background: #2F6FED;
+            color: white;
+        }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s ease-out;
+    }
+</style>
+
+<div class="main-layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="menu-item">
+            <a href="/Home/AdminHome" class="menu-link"><div class="icon">📊</div>Dashboard</a>
+        </div>
+        <div class="menu-item">
+            <a href="/Admin/VerMarcas" class="menu-link"><div class="icon">⏰</div>Marcas de Asistencia</a>
+        </div>
+        <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
+            <div class="menu-expandable-header active">
+                <div class="menu-expandable-left"><div class="icon">⚙️</div><span>Configuración y Políticas</span></div>
+                <div class="menu-arrow">▶</div>
+            </div>
+            <div class="submenu show">
+                <div class="submenu-item"><a href="/Horarios/HorariosConfig" class="submenu-link">⏰ Horarios</a></div>
+                <div class="submenu-item"><a href="/Feriados/FeriadosConfig" class="submenu-link active">📅 Feriados</a></div>
+                <div class="submenu-item"><a href="/Admin/BonosParametroConfig" class="submenu-link">🎁 Bonos</a></div>
+                <div class="submenu-item"><a href="/Admin/NotificacionesConfig" class="submenu-link">🔔 Notificaciones</a></div>
+            </div>
+        </div>
+        <div class="menu-item"><a href="/Admin/Bonos" class="menu-link"><div class="icon">💵</div>Bonos</a></div>
+        <div class="menu-item"><a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link"><div class="icon">📝</div>Gestion de Empleados</a></div>
+        <div class="menu-item"><a href="/Admin/RankingPuntualidad" class="menu-link"><div class="icon">⏱️</div>Indicadores de Puntualidad</a></div>
+        <div class="menu-item"><a href="/Admin/Reportes" class="menu-link"><div class="icon">📄</div>Reportes</a></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="content-header">
+            <h1><i class="fas fa-calendar-alt me-2"></i>Calendario Laboral</h1>
+            <p>Gestión de feriados y días especiales</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="stat-mini fade-in">
+                    <div class="stat-mini-value" id="totalHolidays">-</div>
+                    <div class="stat-mini-label">Feriados Totales</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-mini fade-in" style="animation-delay:.1s">
+                    <div class="stat-mini-value" id="noLaborables">-</div>
+                    <div class="stat-mini-label">No Laborables</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-mini fade-in" style="animation-delay:.2s">
+                    <div class="stat-mini-value" id="nextHoliday">-</div>
+                    <div class="stat-mini-label">Próximo Feriado</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario -->
+        <div class="config-card fade-in" style="animation-delay:.3s">
+            <div class="card-header-custom">
+                <h2><i class="fas fa-calendar-plus me-2"></i>Registrar Nuevo Feriado</h2>
+                <span class="badge">Gestión de Calendario</span>
+            </div>
+            <div class="card-body-custom">
+                <div id="formAlert" style="display:none;"></div>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label"><i class="fas fa-calendar-day text-primary me-2"></i>Fecha del Feriado</label>
+                        <input type="date" id="holidayDate" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label"><i class="fas fa-tag text-success me-2"></i>¿Es Laborable?</label>
+                        <select id="holidayLaborable" class="form-select">
+                            <option value="false">No laborable</option>
+                            <option value="true">Laborable (día especial)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label"><i class="fas fa-text-height text-info me-2"></i>Nombre del Feriado</label>
+                        <input type="text" id="holidayName" class="form-control" placeholder="Ej: Día de la Independencia">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <label class="form-label"><i class="fas fa-comment-alt text-warning me-2"></i>Descripción (Opcional)</label>
+                        <textarea id="holidayDescription" class="form-control" rows="2" placeholder="Agrega una descripción o notas adicionales..."></textarea>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 mt-4">
+                    <button class="btn btn-primary-custom" onclick="guardarFeriado()">
+                        <i class="fas fa-save me-2"></i>Guardar Feriado
+                    </button>
+                    <button class="btn btn-outline-custom" onclick="resetForm()">
+                        <i class="fas fa-undo me-2"></i>Limpiar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendario -->
+        <div class="config-card fade-in" style="animation-delay:.4s">
+            <div class="card-header-custom">
+                <h2><i class="fas fa-calendar me-2"></i>Feriados Registrados</h2>
+                <span class="badge" id="holidayCount">Cargando...</span>
+            </div>
+            <div class="card-body-custom">
+                <!-- Toggle vista -->
+                <div class="view-toggle">
+                    <button class="toggle-btn active" id="btnMensual" onclick="setView('mensual')">
+                        <i class="fas fa-calendar-day me-1"></i>Vista Mensual
+                    </button>
+                    <button class="toggle-btn" id="btnAnual" onclick="setView('anual')">
+                        <i class="fas fa-calendar me-1"></i>Vista Anual
+                    </button>
+                </div>
+
+                <!-- Vista mensual -->
+                <div id="viewMensual">
+                    <div class="calendar-nav">
+                        <button class="nav-btn" onclick="changeMonth(-1)">‹</button>
+                        <h3 id="calendarTitle"></h3>
+                        <button class="nav-btn" onclick="changeMonth(1)">›</button>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid">
+                        <div class="cal-header">Dom</div>
+                        <div class="cal-header">Lun</div>
+                        <div class="cal-header">Mar</div>
+                        <div class="cal-header">Mié</div>
+                        <div class="cal-header">Jue</div>
+                        <div class="cal-header">Vie</div>
+                        <div class="cal-header">Sáb</div>
+                    </div>
+                </div>
+
+                <!-- Vista anual -->
+                <div id="viewAnual" style="display:none;">
+                    <div class="calendar-nav">
+                        <button class="nav-btn" onclick="changeYear(-1)">‹</button>
+                        <h3 id="yearTitle"></h3>
+                        <button class="nav-btn" onclick="changeYear(1)">›</button>
+                    </div>
+                    <div class="months-grid" id="monthsGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar -->
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:15px;border:none;">
+            <div class="modal-header oc-modal-header">
+                <h5 class="modal-title"><i class="fas fa-edit me-2"></i>Editar Feriado</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div id="editAlert" style="display:none;"></div>
+                <input type="hidden" id="editId">
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-calendar-day text-primary me-2"></i>Fecha</label>
+                    <input type="date" id="editDate" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-tag text-success me-2"></i>¿Es Laborable?</label>
+                    <select id="editLaborable" class="form-select">
+                        <option value="false">No laborable</option>
+                        <option value="true">Laborable (día especial)</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-text-height text-info me-2"></i>Nombre</label>
+                    <input type="text" id="editName" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><i class="fas fa-comment-alt text-warning me-2"></i>Descripción</label>
+                    <textarea id="editDescription" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="d-flex gap-2 mt-4">
+                    <button class="btn btn-primary-custom flex-fill" onclick="guardarEdicion()">
+                        <i class="fas fa-save me-2"></i>Guardar Cambios
+                    </button>
+                    <button class="btn btn-outline-custom" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Detalle Feriado (al hacer click en el calendario) -->
+<div class="modal fade" id="detailModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content" style="border-radius:15px;border:none;">
+            <div class="modal-header oc-modal-header">
+                <h5 class="modal-title" id="detailTitle">Detalle del Feriado</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p><strong>📅 Fecha:</strong> <span id="detailFecha"></span></p>
+                <p class="mt-2"><strong>🏷️ Nombre:</strong> <span id="detailNombre"></span></p>
+                <p class="mt-2"><strong>🔖 Estado:</strong> <span id="detailLaborable"></span></p>
+                <p class="mt-2" id="detailDescWrap"><strong>📝 Descripción:</strong> <span id="detailDesc"></span></p>
+                <div class="d-flex gap-2 mt-4">
+                    <button class="btn btn-primary-custom flex-fill" onclick="abrirEditar(currentHolidayId)">
+                        <i class="fas fa-edit me-1"></i>Editar
+                    </button>
+                    <button class="btn" style="background:#fed7d7;color:#9b2c2c;border-radius:10px;font-weight:600;padding:12px;" onclick="eliminarFeriado(currentHolidayId)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+
+    let holidays = [];
+    let currentDate = new Date();
+    let currentYear = new Date().getFullYear();
+    let currentView = 'mensual';
+    let currentHolidayId = null;
+    const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                    'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    const MONTHS_SHORT = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+
+    function toggleSubmenu(el) {
+        const sub = el.querySelector('.submenu');
+        const hdr = el.querySelector('.menu-expandable-header');
+        el.classList.toggle('expanded');
+        sub.classList.toggle('show');
+        hdr.classList.toggle('active', el.classList.contains('expanded'));
+    }
+
+ 
+    async function cargarFeriados() {
+        const res = await fetch('/Feriados/GetAll');
+        holidays = await res.json();
+        updateStats();
+        renderCalendar();
+    }
+
+    async function guardarFeriado() {
+        const fecha = document.getElementById('holidayDate').value;
+        const nombre = document.getElementById('holidayName').value.trim();
+        const laborable = document.getElementById('holidayLaborable').value === 'true';
+        const descripcion = document.getElementById('holidayDescription').value.trim();
+
+        if (!fecha || !nombre) { showAlert('formAlert', 'Completa la fecha y el nombre.', 'danger'); return; }
+
+        const res = await fetch('/Feriados/Crear', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nombre, fecha, esLaborable: laborable, descripcion })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+            showAlert('formAlert', data.mensaje, 'success');
+            resetForm();
+            await cargarFeriados();
+        } else {
+            showAlert('formAlert', data.mensaje, 'danger');
+        }
+    }
+
+    async function abrirEditar(id) {
+        // Cierra el modal de detalle si está abierto
+        const dm = bootstrap.Modal.getInstance(document.getElementById('detailModal'));
+        if (dm) dm.hide();
+
+        const res = await fetch(`/Feriados/ObtenerPorId?id=${id}`);
+        if (!res.ok) return;
+        const f = await res.json();
+
+        document.getElementById('editId').value = f.idFeriado;
+        document.getElementById('editDate').value = f.fecha;
+        document.getElementById('editLaborable').value = f.esLaborable ? 'true' : 'false';
+        document.getElementById('editName').value = f.nombre;
+        document.getElementById('editDescription').value = f.descripcion || '';
+        document.getElementById('editAlert').style.display = 'none';
+
+        new bootstrap.Modal(document.getElementById('editModal')).show();
+    }
+
+    async function guardarEdicion() {
+        const id = parseInt(document.getElementById('editId').value);
+        const fecha = document.getElementById('editDate').value;
+        const nombre = document.getElementById('editName').value.trim();
+        const laborable = document.getElementById('editLaborable').value === 'true';
+        const descripcion = document.getElementById('editDescription').value.trim();
+
+        const res = await fetch('/Feriados/Editar', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ idFeriado: id, nombre, fecha, esLaborable: laborable, descripcion })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+            bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+            await cargarFeriados();
+        } else {
+            showAlert('editAlert', data.mensaje, 'danger');
+        }
+    }
+
+    async function eliminarFeriado(id) {
+        if (!confirm('¿Estás seguro de que deseas eliminar este feriado?')) return;
+
+        const dm = bootstrap.Modal.getInstance(document.getElementById('detailModal'));
+        if (dm) dm.hide();
+
+        const res = await fetch(`/Feriados/Eliminar?id=${id}`, { method: 'DELETE' });
+        if (res.ok) await cargarFeriados();
+    }
+
+
+    function updateStats() {
+        document.getElementById('totalHolidays').textContent = holidays.length;
+        const noLab = holidays.filter(h => !h.esLaborable).length;
+        document.getElementById('noLaborables').textContent = noLab;
+        document.getElementById('holidayCount').textContent = `${holidays.length} registrados`;
+
+        const today = new Date(); today.setHours(0,0,0,0);
+        const proximos = holidays
+            .filter(h => new Date(h.fecha + 'T00:00:00') >= today)
+            .sort((a,b) => new Date(a.fecha) - new Date(b.fecha));
+
+        if (proximos.length > 0) {
+            const d = new Date(proximos[0].fecha + 'T00:00:00');
+            document.getElementById('nextHoliday').textContent =
+                `${d.getDate()} ${MONTHS_SHORT[d.getMonth()]}`;
+        } else {
+            document.getElementById('nextHoliday').textContent = '-';
+        }
+    }
+
+    function setView(view) {
+        currentView = view;
+        document.getElementById('viewMensual').style.display = view === 'mensual' ? '' : 'none';
+        document.getElementById('viewAnual').style.display = view === 'anual' ? '' : 'none';
+        document.getElementById('btnMensual').classList.toggle('active', view === 'mensual');
+        document.getElementById('btnAnual').classList.toggle('active', view === 'anual');
+        renderCalendar();
+    }
+
+    function renderCalendar() {
+        if (currentView === 'mensual') renderMensual();
+        else renderAnual();
+    }
+
+ 
+    function changeMonth(dir) {
+        currentDate.setMonth(currentDate.getMonth() + dir);
+        renderMensual();
+    }
+
+    function renderMensual() {
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        document.getElementById('calendarTitle').textContent = `${MONTHS[month]} ${year}`;
+
+        const grid = document.getElementById('calendarGrid');
+        // Mantener headers
+        grid.innerHTML = `
+            <div class="cal-header">Dom</div><div class="cal-header">Lun</div>
+            <div class="cal-header">Mar</div><div class="cal-header">Mié</div>
+            <div class="cal-header">Jue</div><div class="cal-header">Vie</div>
+            <div class="cal-header">Sáb</div>
+        `;
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const today = new Date(); today.setHours(0,0,0,0);
+
+        // Celdas vacías iniciales
+        for (let i = 0; i < firstDay; i++) {
+            grid.insertAdjacentHTML('beforeend', '<div class="cal-day empty"></div>');
+        }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+            const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            const dayDate = new Date(year, month, d);
+            const isToday = dayDate.getTime() === today.getTime();
+            const isWeekend = dayDate.getDay() === 0 || dayDate.getDay() === 6;
+            const holiday = holidays.find(h => h.fecha === dateStr);
+
+            let cls = 'cal-day';
+            if (isToday) cls += ' today';
+            if (holiday) cls += ' holiday';
+            else if (isWeekend) cls += ' weekend';
+
+            const badge = holiday
+                ? `<span class="holiday-dot">🎌 ${holiday.nombre}</span>`
+                : '';
+
+            const onclick = holiday
+                ? `onclick="mostrarDetalle(${holiday.idFeriado})"`
+                : '';
+
+            grid.insertAdjacentHTML('beforeend', `
+                <div class="${cls}" ${onclick} title="${holiday ? holiday.nombre : ''}">
+                    <span class="day-number">${d}</span>
+                    ${badge}
+                </div>
+            `);
+        }
+    }
+
+    function changeYear(dir) {
+        currentYear += dir;
+        renderAnual();
+    }
+
+    function renderAnual() {
+        document.getElementById('yearTitle').textContent = currentYear;
+        const container = document.getElementById('monthsGrid');
+        container.innerHTML = '';
+        const today = new Date(); today.setHours(0,0,0,0);
+
+        for (let m = 0; m < 12; m++) {
+            const firstDay = new Date(currentYear, m, 1).getDay();
+            const daysInMonth = new Date(currentYear, m + 1, 0).getDate();
+
+            let daysHtml = '';
+            // headers
+            ['D','L','M','X','J','V','S'].forEach(h => {
+                daysHtml += `<div class="mini-header">${h}</div>`;
+            });
+            // empty
+            for (let i = 0; i < firstDay; i++) daysHtml += `<div class="mini-day empty-mini"></div>`;
+            // days
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateStr = `${currentYear}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                const dayDate = new Date(currentYear, m, d);
+                const isToday = dayDate.getTime() === today.getTime();
+                const isWeekend = dayDate.getDay() === 0 || dayDate.getDay() === 6;
+                const holiday = holidays.find(h => h.fecha === dateStr);
+
+                let cls = 'mini-day';
+                if (holiday) cls += ' holiday-mini';
+                else if (isWeekend) cls += ' weekend-mini';
+                if (isToday) cls += ' today-mini';
+
+                const onclick = holiday ? `onclick="mostrarDetalle(${holiday.idFeriado})"` : '';
+                daysHtml += `<div class="${cls}" ${onclick} title="${holiday ? holiday.nombre : ''}">${d}</div>`;
+            }
+
+            container.insertAdjacentHTML('beforeend', `
+                <div class="month-card">
+                    <div class="month-title">${MONTHS[m]}</div>
+                    <div class="mini-grid">${daysHtml}</div>
+                </div>
+            `);
+        }
+    }
+
+ 
+    function mostrarDetalle(id) {
+        const h = holidays.find(x => x.idFeriado === id);
+        if (!h) return;
+        currentHolidayId = id;
+
+        const d = new Date(h.fecha + 'T00:00:00');
+        document.getElementById('detailTitle').textContent = '📅 Feriado';
+        document.getElementById('detailFecha').textContent = `${d.getDate()} de ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+        document.getElementById('detailNombre').textContent = h.nombre;
+        document.getElementById('detailLaborable').textContent = h.esLaborable ? '✅ Laborable' : '🚫 No laborable';
+
+        const descWrap = document.getElementById('detailDescWrap');
+        if (h.descripcion) {
+            document.getElementById('detailDesc').textContent = h.descripcion;
+            descWrap.style.display = '';
+        } else {
+            descWrap.style.display = 'none';
+        }
+
+        new bootstrap.Modal(document.getElementById('detailModal')).show();
+    }
+
+
+    function resetForm() {
+        document.getElementById('holidayDate').value = '';
+        document.getElementById('holidayName').value = '';
+        document.getElementById('holidayLaborable').value = 'false';
+        document.getElementById('holidayDescription').value = '';
+        document.getElementById('formAlert').style.display = 'none';
+    }
+
+    function showAlert(containerId, msg, type) {
+        const el = document.getElementById(containerId);
+        el.className = type === 'success' ? 'alert-success-custom' : 'alert-danger-custom';
+        el.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>${msg}`;
+        el.style.display = 'block';
+        setTimeout(() => el.style.display = 'none', 4000);
+    }
+
+    // Inicializar
+    document.addEventListener('DOMContentLoaded', cargarFeriados);
+</script>

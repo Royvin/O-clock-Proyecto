@@ -33,16 +33,6 @@ namespace Oclock.Controllers
             return View();
         }
 
-        public IActionResult FeriadosConfig()
-        {
-            return View();
-        }
-
-        public IActionResult HorariosConfig()
-        {
-            return View();
-        }
-
         public IActionResult NotificacionesConfig()
         {
             return View();
