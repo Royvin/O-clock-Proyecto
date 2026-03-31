@@ -1,0 +1,600 @@
+﻿@model Oclock.Models.Usuario
+
+@{
+    ViewData["Title"] = "O'Clock - Acceso";
+    Layout = null;
+    var showRegister = ViewBag.ShowRegister ?? false;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>O'Clock - Acceso al Sistema</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        :root {
+            --oc-blue: #2F6FED;
+            --oc-blue-700: #2457C8;
+            --oc-bg: #F6F8FB;
+            --oc-surface: #FFFFFF;
+            --oc-text: #1F2937;
+            --oc-muted: #6B7280;
+            --oc-border: #E5E7EB;
+            --oc-radius: 20px;
+            --oc-shadow: 0 10px 28px rgba(17, 24, 39, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--oc-bg);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', sans-serif;
+            padding: 2rem 0;
+            color: var(--oc-text);
+        }
+
+        .auth-container {
+            background: var(--oc-surface);
+            width: 850px;
+            max-width: 95%;
+            max-height: 90vh;
+            border-radius: var(--oc-radius);
+            box-shadow: var(--oc-shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--oc-border);
+            animation: fadeIn 0.35s ease-in-out;
+        }
+
+        .brand-bar {
+            background: var(--oc-blue);
+            color: #fff;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .brand-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .clock-icon {
+            width: 26px;
+            height: 26px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+            .clock-icon::before {
+                content: '';
+                position: absolute;
+                width: 2px;
+                height: 8px;
+                background: #fff;
+                top: 4px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .clock-icon::after {
+                content: '';
+                position: absolute;
+                width: 2px;
+                height: 6px;
+                background: #fff;
+                top: 9px;
+                left: 50%;
+                transform: translateX(-50%) rotate(90deg);
+                transform-origin: top;
+            }
+
+        .brand-title {
+            font-weight: 800;
+            letter-spacing: .2px;
+            font-size: 16px;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .brand-subtitle {
+            font-size: 12px;
+            opacity: .9;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .brand-right {
+            font-size: 12px;
+            opacity: .92;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            display: flex;
+            background: #ffffff;
+            border-bottom: 1px solid var(--oc-border);
+            flex-shrink: 0;
+        }
+
+        .tab-link {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--oc-muted);
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+            display: block;
+        }
+
+            .tab-link:hover {
+                background: rgba(47,111,237,0.06);
+                color: var(--oc-blue);
+            }
+
+            .tab-link.active {
+                color: var(--oc-blue);
+                background: #ffffff;
+                border-bottom: 3px solid var(--oc-blue);
+            }
+
+        .tab-content {
+            padding: 1.5rem 2rem;
+            overflow-y: auto;
+            flex: 1;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+
+        .auth-title {
+            color: var(--oc-text);
+            font-weight: 800;
+            font-size: 1.35rem;
+            margin-bottom: 1.1rem;
+        }
+
+        .section-title {
+            color: var(--oc-text);
+            font-weight: 800;
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 2px solid #eef2f7;
+        }
+
+        .form-label {
+            color: var(--oc-muted);
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        .form-control, .form-select {
+            border-radius: 12px;
+            border: 1px solid var(--oc-border);
+            padding: 0.55rem 0.85rem;
+            font-size: 0.95rem;
+        }
+
+            .form-control:focus, .form-select:focus {
+                border-color: var(--oc-blue);
+                box-shadow: 0 0 0 0.2rem rgba(47, 111, 237, 0.18);
+            }
+
+        .text-danger-custom {
+            color: #e53e3e;
+            font-weight: 700;
+        }
+
+        .btn-primary-custom {
+            background: var(--oc-blue);
+            border: none;
+            border-radius: 12px;
+            padding: 0.65rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #fff;
+            width: 100%;
+            transition: 0.2s;
+        }
+
+            .btn-primary-custom:hover {
+                background: var(--oc-blue-700);
+                box-shadow: 0 10px 18px rgba(47,111,237,0.18);
+                transform: translateY(-1px);
+                color: #fff;
+            }
+
+        .btn-secondary-custom {
+            background: #e9eef7;
+            border: 1px solid var(--oc-border);
+            border-radius: 12px;
+            padding: 0.65rem 1.2rem;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #374151;
+            transition: 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+            .btn-secondary-custom:hover {
+                background: #dde6f5;
+                transform: translateY(-1px);
+                color: #374151;
+            }
+
+        .logo-circle {
+            width: 96px;
+            height: 56px;
+            border-radius: 18px;
+            background: #f1f5ff;
+            border: 1px solid rgba(47,111,237,0.18);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 1rem auto;
+            box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            color: var(--oc-blue);
+            font-weight: 900;
+            letter-spacing: .2px;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--oc-blue);
+            border-color: var(--oc-blue);
+        }
+
+        .section-container {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 14px;
+            margin-bottom: 1rem;
+            border: 1px solid #eef2f7;
+        }
+
+        .forgot-link {
+            color: var(--oc-muted);
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+            .forgot-link:hover {
+                text-decoration: underline;
+                color: var(--oc-blue);
+            }
+
+        .validation-message {
+            color: #e53e3e;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            font-weight: 700;
+        }
+
+        .password-wrap {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: var(--oc-muted);
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+            .password-toggle:hover {
+                color: var(--oc-blue);
+            }
+
+            .password-toggle:focus {
+                outline: none;
+            }
+
+        .alert {
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        /* Footer inside card */
+        .auth-footer {
+            padding: 14px 18px;
+            border-top: 1px solid var(--oc-border);
+            background: #fff;
+            font-size: 12px;
+            color: var(--oc-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .tab-content {
+                padding: 1.1rem 1.1rem;
+            }
+
+            .brand-right {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="brand-bar">
+            <div class="brand-left">
+                <div class="clock-icon"></div>
+                <div>
+                    <p class="brand-title">O'Clock</p>
+                    <p class="brand-subtitle">Sistema de Asistencia</p>
+                </div>
+            </div>
+            <div class="brand-right">
+                Acceso seguro
+            </div>
+        </div>
+
+        <div class="tabs-container">
+            <a href="@Url.Action("Index", "Usuario", new { tab = "login" })" class="tab-link @(showRegister ? "" : "active")">
+                <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+            </a>
+            <a href="@Url.Action("Index", "Usuario", new { tab = "register" })" class="tab-link @(showRegister ? "active" : "")">
+                <i class="fas fa-user-plus me-2"></i>Registrarse
+            </a>
+        </div>
+
+        @if (!showRegister)
+        {
+            <div class="tab-content">
+                <div class="logo-circle">
+                    <span class="logo-text">O'clock</span>
+                </div>
+
+                <h2 class="text-center auth-title">Bienvenido de nuevo</h2>
+
+                @if (ViewBag.SuccessMessage != null)
+                {
+                    <div class="alert alert-success" role="alert">
+                        @ViewBag.SuccessMessage
+                    </div>
+                }
+
+                <form asp-action="Login" asp-controller="Usuario" method="post">
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @ViewBag.ErrorMessage
+                        </div>
+                    }
+
+                    <div class="mb-3">
+                        <label class="form-label">Correo electrónico</label>
+                        <input type="email" name="email" class="form-control" placeholder="usuario@empresa.com" required />
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label">Contraseña</label>
+                        <div class="password-wrap">
+                            <input id="loginPassword" type="password" name="password" class="form-control" placeholder="••••••••" required />
+                            <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)" aria-label="Mostrar contraseña">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
+                            <label class="form-check-label" for="rememberMe">
+                                Recordarme
+                            </label>
+                        </div>
+
+                        <a class="forgot-link" href="@Url.Action("ForgotPassword", "Usuario")">
+                            Olvidé la contraseña
+                        </a>
+                    </div>
+
+                    <button type="submit" class="btn-primary-custom mt-2">
+                        <i class="fas fa-sign-in-alt me-2"></i>Ingresar
+                    </button>
+                </form>
+            </div>
+        }
+        else
+        {
+            <div class="tab-content">
+                <div class="logo-circle">
+                    <span class="logo-text">O'clock</span>
+                </div>
+
+                <h2 class="text-center auth-title">Crear cuenta nueva</h2>
+
+                <form asp-action="Register" asp-controller="Usuario" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    @if (ViewBag.SuccessMessage != null)
+                    {
+                        <div class="alert alert-success" role="alert">
+                            @ViewBag.SuccessMessage
+                        </div>
+                    }
+
+                    <div class="section-container">
+                        <h5 class="section-title">
+                            <i class="fas fa-id-card me-2"></i>Información Personal
+                        </h5>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Nombre" class="form-label">
+                                    Nombre <span class="text-danger-custom">*</span>
+                                </label>
+                                <input asp-for="Nombre" class="form-control" placeholder="Ingrese el nombre" required />
+                                <span asp-validation-for="Nombre" class="validation-message"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Apellido" class="form-label">
+                                    Apellido <span class="text-danger-custom">*</span>
+                                </label>
+                                <input asp-for="Apellido" class="form-control" placeholder="Ingrese el apellido" required />
+                                <span asp-validation-for="Apellido" class="validation-message"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Email" class="form-label">
+                                    Correo Electrónico <span class="text-danger-custom">*</span>
+                                </label>
+                                <input asp-for="Email" type="email" class="form-control" placeholder="usuario@empresa.com" required />
+                                <span asp-validation-for="Email" class="validation-message"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Telefono" class="form-label">
+                                    Teléfono
+                                </label>
+                                <input asp-for="Telefono" type="tel" class="form-control" placeholder="8888-8888" />
+                                <span asp-validation-for="Telefono" class="validation-message"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-container">
+                        <h5 class="section-title">
+                            <i class="fas fa-lock me-2"></i>Seguridad
+                        </h5>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Contraseña" class="form-label">
+                                    Contraseña <span class="text-danger-custom">*</span>
+                                </label>
+
+                                <div class="password-wrap">
+                                    <input id="registerPassword" asp-for="Contraseña" type="password" class="form-control" placeholder="••••••••" required minlength="8" />
+                                    <button type="button" class="password-toggle" onclick="togglePassword('registerPassword', this)" aria-label="Mostrar contraseña">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </div>
+
+                                <span asp-validation-for="Contraseña" class="validation-message"></span>
+                                <small class="text-muted">Mínimo 8 caracteres</small>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="confirmar_contraseña" class="form-label">
+                                    Confirmar Contraseña <span class="text-danger-custom">*</span>
+                                </label>
+
+                                <div class="password-wrap">
+                                    <input id="confirmPassword" type="password" name="confirmar_contraseña" class="form-control" placeholder="••••••••" required minlength="8" />
+                                    <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword', this)" aria-label="Mostrar contraseña">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </div>
+
+                                <small class="text-muted">Debe coincidir con la contraseña</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-container">
+                        <h5 class="section-title">
+                            <i class="fas fa-briefcase me-2"></i>Información Laboral
+                        </h5>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FechaContratacion" class="form-label">
+                                    Fecha de Contratación
+                                </label>
+                                <input asp-for="FechaContratacion" type="date" class="form-control" />
+                                <span asp-validation-for="FechaContratacion" class="validation-message"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <button type="submit" class="btn-primary-custom" style="width: auto;">
+                            <i class="fas fa-save me-2"></i>Registrar Usuario
+                        </button>
+                        <button type="reset" class="btn-secondary-custom">
+                            <i class="fas fa-eraser me-2"></i>Limpiar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        }
+
+        <div class="auth-footer">
+            <span>&copy; @DateTime.Now.Year O'Clock</span>
+            <span>Soporte interno</span>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+
+            const icon = btn.querySelector('i');
+            const isHidden = input.type === 'password';
+
+            input.type = isHidden ? 'text' : 'password';
+
+            if (icon) {
+                icon.classList.toggle('fa-eye', !isHidden);
+                icon.classList.toggle('fa-eye-slash', isHidden);
+            }
+
+            btn.setAttribute('aria-label', isHidden ? 'Ocultar contraseña' : 'Mostrar contraseña');
+        }
+    </script>
+</body>
+</html>

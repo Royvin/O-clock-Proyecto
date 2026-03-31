@@ -3,19 +3,23 @@ using System.Collections.Generic;
 
 namespace Oclock.Models;
 
-public partial class MARCA
+public partial class Marca
 {
-    public int id_marca { get; set; }
+    public int IdMarca { get; set; }
 
-    public string nombre { get; set; } = null!;
+    public string Nombre { get; set; } = null!;
 
-    public TimeOnly? hora_entrada { get; set; }
+    public TimeOnly? HoraEntrada { get; set; }
 
-    public TimeOnly? hora_salida { get; set; }
+    public TimeOnly? HoraSalida { get; set; }
 
-    public string? ubicancia { get; set; }
+    public string? Ubicancia { get; set; }
 
-    public string? comentario { get; set; }
+    public string? Comentario { get; set; }
 
-    public virtual USUARIO id_marcaNavigation { get; set; } = null!;
+    public int? IdUsuario { get; set; }
+
+    public virtual Usuario? IdUsuarioNavigation { get; set; }
+
+    public DateOnly Fecha { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 }

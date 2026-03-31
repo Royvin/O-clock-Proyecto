@@ -1,4 +1,4 @@
-namespace Oclock.Models
+﻿namespace Oclock.Models
 {
     public class ErrorViewModel
     {

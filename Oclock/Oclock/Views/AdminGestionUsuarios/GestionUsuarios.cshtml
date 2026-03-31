@@ -1,7 +1,9 @@
-﻿@{
-    ViewData["Title"] = "Ranking de puntualidad";
+﻿@model List<Oclock.Models.Usuario>
+@{
+    ViewData["Title"] = "Gestión de Usuarios";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <style>
     * {
         margin: 0;
@@ -46,13 +48,13 @@
     }
 
         .menu-link:hover {
-            background: #2F6FED;
+            background: #667eea;
             color: white;
             transform: translateX(5px);
         }
 
         .menu-link.active {
-            background: #2F6FED;
+            background: #667eea;
             color: white;
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
@@ -100,7 +102,7 @@
         }
 
         .menu-expandable-header.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            background: rgba(102, 126, 234, 0.1);
             color: #667eea;
             font-weight: 600;
         }
@@ -177,7 +179,7 @@
             }
 
         .submenu-link.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            background: rgba(102, 126, 234, 0.15);
             color: #667eea;
             font-weight: 600;
         }
@@ -196,7 +198,7 @@
     }
 
     .content-header {
-        margin-bottom: 30px;
+        margin-bottom: 15px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -341,7 +343,7 @@
         }
 
         .tab.active {
-            background: #2F6FED;
+            background: #667eea;
             color: white;
         }
 
@@ -360,7 +362,7 @@
     }
 
     .btn-primary {
-        background: #2F6FED;
+        background: #667eea;
         color: white;
     }
 
@@ -437,6 +439,64 @@
             gap: 10px;
         }
 
+    .request-card {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        border-left: 4px solid #667eea;
+        transition: all 0.3s;
+    }
+
+        .request-card:hover {
+            background: #e8edf3;
+            transform: translateX(5px);
+        }
+
+    .request-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        flex-shrink: 0;
+    }
+
+    .request-info {
+        flex: 1;
+    }
+
+    .request-title {
+        color: #2d3748;
+        font-weight: 700;
+        margin-bottom: 6px;
+        font-size: 16px;
+    }
+
+    .request-details {
+        color: #718096;
+        font-size: 13px;
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .request-detail-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .request-actions {
+        display: flex;
+        gap: 10px;
+    }
+
     /* Table */
     .table-container {
         overflow-x: auto;
@@ -506,6 +566,29 @@
         color: #2c5282;
     }
 
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #718096;
+    }
+
+    .empty-state-icon {
+        font-size: 64px;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+
+    .empty-state h3 {
+        color: #4a5568;
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+
+    .empty-state p {
+        font-size: 14px;
+    }
+
     /* Modal */
     .modal {
         display: none;
@@ -570,13 +653,133 @@
             color: #2d3748;
         }
 
+    .detail-row {
+        display: flex;
+        padding: 15px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+    .detail-label {
+        font-weight: 700;
+        color: #4a5568;
+        width: 150px;
+        flex-shrink: 0;
+    }
+
+    .detail-value {
+        color: #2d3748;
+        flex: 1;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+        .tab-content.active {
+            display: block;
+        }
+
     .btn-group {
         display: flex;
         gap: 15px;
         flex-wrap: wrap;
     }
+    /* Reemplaza los estilos de empleado */
+    .empleado-card {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        margin-bottom: 8px;
+        border-left: 3px solid #667eea;
+        transition: all 0.3s;
+        text-decoration: none;
+        color: inherit;
+    }
+
+        .empleado-card:hover {
+            background: #e8edf3;
+            transform: translateX(4px);
+            text-decoration: none;
+            color: inherit;
+        }
+
+    .empleado-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #667eea;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 13px;
+        flex-shrink: 0;
+    }
+
+    .empleado-info {
+        flex: 1;
+    }
+
+    .empleado-name {
+        font-weight: 600;
+        color: #2d3748;
+        font-size: 14px;
+    }
+
+    .empleado-meta {
+        color: #718096;
+        font-size: 12px;
+        margin-top: 2px;
+    }
+
+    /* Paginación */
+    .paginacion {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+
+    .pag-btn {
+        padding: 8px 14px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        color: #4a5568;
+        background: white;
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s;
+    }
+
+        .pag-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .pag-btn.activo {
+            background: #667eea;
+            color: white;
+            border-color: transparent;
+        }
+
+        .pag-btn.deshabilitado {
+            opacity: 0.4;
+            pointer-events: none;
+        }
 </style>
-<!-- Main Layout -->
+
 <div class="main-layout">
     <!-- Sidebar -->
     <div class="sidebar">
@@ -625,6 +828,8 @@
                 </div>
             </div>
         </div>
+
+
         <div class="menu-item">
             <a href="/Admin/Bonos" class="menu-link">
                 <div class="icon">💵 </div>
@@ -633,18 +838,20 @@
         </div>
 
         <div class="menu-item">
-            <a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link">
+            <a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link active">
                 <div class="icon">📝</div>
                 Gestion de Empleados
             </a>
         </div>
 
         <div class="menu-item">
-            <a href="/Admin/RankingPuntualidad" class="menu-link active">
+            <a href="/Admin/RankingPuntualidad" class="menu-link">
                 <div class="icon">⏱️</div>
                 Indicadores de Puntualidad
             </a>
         </div>
+
+
         <div class="menu-item">
             <a href="/Admin/Reportes" class="menu-link">
                 <div class="icon">📄</div>
@@ -654,134 +861,95 @@
 
     </div>
 
-    <!-- Main Content -->
     <div class="content">
         <div class="content-header">
             <div>
-                <h1>Ranking de Puntualidad</h1>
-                <p>Clasificación de empleados según su nivel de puntualidad</p>
+                <h1>👥 Gestión de Usuarios</h1>
+                <p>Selecciona un empleado para ver y editar su expediente completo</p>
             </div>
         </div>
 
-        <div class="filter-section">
-            <h2>🏷️ Filtros del Ranking</h2>
-            <div class="filter-grid">
-                <div class="form-group">
-                    <label>Departamento</label>
-                    <select id="departmentFilter" onchange="applyRankingFilter()">
-                        <option value="all">Todos</option>
-                        <option value="ti">Tecnología</option>
-                        <option value="rrhh">Recursos Humanos</option>
-                        <option value="finanzas">Finanzas</option>
-                    </select>
-                </div>
+        @if (TempData["Mensaje"] != null)
+        {
+            <div style="background:#c6f6d5;color:#22543d;padding:15px;border-radius:10px;margin-bottom:20px;">
+                ✅ @TempData["Mensaje"]
             </div>
-            <div class="btn-group">
-                <button class="btn btn-primary" onclick="applyRankingFilter()">🔍 Aplicar filtro</button>
-                <button class="btn btn-secondary" onclick="exportRanking()">📥 Exportar Ranking</button>
-            </div>
-        </div>
+        }
 
         <div class="requests-section">
             <div class="section-header">
-                <h2>🏆 Ranking de Puntualidad</h2>
-                <span class="badge badge-info" id="rankingCount">5 empleados</span>
+                <h2>📋 Empleados</h2>
+                <span class="badge badge-info">Página @ViewBag.PaginaActual de @ViewBag.TotalPaginas</span>
             </div>
 
-            <div class="table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Empleado</th>
-                            <th>Departamento</th>
-                            <th>% Puntualidad</th>
-                            <th>Llegadas Tarde</th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody id="rankingTable">
-                    </tbody>
-                </table>
-            </div>
+            @foreach (var u in Model)
+            {
+                <a href="/AdminGestionUsuarios/Expediente/@u.IdUsuario" class="empleado-card">
+                    <div class="empleado-avatar">
+                        @u.Nombre.Substring(0, 1)@u.Apellido.Substring(0, 1)
+                    </div>
+                    <div class="empleado-info">
+                        <div class="empleado-name">@u.Nombre @u.Apellido</div>
+                        <div class="empleado-meta">
+                            📧 @u.Email &nbsp;|&nbsp;
+                            🎭 @u.IdRolNavigation?.NombreRol &nbsp;|&nbsp;
+                            @if (u.Activo == true)
+                            {
+                                <span style="color:#38a169;">● Activo</span>
+                            }
+                            else
+                            {
+                                <span style="color:#e53e3e;">● Inactivo</span>
+                            }
+                        </div>
+                    </div>
+                    <span class="badge badge-info">Ver →</span>
+                </a>
+            }
+
+            @if (!Model.Any())
+            {
+                <div class="empty-state">
+                    <div class="empty-state-icon">👤</div>
+                    <h3>No hay usuarios registrados</h3>
+                </div>
+            }
+
+            <!-- Paginación -->
+            @if (ViewBag.TotalPaginas > 1)
+            {
+                <div class="paginacion">
+                    @if (ViewBag.PaginaActual > 1)
+                    {
+                        <a href="/AdminGestionUsuarios/GestionUsuarios?pagina=@(ViewBag.PaginaActual - 1)" class="pag-btn">← Anterior</a>
+                    }
+                    else
+                    {
+                        <span class="pag-btn deshabilitado">← Anterior</span>
+                    }
+
+                    @for (int i = 1; i <= ViewBag.TotalPaginas; i++)
+                    {
+                        if (i == ViewBag.PaginaActual)
+                        {
+                            <span class="pag-btn activo">@i</span>
+                        }
+                        else
+                        {
+                            <a href="/AdminGestionUsuarios/GestionUsuarios?pagina=@i" class="pag-btn">@i</a>
+                        }
+                    }
+
+                    @if (ViewBag.PaginaActual < ViewBag.TotalPaginas)
+                    {
+                        <a href="/AdminGestionUsuarios/GestionUsuarios?pagina=@(ViewBag.PaginaActual + 1)" class="pag-btn">Siguiente →</a>
+                    }
+                    else
+                    {
+                        <span class="pag-btn deshabilitado">Siguiente →</span>
+                    }
+                </div>
+            }
         </div>
     </div>
 </div>
-
-<div class="modal" id="requestModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>📋 Detalle de Solicitud</h3>
-            <button class="btn-close" onclick="closeModal()">×</button>
-        </div>
-        <div id="modalContent"></div>
-    </div>
-</div>
-
-<script>
-    const rankingData = [
-        { name: 'Ana López', dept: 'ti', deptName: 'Tecnología', punctuality: 98, late: 1 },
-        { name: 'Carlos Ramírez', dept: 'finanzas', deptName: 'Finanzas', punctuality: 95, late: 2 },
-        { name: 'María González', dept: 'rrhh', deptName: 'Recursos Humanos', punctuality: 92, late: 3 },
-        { name: 'Pedro Martínez', dept: 'ti', deptName: 'Tecnología', punctuality: 90, late: 4 },
-        { name: 'Laura Jiménez', dept: 'finanzas', deptName: 'Finanzas', punctuality: 88, late: 5 }
-    ];
-
-    document.addEventListener('DOMContentLoaded', renderRanking);
-
-    function renderRanking(filter = 'all') {
-        const tbody = document.getElementById('rankingTable');
-        let data = rankingData;
-
-        if (filter !== 'all') {
-            data = rankingData.filter(r => r.dept === filter);
-        }
-
-        tbody.innerHTML = data.map((r, i) => `
-            <tr>
-                <td>${i + 1}</td>
-                <td>${r.name}</td>
-                <td>${r.deptName}</td>
-                <td><strong>${r.punctuality}%</strong></td>
-                <td>${r.late}</td>
-                <td>${statusBadge(r.punctuality)}</td>
-            </tr>
-        `).join('');
-
-        document.getElementById('rankingCount').textContent = `${data.length} empleados`;
-    }
-
-    function applyRankingFilter() {
-        const dept = document.getElementById('departmentFilter').value;
-        renderRanking(dept);
-    }
-
-    function exportRanking() {
-        alert('Ranking exportado correctamente');
-    }
-
-    function statusBadge(p) {
-        if (p >= 95) return '<span class="badge badge-success">Excelente</span>';
-        if (p >= 90) return '<span class="badge badge-info">Bueno</span>';
-        return '<span class="badge badge-warning">Regular</span>';
-    }
-
-    function toggleSubmenu(element) {
-        const submenu = element.querySelector('.submenu');
-        const header = element.querySelector('.menu-expandable-header');
-
-        element.classList.toggle('expanded');
-        submenu.classList.toggle('show');
-
-        if (element.classList.contains('expanded')) {
-            header.classList.add('active');
-        } else {
-            header.classList.remove('active');
-        }
-    }
-
-    function closeModal() {
-        const modal = document.getElementById('requestModal');
-        modal.classList.remove('show');
-    }
-</script>

@@ -1,0 +1,1102 @@
+﻿@using Oclock.Models
+@{
+    ViewData["Title"] = "Configuracion de Horarios";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var horarios = (List<Horario>)ViewBag.Horarios;
+    var usuarios = (List<Usuario>)ViewBag.Usuarios;
+    var totalAsignados = (int)ViewBag.TotalAsignados;
+    var editarId = (int?)ViewBag.EditarId;
+    var asignarId = (int?)ViewBag.AsignarId;
+    var horarioEditando = (Horario?)ViewBag.HorarioEditando;
+    var horarioAsignando = (Horario?)ViewBag.HorarioAsignando;
+    var yaAsignados = (List<int>)ViewBag.UsuariosYaAsignados;
+}
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .main-layout {
+        display: flex;
+        min-height: 600px;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+        width: 280px;
+        background: #fff;
+        padding: 30px 20px;
+        border-right: 1px solid #e0e0e0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+        flex-shrink: 0;
+    }
+
+    .menu-item {
+        padding: 0;
+        margin: 4px 0;
+        border-radius: 10px;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+    .menu-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 20px;
+        color: #4a5568;
+        text-decoration: none;
+        font-weight: 500;
+        border-radius: 10px;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+        .menu-link:hover {
+            background: #2F6FED;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .menu-link.active {
+            background: #2F6FED;
+            color: white;
+            box-shadow: 0 4px 12px rgba(47,111,237,0.3);
+        }
+
+            .menu-link.active::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 4px;
+                height: 24px;
+                background: white;
+                border-radius: 0 4px 4px 0;
+            }
+
+    .icon {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .menu-expandable {
+        cursor: pointer;
+    }
+
+    .menu-expandable-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 20px;
+        color: #4a5568;
+        font-weight: 500;
+        border-radius: 10px;
+        transition: all 0.3s;
+    }
+
+        .menu-expandable-header:hover {
+            background: #f0f0f0;
+            color: #2F6FED;
+        }
+
+        .menu-expandable-header.active {
+            color: #2F6FED;
+            font-weight: 600;
+        }
+
+    .menu-expandable-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .menu-arrow {
+        font-size: 12px;
+        transition: transform 0.3s;
+    }
+
+    .menu-expandable.expanded .menu-arrow {
+        transform: rotate(90deg);
+    }
+
+    .submenu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+        margin-left: 20px;
+        margin-top: 4px;
+    }
+
+        .submenu.show {
+            max-height: 500px;
+        }
+
+    .submenu-item {
+        margin: 4px 0;
+    }
+
+    .submenu-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px 12px 40px;
+        color: #718096;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+        .submenu-link::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: #cbd5e0;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .submenu-link:hover {
+            background: #f7fafc;
+            color: #2F6FED;
+            transform: translateX(3px);
+        }
+
+            .submenu-link:hover::before {
+                background: #2F6FED;
+                transform: translateY(-50%) scale(1.3);
+            }
+
+        .submenu-link.active {
+            background: rgba(47,111,237,0.1);
+            color: #2F6FED;
+            font-weight: 600;
+        }
+
+            .submenu-link.active::before {
+                background: #2F6FED;
+                width: 8px;
+                height: 8px;
+            }
+
+    /* CONTENT */
+    .content {
+        flex: 1;
+        padding: 40px;
+        background: #fafbfc;
+        min-width: 0;
+    }
+
+    .content-header {
+        margin-bottom: 30px;
+    }
+
+        .content-header h1 {
+            color: #2d3748;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .content-header p {
+            color: #718096;
+        }
+
+    /* STATS */
+    .stats-row {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .stat-mini {
+        background: #2F6FED;
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        flex: 1;
+    }
+
+    .stat-mini-value {
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .stat-mini-label {
+        font-size: 13px;
+        opacity: 0.9;
+    }
+
+    /* CARDS */
+    .config-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        margin-bottom: 25px;
+        overflow: hidden;
+    }
+
+    .card-header-custom {
+        background: #2F6FED;
+        color: white;
+        padding: 20px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .card-header-custom h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+    .badge-custom {
+        background: rgba(255,255,255,0.25);
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .card-body-custom {
+        padding: 25px;
+    }
+
+    /* FORM */
+    .form-label {
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 6px;
+        font-size: 14px;
+        display: block;
+    }
+
+    .form-control, .form-select {
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 12px 15px;
+        font-size: 14px;
+        width: 100%;
+        transition: border-color 0.2s;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #2F6FED;
+            box-shadow: 0 0 0 3px rgba(47,111,237,0.1);
+            outline: none;
+        }
+
+    .form-row {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .form-group {
+        flex: 1;
+        min-width: 160px;
+        margin-bottom: 16px;
+    }
+
+    .form-group-full {
+        flex: 1 1 100%;
+        margin-bottom: 16px;
+    }
+
+    /* BUTTONS */
+    .btn-primary-custom {
+        background: #2F6FED;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        transition: all 0.2s;
+    }
+
+        .btn-primary-custom:hover {
+            background: #1a5fd4;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(47,111,237,0.35);
+        }
+
+    .btn-outline-custom {
+        border: 2px solid #2F6FED;
+        color: #2F6FED;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        background: white;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+        .btn-outline-custom:hover {
+            background: #2F6FED;
+            color: white;
+        }
+
+    .btn-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+
+    /* TABLE */
+    .table-wrap {
+        overflow-x: auto;
+    }
+
+    table.tbl {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        table.tbl thead {
+            background: #2F6FED;
+            color: white;
+        }
+
+            table.tbl thead th {
+                padding: 14px 16px;
+                font-weight: 600;
+                text-align: left;
+                white-space: nowrap;
+            }
+
+        table.tbl tbody td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+        }
+
+        table.tbl tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        table.tbl tbody tr:hover {
+            background: #f7fafc;
+        }
+
+    /* BADGES */
+    .badge-time {
+        background: #e6f2ff;
+        color: #0066cc;
+        padding: 5px 10px;
+        border-radius: 7px;
+        font-weight: 600;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .badge-dias {
+        background: #f0fff4;
+        color: #276749;
+        padding: 5px 10px;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .badge-count {
+        background: #fef3c7;
+        color: #92400e;
+        padding: 5px 10px;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .badge-count:hover {
+            background: #fde68a;
+        }
+
+    /* ICON BUTTONS */
+    .btn-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 15px;
+        text-decoration: none;
+    }
+
+    .btn-assign {
+        background: #c6f6d5;
+    }
+
+        .btn-assign:hover {
+            background: #9ae6b4;
+            transform: scale(1.1);
+        }
+
+    .btn-edit {
+        background: #bee3f8;
+    }
+
+        .btn-edit:hover {
+            background: #90cdf4;
+            transform: scale(1.1);
+        }
+
+    .btn-del {
+        background: #fed7d7;
+    }
+
+        .btn-del:hover {
+            background: #fc8181;
+            transform: scale(1.1);
+        }
+
+    /* CHIPS */
+    .chips-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 12px 16px 16px;
+        background: #f9fafb;
+    }
+
+    .chip {
+        background: #ebf4ff;
+        color: #2c5282;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .chip-btn {
+        background: none;
+        border: none;
+        color: #e53e3e;
+        cursor: pointer;
+        font-size: 13px;
+        line-height: 1;
+        padding: 0;
+    }
+
+        .chip-btn:hover {
+            color: #9b2c2c;
+        }
+
+    /* ALERTS */
+    .alert-ok {
+        background: #f0fff4;
+        border-left: 4px solid #38a169;
+        color: #276749;
+        padding: 14px 18px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .alert-err {
+        background: #fff5f5;
+        border-left: 4px solid #e53e3e;
+        color: #9b2c2c;
+        padding: 14px 18px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .alert-info {
+        border-left: 4px solid #2F6FED;
+        background: #f0f5ff;
+        border-radius: 8px;
+        padding: 12px 16px;
+        color: #2d3748;
+        font-size: 14px;
+        margin-top: 16px;
+    }
+
+    /* EMPTY */
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #a0aec0;
+    }
+
+    .empty-icon {
+        font-size: 48px;
+        margin-bottom: 10px;
+    }
+
+    /* MODAL */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.55);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(3px);
+    }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+    .modal-box {
+        background: white;
+        border-radius: 16px;
+        max-width: 540px;
+        width: 90%;
+        max-height: 88vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        animation: popIn 0.25s ease;
+    }
+
+    .modal-box-lg {
+        max-width: 660px;
+    }
+
+    @@keyframes popIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .modal-head {
+        background: #2F6FED;
+        color: white;
+        padding: 18px 22px;
+        border-radius: 16px 16px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-shrink: 0;
+    }
+
+        .modal-head h3 {
+            margin: 0;
+            font-size: 17px;
+        }
+
+    .modal-close {
+        background: rgba(255,255,255,0.2);
+        border: none;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+    }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.35);
+            color: white;
+        }
+
+    .modal-body {
+        padding: 22px;
+        overflow-y: auto;
+        flex: 1;
+    }
+
+    .modal-foot {
+        padding: 14px 22px 20px;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        flex-shrink: 0;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    /* USER LIST */
+    .user-filter {
+        position: relative;
+        margin-bottom: 10px;
+    }
+
+        .user-filter input {
+            padding-left: 36px;
+        }
+
+    .user-filter-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #a0aec0;
+        pointer-events: none;
+    }
+
+    .user-list {
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .user-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 14px;
+        cursor: pointer;
+        transition: background 0.15s;
+        border-bottom: 1px solid #f5f5f5;
+    }
+
+        .user-row:last-child {
+            border-bottom: none;
+        }
+
+        .user-row:hover {
+            background: #f7fafc;
+        }
+
+        .user-row.checked {
+            background: rgba(47,111,237,0.07);
+        }
+
+    .user-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #2F6FED;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 13px;
+        flex-shrink: 0;
+    }
+
+    .user-info {
+        flex: 1;
+    }
+
+    .user-name {
+        font-weight: 600;
+        color: #2d3748;
+        font-size: 14px;
+    }
+
+    .user-sub {
+        color: #718096;
+        font-size: 12px;
+    }
+
+    .user-cb {
+        width: 17px;
+        height: 17px;
+        accent-color: #2F6FED;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .sel-count {
+        text-align: center;
+        background: #ebf4ff;
+        color: #2F6FED;
+        padding: 7px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(16px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fade-in {
+        animation: fadeUp 0.4s ease both;
+    }
+</style>
+
+<div class="main-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="menu-item">
+            <a href="/Home/AdminHome" class="menu-link"><div class="icon">📊</div> Dashboard</a>
+        </div>
+        <div class="menu-item">
+            <a href="/Admin/VerMarcas" class="menu-link"><div class="icon">⏰</div> Marcas de Asistencia</a>
+        </div>
+        <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
+            <div class="menu-expandable-header active">
+                <div class="menu-expandable-left"><div class="icon">⚙️</div><span>Configuración y Políticas</span></div>
+                <div class="menu-arrow">▶</div>
+            </div>
+            <div class="submenu show">
+                <div class="submenu-item"><a href="/Horarios/HorariosConfig" class="submenu-link active">⏰ Horarios</a></div>
+                <div class="submenu-item"><a href="/Feriados/FeriadosConfig" class="submenu-link">📅 Feriados</a></div>
+                <div class="submenu-item"><a href="/Admin/BonosParametroConfig" class="submenu-link">🎁 Bonos</a></div>
+                <div class="submenu-item"><a href="/Admin/NotificacionesConfig" class="submenu-link">🔔 Notificaciones</a></div>
+            </div>
+        </div>
+        <div class="menu-item"><a href="/Admin/Bonos" class="menu-link"><div class="icon">💵</div> Bonos</a></div>
+        <div class="menu-item"><a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link"><div class="icon">📝</div> Gestion de Empleados</a></div>
+        <div class="menu-item"><a href="/Admin/RankingPuntualidad" class="menu-link"><div class="icon">⏱️</div> Indicadores de Puntualidad</a></div>
+        <div class="menu-item"><a href="/Admin/Reportes" class="menu-link"><div class="icon">📄</div> Reportes</a></div>
+    </div>
+
+    <div class="content">
+        <div class="content-header fade-in">
+            <h1>⏰ Configuración de Horarios</h1>
+            <p>Gestiona horarios y asigna empleados a cada turno</p>
+        </div>
+
+        @if (TempData["Exito"] != null)
+        {
+            <div class="alert-ok fade-in">✅ @TempData["Exito"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert-err fade-in">❌ @TempData["Error"]</div>
+        }
+
+        <!-- Stats -->
+        <div class="stats-row fade-in">
+            <div class="stat-mini">
+                <div class="stat-mini-value">@horarios.Count</div>
+                <div class="stat-mini-label">Horarios Configurados</div>
+            </div>
+            <div class="stat-mini">
+                <div class="stat-mini-value">@totalAsignados</div>
+                <div class="stat-mini-label">Empleados Asignados</div>
+            </div>
+            <div class="stat-mini">
+                <div class="stat-mini-value">@usuarios.Count</div>
+                <div class="stat-mini-label">Empleados Activos</div>
+            </div>
+        </div>
+
+        <!-- Crear Horario -->
+        <div class="config-card fade-in">
+            <div class="card-header-custom">
+                <h2>➕ Nuevo Horario</h2>
+                <span class="badge-custom">Configuración</span>
+            </div>
+            <div class="card-body-custom">
+                <form method="post" action="/Horarios/CrearHorario">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group-full">
+                        <label class="form-label">📝 Nombre del Horario</label>
+                        <input type="text" name="nombreHorario" class="form-control" placeholder="Ej: Turno Mañana, Horario Estándar..." required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">🟢 Hora de Entrada</label>
+                            <input type="time" name="horaEntrada" class="form-control" value="08:00" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">🔴 Hora de Salida</label>
+                            <input type="time" name="horaSalida" class="form-control" value="17:00" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">📅 Días Laborales</label>
+                            <select name="dias" class="form-select">
+                                <option value="Lunes a Viernes">Lunes a Viernes</option>
+                                <option value="Lunes a Sábado">Lunes a Sábado</option>
+                                <option value="Lunes a Domingo">Lunes a Domingo</option>
+                                <option value="Personalizado">Personalizado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="btn-actions">
+                        <button type="submit" class="btn-primary-custom">💾 Crear Horario</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tabla -->
+        <div class="config-card fade-in">
+            <div class="card-header-custom">
+                <h2>📋 Horarios Configurados</h2>
+                <span class="badge-custom">@horarios.Count registros</span>
+            </div>
+            <div class="card-body-custom" style="padding:0">
+                @if (!horarios.Any())
+                {
+                    <div class="empty-state">
+                        <div class="empty-icon">⏰</div>
+                        <p>No hay horarios configurados. Crea el primero arriba.</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="table-wrap">
+                        <table class="tbl">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Entrada</th>
+                                    <th>Salida</th>
+                                    <th>Horas/día</th>
+                                    <th>Días</th>
+                                    <th>Empleados</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var h in horarios)
+                                {
+                                    var horas = (h.HoraSalida - h.HoraEntrada).TotalHours;
+                                    <tr>
+                                        <td><strong>@h.NombreHorario</strong></td>
+                                        <td><span class="badge-time">@h.HoraEntrada.ToString("hh:mm tt")</span></td>
+                                        <td><span class="badge-time">@h.HoraSalida.ToString("hh:mm tt")</span></td>
+                                        <td><span class="badge-time">@horas.ToString("F1")h</span></td>
+                                        <td><span class="badge-dias">@(h.Dias ?? "—")</span></td>
+                                        <td>
+                                            <a href="/Horarios/HorariosConfig?asignarId=@h.IdHorario"
+                                               class="badge-count">👥 @h.UsuarioHorarios.Count</a>
+                                        </td>
+                                        <td style="white-space:nowrap">
+                                            <a href="/Horarios/HorariosConfig?editarId=@h.IdHorario"
+                                               class="btn-icon btn-edit" title="Editar">✏️</a>
+                                            <a href="/Horarios/HorariosConfig?asignarId=@h.IdHorario"
+                                               class="btn-icon btn-assign" title="Asignar empleados">👥</a>
+                                            <form method="post" action="/Horarios/EliminarHorario" style="display:inline"
+                                                  onsubmit="return confirm('¿Eliminar el horario @h.NombreHorario?')">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="idHorario" value="@h.IdHorario" />
+                                                <button type="submit" class="btn-icon btn-del" title="Eliminar">🗑️</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    @if (h.UsuarioHorarios.Any())
+                                    {
+                                        <tr style="background:#f9fafb">
+                                            <td colspan="8" style="padding:0">
+                                                <div class="chips-row">
+                                                    @foreach (var uh in h.UsuarioHorarios)
+                                                    {
+                                                        <span class="chip">
+                                                            👤 @uh.IdUsuarioNavigation?.Nombre @uh.IdUsuarioNavigation?.Apellido
+                                                            <form method="post" action="/Horarios/DesasignarUsuario" style="display:inline">
+                                                                @Html.AntiForgeryToken()
+                                                                <input type="hidden" name="idHorario" value="@h.IdHorario" />
+                                                                <input type="hidden" name="idUsuario" value="@uh.IdUsuario" />
+                                                                <button type="submit" class="chip-btn" title="Desasignar">✕</button>
+                                                            </form>
+                                                        </span>
+                                                    }
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL EDITAR -->
+<div class="modal-overlay @(editarId.HasValue ? "open" : "")">
+    <div class="modal-box">
+        <div class="modal-head">
+            <h3>✏️ Editar Horario</h3>
+            <a href="/Horarios/HorariosConfig" class="modal-close">✕</a>
+        </div>
+        @if (horarioEditando != null)
+        {
+            <form method="post" action="/Horarios/EditarHorario">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="idHorario" value="@horarioEditando.IdHorario" />
+                <div class="modal-body">
+                    <div class="form-group-full">
+                        <label class="form-label">📝 Nombre del Horario</label>
+                        <input type="text" name="nombreHorario" class="form-control"
+                               value="@horarioEditando.NombreHorario" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">🟢 Hora Entrada</label>
+                            <input type="time" name="horaEntrada" class="form-control"
+                                   value="@horarioEditando.HoraEntrada.ToString("HH:mm")" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">🔴 Hora Salida</label>
+                            <input type="time" name="horaSalida" class="form-control"
+                                   value="@horarioEditando.HoraSalida.ToString("HH:mm")" required>
+                        </div>
+                    </div>
+                    <div class="form-group-full">
+                        <label class="form-label">📅 Días Laborales</label>
+                        @{
+                            var diasVal = horarioEditando!.Dias;
+                            var opcionesDias = new[] { "Lunes a Viernes", "Lunes a Sabado", "Lunes a Domingo", "Personalizado" };
+                        }
+                        <select name="dias" class="form-select">
+                            @foreach (var op in opcionesDias)
+                            {
+                                if (diasVal == op)
+                                {
+                                    <option value="@op" selected="selected">@op</option>
+                                }
+                                else
+                                {
+                                    <option value="@op">@op</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-foot">
+                    <a href="/Horarios/HorariosConfig" class="btn-outline-custom">Cancelar</a>
+                    <button type="submit" class="btn-primary-custom">💾 Guardar Cambios</button>
+                </div>
+            </form>
+        }
+    </div>
+</div>
+
+
+<!-- MODAL ASIGNAR -->
+<div class="modal-overlay @(asignarId.HasValue ? "open" : "")">
+    <div class="modal-box modal-box-lg">
+        <div class="modal-head">
+            <h3>👥 Asignar Empleados — @(horarioAsignando?.NombreHorario ?? "")</h3>
+            <a href="/Horarios/HorariosConfig" class="modal-close">✕</a>
+        </div>
+        @if (horarioAsignando != null)
+        {
+            <form method="post" action="/Horarios/AsignarUsuarios">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="idHorario" value="@horarioAsignando.IdHorario" />
+                <div class="modal-body">
+                    <div class="sel-count" id="selCount">
+                        @yaAsignados.Count empleado(s) actualmente asignados
+                    </div>
+                    <div class="user-filter">
+                        <span class="user-filter-icon">🔍</span>
+                        <input type="text" class="form-control" placeholder="Buscar empleado..."
+                               oninput="filtrar(this.value)">
+                    </div>
+                    <div class="user-list">
+                        @foreach (var u in usuarios)
+                        {
+                            var iniciales = new string(new[] { u.Nombre[0], u.Apellido[0] });
+                            var marcado = yaAsignados.Contains(u.IdUsuario);
+                            <label class="user-row @(marcado ? "checked" : "")" for="chk-@u.IdUsuario">
+                                <div class="user-avatar">@iniciales</div>
+                                <div class="user-info">
+                                    <div class="user-name">@u.Nombre @u.Apellido</div>
+                                </div>
+                                <input type="checkbox" class="user-cb emp-cb"
+                                       id="chk-@u.IdUsuario"
+                                       name="idsUsuarios"
+                                       value="@u.IdUsuario"
+                                       @(marcado ? "checked" : "")
+                                       onchange="actualizarContador()" />
+                            </label>
+                        }
+                        @if (!usuarios.Any())
+                        {
+                            <div class="empty-state"><div class="empty-icon">👤</div><p>No hay empleados activos.</p></div>
+                        }
+                    </div>
+                    <div class="alert-info">
+                        ℹ️ Los cambios reemplazarán las asignaciones actuales del horario.
+                    </div>
+                </div>
+                <div class="modal-foot">
+                    <a href="/Horarios/HorariosConfig" class="btn-outline-custom">Cancelar</a>
+                    <button type="submit" class="btn-primary-custom">💾 Guardar Asignaciones</button>
+                </div>
+            </form>
+        }
+    </div>
+</div>
+
+
+<script>
+    function toggleSubmenu(el) {
+        el.classList.toggle('expanded');
+        el.querySelector('.submenu').classList.toggle('show');
+        el.querySelector('.menu-expandable-header').classList.toggle('active', el.classList.contains('expanded'));
+    }
+
+    function filtrar(q) {
+        q = q.toLowerCase();
+        document.querySelectorAll('.user-row').forEach(row => {
+            const name = row.querySelector('.user-name')?.textContent.toLowerCase() || '';
+            row.style.display = name.includes(q) ? 'flex' : 'none';
+        });
+    }
+
+    function actualizarContador() {
+        const checks = document.querySelectorAll('.emp-cb');
+        let n = 0;
+        checks.forEach(cb => {
+            cb.closest('.user-row').classList.toggle('checked', cb.checked);
+            if (cb.checked) n++;
+        });
+        const el = document.getElementById('selCount');
+        if (el) el.textContent = n === 1 ? '1 empleado seleccionado' : `${n} empleados seleccionados`;
+    }
+
+    document.addEventListener('DOMContentLoaded', actualizarContador);
+</script>

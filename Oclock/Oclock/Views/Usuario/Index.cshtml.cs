@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Oclock.Views.Admin
+namespace Oclock.Views.Usuario
 {
-    public class FeriadosConfigModel : PageModel
+    public class LoginModel : PageModel
     {
         public void OnGet()
         {
