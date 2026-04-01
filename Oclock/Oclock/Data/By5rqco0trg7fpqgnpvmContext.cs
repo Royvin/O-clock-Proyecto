@@ -49,8 +49,12 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+<<<<<<< HEAD
         => optionsBuilder.UseMySql("server=bzad1vavdtzjjqhfukdu-mysql.services.clever-cloud.com;port=21791;database=bzad1vavdtzjjqhfukdu;user=uhtuhx1j5cjbucsm;password=ctjpVDBOslwnwliD6fMQ;sslmode=Required",ServerVersion.Parse("8.4.2-mysql"));
 
+=======
+    => optionsBuilder.UseMySql("server=bzad1vavdtzjjqhfukdu-mysql.services.clever-cloud.com;port=21791;database=bzad1vavdtzjjqhfukdu;user=uhtuhx1j5cjbucsm;password=ctjpVDBOslwnwliD6fMQ;sslmode=Required",ServerVersion.Parse("8.4.2-mysql"));
+>>>>>>> 49e5b350bcd7d55f32fef01838af4ff82e13074f
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
