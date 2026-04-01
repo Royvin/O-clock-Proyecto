@@ -1,7 +1,9 @@
-﻿@{
-    ViewData["Title"] = "Configuracion de Parametros para Bonos";
+﻿@model Oclock.Models.BonoViewModel
+@{
+    ViewData["Title"] = "Gestión de Bonos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <style>
     * {
         margin: 0;
@@ -13,6 +15,7 @@
         display: flex;
         min-height: 600px;
     }
+
     .sidebar {
         width: 280px;
         background: #ffffff;
@@ -96,7 +99,7 @@
         }
 
         .menu-expandable-header.active {
-            background: #eef4ff; 
+            background: #eef4ff;
             color: #2F6FED;
             font-weight: 600;
         }
@@ -173,7 +176,7 @@
             }
 
         .submenu-link.active {
-            background: #eef4ff; 
+            background: #eef4ff;
             color: #2F6FED;
             font-weight: 600;
         }
@@ -286,7 +289,7 @@
     }
 
         .btn-primary:hover {
-            background: #2457C8; 
+            background: #2457C8;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(47, 111, 237, 0.25);
         }
@@ -391,7 +394,7 @@
 
     .rule-amount {
         font-weight: 700;
-        color: #2E9B63; 
+        color: #2E9B63;
         font-size: 16px;
     }
 
@@ -511,8 +514,8 @@
         }
 </style>
 
-
 <div class="main-layout">
+    <!-- Sidebar -->
     <div class="sidebar">
         <div class="menu-item">
             <a href="/Home/AdminHome" class="menu-link">
@@ -522,47 +525,41 @@
         </div>
 
         <div class="menu-item">
-            <a href="/Admin/VerMarcas" class="menu-link">
+            <a href="/Admin/VerMarcas" class="menu-link active">
                 <div class="icon">⏰</div>
                 Marcas de Asistencia
             </a>
         </div>
 
         <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
-            <div class="menu-expandable-header active">
+            <div class="menu-expandable-header">
                 <div class="menu-expandable-left">
                     <div class="icon">⚙️</div>
-                    <span>Configuración y Políticas</span>
+                    <span>Configuración</span>
                 </div>
                 <div class="menu-arrow">▶</div>
             </div>
             <div class="submenu show">
                 <div class="submenu-item">
-                    <a href="/Horarios/HorariosConfig" class="submenu-link">
-                        ⏰ Horarios
-                    </a>
+                    <a href="/Horarios/HorariosConfig" class="submenu-link">⏰ Horarios</a>
                 </div>
                 <div class="submenu-item">
-                    <a href="/Admin/FeriadosConfig" class="submenu-link">
-                        📅 Feriados
-                    </a>
+                    <a href="/Admin/FeriadosConfig" class="submenu-link">📅 Feriados</a>
                 </div>
                 <div class="submenu-item">
-                    <a href="/Admin/BonosParametroConfig" class="submenu-link active">
+                    <a href="/Bono/GestionBonos" class="submenu-link">
                         🎁 Bonos
                     </a>
                 </div>
                 <div class="submenu-item">
-                    <a href="/Admin/NotificacionesConfig" class="submenu-link">
-                        🔔 Notificaciones
-                    </a>
+                    <a href="/Admin/NotificacionesConfig" class="submenu-link">🔔 Notificaciones</a>
                 </div>
             </div>
         </div>
 
         <div class="menu-item">
-            <a href="/Admin/Bonos" class="menu-link">
-                <div class="icon">💵 </div>
+            <a href="/Bono/AsignarBono" class="menu-link">
+                <div class="icon">💵</div>
                 Bonos
             </a>
         </div>
@@ -577,7 +574,7 @@
         <div class="menu-item">
             <a href="/Admin/RankingPuntualidad" class="menu-link">
                 <div class="icon">⏱️</div>
-                Indicadores de Puntualidad
+                Puntualidad
             </a>
         </div>
 
@@ -587,343 +584,238 @@
                 Reportes
             </a>
         </div>
-
     </div>
 
     <div class="content">
         <div class="content-header">
             <div>
-                <h1>Parámetros de Bonos</h1>
-                <p>Configure las reglas y rangos para el cálculo de bonificaciones</p>
+                <h1>Gestión de Bonos</h1>
+                <p>Cree y administre los bonos disponibles para los empleados</p>
             </div>
         </div>
 
-        <div class="form-card">
-            <h2>✨ Nueva Regla de Bono</h2>
-
+        <form asp-action="CrearBono" method="post">
             <div class="form-grid">
+
                 <div class="form-group">
                     <label>Nombre del Bono</label>
-                    <input type="text" id="nombre" placeholder="Ej: Bono Puntualidad">
-                </div>
-
-                <div class="form-group">
-                    <label>Horas Mínimas</label>
-                    <input type="number" id="horasMin" placeholder="40" min="0">
-                </div>
-
-                <div class="form-group">
-                    <label>Horas Máximas</label>
-                    <input type="number" id="horasMax" placeholder="48" min="0">
+                    <input type="text" asp-for="NuevoBono.NombreBono" class="form-control" />
                 </div>
 
                 <div class="form-group">
                     <label>Tipo de Bono</label>
-                    <select id="tipoBono">
-                        <option value="monto">Monto Fijo</option>
-                        <option value="porcentaje">Porcentaje</option>
+                    <select asp-for="NuevoBono.IdTipoBono" class="form-control" id="selectTipoBono" onchange="actualizarCondicion()">
+                        <option value="">-- Seleccione --</option>
+                        @foreach (var tipo in Model.TiposBono)
+                        {
+                            <option value="@tipo.IdTipoBono" data-metrica="@tipo.MetricaTipo">
+                                @tipo.NombreTipo
+                            </option>
+                        }
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label>Valor</label>
-                    <input type="number" id="valor" placeholder="100" min="0" step="0.01">
+                    <label>Monto</label>
+                    <input type="number" asp-for="NuevoBono.Monto" class="form-control" />
                 </div>
-            </div>
 
-            <div class="alert alert-error" id="alertError">
-                ⚠️ <span id="errorMessage">Por favor complete todos los campos correctamente</span>
-            </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <input type="text" asp-for="NuevoBono.Descripcion" class="form-control" />
+                </div>
 
-            <div class="alert alert-success" id="alertSuccess">
-                ✅ Regla guardada exitosamente
+                <!-- Campo dinámico según tipo -->
+                <div class="form-group" id="campoCondicion" style="display:none">
+                    <label id="labelCondicion">Condición Mínima</label>
+                    <input type="number" asp-for="NuevoBono.CondicionMinima"
+                           class="form-control" id="inputCondicion"
+                           step="0.01" min="0" />
+                    <small id="hintCondicion" style="color:gray"></small>
+                </div>
+
             </div>
 
             <div class="form-actions">
-                <button class="btn btn-primary" onclick="guardarRegla()">
-                    💾 Guardar Regla
-                </button>
-                <button class="btn btn-secondary" onclick="limpiarFormulario()">
-                    🔄 Limpiar
-                </button>
+                <button type="submit" class="btn btn-primary">💾 Guardar Bono</button>
             </div>
-        </div>
+        </form>
 
+        <!-- TABLA DE BONOS -->
         <div class="rules-card">
-            <h2>
-                📋 Reglas Registradas
-                <span class="rules-count" id="rulesCount">0 reglas</span>
-            </h2>
+            <h2>📋 Bonos Registrados</h2>
 
-            <div id="tableContainer"></div>
+            <table class="rules-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Monto</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Bonos.Any())
+                    {
+                        foreach (var bono in Model.Bonos)
+                        {
+                            <tr>
+                                <td>@bono.NombreBono</td>
+                                <td>@bono.IdTipoBonoNavigation?.NombreTipo</td>
+                                <td>₡@bono.Monto</td>
+                                <td>@bono.Descripcion</td>
+                                <td>
+                                    @if (bono.Activo == true)
+                                    {
+                                        <span style="color:green">Activo</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="color:red">Inactivo</span>
+                                    }
+                                </td>
+                                <td>
+                                    <button class="btn-icon btn-edit"
+                                            onclick="abrirEditar('@bono.IdBono', '@bono.NombreBono', '@bono.IdTipoBono', '@bono.Monto', '@bono.Descripcion')">
+                                        ✏️
+                                    </button>
+
+                                    @if (bono.Activo == true)
+                                    {
+                                        <form asp-action="DesactivarBono" method="post" style="display:inline">
+                                            <input type="hidden" name="id" value="@bono.IdBono" />
+                                            <button type="submit" class="btn-icon" title="Desactivar">🚫</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form asp-action="ActivarBono" method="post" style="display:inline">
+                                            <input type="hidden" name="id" value="@bono.IdBono" />
+                                            <button type="submit" class="btn-icon" title="Activar">✅</button>
+                                        </form>
+                                    }
+
+                                    <form asp-action="EliminarBono" method="post" style="display:inline"
+                                          onsubmit="return confirm('¿Estás seguro de eliminar este bono?')">
+                                        <input type="hidden" name="id" value="@bono.IdBono" />
+                                        <button type="submit" class="btn-icon" title="Eliminar">🗑️</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="6">No hay bonos registrados</td></tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
+<!-- MODAL EDITAR -->
 <div class="modal" id="editModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>✏️ Editar Regla</h3>
+            <h3>✏️ Editar Bono</h3>
             <button class="btn-close" onclick="cerrarModal()">×</button>
         </div>
 
-        <div class="form-grid">
-            <div class="form-group">
-                <label>Nombre del Bono</label>
-                <input type="text" id="editNombre">
+        <form method="post" asp-action="EditarBono">
+            <input type="hidden" id="editIdBono" name="IdBono">
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Nombre del Bono</label>
+                    <input type="text" id="editNombreBono" name="NombreBono" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de Bono</label>
+                    <select id="editTipoBono" name="IdTipoBono">
+                        @foreach (var tipo in Model.TiposBono)
+                        {
+                            <option value="@tipo.IdTipoBono">@tipo.NombreTipo</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Monto</label>
+                    <input type="number" id="editMonto" name="Monto" min="0" step="0.01">
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <input type="text" id="editDescripcion" name="Descripcion">
+                </div>
             </div>
 
-            <div class="form-group">
-                <label>Horas Mínimas</label>
-                <input type="number" id="editHorasMin" min="0">
+            <div class="form-actions" style="margin-top:25px">
+                <button type="submit" class="btn btn-primary">💾 Actualizar</button>
+                <button type="button" class="btn btn-secondary" onclick="cerrarModal()">❌ Cancelar</button>
             </div>
-
-            <div class="form-group">
-                <label>Horas Máximas</label>
-                <input type="number" id="editHorasMax" min="0">
-            </div>
-
-            <div class="form-group">
-                <label>Tipo de Bono</label>
-                <select id="editTipoBono">
-                    <option value="monto">Monto Fijo</option>
-                    <option value="porcentaje">Porcentaje</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Valor</label>
-                <input type="number" id="editValor" min="0" step="0.01">
-            </div>
-        </div>
-
-        <div class="alert alert-error" id="editAlertError">
-            ⚠️ <span id="editErrorMessage">Error al actualizar</span>
-        </div>
-
-        <div class="form-actions" style="margin-top: 25px;">
-            <button class="btn btn-primary" onclick="actualizarRegla()">
-                💾 Actualizar
-            </button>
-            <button class="btn btn-secondary" onclick="cerrarModal()">
-                ❌ Cancelar
-            </button>
-        </div>
+        </form>
     </div>
 </div>
 
 <script>
-    let reglas = [];
-    let editingIndex = -1;
-
-    function toggleSubmenu(element) {
-        const submenu = element.querySelector('.submenu');
-        const header = element.querySelector('.menu-expandable-header');
-        element.classList.toggle('expanded');
-        submenu.classList.toggle('show');
-        if (element.classList.contains('expanded')) {
-            header.classList.add('active');
-        } else {
-            header.classList.remove('active');
-        }
-    }
-
-    function validarFormulario(nombre, horasMin, horasMax, valor) {
-        if (!nombre.trim()) {
-            return "El nombre del bono es requerido";
-        }
-        if (horasMin === '' || horasMin < 0) {
-            return "Las horas mínimas deben ser un valor positivo";
-        }
-        if (horasMax === '' || horasMax < 0) {
-            return "Las horas máximas deben ser un valor positivo";
-        }
-        if (parseFloat(horasMin) >= parseFloat(horasMax)) {
-            return "Las horas máximas deben ser mayores a las mínimas";
-        }
-        if (valor === '' || valor <= 0) {
-            return "El valor debe ser mayor a 0";
-        }
-        return null;
-    }
-
-    function guardarRegla() {
-        const nombre = document.getElementById('nombre').value;
-        const horasMin = document.getElementById('horasMin').value;
-        const horasMax = document.getElementById('horasMax').value;
-        const tipoBono = document.getElementById('tipoBono').value;
-        const valor = document.getElementById('valor').value;
-
-        const error = validarFormulario(nombre, horasMin, horasMax, valor);
-
-        if (error) {
-            mostrarAlerta('alertError', error);
-            return;
-        }
-
-        const regla = {
-            nombre,
-            horasMin: parseFloat(horasMin),
-            horasMax: parseFloat(horasMax),
-            tipoBono,
-            valor: parseFloat(valor)
-        };
-
-        reglas.push(regla);
-        actualizarTabla();
-        limpiarFormulario();
-        mostrarAlerta('alertSuccess');
-
-        setTimeout(() => {
-            ocultarAlerta('alertSuccess');
-        }, 3000);
-    }
-
-    function limpiarFormulario() {
-        document.getElementById('nombre').value = '';
-        document.getElementById('horasMin').value = '';
-        document.getElementById('horasMax').value = '';
-        document.getElementById('tipoBono').value = 'monto';
-        document.getElementById('valor').value = '';
-        ocultarAlerta('alertError');
-    }
-
-    function mostrarAlerta(alertId, mensaje = null) {
-        const alert = document.getElementById(alertId);
-        if (mensaje && alertId === 'alertError') {
-            document.getElementById('errorMessage').textContent = mensaje;
-        }
-        alert.classList.add('show');
-    }
-
-    function ocultarAlerta(alertId) {
-        document.getElementById(alertId).classList.remove('show');
-    }
-
-    function actualizarTabla() {
-        const container = document.getElementById('tableContainer');
-        document.getElementById('rulesCount').textContent =
-            `${reglas.length} ${reglas.length === 1 ? 'regla' : 'reglas'}`;
-
-        if (reglas.length === 0) {
-            container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📋</div>
-                        <h3>No hay reglas configuradas</h3>
-                        <p>Comience agregando una nueva regla de bono</p>
-                    </div>
-                `;
-            return;
-        }
-
-        let html = `
-                <table class="rules-table">
-                    <thead>
-                        <tr>
-                            <th>Nombre del Bono</th>
-                            <th>Rango de Horas</th>
-                            <th>Tipo</th>
-                            <th>Valor</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-        reglas.forEach((regla, index) => {
-            const simbolo = regla.tipoBono === 'porcentaje' ? '%' : '$';
-            html += `
-                    <tr>
-                        <td class="rule-name">${regla.nombre}</td>
-                        <td>
-                            <div class="rule-range">
-                                <span>${regla.horasMin}h</span>
-                                <span style="color: #cbd5e0;">→</span>
-                                <span>${regla.horasMax}h</span>
-                            </div>
-                        </td>
-                        <td>${regla.tipoBono === 'monto' ? 'Monto Fijo' : 'Porcentaje'}</td>
-                        <td class="rule-amount">${simbolo}${regla.valor.toFixed(2)}</td>
-                        <td>
-                            <div class="rule-actions">
-                                <button class="btn-icon btn-edit" onclick="editarRegla(${index})" title="Editar">
-                                    ✏️
-                                </button>
-                                <button class="btn-icon btn-delete" onclick="eliminarRegla(${index})" title="Eliminar">
-                                    🗑️
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-        });
-
-        html += `
-                    </tbody>
-                </table>
-            `;
-
-        container.innerHTML = html;
-    }
-
-    function editarRegla(index) {
-        editingIndex = index;
-        const regla = reglas[index];
-
-        document.getElementById('editNombre').value = regla.nombre;
-        document.getElementById('editHorasMin').value = regla.horasMin;
-        document.getElementById('editHorasMax').value = regla.horasMax;
-        document.getElementById('editTipoBono').value = regla.tipoBono;
-        document.getElementById('editValor').value = regla.valor;
-
-        document.getElementById('editModal').classList.add('show');
-        ocultarAlerta('editAlertError');
-    }
-
-    function actualizarRegla() {
-        const nombre = document.getElementById('editNombre').value;
-        const horasMin = document.getElementById('editHorasMin').value;
-        const horasMax = document.getElementById('editHorasMax').value;
-        const tipoBono = document.getElementById('editTipoBono').value;
-        const valor = document.getElementById('editValor').value;
-
-        const error = validarFormulario(nombre, horasMin, horasMax, valor);
-
-        if (error) {
-            document.getElementById('editErrorMessage').textContent = error;
-            mostrarAlerta('editAlertError');
-            return;
-        }
-
-        reglas[editingIndex] = {
-            nombre,
-            horasMin: parseFloat(horasMin),
-            horasMax: parseFloat(horasMax),
-            tipoBono,
-            valor: parseFloat(valor)
-        };
-
-        actualizarTabla();
-        cerrarModal();
+    function abrirEditar(id, nombre, tipo, monto, descripcion) {
+        document.getElementById("editIdBono").value = id;
+        document.getElementById("editNombreBono").value = nombre;
+        document.getElementById("editTipoBono").value = tipo;
+        document.getElementById("editMonto").value = monto;
+        document.getElementById("editDescripcion").value = descripcion;
+        document.getElementById("editModal").classList.add("show");
     }
 
     function cerrarModal() {
-        document.getElementById('editModal').classList.remove('show');
-        editingIndex = -1;
+        document.getElementById("editModal").classList.remove("show");
     }
-
-    function eliminarRegla(index) {
-        if (confirm('¿Está seguro de eliminar esta regla?')) {
-            reglas.splice(index, 1);
-            actualizarTabla();
-        }
-    }
-
-    actualizarTabla();
 
     document.getElementById('editModal').addEventListener('click', function (e) {
-        if (e.target === this) {
-            cerrarModal();
-        }
+        if (e.target === this) cerrarModal();
     });
+
+
+
+        function actualizarCondicion() {
+        const select = document.getElementById("selectTipoBono");
+        const option = select.options[select.selectedIndex];
+        const metrica = option.getAttribute("data-metrica");
+
+        const campo = document.getElementById("campoCondicion");
+        const label = document.getElementById("labelCondicion");
+        const hint = document.getElementById("hintCondicion");
+
+        if (!metrica) {
+            campo.style.display = "none";
+            return;
+        }
+
+        campo.style.display = "block";
+
+        switch (metrica) {
+            case "puntualidad":
+                label.textContent = "Puntualidad mínima (%)";
+                hint.textContent = "Ej: 90 significa que el empleado debe tener al menos 90% de puntualidad";
+                break;
+            case "puntualidad_premium":
+                label.textContent = "Puntualidad mínima premium (%)";
+                hint.textContent = "Ej: 98 significa que el empleado debe tener al menos 98% de puntualidad";
+                break;
+            case "asistencia":
+                label.textContent = "Días trabajados mínimos";
+                hint.textContent = "Ej: 20 significa que el empleado debe haber trabajado al menos 20 días";
+                break;
+            case "horas":
+                label.textContent = "Horas trabajadas mínimas";
+                hint.textContent = "Ej: 160 significa que el empleado debe haber trabajado al menos 160 horas";
+                break;
+        }
+    }
+
 </script>

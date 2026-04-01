@@ -33,8 +33,6 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
 
     public virtual DbSet<Notificacion> Notificacions { get; set; }
 
-    public virtual DbSet<PoliticaBono> PoliticaBonos { get; set; }
-
     public virtual DbSet<Rol> Rols { get; set; }
 
     public virtual DbSet<Solicitud> Solicituds { get; set; }
@@ -45,9 +43,13 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
 
     public virtual DbSet<UsuarioHorario> UsuarioHorarios { get; set; }
 
+    public virtual DbSet<TipoBono> TipoBonos { get; set; }
+
+    public virtual DbSet<BonoAsignado> BonosAsignados { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=by5rqco0trg7fpqgnpvm-mysql.services.clever-cloud.com;database=by5rqco0trg7fpqgnpvm;user=uhtuhx1j5cjbucsm;password=ctjpVDBOslwnwliD6fMQ;sslmode=Required", ServerVersion.Parse("8.4.2-mysql"));
+        => optionsBuilder.UseMySql("server=bzad1vavdtzjjqhfukdu-mysql.services.clever-cloud.com;port=21791;database=bzad1vavdtzjjqhfukdu;user=uhtuhx1j5cjbucsm;password=ctjpVDBOslwnwliD6fMQ;sslmode=Required",ServerVersion.Parse("8.4.2-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -58,36 +60,47 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
         modelBuilder.Entity<Bono>(entity =>
         {
             entity.HasKey(e => e.IdBono).HasName("PRIMARY");
+            entity.ToTable("bono");
 
-            entity.ToTable("BONO");
+            entity.HasIndex(e => e.IdTipoBono, "IdTipoBono");
 
-            entity.HasIndex(e => e.IdPoliticaBono, "fk_bono_politica");
+            entity.Property(e => e.IdBono)
+                .HasColumnName("IdBono"); 
 
-            entity.HasIndex(e => e.IdUsuario, "fk_bono_usuario");
+            entity.Property(e => e.IdTipoBono)
+                .HasColumnName("IdTipoBono");
 
-            entity.Property(e => e.IdBono).HasColumnName("id_bono");
-            entity.Property(e => e.Descripcion)
-                .HasColumnType("text")
-                .HasColumnName("descripcion");
-            entity.Property(e => e.FechaCumplidos).HasColumnName("fecha_cumplidos");
-            entity.Property(e => e.FechaOtorgado).HasColumnName("fecha_otorgado");
-            entity.Property(e => e.IdPoliticaBono).HasColumnName("id_politica_bono");
-            entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
             entity.Property(e => e.NombreBono)
                 .HasMaxLength(100)
-                .HasColumnName("nombre_bono");
-            entity.Property(e => e.Periodo)
-                .HasMaxLength(50)
-                .HasColumnName("periodo");
+                .HasColumnName("NombreBono");
 
-            entity.HasOne(d => d.IdPoliticaBonoNavigation).WithMany(p => p.Bonos)
-                .HasForeignKey(d => d.IdPoliticaBono)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("fk_bono_politica");
+            entity.Property(e => e.Monto)
+                .HasColumnType("decimal(10,2)")
+                .HasColumnName("Monto");
 
-            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Bonos)
-                .HasForeignKey(d => d.IdUsuario)
-                .HasConstraintName("fk_bono_usuario");
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(255) 
+                .HasColumnName("Descripcion");
+
+            entity.Property(e => e.Activo)
+                .HasColumnType("tinyint(1)") 
+                .HasColumnName("Activo")
+                .HasDefaultValue(true); 
+
+            entity.Property(e => e.FechaCreacion)
+                .HasColumnType("date")
+                .HasColumnName("FechaCreacion")
+                .HasDefaultValueSql("curdate()"); 
+
+            entity.HasOne(d => d.IdTipoBonoNavigation)
+                .WithMany(p => p.Bonos)
+                .HasForeignKey(d => d.IdTipoBono)
+                .HasConstraintName("bono_ibfk_1");
+
+            entity.Property(e => e.CondicionMinima)
+    .HasColumnType("decimal(10,2)")
+    .HasColumnName("CondicionMinima")
+    .HasDefaultValue(0);
         });
 
         modelBuilder.Entity<Capacitacion>(entity =>
@@ -144,9 +157,8 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
                 .HasForeignKey(d => d.IdUsuario)
                 .HasConstraintName("fk_documento_usuario");
 
-           
-        });
 
+        });
 
         modelBuilder.Entity<Expediente>(entity =>
         {
@@ -290,26 +302,6 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
                 .HasConstraintName("fk_notificacion_usuario");
         });
 
-        modelBuilder.Entity<PoliticaBono>(entity =>
-        {
-            entity.HasKey(e => e.IdPoliticaBono).HasName("PRIMARY");
-
-            entity.ToTable("POLITICA_BONO");
-
-            entity.Property(e => e.IdPoliticaBono).HasColumnName("id_politica_bono");
-            entity.Property(e => e.Activo)
-                .HasDefaultValueSql("'1'")
-                .HasColumnName("activo");
-            entity.Property(e => e.Descripcion)
-                .HasColumnType("text")
-                .HasColumnName("descripcion");
-            entity.Property(e => e.DiasAcumulados).HasColumnName("dias_acumulados");
-            entity.Property(e => e.MesesBono).HasColumnName("meses_bono");
-            entity.Property(e => e.NombrePolitica)
-                .HasMaxLength(100)
-                .HasColumnName("nombre_politica");
-        });
-
         modelBuilder.Entity<Rol>(entity =>
         {
             entity.HasKey(e => e.IdRol).HasName("PRIMARY");
@@ -448,7 +440,52 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
                 .HasConstraintName("fk_usuario_horario_usuario");
         });
 
-        OnModelCreatingPartial(modelBuilder);
+        modelBuilder.Entity<TipoBono>(entity =>
+        {
+            entity.HasKey(e => e.IdTipoBono);
+            entity.ToTable("TIPO_BONO");
+
+            entity.Property(e => e.IdTipoBono).HasColumnName("id_tipo_bono");
+            entity.Property(e => e.NombreTipo)
+                .HasMaxLength(100)
+                .HasColumnName("nombre_tipo");
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(255)
+                .HasColumnName("descripcion");
+            entity.Property(e => e.MetricaTipo)
+                .HasMaxLength(50)
+                .HasColumnName("MetricaTipo");
+        });
+
+        modelBuilder.Entity<BonoAsignado>(entity =>
+        {
+            entity.HasKey(e => e.IdBonoAsignado).HasName("PRIMARY");
+            entity.ToTable("BONO_ASIGNADO");
+
+            entity.HasIndex(e => e.IdBono, "fk_bonoasignado_bono");
+            entity.HasIndex(e => e.IdUsuario, "fk_bonoasignado_usuario");
+
+            entity.Property(e => e.IdBonoAsignado).HasColumnName("IdBonoAsignado");
+            entity.Property(e => e.IdBono).HasColumnName("IdBono");
+            entity.Property(e => e.IdUsuario).HasColumnName("IdUsuario");
+            entity.Property(e => e.Periodo)
+                .HasMaxLength(7)
+                .HasColumnName("Periodo");
+            entity.Property(e => e.FechaAsignado)
+                .HasColumnType("date")
+                .HasColumnName("FechaAsignado");
+
+            entity.HasOne(d => d.IdBonoNavigation)
+                .WithMany(p => p.BonosAsignados)
+                .HasForeignKey(d => d.IdBono)
+                .HasConstraintName("fk_bonoasignado_bono");
+
+            entity.HasOne(d => d.IdUsuarioNavigation)
+                .WithMany(p => p.BonosAsignados)
+                .HasForeignKey(d => d.IdUsuario)
+                .HasConstraintName("fk_bonoasignado_usuario");
+        });
+
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
