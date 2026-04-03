@@ -733,7 +733,7 @@
     }
 </style>
 
-<!-- HTML + JS queda exactamente igual (no toqué nada) -->
+
 <div class="main-layout">
     <div class="sidebar">
         <div class="menu-item">
@@ -754,6 +754,14 @@
             <a href="/Empleado/Solicitudes" class="menu-link active">
                 <div class="icon">🗂️</div>
                 Mis Solicitudes
+            </a>
+        </div>
+
+
+        <div class="menu-item">
+            <a href="/Empleado/HistorialBonos" class="menu-link">
+                <div class="icon">🏆</div>
+                Mis Bonos
             </a>
         </div>
     </div>
@@ -927,4 +935,721 @@
     </div>
 </div>
 
-<!-- el resto (modales + script) lo dejaste igual -->
+<div class="modal" id="detailModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>📋 Detalle de Solicitud</h3>
+            <button class="btn-close" onclick="closeModal('detailModal')">×</button>
+        </div>
+        <div id="detailContent"></div>
+    </div>
+</div>
+
+<div class="modal" id="editModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>✏️ Editar Solicitud</h3>
+            <button class="btn-close" onclick="closeModal('editModal')">×</button>
+        </div>
+        <div id="editContent">
+            <form id="editForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Tipo <span class="required">*</span></label>
+                        <select id="editTipoSolicitud" required>
+                            <option value="">Seleccione un tipo</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Prioridad <span class="required">*</span></label>
+                        <select id="editPrioridad" required>
+                            <option value="normal">Normal</option>
+                            <option value="urgente">Urgente</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fecha Inicio <span class="required">*</span></label>
+                        <input type="date" id="editFechaInicio" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fecha Fin <span class="required">*</span></label>
+                        <input type="date" id="editFechaFin" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Motivo <span class="required">*</span></label>
+                        <textarea id="editMotivo" required></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Documento de Respaldo</label>
+
+                        <!-- Archivo actual -->
+                        <div id="archivoActualContainer" style="margin-bottom:10px; display:none;">
+                            <div class="uploaded-file">
+                                <div class="file-icon">📄</div>
+                                <div class="file-info">
+                                    <div class="file-name" id="archivoActualNombre"></div>
+                                </div>
+                                <button type="button" class="file-remove" onclick="eliminarArchivoActual()">
+                                    🗑️
+                                </button>
+                            </div>
+                            <button type="button" class="btn btn-info"
+                                    style="margin-top:5px;"
+                                    onclick="descargarArchivoActual()">
+                                ⬇️ Descargar
+                            </button>
+                        </div>
+
+                        <!-- Subir nuevo archivo -->
+                        <div class="file-upload" onclick="document.getElementById('editFileInput').click()">
+                            <div class="file-upload-icon">📎</div>
+                            <div class="file-upload-text">Haz clic para adjuntar nuevo archivo</div>
+                            <div class="file-upload-hint">PDF, JPG, PNG (Máximo 5MB)</div>
+                        </div>
+
+                        <input type="file" id="editFileInput" class="file-input"
+                               accept=".pdf,.jpg,.jpeg,.png"
+                               onchange="handleEditFileSelect(event)">
+
+                        <div id="editUploadedFiles" class="uploaded-files"></div>
+                    </div>
+
+                </div>
+
+                <div class="btn-group" style="margin-top: 15px;">
+                    <button type="submit" class="btn btn-success">
+                        💾 Guardar
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('editModal')">
+                        ❌ Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="cancelModal">
+    <div class="modal-content" style="max-width: 450px;">
+        <div class="modal-header">
+            <h3>⚠️ Confirmar Cancelación</h3>
+            <button class="btn-close" onclick="closeModal('cancelModal')">×</button>
+        </div>
+        <div style="padding: 15px 0;">
+            <p style="color: #4a5568; margin-bottom: 15px; font-size: 13px;">
+                ¿Está seguro que desea cancelar esta solicitud? Esta acción no se puede deshacer.
+            </p>
+            <div class="btn-group">
+                <button class="btn btn-danger" onclick="confirmCancel()">
+                    ✅ Sí, Cancelar
+                </button>
+                <button class="btn btn-secondary" onclick="closeModal('cancelModal')">
+                    ❌ No, Mantener
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+       // ============================================================
+    // VARIABLES GLOBALES
+    // ============================================================
+    let solicitudes = [];
+    let uploadedFiles = [];
+    let currentEditId = null;
+    let currentCancelId = null;
+    let editFile = null;
+    let eliminarArchivo = false;
+    let archivoActualRuta = null;
+
+    // ============================================================
+    // INICIALIZACIÓN
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', () => {
+        cargarTiposSolicitud();
+        cargarSolicitudes();
+        document.getElementById('solicitudForm').addEventListener('submit', handleFormSubmit);
+        document.getElementById('editForm').addEventListener('submit', handleEditSubmit);
+    });
+
+    // ============================================================
+    // CARGA DE DATOS DESDE EL SERVIDOR
+    // ============================================================
+
+    async function cargarTiposSolicitud() {
+        try {
+            const response = await fetch('/Empleado/ObtenerTiposSolicitud');
+            const tipos = await response.json();
+
+            const selects = [
+                document.getElementById('tipoSolicitud'),
+                document.getElementById('editTipoSolicitud'),
+                document.getElementById('filterTipo')
+            ];
+
+            selects.forEach(select => {
+                if (!select) return;
+
+                if (select.id === "filterTipo") {
+                    select.innerHTML = '<option value="">Todos</option>';
+                } else {
+                    select.innerHTML = '<option value="">Seleccione un tipo</option>';
+                }
+
+                tipos.forEach(tipo => {
+                    if (select.id === "filterTipo") {
+                        select.innerHTML += `<option value="${tipo.nombreSolicitud}">${tipo.nombreSolicitud}</option>`;
+                    } else {
+                        select.innerHTML += `<option value="${tipo.idTipoSolicitud}">${tipo.nombreSolicitud}</option>`;
+                    }
+                });
+            });
+
+        } catch (error) {
+            console.error("Error cargando tipos:", error);
+        }
+    }
+
+    async function cargarSolicitudes() {
+        try {
+            const response = await fetch('/Empleado/SolicitudesEmpleado');
+            const data = await response.json();
+
+            if (!Array.isArray(data)) {
+                console.log("No autorizado o error");
+                return;
+            }
+
+            solicitudes = data;
+            renderSolicitudes();
+            updateCounters();
+
+        } catch (error) {
+            console.error("Error cargando solicitudes:", error);
+        }
+    }
+
+    // ============================================================
+    // RENDERIZADO DE SOLICITUDES
+    // ============================================================
+
+    function renderSolicitudes() {
+        const container = document.getElementById('solicitudesList');
+        let filtered = [...solicitudes];
+
+        const filterEstado = document.getElementById('filterEstado')?.value;
+        const filterTipo   = document.getElementById('filterTipo')?.value;
+        const filterDesde  = document.getElementById('filterDesde')?.value;
+        const filterHasta  = document.getElementById('filterHasta')?.value;
+
+        if (filterEstado) filtered = filtered.filter(s => s.estado === filterEstado);
+        if (filterTipo)   filtered = filtered.filter(s => s.tipoNombre === filterTipo);
+        if (filterDesde)  filtered = filtered.filter(s => s.fechaInicio >= filterDesde);
+        if (filterHasta)  filtered = filtered.filter(s => s.fechaFin <= filterHasta);
+
+        if (filtered.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">📭</div>
+                    <h3>No se encontraron solicitudes</h3>
+                    <p>No hay solicitudes que coincidan con los filtros</p>
+                </div>`;
+            return;
+        }
+
+        const estadoColors = {
+            pendiente: '#feebc8',
+            aprobada:  '#c6f6d5',
+            rechazada: '#fed7d7',
+            cancelada: '#e2e8f0'
+        };
+
+        filtered.sort((a, b) => new Date(b.fechaSolicitud) - new Date(a.fechaSolicitud));
+
+        container.innerHTML = filtered.map(sol => `
+            <div class="request-card ${sol.estado}">
+                <div class="request-icon" style="background:${estadoColors[sol.estado]};color:#2d3748;">
+                    ${getTipoIcon(sol.tipoNombre)}
+                </div>
+                <div class="request-info">
+                    <div class="request-title">${sol.tipoNombre}</div>
+                    <div class="request-details">
+                        <div class="request-detail-item">
+                            📅 <strong>${formatDate(sol.fechaInicio)}</strong> al <strong>${formatDate(sol.fechaFin)}</strong>
+                        </div>
+                        <div class="request-detail-item">${getStatusBadge(sol.estado)}</div>
+                        ${sol.nombreArchivo
+                            ? `<div class="request-detail-item">📎 1 archivo</div>`
+                            : ''}
+                    </div>
+                </div>
+                <div class="request-actions">
+                    <button class="btn btn-info" onclick="viewDetail(${sol.id})">Ver</button>
+                    ${sol.estado === 'pendiente' ? `
+                        <button class="btn btn-success" onclick="editSolicitud(${sol.id})">Editar</button>
+                        <button class="btn btn-danger"  onclick="cancelSolicitud(${sol.id})">Cancelar</button>
+                    ` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function updateCounters() {
+        const pendientes = solicitudes.filter(s => s.estado === 'pendiente').length;
+        const aprobadas  = solicitudes.filter(s => s.estado === 'aprobada').length;
+        const rechazadas = solicitudes.filter(s => s.estado === 'rechazada').length;
+
+        document.getElementById('pendingCount').textContent  = pendientes;
+        document.getElementById('approvedCount').textContent = aprobadas;
+        document.getElementById('rejectedCount').textContent = rechazadas;
+        document.getElementById('totalCount').textContent    = solicitudes.length;
+        document.getElementById('totalBadge').textContent    = `${solicitudes.length} solicitudes`;
+    }
+
+    // ============================================================
+    // ICONOS
+    // ============================================================
+
+    function getTipoIcon(tipoNombre) {
+        const nombre = tipoNombre?.toLowerCase();
+        if (!nombre) return "📄";
+        if (nombre.includes("vacacion"))    return "🏖️";
+        if (nombre.includes("permiso"))     return "📝";
+        if (nombre.includes("incapacidad")) return "🏥";
+        if (nombre.includes("licencia"))    return "📄";
+        return "📄";
+    }
+
+    function getStatusBadge(estado) {
+        const badges = {
+            pendiente: '<span class="badge badge-warning">Pendiente</span>',
+            aprobada:  '<span class="badge badge-success">Aprobada</span>',
+            rechazada: '<span class="badge badge-danger">Rechazada</span>',
+            cancelado: '<span class="badge badge-secondary">Cancelado</span>'
+        };
+        return badges[estado];
+    }
+
+    function formatDate(dateStr) {
+        const date = new Date(dateStr + 'T00:00:00');
+        return date.toLocaleDateString('es-CR', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes < 1024)        return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+        return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+    }
+
+    // ============================================================
+    // ALERTAS - ERRORES
+    // ============================================================
+
+    function showAlert(message, type) {
+        const alertDiv = document.getElementById('alertMessage');
+        alertDiv.className = `alert alert-${type}`;
+        alertDiv.innerHTML = `
+            <span style="font-size:18px;">${type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️'}</span>
+            <span>${message}</span>
+        `;
+        alertDiv.style.display = 'flex';
+        setTimeout(() => alertDiv.style.display = 'none', 5000);
+    }
+
+    function showError(elementId, message) {
+        const errorElement = document.getElementById(elementId);
+        if (errorElement) {
+            errorElement.textContent = message;
+            errorElement.parentElement.classList.add('error');
+        }
+    }
+
+    function clearErrors() {
+        document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+        document.querySelectorAll('.form-group').forEach(el => el.classList.remove('error'));
+    }
+
+    // ============================================================
+    // MANEJO DE PESTAÑAS
+    // ============================================================
+
+    function switchTab(tabName, element) {
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        element.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        document.getElementById(tabName + 'Tab').classList.add('active');
+    }
+
+    // ============================================================
+    // MANEJO DE MODALES
+    // ============================================================
+
+    function openModal(modalId)  { document.getElementById(modalId).classList.add('show'); }
+    function closeModal(modalId) { document.getElementById(modalId).classList.remove('show'); }
+
+    // ============================================================
+    // FORMULARIO: NUEVA SOLICITUD
+    // ============================================================
+
+    async function handleFormSubmit(event) {
+        event.preventDefault();
+        clearErrors();
+
+        const tipo        = document.getElementById('tipoSolicitud').value;
+        const prioridad   = document.getElementById('prioridad').value;
+        const fechaInicio = document.getElementById('fechaInicio').value;
+        const fechaFin    = document.getElementById('fechaFin').value;
+        const motivo      = document.getElementById('motivo').value;
+
+        let isValid = true;
+        if (!tipo)          { showError('tipoError',        'Campo obligatorio'); isValid = false; }
+        if (!fechaInicio)   { showError('fechaInicioError', 'Campo obligatorio'); isValid = false; }
+        if (!fechaFin)      { showError('fechaFinError',    'Campo obligatorio'); isValid = false; }
+        if (!motivo.trim()) { showError('motivoError',      'Campo obligatorio'); isValid = false; }
+
+        if (!isValid) {
+            showAlert('Complete todos los campos obligatorios', 'error');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("IdTipoSolicitud", parseInt(tipo));
+        formData.append("Descripcion", motivo);
+        formData.append("FechaInicio", fechaInicio);
+        formData.append("FechaFin", fechaFin);
+        formData.append("Prioridad", prioridad);
+        uploadedFiles.forEach(file => formData.append("archivo", file));
+
+        try {
+            const response = await fetch('/Empleado/RegistrarSolicitud', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                showAlert(data.message, 'success');
+                clearForm();
+                await cargarSolicitudes();
+            } else {
+                showAlert(data.message, 'error');
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            showAlert('Error al registrar la solicitud', 'error');
+        }
+    }
+
+    function clearForm() {
+        document.getElementById('solicitudForm').reset();
+        uploadedFiles = [];
+        renderUploadedFiles();
+        clearErrors();
+    }
+
+    // ============================================================
+    // MANEJO DE ARCHIVOS: NUEVA SOLICITUD
+    // ============================================================
+
+    function handleFileSelect(event) {
+        const files = Array.from(event.target.files);
+        const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+        const maxSize = 5 * 1024 * 1024;
+
+        document.getElementById('fileError').textContent = '';
+
+        for (const file of files) {
+            if (!allowedTypes.includes(file.type)) {
+                showError('fileError', 'Formato no permitido. Use PDF, JPG o PNG.');
+                continue;
+            }
+            if (file.size > maxSize) {
+                showError('fileError', 'Archivo excede 5MB máximo.');
+                continue;
+            }
+            uploadedFiles.push(file);
+        }
+
+        renderUploadedFiles();
+        event.target.value = '';
+    }
+
+    function renderUploadedFiles() {
+        const container = document.getElementById('uploadedFiles');
+        if (uploadedFiles.length === 0) { container.innerHTML = ''; return; }
+
+        container.innerHTML = uploadedFiles.map((file, index) => `
+            <div class="uploaded-file">
+                <div class="file-icon">📄</div>
+                <div class="file-info">
+                    <div class="file-name">${file.name}</div>
+                    <div class="file-size">${formatFileSize(file.size)}</div>
+                </div>
+                <button type="button" class="file-remove" onclick="removeFile(${index})">🗑️</button>
+            </div>
+        `).join('');
+    }
+
+    function removeFile(index) {
+        uploadedFiles.splice(index, 1);
+        renderUploadedFiles();
+    }
+
+    // ============================================================
+    // MODAL: VER DETALLE
+    // ============================================================
+
+    function viewDetail(id) {
+        const sol = solicitudes.find(s => s.id === id);
+        if (!sol) return;
+
+        // ✅ tipoLabels eliminado — se usa directamente sol.tipoNombre
+        document.getElementById('detailContent').innerHTML = `
+            <div class="detail-row">
+                <div class="detail-label">ID Solicitud</div>
+                <div class="detail-value">#${sol.id}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Tipo</div>
+                <div class="detail-value">${sol.tipoNombre}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Fecha Inicio</div>
+                <div class="detail-value">${formatDate(sol.fechaInicio)}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Fecha Fin</div>
+                <div class="detail-value">${formatDate(sol.fechaFin)}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Motivo</div>
+                <div class="detail-value">${sol.motivo}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Estado</div>
+                <div class="detail-value">${getStatusBadge(sol.estado)}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Prioridad</div>
+                <div class="detail-value">${sol.prioridad === 'urgente' ? '🔴 Urgente' : '🟢 Normal'}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Fecha Solicitud</div>
+                <div class="detail-value">${formatDate(sol.fechaSolicitud)}</div>
+            </div>
+            ${sol.observaciones ? `
+            <div class="detail-row">
+                <div class="detail-label">Observaciones</div>
+                <div class="detail-value">${sol.observaciones}</div>
+            </div>` : ''}
+            <div class="detail-row">
+                <div class="detail-label">Documento de Respaldo</div>
+                <div class="detail-value">${sol.nombreArchivo ? `📎 ${sol.nombreArchivo}` : 'N/A'}</div>
+            </div>
+        `;
+
+        openModal('detailModal');
+    }
+
+    // ============================================================
+    // MODAL: EDITAR SOLICITUD
+    // ============================================================
+
+    function editSolicitud(id) {
+        const sol = solicitudes.find(s => s.id === id);
+        if (!sol || sol.estado !== 'pendiente') {
+            showAlert('No es posible editar solicitudes ya atendidas', 'error');
+            return;
+        }
+
+        currentEditId = id;
+
+        document.getElementById('editTipoSolicitud').value = sol.tipo;
+        document.getElementById('editPrioridad').value     = sol.prioridad ?? "normal";
+        document.getElementById('editFechaInicio').value   = sol.fechaInicio;
+        document.getElementById('editFechaFin').value      = sol.fechaFin;
+        document.getElementById('editMotivo').value        = sol.motivo;
+
+        editFile        = null;
+        eliminarArchivo = false;
+
+        const container = document.getElementById("archivoActualContainer");
+        archivoActualRuta = sol.rutaArchivo ?? null;
+
+        if (sol.rutaArchivo) {
+            container.style.display = "block";
+            document.getElementById("archivoActualNombre").textContent = sol.nombreArchivo;
+            deshabilitarInputArchivo();
+        } else {
+            container.style.display = "none";
+            habilitarInputArchivo();
+        }
+
+        document.getElementById("editUploadedFiles").innerHTML = "";
+        openModal('editModal');
+    }
+
+    async function handleEditSubmit(event) {
+        event.preventDefault();
+
+        const formData = new FormData();
+        formData.append("IdSolicitud",     currentEditId);
+        formData.append("IdTipoSolicitud", parseInt(document.getElementById('editTipoSolicitud').value));
+        formData.append("FechaInicio",     document.getElementById('editFechaInicio').value);
+        formData.append("FechaFin",        document.getElementById('editFechaFin').value);
+        formData.append("Descripcion",     document.getElementById('editMotivo').value);
+        formData.append("EliminarArchivo", eliminarArchivo);
+
+        if (editFile) formData.append("Archivo", editFile);
+
+        try {
+            const response = await fetch('/Empleado/EditarSolicitud', {
+                method: 'PUT',
+                body: formData
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                showAlert("Solicitud actualizada correctamente", "success");
+                closeModal('editModal');
+                await cargarSolicitudes();
+            } else {
+                showAlert(data.message, "error");
+            }
+        } catch (error) {
+            console.error(error);
+            showAlert("Error inesperado", "error");
+        }
+    }
+
+    // ============================================================
+    // MANEJO DE ARCHIVOS: EDITAR SOLICITUD
+    // ============================================================
+
+    function deshabilitarInputArchivo() {
+        document.getElementById("editFileInput").disabled = true;
+        document.getElementById("editUploadedFiles").innerHTML = `
+            <div class="alert alert-warning">
+                ⚠️ Debe eliminar el documento actual antes de subir uno nuevo.
+            </div>
+        `;
+    }
+
+    function habilitarInputArchivo() {
+        document.getElementById("editFileInput").disabled = false;
+        document.getElementById("editUploadedFiles").innerHTML = "";
+    }
+
+    function eliminarArchivoActual() {
+        eliminarArchivo   = true;
+        archivoActualRuta = null;
+        document.getElementById("archivoActualContainer").style.display = "none";
+        habilitarInputArchivo();
+    }
+
+    function descargarArchivoActual() {
+        if (!archivoActualRuta) return;
+        window.open(archivoActualRuta, "_blank");
+    }
+
+    function handleEditFileSelect(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+        const maxSize = 5 * 1024 * 1024;
+
+        if (!allowedTypes.includes(file.type)) { showAlert("Formato no permitido", "error"); return; }
+        if (file.size > maxSize)               { showAlert("Archivo supera 5MB", "error");   return; }
+
+        editFile        = file;
+        eliminarArchivo = false;
+        renderEditUploadedFile();
+    }
+
+    function renderEditUploadedFile() {
+        const container = document.getElementById("editUploadedFiles");
+        if (!editFile) { container.innerHTML = ""; return; }
+
+        container.innerHTML = `
+            <div class="uploaded-file">
+                <div class="file-icon">📄</div>
+                <div class="file-info">
+                    <div class="file-name">${editFile.name}</div>
+                    <div class="file-size">${formatFileSize(editFile.size)}</div>
+                </div>
+                <button type="button" class="file-remove" onclick="removeEditFile()">🗑️</button>
+            </div>
+        `;
+    }
+
+    function removeEditFile() {
+        editFile = null;
+        document.getElementById("editFileInput").value = "";
+        renderEditUploadedFile();
+    }
+
+    // ============================================================
+    // MODAL: CANCELAR SOLICITUD
+    // ============================================================
+
+    function cancelSolicitud(id) {
+        const sol = solicitudes.find(s => s.id === id);
+        if (!sol || sol.estado !== 'pendiente') {
+            showAlert('Solo se pueden cancelar solicitudes pendientes', 'error');
+            return;
+        }
+        currentCancelId = id;
+        openModal('cancelModal');
+    }
+
+    async function confirmCancel() {
+        try {
+            const response = await fetch(`/Empleado/CancelarSolicitud?id=${currentCancelId}`, {
+                method: 'PUT',
+                credentials: 'same-origin'
+            });
+
+            if (!response.ok) {
+                console.log(await response.text());
+                showAlert("Error al cancelar la solicitud", "error");
+                return;
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                showAlert("Solicitud cancelada correctamente", "success");
+                closeModal('cancelModal');
+                await cargarSolicitudes();
+            }
+        } catch (error) {
+            console.error(error);
+            showAlert("Error inesperado", "error");
+        }
+    }
+
+    // ============================================================
+    // FILTROS
+    // ============================================================
+
+    function applyFilters() { renderSolicitudes(); }
+
+    function clearFilters() {
+        document.getElementById('filterEstado').value = '';
+        document.getElementById('filterTipo').value   = '';
+        document.getElementById('filterDesde').value  = '';
+        document.getElementById('filterHasta').value  = '';
+        renderSolicitudes();
+    }
+
+
+
+
+</script>

@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Oclock.Filters;
 using Oclock.Data;
+using Oclock.Filters;
+using Oclock.Helpers;
 using System;
 using System.Linq;
 using System.Text;
@@ -276,6 +277,7 @@ namespace Oclock.Controllers
         }
 
 
+        // ── CambiarEstadoSolicitud ── ★ SE AÑADE NOTIFICACIÓN ────────────
         [HttpPost]
         public IActionResult CambiarEstadoSolicitud(int idSolicitud, string nuevoEstado, string? observacion)
         {
@@ -287,31 +289,32 @@ namespace Oclock.Controllers
             if (nuevoEstado != "aprobada" && nuevoEstado != "rechazada")
                 return BadRequest(new { success = false, message = "Estado no permitido." });
 
-            var solicitud = _context.Solicituds
-                .FirstOrDefault(s => s.IdSolicitud == idSolicitud);
+            var solicitud = _context.Solicituds.FirstOrDefault(s => s.IdSolicitud == idSolicitud);
 
             if (solicitud == null)
                 return NotFound(new { success = false, message = "Solicitud no encontrada." });
 
-            // 🔒 Solo si está pendiente
             if (solicitud.Estado != "pendiente")
                 return BadRequest(new { success = false, message = "La solicitud ya fue gestionada." });
 
-            // 🔒 Si es rechazada, observación obligatoria
             if (nuevoEstado == "rechazada" && string.IsNullOrWhiteSpace(observacion))
                 return BadRequest(new { success = false, message = "Debe indicar una observación para rechazar." });
 
             solicitud.Estado = nuevoEstado;
             solicitud.DescripcionEstado = observacion;
-            
-
             _context.SaveChanges();
 
-            return Ok(new
+            // ★ Notificar al empleado dueño de la solicitud
+            if (solicitud.IdUsuario > 0)
             {
-                success = true,
-                message = $"Solicitud {nuevoEstado} correctamente."
-            });
+                NotificacionHelper.NotificarCambioSolicitud(
+                    _context,
+                    solicitud.IdUsuario,
+                    nuevoEstado,
+                    observacion);
+            }
+
+            return Ok(new { success = true, message = $"Solicitud {nuevoEstado} correctamente." });
         }
 
         [HttpGet]
@@ -355,6 +358,112 @@ namespace Oclock.Controllers
                 rechazadas,
                 total
             });
+        }
+
+
+        [HttpGet]
+        public IActionResult ObtenerRankingPuntualidad(DateOnly desde, DateOnly hasta)
+        {
+            // 1. Obtener todos los empleados activos
+            var empleados = _context.Usuarios
+                .Where(u => u.IdRol == 2 && u.Activo == true)
+                .Select(u => new { u.IdUsuario, Nombre = u.Nombre + " " + u.Apellido })
+                .ToList();
+
+            var resultado = new List<object>();
+
+            foreach (var emp in empleados)
+            {
+                // 2. Marcas del período
+                var marcas = _context.Marcas
+                    .Where(m => m.IdUsuario == emp.IdUsuario
+                             && m.Fecha >= desde
+                             && m.Fecha <= hasta)
+                    .ToList();
+
+                if (!marcas.Any()) continue;
+
+                // 3. Agrupar por fecha
+                var diasAgrupados = marcas.GroupBy(m => m.Fecha).ToList();
+
+                int diasTrabajados = 0;
+                int diasPuntuales = 0;
+                int tardanzas = 0;
+                var minutosEntrada = new List<int>(); // para hora promedio
+
+                foreach (var dia in diasAgrupados)
+                {
+                    var fecha = dia.Key;
+
+                    // Primera entrada del día
+                    var primeraEntrada = dia
+                        .Where(m => m.HoraEntrada.HasValue && (m.Nombre ?? "").ToLower() == "entrada")
+                        .OrderBy(m => m.HoraEntrada)
+                        .FirstOrDefault();
+
+                    if (primeraEntrada == null) continue;
+
+                    diasTrabajados++;
+
+                    // Hora promedio de entrada
+                    var te = primeraEntrada.HoraEntrada.Value;
+                    minutosEntrada.Add(te.Hour * 60 + te.Minute);
+
+                    // Horario asignado para ese día
+                    var horario = _context.UsuarioHorarios
+                        .Include(uh => uh.IdHorarioNavigation)
+                        .FirstOrDefault(uh =>
+                            uh.IdUsuario == emp.IdUsuario &&
+                            (uh.FechaInicio == null || uh.FechaInicio <= fecha) &&
+                            (uh.FechaFin == null || uh.FechaFin >= fecha));
+
+                    if (horario != null)
+                    {
+                        var horaEsperada = horario.IdHorarioNavigation.HoraEntrada;
+
+                        if (primeraEntrada.HoraEntrada.Value > horaEsperada)
+                            tardanzas++;
+                        else
+                            diasPuntuales++;
+                    }
+                    else
+                    {
+                        // Sin horario asignado → se considera puntual
+                        diasPuntuales++;
+                    }
+                }
+
+                if (diasTrabajados == 0) continue;
+
+                double puntualidad = Math.Round((double)diasPuntuales / diasTrabajados * 100, 1);
+
+                // Hora promedio de entrada
+                string horaPromedioEntrada = "—";
+                if (minutosEntrada.Any())
+                {
+                    int promMinutos = (int)minutosEntrada.Average();
+                    int h = promMinutos / 60;
+                    int m = promMinutos % 60;
+                    horaPromedioEntrada = $"{h:D2}:{m:D2}";
+                }
+
+                resultado.Add(new
+                {
+                    nombre = emp.Nombre,
+                    diasTrabajados,
+                    diasPuntuales,
+                    tardanzas,
+                    puntualidad,
+                    horaPromedioEntrada
+                });
+            }
+
+            // Ordenar por puntualidad descendente por defecto
+            resultado = resultado
+                .OrderByDescending(r => ((dynamic)r).puntualidad)
+                .ToList<object>();
+
+            return Json(new { success = true, ranking = resultado });
         }
 
 

@@ -518,78 +518,26 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="menu-item">
-            <a href="/Home/AdminHome" class="menu-link">
-                <div class="icon">📊</div>
-                Dashboard
-            </a>
+            <a href="/Home/AdminHome" class="menu-link"><div class="icon">📊</div>Dashboard</a>
         </div>
-
         <div class="menu-item">
-            <a href="/Admin/VerMarcas" class="menu-link active">
-                <div class="icon">⏰</div>
-                Marcas de Asistencia
-            </a>
+            <a href="/Admin/VerMarcas" class="menu-link"><div class="icon">⏰</div>Marcas de Asistencia</a>
         </div>
-
         <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
-            <div class="menu-expandable-header">
-                <div class="menu-expandable-left">
-                    <div class="icon">⚙️</div>
-                    <span>Configuración</span>
-                </div>
+            <div class="menu-expandable-header active">
+                <div class="menu-expandable-left"><div class="icon">⚙️</div><span>Configuración y Políticas</span></div>
                 <div class="menu-arrow">▶</div>
             </div>
             <div class="submenu show">
-                <div class="submenu-item">
-                    <a href="/Horarios/HorariosConfig" class="submenu-link">⏰ Horarios</a>
-                </div>
-                <div class="submenu-item">
-<<<<<<< HEAD:Oclock/Oclock/Views/Bono/GestionBonos.cshtml
-                    <a href="/Admin/FeriadosConfig" class="submenu-link">📅 Feriados</a>
-=======
-                    <a href="/Feriados/FeriadosConfig" class="submenu-link">
-                        📅 Feriados
-                    </a>
->>>>>>> 49e5b350bcd7d55f32fef01838af4ff82e13074f:Oclock/Oclock/Views/Admin/BonosParametroConfig.cshtml
-                </div>
-                <div class="submenu-item">
-                    <a href="/Bono/GestionBonos" class="submenu-link">
-                        🎁 Bonos
-                    </a>
-                </div>
-                <div class="submenu-item">
-                    <a href="/Admin/NotificacionesConfig" class="submenu-link">🔔 Notificaciones</a>
-                </div>
-            </div>
+                <div class="submenu-item"><a href="/Horarios/HorariosConfig" class="submenu-link">⏰ Horarios</a></div>
+                <div class="submenu-item"><a href="/Feriados/FeriadosConfig" class="submenu-link">📅 Feriados</a></div>
+                <div class="submenu-item"><a href="/Bono/GestionBonos" class="submenu-link active">🎁 Bonos</a></div>
+               </div>
         </div>
-
-        <div class="menu-item">
-            <a href="/Bono/AsignarBono" class="menu-link">
-                <div class="icon">💵</div>
-                Bonos
-            </a>
-        </div>
-
-        <div class="menu-item">
-            <a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link">
-                <div class="icon">📝</div>
-                Gestion de Empleados
-            </a>
-        </div>
-
-        <div class="menu-item">
-            <a href="/Admin/RankingPuntualidad" class="menu-link">
-                <div class="icon">⏱️</div>
-                Puntualidad
-            </a>
-        </div>
-
-        <div class="menu-item">
-            <a href="/Admin/Reportes" class="menu-link">
-                <div class="icon">📄</div>
-                Reportes
-            </a>
-        </div>
+        <div class="menu-item"><a href="/Bono/AsignarBono" class="menu-link"><div class="icon">💵</div>Bonos</a></div>
+        <div class="menu-item"><a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link"><div class="icon">📝</div>Gestion de Empleados</a></div>
+        <div class="menu-item"><a href="/Admin/RankingPuntualidad" class="menu-link"><div class="icon">⏱️</div>Indicadores de Puntualidad</a></div>
+        <div class="menu-item"><a href="/Admin/Reportes" class="menu-link"><div class="icon">📄</div>Reportes</a></div>
     </div>
 
     <div class="content">

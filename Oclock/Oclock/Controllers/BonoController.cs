@@ -1,9 +1,10 @@
 ﻿
-using Oclock.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Oclock.Filters;
 using Oclock.Data;
+using Oclock.Filters;
+using Oclock.Helpers;
+using Oclock.Models;
 using System;
 using System.Linq;
 using System.Text;
@@ -296,8 +297,22 @@ public class BonoController : Controller
         _context.BonosAsignados.Add(asignacion);
         _context.SaveChanges();
 
+        // ★ Notificar al empleado sobre el bono asignado
+        var bono = _context.Bonos.FirstOrDefault(b => b.IdBono == request.IdBono);
+
+        if (bono != null)
+        {
+            NotificacionHelper.NotificarBonoAsignado(
+                _context,
+                request.IdUsuario,
+                bono.NombreBono ?? "Bono",
+                request.Periodo);
+        }
+
         return Json(new { success = true });
     }
+
+
 
     [HttpGet]
     public IActionResult ObtenerHistorial()

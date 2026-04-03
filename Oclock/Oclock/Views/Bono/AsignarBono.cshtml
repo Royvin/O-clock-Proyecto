@@ -15,6 +15,7 @@
         min-height: 600px;
     }
 
+    /* SIDEBAR */
     .sidebar {
         width: 280px;
         background: #ffffff;
@@ -45,15 +46,15 @@
     }
 
         .menu-link:hover {
-            background: #2F6FED;
+            background: #667eea;
             color: white;
             transform: translateX(5px);
         }
 
         .menu-link.active {
-            background: #2457C8;
+            background: #667eea;
             color: white;
-            box-shadow: 0 4px 12px rgba(36, 87, 200, 0.25);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
 
             .menu-link.active::before {
@@ -77,6 +78,7 @@
         font-size: 18px;
     }
 
+    /* Menu Expandible */
     .menu-expandable {
         cursor: pointer;
     }
@@ -93,13 +95,13 @@
     }
 
         .menu-expandable-header:hover {
-            background: #f3f6ff;
-            color: #2F6FED;
+            background: #f0f0f0;
+            color: #667eea;
         }
 
         .menu-expandable-header.active {
-            background: #eef4ff;
-            color: #2F6FED;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
             font-weight: 600;
         }
 
@@ -165,23 +167,23 @@
 
         .submenu-link:hover {
             background: #f7fafc;
-            color: #2F6FED;
+            color: #667eea;
             transform: translateX(3px);
         }
 
             .submenu-link:hover::before {
-                background: #2F6FED;
+                background: #667eea;
                 transform: translateY(-50%) scale(1.3);
             }
 
         .submenu-link.active {
-            background: #eef4ff;
-            color: #2F6FED;
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
             font-weight: 600;
         }
 
             .submenu-link.active::before {
-                background: #2F6FED;
+                background: #667eea;
                 width: 8px;
                 height: 8px;
             }
@@ -622,15 +624,19 @@
     <div class="sidebar">
         <div class="menu-item">
             <a href="/Home/AdminHome" class="menu-link">
-                <div class="icon">📊</div>Dashboard
+                <div class="icon">📊</div>
+                Dashboard
             </a>
         </div>
+
         <div class="menu-item">
             <a href="/Admin/VerMarcas" class="menu-link">
-                <div class="icon">⏰</div>Marcas de Asistencia
+                <div class="icon">⏰</div>
+                Marcas de Asistencia
             </a>
         </div>
-        <div class="menu-item menu-expandable" onclick="toggleSubmenu(this)">
+
+        <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
             <div class="menu-expandable-header">
                 <div class="menu-expandable-left">
                     <div class="icon">⚙️</div>
@@ -638,41 +644,56 @@
                 </div>
                 <div class="menu-arrow">▶</div>
             </div>
-            <div class="submenu">
+            <div class="submenu show">
                 <div class="submenu-item">
-                    <a href="/Horarios/HorariosConfig" class="submenu-link">⏰ Horarios</a>
+                    <a href="/Horarios/HorariosConfig" class="submenu-link">
+                        ⏰ Horarios
+                    </a>
                 </div>
                 <div class="submenu-item">
-                    <a href="/Admin/FeriadosConfig" class="submenu-link">📅 Feriados</a>
+                    <a href="/Feriados/FeriadosConfig" class="submenu-link">
+                        📅 Feriados
+                    </a>
                 </div>
                 <div class="submenu-item">
-                    <a href="/Bono/GestionBonos" class="submenu-link">🎁 Bonos</a>
+                    <a href="/Bono/GestionBonos" class="submenu-link">
+                        🎁 Bonos
+                    </a>
                 </div>
-                <div class="submenu-item">
-                    <a href="/Admin/NotificacionesConfig" class="submenu-link">🔔 Notificaciones</a>
-                </div>
+
             </div>
         </div>
+
+
         <div class="menu-item">
             <a href="/Bono/AsignarBono" class="menu-link active">
-                <div class="icon">💵</div>Bonos
+                <div class="icon">💵 </div>
+                Bonos
             </a>
         </div>
+
         <div class="menu-item">
             <a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link">
-                <div class="icon">📝</div>Gestion de Empleados
+                <div class="icon">📝</div>
+                Gestion de Empleados
             </a>
         </div>
+
         <div class="menu-item">
             <a href="/Admin/RankingPuntualidad" class="menu-link">
-                <div class="icon">⏱️</div>Indicadores de Puntualidad
+                <div class="icon">⏱️</div>
+                Indicadores de Puntualidad
             </a>
         </div>
+
+
         <div class="menu-item">
             <a href="/Admin/Reportes" class="menu-link">
-                <div class="icon">📄</div>Reportes
+                <div class="icon">📄</div>
+                Reportes
             </a>
         </div>
+
     </div>
 
     <div class="content">

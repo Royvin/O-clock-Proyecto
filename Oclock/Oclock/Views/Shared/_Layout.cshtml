@@ -22,6 +22,8 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: relative;
+            z-index: 1000;
         }
 
         .header-logo {
@@ -37,7 +39,6 @@
 
             .header-logo:hover {
                 color: rgba(255,255,255,0.85) !important;
-                text-decoration: none !important;
             }
 
             .header-logo:visited {
@@ -75,7 +76,6 @@
                 transform-origin: top;
             }
 
-        /* Prefijo hdr- para evitar colisiones con vistas */
         .hdr-user-info {
             display: flex;
             align-items: center;
@@ -132,7 +132,6 @@
                 background: white !important;
                 color: #2F6FED !important;
                 transform: translateY(-1px);
-                text-decoration: none !important;
             }
 
             .logout-btn:visited {
@@ -142,6 +141,194 @@
                 .logout-btn:visited:hover {
                     color: #2F6FED !important;
                 }
+
+        /* ── Campana de notificaciones ──────────────────────────────── */
+        .notif-wrapper {
+            position: relative;
+        }
+
+        .notif-bell-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            position: relative;
+        }
+
+            .notif-bell-btn:hover {
+                background: rgba(255,255,255,0.15);
+            }
+
+        .notif-bell-icon {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: white;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #FF4757;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            border: 2px solid #2F6FED;
+            line-height: 1;
+            display: none; /* se muestra con JS */
+        }
+
+        /* Dropdown panel */
+        .notif-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 320px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            z-index: 9999;
+            display: none;
+        }
+
+            .notif-dropdown.open {
+                display: block;
+            }
+
+        .notif-header {
+            background: #2F6FED;
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .notif-header span {
+                font-weight: 600;
+                font-size: 13px;
+            }
+
+        .notif-mark-all-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.85);
+            font-size: 11px;
+            cursor: pointer;
+            padding: 0;
+            text-decoration: underline;
+        }
+
+            .notif-mark-all-btn:hover {
+                color: white;
+            }
+
+        .notif-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .notif-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.15s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+            .notif-item:hover {
+                background: #f7f9ff;
+            }
+
+            .notif-item:last-child {
+                border-bottom: none;
+            }
+
+        .notif-item-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+            .notif-item-icon.tipo-solicitud {
+                background: #EBF2FF;
+            }
+
+            .notif-item-icon.tipo-bono {
+                background: #FFF3E0;
+            }
+
+            .notif-item-icon.tipo-nueva_solicitud {
+                background: #E8F5E9;
+            }
+
+        .notif-item-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notif-item-msg {
+            font-size: 13px;
+            color: #333;
+            line-height: 1.4;
+            margin-bottom: 4px;
+        }
+
+        .notif-item-count {
+            display: inline-block;
+            background: #2F6FED;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 8px;
+            padding: 2px 8px;
+            margin-bottom: 4px;
+        }
+
+        .notif-item-time {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .notif-empty {
+            padding: 32px 16px;
+            text-align: center;
+            color: #aaa;
+            font-size: 13px;
+        }
+
+        .notif-empty-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        /* ── fin campana ──────────────────────────────────────────────── */
 
         main {
             min-height: calc(100vh - 120px);
@@ -188,12 +375,41 @@
                 <div class="clock-icon"></div>
                 O'clock
             </a>
+
             <div class="hdr-user-info">
                 <div class="hdr-user-details">
                     <div class="hdr-user-name">@usuarioNombre</div>
                     <div class="hdr-user-role">@rolNombre</div>
                 </div>
                 <div class="hdr-user-avatar">@iniciales</div>
+
+                <!-- ★ CAMPANA ─────────────────────────────────────────── -->
+                <div class="notif-wrapper" id="notifWrapper">
+                    <button class="notif-bell-btn" id="notifBellBtn" title="Notificaciones">
+                        <svg class="notif-bell-icon" viewBox="0 0 24 24">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                        </svg>
+                        <span class="notif-badge" id="notifBadge">0</span>
+                    </button>
+
+                    <div class="notif-dropdown" id="notifDropdown">
+                        <div class="notif-header">
+                            <span>Notificaciones</span>
+                            <button class="notif-mark-all-btn" id="notifMarkAll">
+                                Marcar todas como leídas
+                            </button>
+                        </div>
+                        <div class="notif-list" id="notifList">
+                            <div class="notif-empty">
+                                <div class="notif-empty-icon">🔔</div>
+                                Cargando...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ★ FIN CAMPANA ──────────────────────────────────────── -->
+
                 <a href="/Usuario/Logout" class="logout-btn"
                    onclick="return confirm('¿Está seguro que desea cerrar sesión?')">
                     🚪 Cerrar Sesión
@@ -219,6 +435,153 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @if (usuarioId.HasValue)
+    {
+        <!-- ★ SCRIPT DE NOTIFICACIONES ──────────────────────────────── -->
+        <script>
+            (function () {
+                const bellBtn    = document.getElementById('notifBellBtn');
+                const dropdown   = document.getElementById('notifDropdown');
+                const badge      = document.getElementById('notifBadge');
+                const list       = document.getElementById('notifList');
+                const markAllBtn = document.getElementById('notifMarkAll');
+
+                let isOpen = false;
+
+                // ── helpers ─────────────────────────────────────────────────
+                function iconForTipo(tipo) {
+                    if (tipo === 'bono')           return '🏆';
+                    if (tipo === 'nueva_solicitud') return '📋';
+                    return '📄';
+                }
+
+                function timeAgo(dateStr) {
+                    const d    = new Date(dateStr);
+                    const diff = Math.floor((Date.now() - d) / 1000);
+                    if (diff < 60)     return 'Hace un momento';
+                    if (diff < 3600)   return `Hace ${Math.floor(diff / 60)} min`;
+                    if (diff < 86400)  return `Hace ${Math.floor(diff / 3600)} h`;
+                    return d.toLocaleDateString('es-CR');
+                }
+
+                // ── renderizar lista ─────────────────────────────────────────
+                function renderItems(items) {
+                    if (!items || items.length === 0) {
+                        list.innerHTML = `
+                            <div class="notif-empty">
+                                <div class="notif-empty-icon">✅</div>
+                                No tienes notificaciones pendientes
+                            </div>`;
+                        return;
+                    }
+
+                    list.innerHTML = items.map(item => `
+                        <div class="notif-item"
+                             data-ids='${JSON.stringify(item.ids)}'
+                             data-ruta="${item.ruta}"
+                             onclick="notifItemClick(this)">
+                            <div class="notif-item-icon tipo-${item.tipo}">
+                                ${iconForTipo(item.tipo)}
+                            </div>
+                            <div class="notif-item-body">
+                                <div class="notif-item-count">${item.cantidad} nueva${item.cantidad > 1 ? 's' : ''}</div>
+                                <div class="notif-item-msg">${item.mensaje}</div>
+                                <div class="notif-item-time">${timeAgo(item.fecha)}</div>
+                            </div>
+                        </div>`
+                    ).join('');
+                }
+
+                // ── cargar desde API ─────────────────────────────────────────
+                function cargarNotificaciones() {
+                    fetch('/Notificacion/ObtenerResumen')
+                        .then(r => r.ok ? r.json() : null)
+                        .then(data => {
+                            if (!data) return;
+
+                            const total = data.total || 0;
+
+                            // Badge
+                            if (total > 0) {
+                                badge.style.display = 'flex';
+                                badge.textContent   = total > 99 ? '99+' : total;
+                            } else {
+                                badge.style.display = 'none';
+                            }
+
+                            
+                            if (isOpen) renderItems(data.items);
+                        })
+                        .catch(() => {});
+                }
+
+                // ── marcar IDs como leídos ───────────────────────────────────
+                function marcarLeidos(ids) {
+                    fetch('/Notificacion/MarcarLeidas', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ ids })
+                    }).then(() => cargarNotificaciones()).catch(() => {});
+                }
+
+                // ── click en un item → marcar + redirigir ────────────────────
+                window.notifItemClick = function (el) {
+                    const ids  = JSON.parse(el.dataset.ids  || '[]');
+                    const ruta = el.dataset.ruta || '#';
+
+                    if (ids.length > 0) {
+                        fetch('/Notificacion/MarcarLeidas', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ ids })
+                        }).finally(() => { window.location.href = ruta; });
+                    } else {
+                        window.location.href = ruta;
+                    }
+                };
+
+                // ── toggle dropdown ──────────────────────────────────────────
+                bellBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    isOpen = !isOpen;
+                    dropdown.classList.toggle('open', isOpen);
+
+                    if (isOpen) {
+                        // Renderizar spinner mientras carga
+                        list.innerHTML = `<div class="notif-empty"><div class="notif-empty-icon">🔔</div>Cargando...</div>`;
+                        fetch('/Notificacion/ObtenerResumen')
+                            .then(r => r.ok ? r.json() : null)
+                            .then(data => { if (data) renderItems(data.items); })
+                            .catch(() => {});
+                    }
+                });
+
+                // ── cerrar al hacer click fuera ──────────────────────────────
+                document.addEventListener('click', function (e) {
+                    if (!document.getElementById('notifWrapper').contains(e.target)) {
+                        isOpen = false;
+                        dropdown.classList.remove('open');
+                    }
+                });
+
+                // ── marcar todas ─────────────────────────────────────────────
+                markAllBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    fetch('/Notificacion/MarcarTodasLeidas', { method: 'POST' })
+                        .then(() => {
+                            badge.style.display = 'none';
+                            renderItems([]);
+                        })
+                        .catch(() => {});
+                });
+
+              cargarNotificaciones(); // refresca el badge tras la acción
+            })();
+        </script>
+        <!-- ★ FIN SCRIPT ───────────────────────────────────────────────── -->
+    }
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
