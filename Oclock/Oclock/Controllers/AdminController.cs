@@ -815,9 +815,7 @@ namespace Oclock.Controllers
 
             var inicioMes = new DateOnly(anio, mes, 1);
             var finMes = new DateOnly(anio, mes, DateTime.DaysInMonth(anio, mes));
-
-            var tiposPermitidos = new List<string> { "vacaciones", "permiso", "incapacidad", "licencia" };
-            var filtroTipo = (tipoAusencia ?? "").Trim().ToLower();
+            var filtroTipo = NormalizarTexto(tipoAusencia);
 
             var solicitudesBase = _context.Solicituds
                 .Include(s => s.IdUsuarioNavigation)
@@ -825,11 +823,9 @@ namespace Oclock.Controllers
                 .ToList()
                 .Where(s =>
                 {
-                    var tipo = (s.IdTipoSolicitudNavigation.NombreSolicitud ?? "").Trim().ToLower();
-                    if (!tiposPermitidos.Contains(tipo))
-                        return false;
+                    var nombreTipo = s.IdTipoSolicitudNavigation?.NombreSolicitud ?? "";
 
-                    if (!string.IsNullOrWhiteSpace(filtroTipo) && filtroTipo != "todos" && tipo != filtroTipo)
+                    if (!EsTipoAusenciaPermitido(nombreTipo, filtroTipo))
                         return false;
 
                     var fechaInicio = s.FechaInicio ?? s.FechaSolicitud;
@@ -851,8 +847,8 @@ namespace Oclock.Controllers
                 return new
                 {
                     IdSolicitud = s.IdSolicitud,
-                    Colaborador = (s.IdUsuarioNavigation.Nombre ?? "") + " " + (s.IdUsuarioNavigation.Apellido ?? ""),
-                    TipoAusencia = s.IdTipoSolicitudNavigation.NombreSolicitud,
+                    Colaborador = (s.IdUsuarioNavigation?.Nombre ?? "") + " " + (s.IdUsuarioNavigation?.Apellido ?? ""),
+                    TipoAusencia = ObtenerEtiquetaTipoAusencia(s.IdTipoSolicitudNavigation?.NombreSolicitud),
                     FechaInicio = FormatearFecha(fechaInicio),
                     FechaFin = FormatearFecha(fechaFin),
                     DiasEnMes = diasDentroDelMes,
@@ -889,9 +885,7 @@ namespace Oclock.Controllers
 
             var inicioMes = new DateOnly(anio, mes, 1);
             var finMes = new DateOnly(anio, mes, DateTime.DaysInMonth(anio, mes));
-
-            var tiposPermitidos = new List<string> { "vacaciones", "permiso", "incapacidad", "licencia" };
-            var filtroTipo = (tipoAusencia ?? "").Trim().ToLower();
+            var filtroTipo = NormalizarTexto(tipoAusencia);
 
             var solicitudes = _context.Solicituds
                 .Include(s => s.IdUsuarioNavigation)
@@ -899,11 +893,9 @@ namespace Oclock.Controllers
                 .ToList()
                 .Where(s =>
                 {
-                    var tipo = (s.IdTipoSolicitudNavigation.NombreSolicitud ?? "").Trim().ToLower();
-                    if (!tiposPermitidos.Contains(tipo))
-                        return false;
+                    var nombreTipo = s.IdTipoSolicitudNavigation?.NombreSolicitud ?? "";
 
-                    if (!string.IsNullOrWhiteSpace(filtroTipo) && filtroTipo != "todos" && tipo != filtroTipo)
+                    if (!EsTipoAusenciaPermitido(nombreTipo, filtroTipo))
                         return false;
 
                     var fechaInicio = s.FechaInicio ?? s.FechaSolicitud;
@@ -924,8 +916,8 @@ namespace Oclock.Controllers
 
                 return new List<string>
                 {
-                    (s.IdUsuarioNavigation.Nombre ?? "") + " " + (s.IdUsuarioNavigation.Apellido ?? ""),
-                    s.IdTipoSolicitudNavigation.NombreSolicitud,
+                    (s.IdUsuarioNavigation?.Nombre ?? "") + " " + (s.IdUsuarioNavigation?.Apellido ?? ""),
+                    ObtenerEtiquetaTipoAusencia(s.IdTipoSolicitudNavigation?.NombreSolicitud),
                     FormatearFecha(fechaInicio),
                     FormatearFecha(fechaFin),
                     diasDentroDelMes.ToString(),
@@ -936,7 +928,7 @@ namespace Oclock.Controllers
             var resumen = new Dictionary<string, string>
             {
                 { "Mes", ObtenerNombreMes(anio, mes) },
-                { "Tipo", string.IsNullOrWhiteSpace(tipoAusencia) ? "Todos" : tipoAusencia! },
+                { "Tipo", string.IsNullOrWhiteSpace(tipoAusencia) || NormalizarTexto(tipoAusencia) == "todos" ? "Todos" : tipoAusencia! },
                 { "Total solicitudes", solicitudes.Count.ToString() },
                 { "Empleados impactados", filas.Select(f => f[0]).Distinct().Count().ToString() },
                 { "Total días", filas.Sum(f => int.Parse(f[4])).ToString() },
@@ -974,9 +966,7 @@ namespace Oclock.Controllers
 
             var inicioMes = new DateOnly(anio, mes, 1);
             var finMes = new DateOnly(anio, mes, DateTime.DaysInMonth(anio, mes));
-
-            var tiposPermitidos = new List<string> { "vacaciones", "permiso", "incapacidad", "licencia" };
-            var filtroTipo = (tipoAusencia ?? "").Trim().ToLower();
+            var filtroTipo = NormalizarTexto(tipoAusencia);
 
             var solicitudes = _context.Solicituds
                 .Include(s => s.IdUsuarioNavigation)
@@ -984,11 +974,9 @@ namespace Oclock.Controllers
                 .ToList()
                 .Where(s =>
                 {
-                    var tipo = (s.IdTipoSolicitudNavigation.NombreSolicitud ?? "").Trim().ToLower();
-                    if (!tiposPermitidos.Contains(tipo))
-                        return false;
+                    var nombreTipo = s.IdTipoSolicitudNavigation?.NombreSolicitud ?? "";
 
-                    if (!string.IsNullOrWhiteSpace(filtroTipo) && filtroTipo != "todos" && tipo != filtroTipo)
+                    if (!EsTipoAusenciaPermitido(nombreTipo, filtroTipo))
                         return false;
 
                     var fechaInicio = s.FechaInicio ?? s.FechaSolicitud;
@@ -1009,8 +997,8 @@ namespace Oclock.Controllers
 
                 return new List<string>
                 {
-                    (s.IdUsuarioNavigation.Nombre ?? "") + " " + (s.IdUsuarioNavigation.Apellido ?? ""),
-                    s.IdTipoSolicitudNavigation.NombreSolicitud,
+                    (s.IdUsuarioNavigation?.Nombre ?? "") + " " + (s.IdUsuarioNavigation?.Apellido ?? ""),
+                    ObtenerEtiquetaTipoAusencia(s.IdTipoSolicitudNavigation?.NombreSolicitud),
                     FormatearFecha(fechaInicio),
                     FormatearFecha(fechaFin),
                     diasDentroDelMes.ToString(),
@@ -1022,7 +1010,7 @@ namespace Oclock.Controllers
             var resumen = new Dictionary<string, string>
             {
                 { "Mes", ObtenerNombreMes(anio, mes) },
-                { "Tipo", string.IsNullOrWhiteSpace(tipoAusencia) ? "Todos" : tipoAusencia! },
+                { "Tipo", string.IsNullOrWhiteSpace(tipoAusencia) || NormalizarTexto(tipoAusencia) == "todos" ? "Todos" : tipoAusencia! },
                 { "Total solicitudes", solicitudes.Count.ToString() },
                 { "Empleados impactados", filas.Select(f => f[0]).Distinct().Count().ToString() },
                 { "Total días", filas.Sum(f => int.Parse(f[4])).ToString() },
@@ -1285,6 +1273,72 @@ namespace Oclock.Controllers
             var cultura = new CultureInfo("es-CR");
             var nombre = new DateTime(anio, mes, 1).ToString("MMMM yyyy", cultura);
             return cultura.TextInfo.ToTitleCase(nombre);
+        }
+
+        private static string NormalizarTexto(string? texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto))
+                return "";
+
+            var normalizado = texto.Trim().ToLowerInvariant().Normalize(NormalizationForm.FormD);
+            var sb = new StringBuilder();
+
+            foreach (var c in normalizado)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                    sb.Append(c);
+            }
+
+            return sb.ToString().Normalize(NormalizationForm.FormC);
+        }
+
+        private static bool EsTipoAusenciaPermitido(string? nombreTipo, string? filtroTipo)
+        {
+            var tipo = NormalizarTexto(nombreTipo);
+            var filtro = NormalizarTexto(filtroTipo);
+
+            var categoriaDetectada = ObtenerCategoriaAusencia(tipo);
+
+            if (string.IsNullOrWhiteSpace(categoriaDetectada))
+                return false;
+
+            if (string.IsNullOrWhiteSpace(filtro) || filtro == "todos")
+                return true;
+
+            return categoriaDetectada == filtro;
+        }
+
+        private static string ObtenerEtiquetaTipoAusencia(string? nombreTipo)
+        {
+            var categoria = ObtenerCategoriaAusencia(NormalizarTexto(nombreTipo));
+
+            if (categoria == "vacaciones") return "Vacaciones";
+            if (categoria == "permiso") return "Permiso";
+            if (categoria == "incapacidad") return "Incapacidad";
+            if (categoria == "licencia") return "Licencia";
+
+            return nombreTipo ?? "—";
+        }
+
+        private static string ObtenerCategoriaAusencia(string? tipoNormalizado)
+        {
+            if (string.IsNullOrWhiteSpace(tipoNormalizado))
+                return "";
+
+            if (tipoNormalizado.Contains("vacacion"))
+                return "vacaciones";
+
+            if (tipoNormalizado.Contains("permiso"))
+                return "permiso";
+
+            if (tipoNormalizado.Contains("incapacidad"))
+                return "incapacidad";
+
+            if (tipoNormalizado.Contains("licencia"))
+                return "licencia";
+
+            return "";
         }
 
         private byte[] GenerarExcelGenerico(string titulo, Dictionary<string, string> resumen, List<string> columnas, List<List<string>> filas)
