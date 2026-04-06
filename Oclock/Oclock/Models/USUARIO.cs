@@ -25,7 +25,7 @@ public partial class Usuario
 
     public int IdRol { get; set; }
 
-    public virtual ICollection<Bono> Bonos { get; set; } = new List<Bono>();
+    public virtual ICollection<BonoAsignado> BonosAsignados { get; set; } = new List<BonoAsignado>();
 
     public virtual ICollection<Capacitacion> Capacitacions { get; set; } = new List<Capacitacion>();
 

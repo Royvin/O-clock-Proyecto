@@ -1,6 +1,5 @@
-﻿@model List<Oclock.Models.Usuario>
-@{
-    ViewData["Title"] = "Gestión de Usuarios";
+﻿@{
+    ViewData["Title"] = "Asignar Bono";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,7 +10,6 @@
         box-sizing: border-box;
     }
 
-    /* Sidebar + Content Layout */
     .main-layout {
         display: flex;
         min-height: 600px;
@@ -190,15 +188,14 @@
                 height: 8px;
             }
 
-    /* Main Content - MEJORADO */
     .content {
         flex: 1;
         padding: 40px;
-        background: #f5f7fa;
+        background: #F6F8FB;
     }
 
     .content-header {
-        margin-bottom: 15px;
+        margin-bottom: 30px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -215,7 +212,6 @@
             font-size: 14px;
         }
 
-    /* Stats Cards */
     .stats-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -260,7 +256,6 @@
         font-weight: 600;
     }
 
-    /* Filter Section */
     .filter-section {
         background: white;
         padding: 30px;
@@ -309,8 +304,8 @@
             .form-group select:focus,
             .form-group input:focus {
                 outline: none;
-                border-color: #667eea;
-                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                border-color: #2F6FED;
+                box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.12);
             }
 
     /* Tabs */
@@ -343,11 +338,10 @@
         }
 
         .tab.active {
-            background: #667eea;
+            background: #2F6FED;
             color: white;
         }
 
-    /* Buttons */
     .btn {
         padding: 12px 28px;
         border: none;
@@ -362,13 +356,14 @@
     }
 
     .btn-primary {
-        background: #667eea;
+        background: #2F6FED;
         color: white;
     }
 
         .btn-primary:hover {
+            background: #2457C8;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(47, 111, 237, 0.25);
         }
 
     .btn-secondary {
@@ -381,121 +376,37 @@
         }
 
     .btn-success {
-        background: #48bb78;
+        background: #2E9B63;
         color: white;
         padding: 8px 16px;
         font-size: 13px;
     }
 
         .btn-success:hover {
-            background: #38a169;
+            background: #23784D;
         }
 
     .btn-danger {
-        background: #e53e3e;
+        background: #D64545;
         color: white;
         padding: 8px 16px;
         font-size: 13px;
     }
 
         .btn-danger:hover {
-            background: #c53030;
+            background: #B63838;
         }
 
     .btn-info {
-        background: #667eea;
+        background: #2457C8;
         color: white;
         padding: 6px 14px;
         font-size: 13px;
     }
 
         .btn-info:hover {
-            background: #5a67d8;
+            background: #1E49A8;
         }
-
-    /* Request Cards */
-    .requests-section {
-        background: white;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        margin-bottom: 25px;
-    }
-
-    .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 25px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #f0f0f0;
-    }
-
-        .section-header h2 {
-            color: #2d3748;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-    .request-card {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        padding: 20px;
-        background: #f8f9fa;
-        border-radius: 12px;
-        margin-bottom: 15px;
-        border-left: 4px solid #667eea;
-        transition: all 0.3s;
-    }
-
-        .request-card:hover {
-            background: #e8edf3;
-            transform: translateX(5px);
-        }
-
-    .request-icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        flex-shrink: 0;
-    }
-
-    .request-info {
-        flex: 1;
-    }
-
-    .request-title {
-        color: #2d3748;
-        font-weight: 700;
-        margin-bottom: 6px;
-        font-size: 16px;
-    }
-
-    .request-details {
-        color: #718096;
-        font-size: 13px;
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-    }
-
-    .request-detail-item {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-    }
-
-    .request-actions {
-        display: flex;
-        gap: 10px;
-    }
 
     /* Table */
     .table-container {
@@ -537,7 +448,26 @@
             border-bottom: none;
         }
 
-    /* Badges */
+    .rules-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .rules-table th,
+        .rules-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .rules-table thead tr {
+            background-color: #f5f5f5;
+        }
+
+        .rules-table tbody tr:hover {
+            background-color: #fafafa;
+        }
+
     .badge {
         display: inline-block;
         padding: 6px 14px;
@@ -566,7 +496,6 @@
         color: #2c5282;
     }
 
-    /* Empty State */
     .empty-state {
         text-align: center;
         padding: 60px 20px;
@@ -589,7 +518,6 @@
         font-size: 14px;
     }
 
-    /* Modal */
     .modal {
         display: none;
         position: fixed;
@@ -688,100 +616,11 @@
         gap: 15px;
         flex-wrap: wrap;
     }
-    /* Reemplaza los estilos de empleado */
-    .empleado-card {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 16px;
-        background: #f8f9fa;
-        border-radius: 10px;
-        margin-bottom: 8px;
-        border-left: 3px solid #667eea;
-        transition: all 0.3s;
-        text-decoration: none;
-        color: inherit;
-    }
-
-        .empleado-card:hover {
-            background: #e8edf3;
-            transform: translateX(4px);
-            text-decoration: none;
-            color: inherit;
-        }
-
-    .empleado-avatar {
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        background: #667eea;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: bold;
-        font-size: 13px;
-        flex-shrink: 0;
-    }
-
-    .empleado-info {
-        flex: 1;
-    }
-
-    .empleado-name {
-        font-weight: 600;
-        color: #2d3748;
-        font-size: 14px;
-    }
-
-    .empleado-meta {
-        color: #718096;
-        font-size: 12px;
-        margin-top: 2px;
-    }
-
-    /* Paginación */
-    .paginacion {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 6px;
-        margin-top: 20px;
-        flex-wrap: wrap;
-    }
-
-    .pag-btn {
-        padding: 8px 14px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-size: 13px;
-        font-weight: 600;
-        color: #4a5568;
-        background: white;
-        border: 2px solid #e2e8f0;
-        transition: all 0.3s;
-    }
-
-        .pag-btn:hover {
-            border-color: #667eea;
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .pag-btn.activo {
-            background: #667eea;
-            color: white;
-            border-color: transparent;
-        }
-
-        .pag-btn.deshabilitado {
-            opacity: 0.4;
-            pointer-events: none;
-        }
 </style>
 
+
+
 <div class="main-layout">
-    <!-- Sidebar -->
     <div class="sidebar">
         <div class="menu-item">
             <a href="/Home/AdminHome" class="menu-link">
@@ -821,20 +660,20 @@
                         🎁 Bonos
                     </a>
                 </div>
-                
+
             </div>
         </div>
 
 
         <div class="menu-item">
-            <a href="/Bono/AsignarBono" class="menu-link">
+            <a href="/Bono/AsignarBono" class="menu-link active">
                 <div class="icon">💵 </div>
                 Bonos
             </a>
         </div>
 
         <div class="menu-item">
-            <a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link active">
+            <a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link">
                 <div class="icon">📝</div>
                 Gestion de Empleados
             </a>
@@ -860,92 +699,215 @@
     <div class="content">
         <div class="content-header">
             <div>
-                <h1>👥 Gestión de Usuarios</h1>
-                <p>Selecciona un empleado para ver y editar su expediente completo</p>
+                <h1>Asignar Bono</h1>
+                <p>Seleccione un empleado y periodo para ver los bonos que aplica</p>
             </div>
         </div>
 
-        @if (TempData["Mensaje"] != null)
-        {
-            <div style="background:#c6f6d5;color:#22543d;padding:15px;border-radius:10px;margin-bottom:20px;">
-                ✅ @TempData["Mensaje"]
-            </div>
-        }
-
-        <div class="requests-section">
-            <div class="section-header">
-                <h2>📋 Empleados</h2>
-                <span class="badge badge-info">Página @ViewBag.PaginaActual de @ViewBag.TotalPaginas</span>
-            </div>
-
-            @foreach (var u in Model)
-            {
-                <a href="/AdminGestionUsuarios/Expediente/@u.IdUsuario" class="empleado-card">
-                    <div class="empleado-avatar">
-                        @u.Nombre.Substring(0, 1)@u.Apellido.Substring(0, 1)
-                    </div>
-                    <div class="empleado-info">
-                        <div class="empleado-name">@u.Nombre @u.Apellido</div>
-                        <div class="empleado-meta">
-                            📧 @u.Email &nbsp;|&nbsp;
-                            🎭 @u.IdRolNavigation?.NombreRol &nbsp;|&nbsp;
-                            @if (u.Activo == true)
-                            {
-                                <span style="color:#38a169;">● Activo</span>
-                            }
-                            else
-                            {
-                                <span style="color:#e53e3e;">● Inactivo</span>
-                            }
-                        </div>
-                    </div>
-                    <span class="badge badge-info">Ver →</span>
-                </a>
-            }
-
-            @if (!Model.Any())
-            {
-                <div class="empty-state">
-                    <div class="empty-state-icon">👤</div>
-                    <h3>No hay usuarios registrados</h3>
-                </div>
-            }
-
-            <!-- Paginación -->
-            @if (ViewBag.TotalPaginas > 1)
-            {
-                <div class="paginacion">
-                    @if (ViewBag.PaginaActual > 1)
-                    {
-                        <a href="/AdminGestionUsuarios/GestionUsuarios?pagina=@(ViewBag.PaginaActual - 1)" class="pag-btn">← Anterior</a>
-                    }
-                    else
-                    {
-                        <span class="pag-btn deshabilitado">← Anterior</span>
-                    }
-
-                    @for (int i = 1; i <= ViewBag.TotalPaginas; i++)
-                    {
-                        if (i == ViewBag.PaginaActual)
+        <!-- FILTROS -->
+        <div class="filter-section">
+            <h2>🔍 Buscar Empleado</h2>
+            <div class="filter-grid">
+                <div class="form-group">
+                    <label>Empleado</label>
+                    <select id="selectEmpleado" class="form-control" onchange="buscarBonos()">
+                        <option value="">-- Seleccione --</option>
+                        @foreach (var emp in ViewBag.Empleados)
                         {
-                            <span class="pag-btn activo">@i</span>
+                            <option value="@emp.IdUsuario">@emp.Nombre</option>
                         }
-                        else
-                        {
-                            <a href="/AdminGestionUsuarios/GestionUsuarios?pagina=@i" class="pag-btn">@i</a>
-                        }
-                    }
-
-                    @if (ViewBag.PaginaActual < ViewBag.TotalPaginas)
-                    {
-                        <a href="/AdminGestionUsuarios/GestionUsuarios?pagina=@(ViewBag.PaginaActual + 1)" class="pag-btn">Siguiente →</a>
-                    }
-                    else
-                    {
-                        <span class="pag-btn deshabilitado">Siguiente →</span>
-                    }
+                    </select>
                 </div>
-            }
+                <div class="form-group">
+                    <label>Periodo</label>
+                    <input type="month" id="selectPeriodo" class="form-control" onchange="buscarBonos()" />
+                </div>
+            </div>
+        </div>
+
+        <!-- MÉTRICAS -->
+        <div id="seccionMetricas" style="display:none">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header"><div class="stat-icon">🏅</div></div>
+                    <div class="stat-value" id="metricaPuntualidad">-</div>
+                    <div class="stat-label">Puntualidad</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header"><div class="stat-icon">📅</div></div>
+                    <div class="stat-value" id="metricaDias">-</div>
+                    <div class="stat-label">Días Trabajados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header"><div class="stat-icon">⏱️</div></div>
+                    <div class="stat-value" id="metricaHoras">-</div>
+                    <div class="stat-label">Horas Trabajadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header"><div class="stat-icon">⚠️</div></div>
+                    <div class="stat-value" id="metricaTardanzas">-</div>
+                    <div class="stat-label">Tardanzas</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BONOS APLICABLES -->
+        <div id="seccionBonos" style="display:none">
+            <div class="rules-card">
+                <h2>🎁 Bonos Disponibles para este Empleado</h2>
+                <table class="rules-table">
+                    <thead>
+                        <tr>
+                            <th>Bono</th>
+                            <th>Tipo</th>
+                            <th>Monto</th>
+                            <th>Condición</th>
+                            <th>Tu valor</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaBonos"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SIN BONOS -->
+        <div id="seccionSinBonos" style="display:none">
+            <div class="rules-card">
+                <p style="text-align:center; padding:20px;">
+                    ⚠️ Este empleado no aplica para ningún bono en este periodo.
+                </p>
+            </div>
+        </div>
+
+        <!-- HISTORIAL -->
+        <div class="rules-card" style="margin-top:20px">
+            <h2>📋 Bonos Asignados Recientemente</h2>
+            <table class="rules-table">
+                <thead>
+                    <tr>
+                        <th>Empleado</th>
+                        <th>Bono</th>
+                        <th>Periodo</th>
+                        <th>Monto</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaHistorial"></tbody>
+            </table>
         </div>
     </div>
 </div>
+
+<script>
+    function toggleSubmenu(element) {
+        const submenu = element.querySelector('.submenu');
+        const header = element.querySelector('.menu-expandable-header');
+        element.classList.toggle('expanded');
+        submenu.classList.toggle('show');
+        if (element.classList.contains('expanded')) {
+            header.classList.add('active');
+        } else {
+            header.classList.remove('active');
+        }
+    }
+
+    function buscarBonos() {
+        const idUsuario = document.getElementById("selectEmpleado").value;
+        const periodo = document.getElementById("selectPeriodo").value;
+
+        if (!idUsuario || !periodo) return;
+
+        fetch(`/Bono/ObtenerBonosAplicables?idUsuario=${idUsuario}&periodo=${periodo}`)
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success) {
+                    document.getElementById("seccionMetricas").style.display = "none";
+                    document.getElementById("seccionBonos").style.display = "none";
+                    document.getElementById("seccionSinBonos").style.display = "block";
+                    return;
+                }
+
+                // Mostrar métricas
+                document.getElementById("seccionMetricas").style.display = "block";
+                document.getElementById("metricaPuntualidad").textContent = data.puntualidad + "%";
+                document.getElementById("metricaDias").textContent = data.diasTrabajados;
+                document.getElementById("metricaHoras").textContent = data.horasTotales + " hrs";
+                document.getElementById("metricaTardanzas").textContent = data.tardanzas;
+
+                // Mostrar bonos aplicables
+                if (data.bonosAplicables.length === 0) {
+                    document.getElementById("seccionBonos").style.display = "none";
+                    document.getElementById("seccionSinBonos").style.display = "block";
+                    return;
+                }
+
+                document.getElementById("seccionSinBonos").style.display = "none";
+                document.getElementById("seccionBonos").style.display = "block";
+
+                const tbody = document.getElementById("tablaBonos");
+                tbody.innerHTML = data.bonosAplicables.map(b => `
+                    <tr>
+                        <td>${b.nombreBono}</td>
+                        <td>${b.tipo}</td>
+                        <td>$${b.monto}</td>
+                        <td>≥ ${b.condicionMinima}</td>
+                        <td>${b.valorActual}</td>
+                        <td>
+                            <button class="btn btn-primary"
+                                onclick="asignarBono(${b.idBono}, '${b.nombreBono}')">
+                                ✅ Asignar
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            });
+    }
+
+    function asignarBono(idBono, nombreBono) {
+        const idUsuario = document.getElementById("selectEmpleado").value;
+        const periodo = document.getElementById("selectPeriodo").value;
+
+        if (!confirm(`¿Asignar "${nombreBono}" a este empleado para el periodo ${periodo}?`))
+            return;
+
+        fetch('/Bono/AsignarBono', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ idUsuario: parseInt(idUsuario), idBono, periodo })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert('✅ Bono asignado correctamente.');
+                buscarBonos();
+                cargarHistorial();
+            } else {
+                alert('⚠️ ' + data.message);
+            }
+        });
+    }
+
+    function cargarHistorial() {
+        fetch('/Bono/ObtenerHistorial')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById("tablaHistorial");
+                if (!data.length) {
+                    tbody.innerHTML = '<tr><td colspan="5">No hay bonos asignados aún</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = data.map(b => `
+                    <tr>
+                        <td>${b.empleado}</td>
+                        <td>${b.bono}</td>
+                        <td>${b.periodo}</td>
+                        <td>$${b.monto}</td>
+                        <td>${b.fecha}</td>
+                    </tr>
+                `).join('');
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', cargarHistorial);
+</script>

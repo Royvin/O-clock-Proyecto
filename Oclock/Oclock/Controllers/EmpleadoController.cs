@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Oclock.Filters;
+using Microsoft.EntityFrameworkCore;
 using Oclock.Data;
+using Oclock.Filters;
+using Oclock.Helpers;
 using Oclock.Models;
 using System;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace Oclock.Controllers
 {
@@ -199,21 +201,15 @@ namespace Oclock.Controllers
             int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
 
             if (idUsuario == null)
-            {
                 return Json(new { success = false, message = "Sesión no válida." });
-            }
 
             if (model.FechaFin < model.FechaInicio)
-            {
                 return Json(new { success = false, message = "El rango de fechas es inválido." });
-            }
 
             if (model.FechaInicio.Date < DateTime.Today)
-            {
                 return Json(new { success = false, message = "No puede registrar fechas pasadas." });
-            }
 
-            // 1️⃣ Crear solicitud primero (sin archivo aún)
+            // 1. Crear solicitud primero (sin archivo aún)
             var nuevaSolicitud = new Solicitud
             {
                 IdUsuario = idUsuario.Value,
@@ -227,45 +223,67 @@ namespace Oclock.Controllers
             };
 
             _context.Solicituds.Add(nuevaSolicitud);
-            await _context.SaveChangesAsync(); // Necesario para obtener IdSolicitud
+            await _context.SaveChangesAsync();
 
             int idSolicitud = nuevaSolicitud.IdSolicitud;
 
-            // 2️⃣ Si viene archivo
+            // 2. Si viene archivo
             if (model.Archivo != null && model.Archivo.Length > 0)
             {
                 string carpetaBase = Path.Combine(
                     Directory.GetCurrentDirectory(),
                     "wwwroot/uploads/solicitudes",
-                    idSolicitud.ToString()
-                );
+                    idSolicitud.ToString());
 
                 if (!Directory.Exists(carpetaBase))
-                {
                     Directory.CreateDirectory(carpetaBase);
-                }
 
                 string nombreUnico = Guid.NewGuid().ToString() +
                                      Path.GetExtension(model.Archivo.FileName);
-
                 string rutaCompleta = Path.Combine(carpetaBase, nombreUnico);
 
                 using (var stream = new FileStream(rutaCompleta, FileMode.Create))
-                {
                     await model.Archivo.CopyToAsync(stream);
-                }
 
-                // 3️⃣ Guardar ruta en la misma solicitud
-                nuevaSolicitud.RutaArchivo =
-                    $"/uploads/solicitudes/{idSolicitud}/{nombreUnico}";
-
+                nuevaSolicitud.RutaArchivo = $"/uploads/solicitudes/{idSolicitud}/{nombreUnico}";
                 nuevaSolicitud.NombreArchivo = model.Archivo.FileName;
 
                 await _context.SaveChangesAsync();
             }
 
+            // ★ 3. Notificar a todos los administradores (rol = 1)
+            var admins = _context.Usuarios
+                .Where(u => u.IdRol == 1 && u.Activo == true)
+                .Select(u => u.IdUsuario)
+                .ToList();
+
+            // Obtener nombre del empleado que hizo la solicitud
+            var empleado = _context.Usuarios
+                .FirstOrDefault(u => u.IdUsuario == idUsuario.Value);
+
+            string nombreEmpleado = empleado != null
+                ? $"{empleado.Nombre} {empleado.Apellido}"
+                : $"Empleado #{idUsuario.Value}";
+
+            // Obtener nombre del tipo de solicitud
+            var tipoSolicitud = _context.TipoSolicituds
+                .FirstOrDefault(t => t.IdTipoSolicitud == model.IdTipoSolicitud);
+
+            string nombreTipo = tipoSolicitud?.NombreSolicitud ?? "N/A";
+
+            foreach (var adminId in admins)
+            {
+                NotificacionHelper.NotificarNuevaSolicitud(
+                    _context,
+                    adminId,
+                    nombreEmpleado,
+                    nombreTipo);
+            }
+
             return Json(new { success = true, message = "Solicitud registrada correctamente." });
         }
+
+
 
         [HttpGet]
         public IActionResult SolicitudesEmpleado()
@@ -448,8 +466,44 @@ namespace Oclock.Controllers
             return Json(new { success = true });
         }
 
+        public IActionResult HistorialBonos()
+        {
+            int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
 
-      
+            if (idUsuario == null)
+                return RedirectToAction("Index", "Usuario");
+
+            return View();
+        }
+
+        // ── Endpoint JSON que alimenta la vista ──────────────────────────────────────
+        [HttpGet]
+        public IActionResult ObtenerHistorialBonos()
+        {
+            int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
+
+            if (idUsuario == null)
+                return Json(new { success = false, message = "Sesión no válida." });
+
+            var bonos = _context.BonosAsignados
+                .Include(ba => ba.IdBonoNavigation)
+                .Where(ba => ba.IdUsuario == idUsuario.Value)
+                .OrderByDescending(ba => ba.Periodo)
+                .ThenByDescending(ba => ba.FechaAsignado)
+                .Select(ba => new
+                {
+                    nombreBono = ba.IdBonoNavigation.NombreBono,
+                    monto = ba.IdBonoNavigation.Monto,
+                    periodo = ba.Periodo,
+                    fechaAsignado = ba.FechaAsignado.ToString()
+                })
+                .ToList();
+
+            return Json(new { success = true, bonos });
+        }
+
+
+
 
 
 

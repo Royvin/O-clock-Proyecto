@@ -1,8 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Oclock.Data;
 using Oclock.Services;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 builder.Services.AddControllersWithViews();
 

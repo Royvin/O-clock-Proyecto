@@ -1,0 +1,775 @@
+﻿@model Oclock.Models.BonoViewModel
+@{
+    ViewData["Title"] = "Gestión de Bonos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .main-layout {
+        display: flex;
+        min-height: 600px;
+    }
+
+    .sidebar {
+        width: 280px;
+        background: #ffffff;
+        padding: 30px 20px;
+        border-right: 1px solid #e0e0e0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+    }
+
+    .menu-item {
+        padding: 0;
+        margin: 4px 0;
+        border-radius: 10px;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+    .menu-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 20px;
+        color: #4a5568;
+        text-decoration: none;
+        font-weight: 500;
+        border-radius: 10px;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+        .menu-link:hover {
+            background: #2F6FED;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .menu-link.active {
+            background: #2457C8;
+            color: white;
+            box-shadow: 0 4px 12px rgba(36, 87, 200, 0.25);
+        }
+
+            .menu-link.active::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 4px;
+                height: 24px;
+                background: white;
+                border-radius: 0 4px 4px 0;
+            }
+
+    .icon {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .menu-expandable {
+        cursor: pointer;
+    }
+
+    .menu-expandable-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 20px;
+        color: #4a5568;
+        font-weight: 500;
+        border-radius: 10px;
+        transition: all 0.3s;
+    }
+
+        .menu-expandable-header:hover {
+            background: #f3f6ff;
+            color: #2F6FED;
+        }
+
+        .menu-expandable-header.active {
+            background: #eef4ff;
+            color: #2F6FED;
+            font-weight: 600;
+        }
+
+    .menu-expandable-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .menu-arrow {
+        font-size: 12px;
+        transition: transform 0.3s;
+    }
+
+    .menu-expandable.expanded .menu-arrow {
+        transform: rotate(90deg);
+    }
+
+    .submenu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+        margin-left: 20px;
+        margin-top: 4px;
+    }
+
+        .submenu.show {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+    .submenu-item {
+        margin: 4px 0;
+    }
+
+    .submenu-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        padding-left: 40px;
+        color: #718096;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+        .submenu-link::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: #cbd5e0;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .submenu-link:hover {
+            background: #f7fafc;
+            color: #2F6FED;
+            transform: translateX(3px);
+        }
+
+            .submenu-link:hover::before {
+                background: #2F6FED;
+                transform: translateY(-50%) scale(1.3);
+            }
+
+        .submenu-link.active {
+            background: #eef4ff;
+            color: #2F6FED;
+            font-weight: 600;
+        }
+
+            .submenu-link.active::before {
+                background: #2F6FED;
+                width: 8px;
+                height: 8px;
+            }
+
+    .content {
+        flex: 1;
+        padding: 40px;
+        background: #F6F8FB;
+    }
+
+    .content-header {
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .content-header h1 {
+            color: #2d3748;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .content-header p {
+            color: #718096;
+            font-size: 14px;
+        }
+
+    .form-card {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        margin-bottom: 30px;
+    }
+
+        .form-card h2 {
+            color: #2d3748;
+            margin-bottom: 25px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+        .form-group label {
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+            background: white;
+        }
+
+            .form-group input:focus,
+            .form-group select:focus {
+                outline: none;
+                border-color: #2F6FED;
+                box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.12);
+            }
+
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-primary {
+        background: #2F6FED;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background: #2457C8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(47, 111, 237, 0.25);
+        }
+
+    .btn-secondary {
+        background: #e2e8f0;
+        color: #4a5568;
+    }
+
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+
+    .alert {
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-top: 15px;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+    }
+
+        .alert.show {
+            display: flex;
+        }
+
+    .alert-error {
+        background: #fed7d7;
+        color: #c53030;
+        border-left: 4px solid #c53030;
+    }
+
+    .alert-success {
+        background: #c6f6d5;
+        color: #22543d;
+        border-left: 4px solid #22543d;
+    }
+
+    .rules-card {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+        .rules-card h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+    .rules-count {
+        font-size: 14px;
+        color: #718096;
+        font-weight: normal;
+    }
+
+    .rules-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .rules-table thead {
+            background: #f7fafc;
+        }
+
+        .rules-table th {
+            padding: 15px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rules-table td {
+            padding: 18px 15px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #2d3748;
+        }
+
+        .rules-table tr:hover {
+            background: #f7fafc;
+        }
+
+    .rule-name {
+        font-weight: 600;
+        color: #2F6FED;
+    }
+
+    .rule-range {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+    }
+
+    .rule-amount {
+        font-weight: 700;
+        color: #2E9B63;
+        font-size: 16px;
+    }
+
+    .rule-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-icon {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 16px;
+        background: #e2e8f0;
+    }
+
+        .btn-icon:hover {
+            transform: scale(1.1);
+        }
+
+    .btn-edit {
+        background: #bee3f8;
+        color: #2c5282;
+    }
+
+        .btn-edit:hover {
+            background: #90cdf4;
+        }
+
+    .btn-delete {
+        background: #fed7d7;
+        color: #c53030;
+    }
+
+        .btn-delete:hover {
+            background: #fc8181;
+        }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #718096;
+    }
+
+    .empty-state-icon {
+        font-size: 64px;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+
+    .empty-state h3 {
+        color: #4a5568;
+        margin-bottom: 10px;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .modal.show {
+            display: flex;
+        }
+
+    .modal-content {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+        .modal-header h3 {
+            color: #2d3748;
+            font-size: 22px;
+        }
+
+    .btn-close {
+        background: none;
+        border: none;
+        font-size: 28px;
+        cursor: pointer;
+        color: #718096;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s;
+    }
+
+        .btn-close:hover {
+            background: #e2e8f0;
+            color: #2d3748;
+        }
+</style>
+
+<div class="main-layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="menu-item">
+            <a href="/Home/AdminHome" class="menu-link"><div class="icon">📊</div>Dashboard</a>
+        </div>
+        <div class="menu-item">
+            <a href="/Admin/VerMarcas" class="menu-link"><div class="icon">⏰</div>Marcas de Asistencia</a>
+        </div>
+        <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
+            <div class="menu-expandable-header active">
+                <div class="menu-expandable-left"><div class="icon">⚙️</div><span>Configuración y Políticas</span></div>
+                <div class="menu-arrow">▶</div>
+            </div>
+            <div class="submenu show">
+                <div class="submenu-item"><a href="/Horarios/HorariosConfig" class="submenu-link">⏰ Horarios</a></div>
+                <div class="submenu-item"><a href="/Feriados/FeriadosConfig" class="submenu-link">📅 Feriados</a></div>
+                <div class="submenu-item"><a href="/Bono/GestionBonos" class="submenu-link active">🎁 Bonos</a></div>
+               </div>
+        </div>
+        <div class="menu-item"><a href="/Bono/AsignarBono" class="menu-link"><div class="icon">💵</div>Bonos</a></div>
+        <div class="menu-item"><a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link"><div class="icon">📝</div>Gestion de Empleados</a></div>
+        <div class="menu-item"><a href="/Admin/RankingPuntualidad" class="menu-link"><div class="icon">⏱️</div>Indicadores de Puntualidad</a></div>
+        <div class="menu-item"><a href="/Admin/Reportes" class="menu-link"><div class="icon">📄</div>Reportes</a></div>
+    </div>
+
+    <div class="content">
+        <div class="content-header">
+            <div>
+                <h1>Gestión de Bonos</h1>
+                <p>Cree y administre los bonos disponibles para los empleados</p>
+            </div>
+        </div>
+
+        <form asp-action="CrearBono" method="post">
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Nombre del Bono</label>
+                    <input type="text" asp-for="NuevoBono.NombreBono" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de Bono</label>
+                    <select asp-for="NuevoBono.IdTipoBono" class="form-control" id="selectTipoBono" onchange="actualizarCondicion()">
+                        <option value="">-- Seleccione --</option>
+                        @foreach (var tipo in Model.TiposBono)
+                        {
+                            <option value="@tipo.IdTipoBono" data-metrica="@tipo.MetricaTipo">
+                                @tipo.NombreTipo
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Monto</label>
+                    <input type="number" asp-for="NuevoBono.Monto" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <input type="text" asp-for="NuevoBono.Descripcion" class="form-control" />
+                </div>
+
+                <!-- Campo dinámico según tipo -->
+                <div class="form-group" id="campoCondicion" style="display:none">
+                    <label id="labelCondicion">Condición Mínima</label>
+                    <input type="number" asp-for="NuevoBono.CondicionMinima"
+                           class="form-control" id="inputCondicion"
+                           step="0.01" min="0" />
+                    <small id="hintCondicion" style="color:gray"></small>
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">💾 Guardar Bono</button>
+            </div>
+        </form>
+
+        <!-- TABLA DE BONOS -->
+        <div class="rules-card">
+            <h2>📋 Bonos Registrados</h2>
+
+            <table class="rules-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Monto</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Bonos.Any())
+                    {
+                        foreach (var bono in Model.Bonos)
+                        {
+                            <tr>
+                                <td>@bono.NombreBono</td>
+                                <td>@bono.IdTipoBonoNavigation?.NombreTipo</td>
+                                <td>₡@bono.Monto</td>
+                                <td>@bono.Descripcion</td>
+                                <td>
+                                    @if (bono.Activo == true)
+                                    {
+                                        <span style="color:green">Activo</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="color:red">Inactivo</span>
+                                    }
+                                </td>
+                                <td>
+                                    <button class="btn-icon btn-edit"
+                                            onclick="abrirEditar('@bono.IdBono', '@bono.NombreBono', '@bono.IdTipoBono', '@bono.Monto', '@bono.Descripcion')">
+                                        ✏️
+                                    </button>
+
+                                    @if (bono.Activo == true)
+                                    {
+                                        <form asp-action="DesactivarBono" method="post" style="display:inline">
+                                            <input type="hidden" name="id" value="@bono.IdBono" />
+                                            <button type="submit" class="btn-icon" title="Desactivar">🚫</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form asp-action="ActivarBono" method="post" style="display:inline">
+                                            <input type="hidden" name="id" value="@bono.IdBono" />
+                                            <button type="submit" class="btn-icon" title="Activar">✅</button>
+                                        </form>
+                                    }
+
+                                    <form asp-action="EliminarBono" method="post" style="display:inline"
+                                          onsubmit="return confirm('¿Estás seguro de eliminar este bono?')">
+                                        <input type="hidden" name="id" value="@bono.IdBono" />
+                                        <button type="submit" class="btn-icon" title="Eliminar">🗑️</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="6">No hay bonos registrados</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDITAR -->
+<div class="modal" id="editModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>✏️ Editar Bono</h3>
+            <button class="btn-close" onclick="cerrarModal()">×</button>
+        </div>
+
+        <form method="post" asp-action="EditarBono">
+            <input type="hidden" id="editIdBono" name="IdBono">
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Nombre del Bono</label>
+                    <input type="text" id="editNombreBono" name="NombreBono" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de Bono</label>
+                    <select id="editTipoBono" name="IdTipoBono">
+                        @foreach (var tipo in Model.TiposBono)
+                        {
+                            <option value="@tipo.IdTipoBono">@tipo.NombreTipo</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Monto</label>
+                    <input type="number" id="editMonto" name="Monto" min="0" step="0.01">
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <input type="text" id="editDescripcion" name="Descripcion">
+                </div>
+            </div>
+
+            <div class="form-actions" style="margin-top:25px">
+                <button type="submit" class="btn btn-primary">💾 Actualizar</button>
+                <button type="button" class="btn btn-secondary" onclick="cerrarModal()">❌ Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function abrirEditar(id, nombre, tipo, monto, descripcion) {
+        document.getElementById("editIdBono").value = id;
+        document.getElementById("editNombreBono").value = nombre;
+        document.getElementById("editTipoBono").value = tipo;
+        document.getElementById("editMonto").value = monto;
+        document.getElementById("editDescripcion").value = descripcion;
+        document.getElementById("editModal").classList.add("show");
+    }
+
+    function cerrarModal() {
+        document.getElementById("editModal").classList.remove("show");
+    }
+
+    document.getElementById('editModal').addEventListener('click', function (e) {
+        if (e.target === this) cerrarModal();
+    });
+
+
+
+        function actualizarCondicion() {
+        const select = document.getElementById("selectTipoBono");
+        const option = select.options[select.selectedIndex];
+        const metrica = option.getAttribute("data-metrica");
+
+        const campo = document.getElementById("campoCondicion");
+        const label = document.getElementById("labelCondicion");
+        const hint = document.getElementById("hintCondicion");
+
+        if (!metrica) {
+            campo.style.display = "none";
+            return;
+        }
+
+        campo.style.display = "block";
+
+        switch (metrica) {
+            case "puntualidad":
+                label.textContent = "Puntualidad mínima (%)";
+                hint.textContent = "Ej: 90 significa que el empleado debe tener al menos 90% de puntualidad";
+                break;
+            case "puntualidad_premium":
+                label.textContent = "Puntualidad mínima premium (%)";
+                hint.textContent = "Ej: 98 significa que el empleado debe tener al menos 98% de puntualidad";
+                break;
+            case "asistencia":
+                label.textContent = "Días trabajados mínimos";
+                hint.textContent = "Ej: 20 significa que el empleado debe haber trabajado al menos 20 días";
+                break;
+            case "horas":
+                label.textContent = "Horas trabajadas mínimas";
+                hint.textContent = "Ej: 160 significa que el empleado debe haber trabajado al menos 160 horas";
+                break;
+        }
+    }
+
+</script>

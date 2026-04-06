@@ -1,0 +1,560 @@
+﻿@{
+    ViewData["Title"] = "Mis Bonos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .main-layout {
+        display: flex;
+        min-height: 600px;
+    }
+
+    .sidebar {
+        width: 280px;
+        background: #ffffff;
+        padding: 30px 20px;
+        border-right: 1px solid #e0e0e0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+    }
+
+    .menu-item {
+        padding: 0;
+        margin: 4px 0;
+        border-radius: 10px;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+    .menu-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 20px;
+        color: #4a5568;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 15px;
+        border-radius: 10px;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+        .menu-link:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .menu-link.active {
+            background: #667eea;
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+            .menu-link.active::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 4px;
+                height: 24px;
+                background: white;
+                border-radius: 0 4px 4px 0;
+            }
+
+    .icon {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .content {
+        flex: 1;
+        padding: 40px;
+        background: #f5f7fa;
+    }
+
+    .content-header {
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .content-header h1 {
+            color: #2d3748;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .content-header p {
+            color: #718096;
+            font-size: 14px;
+        }
+
+    /* Stats */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        transition: transform 0.3s;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+    .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .stat-icon {
+        font-size: 20px;
+    }
+
+    .stat-value {
+        font-size: 24px;
+        font-weight: bold;
+        color: #2d3748;
+        margin-bottom: 3px;
+    }
+
+    .stat-label {
+        color: #718096;
+        font-size: 11px;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+
+    /* Filter */
+    .filter-section {
+        background: white;
+        padding: 15px 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        margin-bottom: 20px;
+    }
+
+        .filter-section h3 {
+            color: #2d3748;
+            margin-bottom: 12px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+    .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+        .form-group label {
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 13px;
+            transition: all 0.3s;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+            .form-group input:focus,
+            .form-group select:focus {
+                outline: none;
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+            }
+
+    /* Cards section */
+    .bonos-section {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+        .section-header h2 {
+            color: #2d3748;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+    .bono-card {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        margin-bottom: 12px;
+        border-left: 3px solid #f59e0b;
+        transition: all 0.3s;
+    }
+
+        .bono-card:hover {
+            background: #e8edf3;
+            transform: translateX(3px);
+        }
+
+    .bono-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: #FFF3E0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+    }
+
+    .bono-info {
+        flex: 1;
+    }
+
+    .bono-title {
+        color: #2d3748;
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .bono-details {
+        color: #718096;
+        font-size: 12px;
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .bono-detail-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .bono-monto {
+        font-size: 18px;
+        font-weight: 700;
+        color: #38a169;
+        white-space: nowrap;
+    }
+
+    /* Badges */
+    .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .badge-warning {
+        background: #feebc8;
+        color: #7c2d12;
+    }
+
+    .badge-success {
+        background: #c6f6d5;
+        color: #22543d;
+    }
+
+    .badge-info {
+        background: #bee3f8;
+        color: #2c5282;
+    }
+
+    /* Buttons */
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 13px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-secondary {
+        background: #e2e8f0;
+        color: #4a5568;
+    }
+
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+
+    /* Empty state */
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #718096;
+    }
+
+    .empty-state-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
+
+    .empty-state h3 {
+        color: #4a5568;
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+
+    .empty-state p {
+        font-size: 13px;
+    }
+
+    /* Loading */
+    .loading-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #718096;
+        font-size: 13px;
+    }
+</style>
+
+<div class="main-layout">
+    <div class="sidebar">
+        <div class="menu-item">
+            <a href="/Home/ColaboradorHome" class="menu-link">
+                <div class="icon">⏰</div>
+                Marcas
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="/Empleado/HistorialMarcas" class="menu-link">
+                <div class="icon">📝</div>
+                Mi Historial
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="/Empleado/Solicitudes" class="menu-link">
+                <div class="icon">🗂️</div>
+                Mis Solicitudes
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="/Empleado/HistorialBonos" class="menu-link active">
+                <div class="icon">🏆</div>
+                Mis Bonos
+            </a>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="content-header">
+            <div>
+                <h1>Mis Bonos</h1>
+                <p>Consulta los bonos asignados a tu cuenta</p>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header"><div class="stat-icon">🏆</div></div>
+                <div class="stat-value" id="statTotal">—</div>
+                <div class="stat-label">Total bonos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header"><div class="stat-icon">💰</div></div>
+                <div class="stat-value" id="statMonto">—</div>
+                <div class="stat-label">Monto acumulado</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header"><div class="stat-icon">📅</div></div>
+                <div class="stat-value" id="statPeriodos">—</div>
+                <div class="stat-label">Períodos con bono</div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filter-section">
+            <h3>🔍 Filtrar</h3>
+            <div class="filter-grid">
+                <div class="form-group">
+                    <label>Período (YYYY-MM)</label>
+                    <input type="month" id="filterPeriodo" />
+                </div>
+            </div>
+            <button class="btn btn-secondary" onclick="limpiarFiltros()">🔄 Limpiar filtros</button>
+        </div>
+
+        <!-- Lista -->
+        <div class="bonos-section">
+            <div class="section-header">
+                <h2>🏆 Historial de Bonos</h2>
+                <span class="badge badge-info" id="totalBadge">0 bonos</span>
+            </div>
+            <div id="bonosList">
+                <div class="loading-state">Cargando bonos...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let todosLosBonos = [];
+
+    // ── Cargar bonos desde el servidor ───────────────────────────────
+    async function cargarBonos() {
+        try {
+            const res  = await fetch('/Empleado/ObtenerHistorialBonos');
+            const data = await res.json();
+
+            if (!data.success) {
+                mostrarError('No se pudieron cargar los bonos.');
+                return;
+            }
+
+            todosLosBonos = data.bonos || [];
+            actualizarStats(todosLosBonos);
+            renderBonos(todosLosBonos);
+        } catch (e) {
+            mostrarError('Error al conectar con el servidor.');
+        }
+    }
+
+    // ── Estadísticas ─────────────────────────────────────────────────
+    function actualizarStats(bonos) {
+        const total    = bonos.length;
+        const monto    = bonos.reduce((sum, b) => sum + (b.monto || 0), 0);
+        const periodos = new Set(bonos.map(b => b.periodo)).size;
+
+        document.getElementById('statTotal').textContent    = total;
+        document.getElementById('statMonto').textContent    = '₡' + monto.toLocaleString('es-CR');
+        document.getElementById('statPeriodos').textContent = periodos;
+    }
+
+    // ── Render cards ─────────────────────────────────────────────────
+    function renderBonos(bonos) {
+        const list  = document.getElementById('bonosList');
+        const badge = document.getElementById('totalBadge');
+
+        badge.textContent = `${bonos.length} bono${bonos.length !== 1 ? 's' : ''}`;
+
+        if (bonos.length === 0) {
+            list.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🏆</div>
+                    <h3>Sin bonos registrados</h3>
+                    <p>No hay bonos asignados para el filtro seleccionado.</p>
+                </div>`;
+            return;
+        }
+
+        list.innerHTML = bonos.map(b => `
+            <div class="bono-card">
+                <div class="bono-icon">🏆</div>
+                <div class="bono-info">
+                    <div class="bono-title">${b.nombreBono}</div>
+                    <div class="bono-details">
+                        <div class="bono-detail-item">📅 <strong>Período:</strong> ${formatPeriodo(b.periodo)}</div>
+                        <div class="bono-detail-item">🗓️ Asignado el ${formatFecha(b.fechaAsignado)}</div>
+                    </div>
+                </div>
+                <div class="bono-monto">₡${(b.monto || 0).toLocaleString('es-CR')}</div>
+            </div>`
+        ).join('');
+    }
+
+    // ── Filtros ──────────────────────────────────────────────────────
+    document.getElementById('filterPeriodo').addEventListener('input', aplicarFiltros);
+
+    function aplicarFiltros() {
+        const periodo = document.getElementById('filterPeriodo').value; // "YYYY-MM"
+
+        let resultado = todosLosBonos;
+
+        if (periodo) {
+            resultado = resultado.filter(b => b.periodo === periodo);
+        }
+
+        renderBonos(resultado);
+    }
+
+    function limpiarFiltros() {
+        document.getElementById('filterPeriodo').value = '';
+        renderBonos(todosLosBonos);
+    }
+
+    // ── Helpers de formato ───────────────────────────────────────────
+    function formatPeriodo(p) {
+        if (!p || p.length < 7) return p;
+        const [y, m] = p.split('-');
+        const meses  = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                         'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+        return `${meses[parseInt(m) - 1]} ${y}`;
+    }
+
+    function formatFecha(f) {
+        if (!f) return '—';
+        const d = new Date(f);
+        return d.toLocaleDateString('es-CR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+
+    function mostrarError(msg) {
+        document.getElementById('bonosList').innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">⚠️</div>
+                <h3>Error</h3>
+                <p>${msg}</p>
+            </div>`;
+    }
+
+    // ── Init ─────────────────────────────────────────────────────────
+    cargarBonos();
+</script>

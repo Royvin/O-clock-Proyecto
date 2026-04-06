@@ -8,13 +8,12 @@
         padding: 0;
         box-sizing: border-box;
     }
-    /* Sidebar + Content Layout */
+
     .main-layout {
         display: flex;
         min-height: 600px;
     }
 
-    /* SIDEBAR */
     .sidebar {
         width: 280px;
         background: #ffffff;
@@ -77,7 +76,6 @@
         font-size: 18px;
     }
 
-    /* Menu Expandible */
     .menu-expandable {
         cursor: pointer;
     }
@@ -99,8 +97,8 @@
         }
 
         .menu-expandable-header.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            color: #667eea;
+            background: rgba(47, 111, 237, 0.10);
+            color: #2F6FED;
             font-weight: 600;
         }
 
@@ -176,18 +174,17 @@
             }
 
         .submenu-link.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-            color: #667eea;
+            background: rgba(47, 111, 237, 0.12);
+            color: #2F6FED;
             font-weight: 600;
         }
 
             .submenu-link.active::before {
-                background: #667eea;
+                background: #2F6FED;
                 width: 8px;
                 height: 8px;
             }
 
-    /* Main Content - MEJORADO */
     .content {
         flex: 1;
         padding: 40px;
@@ -212,8 +209,8 @@
             font-size: 14px;
         }
 
-    /* Filter Section */
-    .filter-section {
+    .filter-section,
+    .preview-section {
         background: white;
         padding: 30px;
         border-radius: 15px;
@@ -221,7 +218,8 @@
         margin-bottom: 25px;
     }
 
-        .filter-section h2 {
+        .filter-section h2,
+        .preview-section h2 {
             color: #2d3748;
             margin-bottom: 10px;
             font-size: 20px;
@@ -230,9 +228,16 @@
             gap: 10px;
         }
 
+        .filter-section .helper-text,
+        .preview-section .helper-text {
+            color: #718096;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
     .filter-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 20px;
         margin-bottom: 20px;
     }
@@ -256,16 +261,17 @@
             border-radius: 8px;
             font-size: 14px;
             transition: all 0.3s;
+            background: #fff;
+            color: #2d3748;
         }
 
             .form-group select:focus,
             .form-group input:focus {
                 outline: none;
-                border-color: #667eea;
-                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                border-color: #2F6FED;
+                box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.10);
             }
 
-    /* Tabs */
     .tabs {
         display: flex;
         gap: 10px;
@@ -274,6 +280,7 @@
         padding: 10px;
         border-radius: 15px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        flex-wrap: wrap;
     }
 
     .tab {
@@ -288,6 +295,7 @@
         gap: 8px;
         flex: 1;
         justify-content: center;
+        min-width: 220px;
     }
 
         .tab:hover {
@@ -299,9 +307,8 @@
             color: white;
         }
 
-    /* Buttons */
     .btn {
-        padding: 12px 28px;
+        padding: 12px 24px;
         border: none;
         border-radius: 10px;
         font-weight: 600;
@@ -311,6 +318,8 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
+        text-decoration: none;
+        justify-content: center;
     }
 
     .btn-primary {
@@ -320,7 +329,7 @@
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(47, 111, 237, 0.35);
         }
 
     .btn-secondary {
@@ -338,7 +347,120 @@
         flex-wrap: wrap;
     }
 
-    /* Empty State */
+    .btn[disabled] {
+        opacity: 0.65;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+        .tab-content.active {
+            display: block;
+        }
+
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .summary-card {
+        background: #f8fbff;
+        border: 1px solid #e4eefc;
+        border-radius: 14px;
+        padding: 18px;
+    }
+
+    .summary-card-label {
+        color: #718096;
+        font-size: 13px;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+
+    .summary-card-value {
+        color: #2d3748;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+        border-radius: 12px;
+        border: 1px solid #edf2f7;
+    }
+
+    .report-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 850px;
+    }
+
+        .report-table thead tr {
+            background: #2F6FED;
+        }
+
+        .report-table th {
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: left;
+            padding: 14px 16px;
+            white-space: nowrap;
+        }
+
+        .report-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 14px;
+            color: #2d3748;
+            vertical-align: top;
+        }
+
+        .report-table tbody tr:nth-child(even) {
+            background: #fafcff;
+        }
+
+        .report-table tbody tr:hover {
+            background: #f2f7ff;
+        }
+
+    .badge-status {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        min-width: 92px;
+    }
+
+    .badge-pendiente {
+        background: #fff8e6;
+        color: #b7791f;
+    }
+
+    .badge-aprobada {
+        background: #ecfdf3;
+        color: #1f7a46;
+    }
+
+    .badge-rechazada {
+        background: #fef2f2;
+        color: #c53030;
+    }
+
+    .badge-cancelada {
+        background: #edf2f7;
+        color: #4a5568;
+    }
+
     .empty-state {
         text-align: center;
         padding: 60px 20px;
@@ -361,7 +483,52 @@
         font-size: 14px;
     }
 
-    /* Modal */
+    .loading-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #718096;
+        font-weight: 600;
+    }
+
+    .section-hidden {
+        display: none;
+    }
+
+    .report-title-line {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .preview-meta {
+        color: #718096;
+        font-size: 14px;
+        margin-bottom: 18px;
+    }
+
+    .message-box {
+        padding: 14px 16px;
+        border-radius: 10px;
+        font-size: 14px;
+        margin-bottom: 16px;
+        display: none;
+    }
+
+    .message-error {
+        background: #fef2f2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+    }
+
+    .message-success {
+        background: #ecfdf3;
+        color: #166534;
+        border: 1px solid #bbf7d0;
+    }
+
     .modal {
         display: none;
         position: fixed;
@@ -425,13 +592,21 @@
             color: #2d3748;
         }
 
-    .tab-content {
-        display: none;
-    }
-
-        .tab-content.active {
-            display: block;
+    @@media (max-width: 1100px) {
+        .main-layout {
+            flex-direction: column;
         }
+
+        .sidebar {
+            width: 100%;
+            border-right: none;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .content {
+            padding: 25px;
+        }
+    }
 </style>
 
 <div class="main-layout">
@@ -451,7 +626,7 @@
         </div>
 
         <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
-            <div class="menu-expandable-header">
+            <div class="menu-expandable-header active">
                 <div class="menu-expandable-left">
                     <div class="icon">⚙️</div>
                     <span>Configuración y Políticas</span>
@@ -470,21 +645,16 @@
                     </a>
                 </div>
                 <div class="submenu-item">
-                    <a href="/Admin/BonosParametroConfig" class="submenu-link">
+                    <a href="/Bono/GestionBonos" class="submenu-link">
                         🎁 Bonos
-                    </a>
-                </div>
-                <div class="submenu-item">
-                    <a href="/Admin/NotificacionesConfig" class="submenu-link">
-                        🔔 Notificaciones
                     </a>
                 </div>
             </div>
         </div>
 
         <div class="menu-item">
-            <a href="/Admin/Bonos" class="menu-link">
-                <div class="icon">💵 </div>
+            <a href="/Bono/AsignarBono" class="menu-link">
+                <div class="icon">💵</div>
                 Bonos
             </a>
         </div>
@@ -526,72 +696,182 @@
             <div class="tab" onclick="switchReportTab('seguimiento', this)">📂 Seguimiento de Solicitudes</div>
         </div>
 
+        <div id="messageBox" class="message-box"></div>
+
         <div id="generalTab" class="tab-content active">
             <div class="filter-section">
-                <h2>📄 Reportes Descargables</h2>
-                <p style="color:#718096;margin-bottom:20px;font-size:14px;">Seleccione el formato para generar el reporte</p>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="downloadPDF()">📥 Descargar PDF</button>
-                    <button class="btn btn-secondary" onclick="downloadExcel()">📥 Descargar Excel</button>
+                <h2>📊 Reporte General</h2>
+                <p class="helper-text">Previsualización consolidada con resumen general y detalle de solicitudes para control y auditoría.</p>
+
+                <div class="filter-grid">
+                    <div class="form-group">
+                        <label for="generalDesde">Fecha Inicio</label>
+                        <input type="date" id="generalDesde">
+                    </div>
+                    <div class="form-group">
+                        <label for="generalHasta">Fecha Final</label>
+                        <input type="date" id="generalHasta">
+                    </div>
                 </div>
-                <div id="noDataMessage" class="empty-state" style="display:none;">
+
+                <div class="btn-group">
+                    <button id="btnGeneralGenerar" class="btn btn-primary" onclick="generarReporteGeneral()">📊 Generar Reporte</button>
+                    <button id="btnGeneralPdf" class="btn btn-secondary" onclick="exportarReporteGeneralPdf()">📄 Exportar PDF</button>
+                    <button id="btnGeneralExcel" class="btn btn-secondary" onclick="exportarReporteGeneralExcel()">📗 Exportar Excel</button>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <div class="report-title-line">
+                    <h2>👁️ Previsualización</h2>
+                </div>
+                <div id="generalPreviewMeta" class="preview-meta">Seleccione un rango y genere el reporte.</div>
+                <div id="generalLoading" class="loading-state section-hidden">Generando previsualización...</div>
+                <div id="generalEmpty" class="empty-state">
                     <div class="empty-state-icon">📭</div>
-                    <h3>No hay datos disponibles</h3>
-                    <p>No hay datos disponibles para generar este reporte</p>
+                    <h3>Sin previsualización</h3>
+                    <p>Cuando genere el reporte, aquí se mostrará el resumen y el detalle.</p>
+                </div>
+                <div id="generalPreview" class="section-hidden">
+                    <div id="generalSummary" class="summary-grid"></div>
+                    <div class="table-responsive">
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th>Colaborador</th>
+                                    <th>Tipo</th>
+                                    <th>Fecha Solicitud</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Fin</th>
+                                    <th>Estado</th>
+                                    <th>Observación</th>
+                                </tr>
+                            </thead>
+                            <tbody id="generalTableBody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="asistenciaTab" class="tab-content">
             <div class="filter-section">
-                <h2>🕒 Reporte de Asistencia por Empleado</h2>
+                <h2>🕒 Asistencia por Empleado</h2>
+                <p class="helper-text">Seleccione un colaborador y un rango de fechas para consultar sus marcas y exportar el resultado.</p>
+
                 <div class="filter-grid">
                     <div class="form-group">
-                        <label>Empleado</label>
-                        <select>
-                            <option>Seleccione</option>
-                            <option>Ana López</option>
-                            <option>Carlos Ramírez</option>
-                            <option>María González</option>
+                        <label for="asistenciaEmpleado">Empleado</label>
+                        <select id="asistenciaEmpleado">
+                            <option value="">Seleccione un empleado</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Fecha Inicio</label>
-                        <input type="date">
+                        <label for="asistenciaDesde">Fecha Inicio</label>
+                        <input type="date" id="asistenciaDesde">
                     </div>
                     <div class="form-group">
-                        <label>Fecha Final</label>
-                        <input type="date">
+                        <label for="asistenciaHasta">Fecha Final</label>
+                        <input type="date" id="asistenciaHasta">
                     </div>
                 </div>
+
                 <div class="btn-group">
-                    <button class="btn btn-primary">🔍 Generar Reporte</button>
-                    <button class="btn btn-secondary">📥 Exportar</button>
+                    <button id="btnAsistenciaGenerar" class="btn btn-primary" onclick="generarReporteAsistencia()">📊 Generar Reporte</button>
+                    <button id="btnAsistenciaPdf" class="btn btn-secondary" onclick="exportarReporteAsistenciaPdf()">📄 Exportar PDF</button>
+                    <button id="btnAsistenciaExcel" class="btn btn-secondary" onclick="exportarReporteAsistenciaExcel()">📗 Exportar Excel</button>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <div class="report-title-line">
+                    <h2>👁️ Previsualización</h2>
+                </div>
+                <div id="asistenciaPreviewMeta" class="preview-meta">Seleccione un empleado y genere el reporte.</div>
+                <div id="asistenciaLoading" class="loading-state section-hidden">Generando previsualización...</div>
+                <div id="asistenciaEmpty" class="empty-state">
+                    <div class="empty-state-icon">🕒</div>
+                    <h3>Sin previsualización</h3>
+                    <p>Cuando genere el reporte, aquí se mostrarán las marcas del colaborador.</p>
+                </div>
+                <div id="asistenciaPreview" class="section-hidden">
+                    <div id="asistenciaSummary" class="summary-grid"></div>
+                    <div class="table-responsive">
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Tipo</th>
+                                    <th>Hora</th>
+                                    <th>Ubicación</th>
+                                    <th>Comentario</th>
+                                </tr>
+                            </thead>
+                            <tbody id="asistenciaTableBody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="ausenciasTab" class="tab-content">
             <div class="filter-section">
-                <h2>📅 Reporte Mensual de Ausencias</h2>
+                <h2>📅 Ausencias Mensuales</h2>
+                <p class="helper-text">Consulta mensual de ausencias por Vacaciones, Permiso, Incapacidad o Licencia.</p>
+
                 <div class="filter-grid">
                     <div class="form-group">
-                        <label>Mes</label>
-                        <input type="month">
+                        <label for="ausenciasMes">Mes</label>
+                        <input type="month" id="ausenciasMes">
                     </div>
                     <div class="form-group">
-                        <label>Tipo de Ausencia</label>
-                        <select>
-                            <option>Todos</option>
-                            <option>Vacaciones</option>
-                            <option>Permiso</option>
-                            <option>Incapacidad</option>
+                        <label for="ausenciasTipo">Tipo de Ausencia</label>
+                        <select id="ausenciasTipo">
+                            <option value="todos">Todos</option>
+                            <option value="vacaciones">Vacaciones</option>
+                            <option value="permiso">Permiso</option>
+                            <option value="incapacidad">Incapacidad</option>
+                            <option value="licencia">Licencia</option>
                         </select>
                     </div>
                 </div>
+
                 <div class="btn-group">
-                    <button class="btn btn-primary">📊 Generar Reporte</button>
-                    <button class="btn btn-secondary">✉️ Enviar por Correo</button>
+                    <button id="btnAusenciasGenerar" class="btn btn-primary" onclick="generarReporteAusencias()">📊 Generar Reporte</button>
+                    <button id="btnAusenciasPdf" class="btn btn-secondary" onclick="exportarReporteAusenciasPdf()">📄 Exportar PDF</button>
+                    <button id="btnAusenciasExcel" class="btn btn-secondary" onclick="exportarReporteAusenciasExcel()">📗 Exportar Excel</button>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <div class="report-title-line">
+                    <h2>👁️ Previsualización</h2>
+                </div>
+                <div id="ausenciasPreviewMeta" class="preview-meta">Seleccione el mes y genere el reporte.</div>
+                <div id="ausenciasLoading" class="loading-state section-hidden">Generando previsualización...</div>
+                <div id="ausenciasEmpty" class="empty-state">
+                    <div class="empty-state-icon">📅</div>
+                    <h3>Sin previsualización</h3>
+                    <p>Cuando genere el reporte, aquí se mostrarán las ausencias del mes.</p>
+                </div>
+                <div id="ausenciasPreview" class="section-hidden">
+                    <div id="ausenciasSummary" class="summary-grid"></div>
+                    <div class="table-responsive">
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th>Colaborador</th>
+                                    <th>Tipo</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Fin</th>
+                                    <th>Días en Mes</th>
+                                    <th>Estado</th>
+                                    <th>Observación</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ausenciasTableBody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -599,20 +879,66 @@
         <div id="seguimientoTab" class="tab-content">
             <div class="filter-section">
                 <h2>📂 Seguimiento de Solicitudes</h2>
+                <p class="helper-text">Historial detallado filtrable por estado, con su propia previsualización y exportaciones.</p>
+
                 <div class="filter-grid">
                     <div class="form-group">
-                        <label>Estado</label>
-                        <select>
-                            <option>Todos</option>
-                            <option>Pendiente</option>
-                            <option>Aprobada</option>
-                            <option>Rechazada</option>
+                        <label for="seguimientoEstado">Estado</label>
+                        <select id="seguimientoEstado">
+                            <option value="todos">Todos</option>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="aprobada">Aprobada</option>
+                            <option value="rechazada">Rechazada</option>
+                            <option value="cancelada">Cancelada</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="seguimientoDesde">Fecha Inicio</label>
+                        <input type="date" id="seguimientoDesde">
+                    </div>
+                    <div class="form-group">
+                        <label for="seguimientoHasta">Fecha Final</label>
+                        <input type="date" id="seguimientoHasta">
+                    </div>
                 </div>
+
                 <div class="btn-group">
-                    <button class="btn btn-primary">🔍 Filtrar</button>
-                    <button class="btn btn-secondary">📥 Exportar Historial</button>
+                    <button id="btnSeguimientoGenerar" class="btn btn-primary" onclick="generarReporteSeguimiento()">📊 Generar Reporte</button>
+                    <button id="btnSeguimientoPdf" class="btn btn-secondary" onclick="exportarReporteSeguimientoPdf()">📄 Exportar PDF</button>
+                    <button id="btnSeguimientoExcel" class="btn btn-secondary" onclick="exportarReporteSeguimientoExcel()">📗 Exportar Excel</button>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <div class="report-title-line">
+                    <h2>👁️ Previsualización</h2>
+                </div>
+                <div id="seguimientoPreviewMeta" class="preview-meta">Seleccione los filtros y genere el reporte.</div>
+                <div id="seguimientoLoading" class="loading-state section-hidden">Generando previsualización...</div>
+                <div id="seguimientoEmpty" class="empty-state">
+                    <div class="empty-state-icon">📂</div>
+                    <h3>Sin previsualización</h3>
+                    <p>Cuando genere el reporte, aquí se mostrará el historial filtrado.</p>
+                </div>
+                <div id="seguimientoPreview" class="section-hidden">
+                    <div id="seguimientoSummary" class="summary-grid"></div>
+                    <div class="table-responsive">
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th>Colaborador</th>
+                                    <th>Tipo</th>
+                                    <th>Fecha Solicitud</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Fin</th>
+                                    <th>Estado</th>
+                                    <th>Observación</th>
+                                    <th>Archivo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="seguimientoTableBody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -622,7 +948,7 @@
 <div class="modal" id="requestModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>📋 Detalle de Solicitud</h3>
+            <h3>📋 Detalle</h3>
             <button class="btn-close" onclick="closeModal()">×</button>
         </div>
         <div id="modalContent"></div>
@@ -630,6 +956,14 @@
 </div>
 
 <script>
+    let colaboradoresCargados = false;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        establecerFechasPorDefecto();
+        cargarColaboradores();
+        generarReporteGeneral();
+    });
+
     function toggleSubmenu(element) {
         const submenu = element.querySelector('.submenu');
         const header = element.querySelector('.menu-expandable-header');
@@ -652,19 +986,577 @@
         document.getElementById(tab + 'Tab').classList.add('active');
     }
 
-    function downloadPDF() {
-        const hasData = false;
-        if (!hasData) {
-            document.getElementById('noDataMessage').style.display = 'block';
+    function closeModal() {
+        document.getElementById('requestModal').classList.remove('show');
+    }
+
+    function showMessage(message, type) {
+        const box = document.getElementById('messageBox');
+        box.className = 'message-box';
+        box.classList.add(type === 'success' ? 'message-success' : 'message-error');
+        box.textContent = message;
+        box.style.display = 'block';
+
+        setTimeout(() => {
+            box.style.display = 'none';
+        }, 4500);
+    }
+
+    function establecerFechasPorDefecto() {
+        const hoy = new Date();
+        const hace30 = new Date();
+        hace30.setDate(hoy.getDate() - 30);
+
+        const hoyTexto = formatDateInput(hoy);
+        const hace30Texto = formatDateInput(hace30);
+
+        document.getElementById('generalDesde').value = hace30Texto;
+        document.getElementById('generalHasta').value = hoyTexto;
+
+        document.getElementById('asistenciaDesde').value = hace30Texto;
+        document.getElementById('asistenciaHasta').value = hoyTexto;
+
+        document.getElementById('seguimientoDesde').value = hace30Texto;
+        document.getElementById('seguimientoHasta').value = hoyTexto;
+
+        document.getElementById('ausenciasMes').value = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`;
+    }
+
+    function formatDateInput(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    async function cargarColaboradores() {
+        if (colaboradoresCargados) return;
+
+        try {
+            const response = await fetch('/Admin/ObtenerColaboradores');
+            if (!response.ok) {
+                throw new Error('No se pudieron cargar los colaboradores.');
+            }
+
+            const data = await response.json();
+            const select = document.getElementById('asistenciaEmpleado');
+
+            select.innerHTML = '<option value="">Seleccione un empleado</option>';
+
+            data.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.idUsuario;
+                option.textContent = item.nombreCompleto;
+                select.appendChild(option);
+            });
+
+            colaboradoresCargados = true;
+        } catch (error) {
+            showMessage(error.message || 'Ocurrió un error al cargar los colaboradores.', 'error');
         }
     }
 
-    function downloadExcel() {
-        downloadPDF();
+    function escapeHtml(value) {
+        if (value === null || value === undefined) return '';
+        return String(value)
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
     }
 
-    function closeModal() {
-        const modal = document.getElementById('requestModal');
-        modal.classList.remove('show');
+    function getBadgeClass(estado) {
+        const valor = (estado || '').toString().trim().toLowerCase();
+        if (valor === 'pendiente') return 'badge-status badge-pendiente';
+        if (valor === 'aprobada') return 'badge-status badge-aprobada';
+        if (valor === 'rechazada') return 'badge-status badge-rechazada';
+        if (valor === 'cancelada') return 'badge-status badge-cancelada';
+        return 'badge-status badge-cancelada';
+    }
+
+    function renderSummaryCards(containerId, items) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+
+        items.forEach(item => {
+            container.innerHTML += `
+                <div class="summary-card">
+                    <div class="summary-card-label">${escapeHtml(item.label)}</div>
+                    <div class="summary-card-value">${escapeHtml(item.value)}</div>
+                </div>
+            `;
+        });
+    }
+
+    function setLoading(prefix, isLoading) {
+        const loading = document.getElementById(prefix + 'Loading');
+        if (loading) {
+            loading.classList.toggle('section-hidden', !isLoading);
+        }
+
+        const buttons = document.querySelectorAll(`#${prefix}Tab .btn`);
+        buttons.forEach(btn => btn.disabled = isLoading);
+    }
+
+    function showPreview(prefix, show) {
+        const preview = document.getElementById(prefix + 'Preview');
+        const empty = document.getElementById(prefix + 'Empty');
+
+        preview.classList.toggle('section-hidden', !show);
+        empty.style.display = show ? 'none' : 'block';
+    }
+
+    async function fetchJson(url) {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            let message = 'Ocurrió un error al consultar la información.';
+            try {
+                const text = await response.text();
+                if (text) message = text;
+            } catch (e) {
+            }
+            throw new Error(message);
+        }
+
+        return await response.json();
+    }
+
+    function construirQuery(params) {
+        const search = new URLSearchParams();
+
+        Object.keys(params).forEach(key => {
+            const value = params[key];
+            if (value !== null && value !== undefined && value !== '') {
+                search.append(key, value);
+            }
+        });
+
+        return search.toString();
+    }
+
+    async function generarReporteGeneral() {
+        const desde = document.getElementById('generalDesde').value;
+        const hasta = document.getElementById('generalHasta').value;
+
+        if (!desde || !hasta) {
+            showMessage('Debe seleccionar la fecha inicial y la fecha final.', 'error');
+            return;
+        }
+
+        if (desde > hasta) {
+            showMessage('La fecha inicial no puede ser mayor que la fecha final.', 'error');
+            return;
+        }
+
+        setLoading('general', true);
+
+        try {
+            const query = construirQuery({ desde, hasta });
+            const data = await fetchJson(`/Admin/ObtenerReporteGeneral?${query}`);
+
+            const resumen = data.resumen || {};
+            const detalle = data.detalle || [];
+
+            document.getElementById('generalPreviewMeta').textContent =
+                `Período consultado: ${resumen.desde || ''} al ${resumen.hasta || ''}`;
+
+            renderSummaryCards('generalSummary', [
+                { label: 'Empleados Activos', value: resumen.totalEmpleadosActivos ?? 0 },
+                { label: 'Total Marcas', value: resumen.totalMarcas ?? 0 },
+                { label: 'Total Solicitudes', value: resumen.totalSolicitudes ?? 0 },
+                { label: 'Pendientes', value: resumen.pendientes ?? 0 },
+                { label: 'Aprobadas', value: resumen.aprobadas ?? 0 },
+                { label: 'Rechazadas', value: resumen.rechazadas ?? 0 },
+                { label: 'Canceladas', value: resumen.canceladas ?? 0 }
+            ]);
+
+            const tbody = document.getElementById('generalTableBody');
+            tbody.innerHTML = '';
+
+            if (detalle.length === 0) {
+                showPreview('general', false);
+                document.getElementById('generalEmpty').innerHTML = `
+                    <div class="empty-state-icon">📭</div>
+                    <h3>No hay datos disponibles</h3>
+                    <p>No se encontraron solicitudes en el rango indicado.</p>
+                `;
+                return;
+            }
+
+            detalle.forEach(item => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${escapeHtml(item.colaborador)}</td>
+                        <td>${escapeHtml(item.tipoSolicitud)}</td>
+                        <td>${escapeHtml(item.fechaSolicitud)}</td>
+                        <td>${escapeHtml(item.fechaInicio)}</td>
+                        <td>${escapeHtml(item.fechaFin)}</td>
+                        <td><span class="${getBadgeClass(item.estado)}">${escapeHtml(item.estado)}</span></td>
+                        <td>${escapeHtml(item.observacion)}</td>
+                    </tr>
+                `;
+            });
+
+            showPreview('general', true);
+        } catch (error) {
+            showMessage(error.message || 'No se pudo generar el reporte general.', 'error');
+        } finally {
+            setLoading('general', false);
+        }
+    }
+
+    function exportarReporteGeneralPdf() {
+        const desde = document.getElementById('generalDesde').value;
+        const hasta = document.getElementById('generalHasta').value;
+
+        if (!desde || !hasta) {
+            showMessage('Debe seleccionar la fecha inicial y la fecha final.', 'error');
+            return;
+        }
+
+        const query = construirQuery({ desde, hasta });
+        window.open(`/Admin/ExportarReporteGeneralPdf?${query}`, '_blank');
+    }
+
+    function exportarReporteGeneralExcel() {
+        const desde = document.getElementById('generalDesde').value;
+        const hasta = document.getElementById('generalHasta').value;
+
+        if (!desde || !hasta) {
+            showMessage('Debe seleccionar la fecha inicial y la fecha final.', 'error');
+            return;
+        }
+
+        const query = construirQuery({ desde, hasta });
+        window.location.href = `/Admin/ExportarReporteGeneralExcel?${query}`;
+    }
+
+    async function generarReporteAsistencia() {
+        const idUsuario = document.getElementById('asistenciaEmpleado').value;
+        const desde = document.getElementById('asistenciaDesde').value;
+        const hasta = document.getElementById('asistenciaHasta').value;
+        const nombreEmpleado = document.getElementById('asistenciaEmpleado').selectedOptions[0]?.text || '';
+
+        if (!idUsuario) {
+            showMessage('Debe seleccionar un empleado.', 'error');
+            return;
+        }
+
+        if (!desde || !hasta) {
+            showMessage('Debe seleccionar la fecha inicial y la fecha final.', 'error');
+            return;
+        }
+
+        if (desde > hasta) {
+            showMessage('La fecha inicial no puede ser mayor que la fecha final.', 'error');
+            return;
+        }
+
+        setLoading('asistencia', true);
+
+        try {
+            const query = construirQuery({ idUsuario, desde, hasta });
+            const data = await fetchJson(`/Admin/ObtenerReporteAsistenciaEmpleado?${query}`);
+
+            const resumen = data.resumen || {};
+            const detalle = data.detalle || [];
+
+            document.getElementById('asistenciaPreviewMeta').textContent =
+                `Empleado consultado: ${data.empleado || nombreEmpleado} | Período: ${resumen.desde || ''} al ${resumen.hasta || ''}`;
+
+            renderSummaryCards('asistenciaSummary', [
+                { label: 'Empleado', value: data.empleado || nombreEmpleado },
+                { label: 'Total Marcas', value: resumen.totalMarcas ?? 0 },
+                { label: 'Días con Marca', value: resumen.diasConMarca ?? 0 },
+                { label: 'Entradas', value: resumen.totalEntradas ?? 0 },
+                { label: 'Salidas', value: resumen.totalSalidas ?? 0 },
+                { label: 'Hora Promedio Entrada', value: resumen.horaPromedioEntrada ?? '—' }
+            ]);
+
+            const tbody = document.getElementById('asistenciaTableBody');
+            tbody.innerHTML = '';
+
+            if (detalle.length === 0) {
+                showPreview('asistencia', false);
+                document.getElementById('asistenciaEmpty').innerHTML = `
+                    <div class="empty-state-icon">🕒</div>
+                    <h3>No hay datos disponibles</h3>
+                    <p>El colaborador no tiene marcas en el rango indicado.</p>
+                `;
+                return;
+            }
+
+            detalle.forEach(item => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${escapeHtml(item.fecha)}</td>
+                        <td>${escapeHtml(item.tipo)}</td>
+                        <td>${escapeHtml(item.hora)}</td>
+                        <td>${escapeHtml(item.ubicacion)}</td>
+                        <td>${escapeHtml(item.comentario)}</td>
+                    </tr>
+                `;
+            });
+
+            showPreview('asistencia', true);
+        } catch (error) {
+            showMessage(error.message || 'No se pudo generar el reporte de asistencia.', 'error');
+        } finally {
+            setLoading('asistencia', false);
+        }
+    }
+
+    function exportarReporteAsistenciaPdf() {
+        const idUsuario = document.getElementById('asistenciaEmpleado').value;
+        const desde = document.getElementById('asistenciaDesde').value;
+        const hasta = document.getElementById('asistenciaHasta').value;
+
+        if (!idUsuario) {
+            showMessage('Debe seleccionar un empleado.', 'error');
+            return;
+        }
+
+        const query = construirQuery({ idUsuario, desde, hasta });
+        window.open(`/Admin/ExportarReporteAsistenciaEmpleadoPdf?${query}`, '_blank');
+    }
+
+    function exportarReporteAsistenciaExcel() {
+        const idUsuario = document.getElementById('asistenciaEmpleado').value;
+        const desde = document.getElementById('asistenciaDesde').value;
+        const hasta = document.getElementById('asistenciaHasta').value;
+
+        if (!idUsuario) {
+            showMessage('Debe seleccionar un empleado.', 'error');
+            return;
+        }
+
+        const query = construirQuery({ idUsuario, desde, hasta });
+        window.location.href = `/Admin/ExportarReporteAsistenciaEmpleadoExcel?${query}`;
+    }
+
+    function obtenerAnioMesAusencias() {
+        const valor = document.getElementById('ausenciasMes').value;
+
+        if (!valor) {
+            return null;
+        }
+
+        const partes = valor.split('-');
+        if (partes.length !== 2) {
+            return null;
+        }
+
+        return {
+            anio: partes[0],
+            mes: partes[1]
+        };
+    }
+
+    async function generarReporteAusencias() {
+        const periodo = obtenerAnioMesAusencias();
+        const tipoAusencia = document.getElementById('ausenciasTipo').value;
+
+        if (!periodo) {
+            showMessage('Debe seleccionar un mes válido.', 'error');
+            return;
+        }
+
+        setLoading('ausencias', true);
+
+        try {
+            const query = construirQuery({
+                anio: periodo.anio,
+                mes: periodo.mes,
+                tipoAusencia: tipoAusencia
+            });
+
+            const data = await fetchJson(`/Admin/ObtenerReporteAusenciasMensuales?${query}`);
+            const resumen = data.resumen || {};
+            const detalle = data.detalle || [];
+
+            document.getElementById('ausenciasPreviewMeta').textContent =
+                `Período consultado: ${resumen.mes || ''}`;
+
+            renderSummaryCards('ausenciasSummary', [
+                { label: 'Mes', value: resumen.mes ?? '—' },
+                { label: 'Total Solicitudes', value: resumen.totalSolicitudes ?? 0 },
+                { label: 'Empleados Impactados', value: resumen.empleadosImpactados ?? 0 },
+                { label: 'Total Días', value: resumen.totalDias ?? 0 },
+                { label: 'Pendientes', value: resumen.pendientes ?? 0 },
+                { label: 'Aprobadas', value: resumen.aprobadas ?? 0 },
+                { label: 'Rechazadas', value: resumen.rechazadas ?? 0 },
+                { label: 'Canceladas', value: resumen.canceladas ?? 0 }
+            ]);
+
+            const tbody = document.getElementById('ausenciasTableBody');
+            tbody.innerHTML = '';
+
+            if (detalle.length === 0) {
+                showPreview('ausencias', false);
+                document.getElementById('ausenciasEmpty').innerHTML = `
+                    <div class="empty-state-icon">📅</div>
+                    <h3>No hay datos disponibles</h3>
+                    <p>No se encontraron ausencias para el mes y tipo seleccionados.</p>
+                `;
+                return;
+            }
+
+            detalle.forEach(item => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${escapeHtml(item.colaborador)}</td>
+                        <td>${escapeHtml(item.tipoAusencia)}</td>
+                        <td>${escapeHtml(item.fechaInicio)}</td>
+                        <td>${escapeHtml(item.fechaFin)}</td>
+                        <td>${escapeHtml(item.diasEnMes)}</td>
+                        <td><span class="${getBadgeClass(item.estado)}">${escapeHtml(item.estado)}</span></td>
+                        <td>${escapeHtml(item.observacion)}</td>
+                    </tr>
+                `;
+            });
+
+            showPreview('ausencias', true);
+        } catch (error) {
+            showMessage(error.message || 'No se pudo generar el reporte de ausencias.', 'error');
+        } finally {
+            setLoading('ausencias', false);
+        }
+    }
+
+    function exportarReporteAusenciasPdf() {
+        const periodo = obtenerAnioMesAusencias();
+        const tipoAusencia = document.getElementById('ausenciasTipo').value;
+
+        if (!periodo) {
+            showMessage('Debe seleccionar un mes válido.', 'error');
+            return;
+        }
+
+        const query = construirQuery({
+            anio: periodo.anio,
+            mes: periodo.mes,
+            tipoAusencia: tipoAusencia
+        });
+
+        window.open(`/Admin/ExportarReporteAusenciasMensualesPdf?${query}`, '_blank');
+    }
+
+    function exportarReporteAusenciasExcel() {
+        const periodo = obtenerAnioMesAusencias();
+        const tipoAusencia = document.getElementById('ausenciasTipo').value;
+
+        if (!periodo) {
+            showMessage('Debe seleccionar un mes válido.', 'error');
+            return;
+        }
+
+        const query = construirQuery({
+            anio: periodo.anio,
+            mes: periodo.mes,
+            tipoAusencia: tipoAusencia
+        });
+
+        window.location.href = `/Admin/ExportarReporteAusenciasMensualesExcel?${query}`;
+    }
+
+    async function generarReporteSeguimiento() {
+        const estado = document.getElementById('seguimientoEstado').value;
+        const desde = document.getElementById('seguimientoDesde').value;
+        const hasta = document.getElementById('seguimientoHasta').value;
+
+        if (!desde || !hasta) {
+            showMessage('Debe seleccionar la fecha inicial y la fecha final.', 'error');
+            return;
+        }
+
+        if (desde > hasta) {
+            showMessage('La fecha inicial no puede ser mayor que la fecha final.', 'error');
+            return;
+        }
+
+        setLoading('seguimiento', true);
+
+        try {
+            const query = construirQuery({ estado, desde, hasta });
+            const data = await fetchJson(`/Admin/ObtenerReporteSeguimientoSolicitudes?${query}`);
+
+            const resumen = data.resumen || {};
+            const detalle = data.detalle || [];
+
+            document.getElementById('seguimientoPreviewMeta').textContent =
+                `Período consultado: ${resumen.desde || ''} al ${resumen.hasta || ''}`;
+
+            renderSummaryCards('seguimientoSummary', [
+                { label: 'Total Solicitudes', value: resumen.totalSolicitudes ?? 0 },
+                { label: 'Pendientes', value: resumen.pendientes ?? 0 },
+                { label: 'Aprobadas', value: resumen.aprobadas ?? 0 },
+                { label: 'Rechazadas', value: resumen.rechazadas ?? 0 },
+                { label: 'Canceladas', value: resumen.canceladas ?? 0 }
+            ]);
+
+            const tbody = document.getElementById('seguimientoTableBody');
+            tbody.innerHTML = '';
+
+            if (detalle.length === 0) {
+                showPreview('seguimiento', false);
+                document.getElementById('seguimientoEmpty').innerHTML = `
+                    <div class="empty-state-icon">📂</div>
+                    <h3>No hay datos disponibles</h3>
+                    <p>No se encontraron solicitudes con los filtros indicados.</p>
+                `;
+                return;
+            }
+
+            detalle.forEach(item => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${escapeHtml(item.colaborador)}</td>
+                        <td>${escapeHtml(item.tipoSolicitud)}</td>
+                        <td>${escapeHtml(item.fechaSolicitud)}</td>
+                        <td>${escapeHtml(item.fechaInicio)}</td>
+                        <td>${escapeHtml(item.fechaFin)}</td>
+                        <td><span class="${getBadgeClass(item.estado)}">${escapeHtml(item.estado)}</span></td>
+                        <td>${escapeHtml(item.observacion)}</td>
+                        <td>${escapeHtml(item.archivo)}</td>
+                    </tr>
+                `;
+            });
+
+            showPreview('seguimiento', true);
+        } catch (error) {
+            showMessage(error.message || 'No se pudo generar el reporte de seguimiento.', 'error');
+        } finally {
+            setLoading('seguimiento', false);
+        }
+    }
+
+    function exportarReporteSeguimientoPdf() {
+        const estado = document.getElementById('seguimientoEstado').value;
+        const desde = document.getElementById('seguimientoDesde').value;
+        const hasta = document.getElementById('seguimientoHasta').value;
+
+        if (!desde || !hasta) {
+            showMessage('Debe seleccionar la fecha inicial y la fecha final.', 'error');
+            return;
+        }
+
+        const query = construirQuery({ estado, desde, hasta });
+        window.open(`/Admin/ExportarReporteSeguimientoSolicitudesPdf?${query}`, '_blank');
+    }
+
+    function exportarReporteSeguimientoExcel() {
+        const estado = document.getElementById('seguimientoEstado').value;
+        const desde = document.getElementById('seguimientoDesde').value;
+        const hasta = document.getElementById('seguimientoHasta').value;
+
+        if (!desde || !hasta) {
+            showMessage('Debe seleccionar la fecha inicial y la fecha final.', 'error');
+            return;
+        }
+
+        const query = construirQuery({ estado, desde, hasta });
+        window.location.href = `/Admin/ExportarReporteSeguimientoSolicitudesExcel?${query}`;
     }
 </script>
