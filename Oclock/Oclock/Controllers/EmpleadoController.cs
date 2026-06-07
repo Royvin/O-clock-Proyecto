@@ -21,6 +21,13 @@ namespace Oclock.Controllers
             _context = context;
         }
 
+
+        private static DateTime AhoraCostaRica()
+        {
+            var tz = TimeZoneInfo.FindSystemTimeZoneById("America/Costa_Rica");
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tz);
+        }
+
         public IActionResult Marcas()
         {
             int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
@@ -85,7 +92,7 @@ namespace Oclock.Controllers
 
             try
             {
-                var ahora = DateTime.Now;
+                var ahora = AhoraCostaRica();   
                 var hoy = DateOnly.FromDateTime(ahora);
 
                 tipo = (tipo ?? "").Trim().ToLower();
@@ -149,7 +156,7 @@ namespace Oclock.Controllers
             }
 
             // Si no vienen fechas, por defecto: últimos 30 días (incluyendo hoy)
-            DateTime hoyDateTime = DateTime.Today;
+            DateTime hoyDateTime = AhoraCostaRica().Date;   
             DateTime desdeDT = desde?.Date ?? hoyDateTime.AddDays(-30);
             DateTime hastaDT = hasta?.Date ?? hoyDateTime;
 
@@ -215,7 +222,7 @@ namespace Oclock.Controllers
                 IdUsuario = idUsuario.Value,
                 IdTipoSolicitud = model.IdTipoSolicitud,
                 Descripcion = model.Descripcion,
-                FechaSolicitud = DateOnly.FromDateTime(DateTime.Now),
+                FechaSolicitud = DateOnly.FromDateTime(AhoraCostaRica()),
                 FechaInicio = DateOnly.FromDateTime(model.FechaInicio),
                 FechaFin = DateOnly.FromDateTime(model.FechaFin),
                 Estado = "pendiente",

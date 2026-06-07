@@ -21,5 +21,5 @@ public partial class Marca
 
     public virtual Usuario? IdUsuarioNavigation { get; set; }
 
-    public DateOnly Fecha { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+    public DateOnly Fecha { get; set; }
 }
