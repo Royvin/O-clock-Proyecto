@@ -266,9 +266,9 @@
 
     .form-actions {
         display: flex;
-        gap: 15px;
-        margin-top: 20px;
-    }
+        gap: 10px;
+        margin-top: 15px;
+        padding: 20px;    }
 
     .btn {
         padding: 12px 30px;
@@ -650,12 +650,6 @@
                                             <button type="submit" class="btn-icon" title="Activar">✅</button>
                                         </form>
                                     }
-
-                                    <form asp-action="EliminarBono" method="post" style="display:inline"
-                                          onsubmit="return confirm('¿Estás seguro de eliminar este bono?')">
-                                        <input type="hidden" name="id" value="@bono.IdBono" />
-                                        <button type="submit" class="btn-icon" title="Eliminar">🗑️</button>
-                                    </form>
                                 </td>
                             </tr>
                         }
