@@ -86,20 +86,6 @@ public class BonoController : Controller
     }
 
     [HttpPost]
-    public IActionResult EliminarBono(int id)
-    {
-        var bono = _context.Bonos.FirstOrDefault(b => b.IdBono == id);
-
-        if (bono == null)
-            return NotFound();
-
-        _context.Bonos.Remove(bono);
-        _context.SaveChanges();
-
-        return RedirectToAction("GestionBonos");
-    }
-
-    [HttpPost]
     public IActionResult ActivarBono(int id)
     {
         var bono = _context.Bonos.FirstOrDefault(b => b.IdBono == id);
