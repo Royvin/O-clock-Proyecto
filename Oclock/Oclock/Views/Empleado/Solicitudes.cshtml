@@ -2,6 +2,7 @@
     ViewData["Title"] = "Solicitudes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <style>
     * {
         margin: 0;
@@ -38,7 +39,7 @@
         color: #4a5568;
         text-decoration: none;
         font-weight: 500;
-        font-size: 15px; /* <- Ajuste para igualar fuente */
+        font-size: 15px;
         border-radius: 10px;
         transition: all 0.3s;
         position: relative;
@@ -79,7 +80,7 @@
 
     .content {
         flex: 1;
-        padding: 40px; /* <- Igual al resto */
+        padding: 40px;
         background: #f5f7fa;
     }
 
@@ -92,7 +93,7 @@
 
         .content-header h1 {
             color: #2d3748;
-            font-size: 28px; /* <- Igual que Marcas */
+            font-size: 28px;
             margin-bottom: 8px;
         }
 
@@ -101,7 +102,6 @@
             font-size: 14px;
         }
 
-    /* Stats Cards */
     .stats-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -146,7 +146,6 @@
         font-weight: 600;
     }
 
-    /* Tabs */
     .tabs {
         display: flex;
         gap: 8px;
@@ -189,7 +188,6 @@
             display: block;
         }
 
-    /* Form Section */
     .form-section {
         background: white;
         padding: 20px;
@@ -271,7 +269,6 @@
         grid-column: 1 / -1;
     }
 
-    /* File Upload */
     .file-upload {
         border: 2px dashed #cbd5e0;
         border-radius: 8px;
@@ -359,7 +356,6 @@
             color: white;
         }
 
-    /* Buttons */
     .btn {
         padding: 10px 20px;
         border: none;
@@ -427,7 +423,6 @@
         flex-wrap: wrap;
     }
 
-    /* Filter Section */
     .filter-section {
         background: white;
         padding: 15px 20px;
@@ -452,7 +447,6 @@
         margin-bottom: 12px;
     }
 
-    /* Request Cards */
     .requests-section {
         background: white;
         padding: 20px;
@@ -510,6 +504,10 @@
             border-left-color: #718096;
         }
 
+        .request-card.cancelado {
+            border-left-color: #718096;
+        }
+
     .request-icon {
         width: 40px;
         height: 40px;
@@ -552,7 +550,6 @@
         flex-wrap: wrap;
     }
 
-    /* Badges */
     .badge {
         display: inline-block;
         padding: 4px 10px;
@@ -586,7 +583,6 @@
         color: #4a5568;
     }
 
-    /* Empty State */
     .empty-state {
         text-align: center;
         padding: 40px 20px;
@@ -609,7 +605,6 @@
         font-size: 13px;
     }
 
-    /* Modal */
     .modal {
         display: none;
         position: fixed;
@@ -697,7 +692,6 @@
         font-size: 13px;
     }
 
-    /* Alert Messages */
     .alert {
         padding: 12px 15px;
         border-radius: 8px;
@@ -733,7 +727,6 @@
     }
 </style>
 
-
 <div class="main-layout">
     <div class="sidebar">
         <div class="menu-item">
@@ -757,6 +750,12 @@
             </a>
         </div>
 
+        <div class="menu-item">
+            <a href="/Empleado/CalendarioFeriados" class="menu-link">
+                <div class="icon">📅</div>
+                Calendario de Feriados
+            </a>
+        </div>
 
         <div class="menu-item">
             <a href="/Empleado/HistorialBonos" class="menu-link">
@@ -897,6 +896,7 @@
                             <option value="aprobada">Aprobada</option>
                             <option value="rechazada">Rechazada</option>
                             <option value="cancelada">Cancelada</option>
+                            <option value="cancelado">Cancelado</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -926,7 +926,7 @@
             <div class="requests-section">
                 <div class="section-header">
                     <h2>📄 Mis Solicitudes</h2>
-                    <span class="badge badge-info" id="totalBadge">12 solicitudes</span>
+                    <span class="badge badge-info" id="totalBadge">0 solicitudes</span>
                 </div>
 
                 <div id="solicitudesList"></div>
@@ -987,7 +987,6 @@
                     <div class="form-group full-width">
                         <label>Documento de Respaldo</label>
 
-                        <!-- Archivo actual -->
                         <div id="archivoActualContainer" style="margin-bottom:10px; display:none;">
                             <div class="uploaded-file">
                                 <div class="file-icon">📄</div>
@@ -1005,7 +1004,6 @@
                             </button>
                         </div>
 
-                        <!-- Subir nuevo archivo -->
                         <div class="file-upload" onclick="document.getElementById('editFileInput').click()">
                             <div class="file-upload-icon">📎</div>
                             <div class="file-upload-text">Haz clic para adjuntar nuevo archivo</div>
@@ -1018,7 +1016,6 @@
 
                         <div id="editUploadedFiles" class="uploaded-files"></div>
                     </div>
-
                 </div>
 
                 <div class="btn-group" style="margin-top: 15px;">
@@ -1057,10 +1054,6 @@
 </div>
 
 <script>
-
-       // ============================================================
-    // VARIABLES GLOBALES
-    // ============================================================
     let solicitudes = [];
     let uploadedFiles = [];
     let currentEditId = null;
@@ -1069,19 +1062,12 @@
     let eliminarArchivo = false;
     let archivoActualRuta = null;
 
-    // ============================================================
-    // INICIALIZACIÓN
-    // ============================================================
     document.addEventListener('DOMContentLoaded', () => {
         cargarTiposSolicitud();
         cargarSolicitudes();
         document.getElementById('solicitudForm').addEventListener('submit', handleFormSubmit);
         document.getElementById('editForm').addEventListener('submit', handleEditSubmit);
     });
-
-    // ============================================================
-    // CARGA DE DATOS DESDE EL SERVIDOR
-    // ============================================================
 
     async function cargarTiposSolicitud() {
         try {
@@ -1111,7 +1097,6 @@
                     }
                 });
             });
-
         } catch (error) {
             console.error("Error cargando tipos:", error);
         }
@@ -1130,29 +1115,24 @@
             solicitudes = data;
             renderSolicitudes();
             updateCounters();
-
         } catch (error) {
             console.error("Error cargando solicitudes:", error);
         }
     }
-
-    // ============================================================
-    // RENDERIZADO DE SOLICITUDES
-    // ============================================================
 
     function renderSolicitudes() {
         const container = document.getElementById('solicitudesList');
         let filtered = [...solicitudes];
 
         const filterEstado = document.getElementById('filterEstado')?.value;
-        const filterTipo   = document.getElementById('filterTipo')?.value;
-        const filterDesde  = document.getElementById('filterDesde')?.value;
-        const filterHasta  = document.getElementById('filterHasta')?.value;
+        const filterTipo = document.getElementById('filterTipo')?.value;
+        const filterDesde = document.getElementById('filterDesde')?.value;
+        const filterHasta = document.getElementById('filterHasta')?.value;
 
         if (filterEstado) filtered = filtered.filter(s => s.estado === filterEstado);
-        if (filterTipo)   filtered = filtered.filter(s => s.tipoNombre === filterTipo);
-        if (filterDesde)  filtered = filtered.filter(s => s.fechaInicio >= filterDesde);
-        if (filterHasta)  filtered = filtered.filter(s => s.fechaFin <= filterHasta);
+        if (filterTipo) filtered = filtered.filter(s => s.tipoNombre === filterTipo);
+        if (filterDesde) filtered = filtered.filter(s => s.fechaInicio >= filterDesde);
+        if (filterHasta) filtered = filtered.filter(s => s.fechaFin <= filterHasta);
 
         if (filtered.length === 0) {
             container.innerHTML = `
@@ -1166,16 +1146,17 @@
 
         const estadoColors = {
             pendiente: '#feebc8',
-            aprobada:  '#c6f6d5',
+            aprobada: '#c6f6d5',
             rechazada: '#fed7d7',
-            cancelada: '#e2e8f0'
+            cancelada: '#e2e8f0',
+            cancelado: '#e2e8f0'
         };
 
         filtered.sort((a, b) => new Date(b.fechaSolicitud) - new Date(a.fechaSolicitud));
 
         container.innerHTML = filtered.map(sol => `
             <div class="request-card ${sol.estado}">
-                <div class="request-icon" style="background:${estadoColors[sol.estado]};color:#2d3748;">
+                <div class="request-icon" style="background:${estadoColors[sol.estado] || '#e2e8f0'};color:#2d3748;">
                     ${getTipoIcon(sol.tipoNombre)}
                 </div>
                 <div class="request-info">
@@ -1194,7 +1175,7 @@
                     <button class="btn btn-info" onclick="viewDetail(${sol.id})">Ver</button>
                     ${sol.estado === 'pendiente' ? `
                         <button class="btn btn-success" onclick="editSolicitud(${sol.id})">Editar</button>
-                        <button class="btn btn-danger"  onclick="cancelSolicitud(${sol.id})">Cancelar</button>
+                        <button class="btn btn-danger" onclick="cancelSolicitud(${sol.id})">Cancelar</button>
                     ` : ''}
                 </div>
             </div>
@@ -1203,38 +1184,36 @@
 
     function updateCounters() {
         const pendientes = solicitudes.filter(s => s.estado === 'pendiente').length;
-        const aprobadas  = solicitudes.filter(s => s.estado === 'aprobada').length;
+        const aprobadas = solicitudes.filter(s => s.estado === 'aprobada').length;
         const rechazadas = solicitudes.filter(s => s.estado === 'rechazada').length;
 
-        document.getElementById('pendingCount').textContent  = pendientes;
+        document.getElementById('pendingCount').textContent = pendientes;
         document.getElementById('approvedCount').textContent = aprobadas;
         document.getElementById('rejectedCount').textContent = rechazadas;
-        document.getElementById('totalCount').textContent    = solicitudes.length;
-        document.getElementById('totalBadge').textContent    = `${solicitudes.length} solicitudes`;
+        document.getElementById('totalCount').textContent = solicitudes.length;
+        document.getElementById('totalBadge').textContent = `${solicitudes.length} solicitudes`;
     }
-
-    // ============================================================
-    // ICONOS
-    // ============================================================
 
     function getTipoIcon(tipoNombre) {
         const nombre = tipoNombre?.toLowerCase();
         if (!nombre) return "📄";
-        if (nombre.includes("vacacion"))    return "🏖️";
-        if (nombre.includes("permiso"))     return "📝";
+        if (nombre.includes("vacacion")) return "🏖️";
+        if (nombre.includes("permiso")) return "📝";
         if (nombre.includes("incapacidad")) return "🏥";
-        if (nombre.includes("licencia"))    return "📄";
+        if (nombre.includes("licencia")) return "📄";
         return "📄";
     }
 
     function getStatusBadge(estado) {
         const badges = {
             pendiente: '<span class="badge badge-warning">Pendiente</span>',
-            aprobada:  '<span class="badge badge-success">Aprobada</span>',
+            aprobada: '<span class="badge badge-success">Aprobada</span>',
             rechazada: '<span class="badge badge-danger">Rechazada</span>',
+            cancelada: '<span class="badge badge-secondary">Cancelada</span>',
             cancelado: '<span class="badge badge-secondary">Cancelado</span>'
         };
-        return badges[estado];
+
+        return badges[estado] || '<span class="badge badge-secondary">Sin estado</span>';
     }
 
     function formatDate(dateStr) {
@@ -1243,14 +1222,10 @@
     }
 
     function formatFileSize(bytes) {
-        if (bytes < 1024)        return bytes + ' B';
+        if (bytes < 1024) return bytes + ' B';
         if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
         return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
     }
-
-    // ============================================================
-    // ALERTAS - ERRORES
-    // ============================================================
 
     function showAlert(message, type) {
         const alertDiv = document.getElementById('alertMessage');
@@ -1276,10 +1251,6 @@
         document.querySelectorAll('.form-group').forEach(el => el.classList.remove('error'));
     }
 
-    // ============================================================
-    // MANEJO DE PESTAÑAS
-    // ============================================================
-
     function switchTab(tabName, element) {
         document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
         element.classList.add('active');
@@ -1287,32 +1258,29 @@
         document.getElementById(tabName + 'Tab').classList.add('active');
     }
 
-    // ============================================================
-    // MANEJO DE MODALES
-    // ============================================================
+    function openModal(modalId) {
+        document.getElementById(modalId).classList.add('show');
+    }
 
-    function openModal(modalId)  { document.getElementById(modalId).classList.add('show'); }
-    function closeModal(modalId) { document.getElementById(modalId).classList.remove('show'); }
-
-    // ============================================================
-    // FORMULARIO: NUEVA SOLICITUD
-    // ============================================================
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('show');
+    }
 
     async function handleFormSubmit(event) {
         event.preventDefault();
         clearErrors();
 
-        const tipo        = document.getElementById('tipoSolicitud').value;
-        const prioridad   = document.getElementById('prioridad').value;
+        const tipo = document.getElementById('tipoSolicitud').value;
+        const prioridad = document.getElementById('prioridad').value;
         const fechaInicio = document.getElementById('fechaInicio').value;
-        const fechaFin    = document.getElementById('fechaFin').value;
-        const motivo      = document.getElementById('motivo').value;
+        const fechaFin = document.getElementById('fechaFin').value;
+        const motivo = document.getElementById('motivo').value;
 
         let isValid = true;
-        if (!tipo)          { showError('tipoError',        'Campo obligatorio'); isValid = false; }
-        if (!fechaInicio)   { showError('fechaInicioError', 'Campo obligatorio'); isValid = false; }
-        if (!fechaFin)      { showError('fechaFinError',    'Campo obligatorio'); isValid = false; }
-        if (!motivo.trim()) { showError('motivoError',      'Campo obligatorio'); isValid = false; }
+        if (!tipo) { showError('tipoError', 'Campo obligatorio'); isValid = false; }
+        if (!fechaInicio) { showError('fechaInicioError', 'Campo obligatorio'); isValid = false; }
+        if (!fechaFin) { showError('fechaFinError', 'Campo obligatorio'); isValid = false; }
+        if (!motivo.trim()) { showError('motivoError', 'Campo obligatorio'); isValid = false; }
 
         if (!isValid) {
             showAlert('Complete todos los campos obligatorios', 'error');
@@ -1354,10 +1322,6 @@
         clearErrors();
     }
 
-    // ============================================================
-    // MANEJO DE ARCHIVOS: NUEVA SOLICITUD
-    // ============================================================
-
     function handleFileSelect(event) {
         const files = Array.from(event.target.files);
         const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
@@ -1383,7 +1347,10 @@
 
     function renderUploadedFiles() {
         const container = document.getElementById('uploadedFiles');
-        if (uploadedFiles.length === 0) { container.innerHTML = ''; return; }
+        if (uploadedFiles.length === 0) {
+            container.innerHTML = '';
+            return;
+        }
 
         container.innerHTML = uploadedFiles.map((file, index) => `
             <div class="uploaded-file">
@@ -1402,15 +1369,10 @@
         renderUploadedFiles();
     }
 
-    // ============================================================
-    // MODAL: VER DETALLE
-    // ============================================================
-
     function viewDetail(id) {
         const sol = solicitudes.find(s => s.id === id);
         if (!sol) return;
 
-        // ✅ tipoLabels eliminado — se usa directamente sol.tipoNombre
         document.getElementById('detailContent').innerHTML = `
             <div class="detail-row">
                 <div class="detail-label">ID Solicitud</div>
@@ -1458,10 +1420,6 @@
         openModal('detailModal');
     }
 
-    // ============================================================
-    // MODAL: EDITAR SOLICITUD
-    // ============================================================
-
     function editSolicitud(id) {
         const sol = solicitudes.find(s => s.id === id);
         if (!sol || sol.estado !== 'pendiente') {
@@ -1472,12 +1430,12 @@
         currentEditId = id;
 
         document.getElementById('editTipoSolicitud').value = sol.tipo;
-        document.getElementById('editPrioridad').value     = sol.prioridad ?? "normal";
-        document.getElementById('editFechaInicio').value   = sol.fechaInicio;
-        document.getElementById('editFechaFin').value      = sol.fechaFin;
-        document.getElementById('editMotivo').value        = sol.motivo;
+        document.getElementById('editPrioridad').value = sol.prioridad ?? "normal";
+        document.getElementById('editFechaInicio').value = sol.fechaInicio;
+        document.getElementById('editFechaFin').value = sol.fechaFin;
+        document.getElementById('editMotivo').value = sol.motivo;
 
-        editFile        = null;
+        editFile = null;
         eliminarArchivo = false;
 
         const container = document.getElementById("archivoActualContainer");
@@ -1500,11 +1458,11 @@
         event.preventDefault();
 
         const formData = new FormData();
-        formData.append("IdSolicitud",     currentEditId);
+        formData.append("IdSolicitud", currentEditId);
         formData.append("IdTipoSolicitud", parseInt(document.getElementById('editTipoSolicitud').value));
-        formData.append("FechaInicio",     document.getElementById('editFechaInicio').value);
-        formData.append("FechaFin",        document.getElementById('editFechaFin').value);
-        formData.append("Descripcion",     document.getElementById('editMotivo').value);
+        formData.append("FechaInicio", document.getElementById('editFechaInicio').value);
+        formData.append("FechaFin", document.getElementById('editFechaFin').value);
+        formData.append("Descripcion", document.getElementById('editMotivo').value);
         formData.append("EliminarArchivo", eliminarArchivo);
 
         if (editFile) formData.append("Archivo", editFile);
@@ -1529,10 +1487,6 @@
         }
     }
 
-    // ============================================================
-    // MANEJO DE ARCHIVOS: EDITAR SOLICITUD
-    // ============================================================
-
     function deshabilitarInputArchivo() {
         document.getElementById("editFileInput").disabled = true;
         document.getElementById("editUploadedFiles").innerHTML = `
@@ -1548,7 +1502,7 @@
     }
 
     function eliminarArchivoActual() {
-        eliminarArchivo   = true;
+        eliminarArchivo = true;
         archivoActualRuta = null;
         document.getElementById("archivoActualContainer").style.display = "none";
         habilitarInputArchivo();
@@ -1566,17 +1520,27 @@
         const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
         const maxSize = 5 * 1024 * 1024;
 
-        if (!allowedTypes.includes(file.type)) { showAlert("Formato no permitido", "error"); return; }
-        if (file.size > maxSize)               { showAlert("Archivo supera 5MB", "error");   return; }
+        if (!allowedTypes.includes(file.type)) {
+            showAlert("Formato no permitido", "error");
+            return;
+        }
 
-        editFile        = file;
+        if (file.size > maxSize) {
+            showAlert("Archivo supera 5MB", "error");
+            return;
+        }
+
+        editFile = file;
         eliminarArchivo = false;
         renderEditUploadedFile();
     }
 
     function renderEditUploadedFile() {
         const container = document.getElementById("editUploadedFiles");
-        if (!editFile) { container.innerHTML = ""; return; }
+        if (!editFile) {
+            container.innerHTML = "";
+            return;
+        }
 
         container.innerHTML = `
             <div class="uploaded-file">
@@ -1596,16 +1560,13 @@
         renderEditUploadedFile();
     }
 
-    // ============================================================
-    // MODAL: CANCELAR SOLICITUD
-    // ============================================================
-
     function cancelSolicitud(id) {
         const sol = solicitudes.find(s => s.id === id);
         if (!sol || sol.estado !== 'pendiente') {
             showAlert('Solo se pueden cancelar solicitudes pendientes', 'error');
             return;
         }
+
         currentCancelId = id;
         openModal('cancelModal');
     }
@@ -1635,21 +1596,15 @@
         }
     }
 
-    // ============================================================
-    // FILTROS
-    // ============================================================
-
-    function applyFilters() { renderSolicitudes(); }
-
-    function clearFilters() {
-        document.getElementById('filterEstado').value = '';
-        document.getElementById('filterTipo').value   = '';
-        document.getElementById('filterDesde').value  = '';
-        document.getElementById('filterHasta').value  = '';
+    function applyFilters() {
         renderSolicitudes();
     }
 
-
-
-
+    function clearFilters() {
+        document.getElementById('filterEstado').value = '';
+        document.getElementById('filterTipo').value = '';
+        document.getElementById('filterDesde').value = '';
+        document.getElementById('filterHasta').value = '';
+        renderSolicitudes();
+    }
 </script>

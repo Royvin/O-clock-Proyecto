@@ -10,6 +10,7 @@
         padding: 0;
         box-sizing: border-box;
     }
+
     /* Sidebar + Content Layout */
     .main-layout {
         display: flex;
@@ -154,7 +155,7 @@
         border: none;
         border-radius: 10px;
         font-weight: 600;
-        cursor: pointer;  
+        cursor: pointer;
         transition: all 0.3s;
         font-size: 14px;
         display: inline-flex;
@@ -260,8 +261,15 @@
 
         <div class="menu-item">
             <a href="/Empleado/Solicitudes" class="menu-link">
-                <div class="icon">🗂️ </div>
+                <div class="icon">🗂️</div>
                 Mis Solicitudes
+            </a>
+        </div>
+
+        <div class="menu-item">
+            <a href="/Empleado/CalendarioFeriados" class="menu-link">
+                <div class="icon">📅</div>
+                Calendario de Feriados
             </a>
         </div>
 
@@ -326,16 +334,32 @@
                                 var tipo = (m.Nombre ?? "").ToLower();
 
                                 var hora = m.HoraEntrada.HasValue
-                                ? m.HoraEntrada.Value.ToString("HH:mm:ss")
-                                : (m.HoraSalida.HasValue ? m.HoraSalida.Value.ToString("HH:mm:ss") : "--:--:--");
+                                    ? m.HoraEntrada.Value.ToString("HH:mm:ss")
+                                    : (m.HoraSalida.HasValue ? m.HoraSalida.Value.ToString("HH:mm:ss") : "--:--:--");
 
                                 string badgeClass = "badge-info";
                                 string label = m.Nombre;
 
-                                if (tipo == "entrada") { badgeClass = "badge-success"; label = "Entrada"; }
-                                else if (tipo == "salida") { badgeClass = "badge-danger"; label = "Salida"; }
-                                else if (tipo == "almuerzo") { badgeClass = "badge-warning"; label = "Almuerzo"; }
-                                else if (tipo == "descanso") { badgeClass = "badge-info"; label = "Descanso"; }
+                                if (tipo == "entrada")
+                                {
+                                    badgeClass = "badge-success";
+                                    label = "Entrada";
+                                }
+                                else if (tipo == "salida")
+                                {
+                                    badgeClass = "badge-danger";
+                                    label = "Salida";
+                                }
+                                else if (tipo == "almuerzo")
+                                {
+                                    badgeClass = "badge-warning";
+                                    label = "Almuerzo";
+                                }
+                                else if (tipo == "descanso")
+                                {
+                                    badgeClass = "badge-info";
+                                    label = "Descanso";
+                                }
 
                                 <tr style="border-bottom:1px solid #e5e7eb;">
                                     <td style="padding:14px;">@m.Fecha.ToString("dd/MM/yyyy")</td>

@@ -1,16 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Oclock.Data;
 using Oclock.Filters;
 using Oclock.Helpers;
 using Oclock.Models;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-
+using System.Threading.Tasks;
 
 namespace Oclock.Controllers
 {
-    
     [AuthorizeRole(2)]
     public class EmpleadoController : Controller
     {
@@ -20,7 +22,6 @@ namespace Oclock.Controllers
         {
             _context = context;
         }
-
 
         private static DateTime AhoraCostaRica()
         {
@@ -92,7 +93,7 @@ namespace Oclock.Controllers
 
             try
             {
-                var ahora = AhoraCostaRica();   
+                var ahora = AhoraCostaRica();
                 var hoy = DateOnly.FromDateTime(ahora);
 
                 tipo = (tipo ?? "").Trim().ToLower();
@@ -144,7 +145,6 @@ namespace Oclock.Controllers
             }
         }
 
-      
         // Se usa por querystring: /Empleado/HistorialMarcas?desde=2026-01-01&hasta=2026-01-31
         public IActionResult HistorialMarcas(DateTime? desde, DateTime? hasta)
         {
@@ -156,7 +156,7 @@ namespace Oclock.Controllers
             }
 
             // Si no vienen fechas, por defecto: últimos 30 días (incluyendo hoy)
-            DateTime hoyDateTime = AhoraCostaRica().Date;   
+            DateTime hoyDateTime = AhoraCostaRica().Date;
             DateTime desdeDT = desde?.Date ?? hoyDateTime.AddDays(-30);
             DateTime hastaDT = hasta?.Date ?? hoyDateTime;
 
@@ -184,7 +184,6 @@ namespace Oclock.Controllers
             return View();
         }
 
-
         [HttpGet]
         public IActionResult ObtenerTiposSolicitud()
         {
@@ -198,9 +197,6 @@ namespace Oclock.Controllers
 
             return Json(tipos);
         }
-
-
-
 
         [HttpPost]
         public async Task<IActionResult> RegistrarSolicitud(SolicitudPost model)
@@ -247,6 +243,7 @@ namespace Oclock.Controllers
 
                 string nombreUnico = Guid.NewGuid().ToString() +
                                      Path.GetExtension(model.Archivo.FileName);
+
                 string rutaCompleta = Path.Combine(carpetaBase, nombreUnico);
 
                 using (var stream = new FileStream(rutaCompleta, FileMode.Create))
@@ -258,7 +255,7 @@ namespace Oclock.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            // ★ 3. Notificar a todos los administradores (rol = 1)
+            // 3. Notificar a todos los administradores (rol = 1)
             var admins = _context.Usuarios
                 .Where(u => u.IdRol == 1 && u.Activo == true)
                 .Select(u => u.IdUsuario)
@@ -290,8 +287,6 @@ namespace Oclock.Controllers
             return Json(new { success = true, message = "Solicitud registrada correctamente." });
         }
 
-
-
         [HttpGet]
         public IActionResult SolicitudesEmpleado()
         {
@@ -303,29 +298,27 @@ namespace Oclock.Controllers
             }
 
             var solicitudes = _context.Solicituds
-       .Include(s => s.IdTipoSolicitudNavigation)
-       .Where(s => s.IdUsuario == idUsuario)
-       .Select(s => new
-       {
-           id = s.IdSolicitud,
-           tipo = s.IdTipoSolicitud,
-           tipoNombre = s.IdTipoSolicitudNavigation.NombreSolicitud.ToLower(),
-           fechaInicio = s.FechaInicio.Value.ToString("yyyy-MM-dd"),
-           fechaFin = s.FechaFin.Value.ToString("yyyy-MM-dd"),
-           estado = s.Estado.ToLower(),
-           fechaSolicitud = s.FechaSolicitud.ToString("yyyy-MM-dd"),
-           motivo = s.Descripcion,
-           prioridad = "normal",
-           archivos = new List<string>(),
-           RutaArchivo = s.RutaArchivo,
-           NombreArchivo = s.NombreArchivo,
-
-       })
-       .ToList();
+                .Include(s => s.IdTipoSolicitudNavigation)
+                .Where(s => s.IdUsuario == idUsuario)
+                .Select(s => new
+                {
+                    id = s.IdSolicitud,
+                    tipo = s.IdTipoSolicitud,
+                    tipoNombre = s.IdTipoSolicitudNavigation.NombreSolicitud.ToLower(),
+                    fechaInicio = s.FechaInicio.Value.ToString("yyyy-MM-dd"),
+                    fechaFin = s.FechaFin.Value.ToString("yyyy-MM-dd"),
+                    estado = s.Estado.ToLower(),
+                    fechaSolicitud = s.FechaSolicitud.ToString("yyyy-MM-dd"),
+                    motivo = s.Descripcion,
+                    prioridad = "normal",
+                    archivos = new List<string>(),
+                    RutaArchivo = s.RutaArchivo,
+                    NombreArchivo = s.NombreArchivo
+                })
+                .ToList();
 
             return Json(solicitudes);
         }
-
 
         [HttpPut]
         public async Task<IActionResult> EditarSolicitud(SolicitudPut model)
@@ -348,7 +341,7 @@ namespace Oclock.Controllers
             if (model.FechaFin < model.FechaInicio)
                 return BadRequest("Rango de fechas inválido.");
 
-            // 🔹 Actualizar datos normales
+            // Actualizar datos normales
             solicitud.IdTipoSolicitud = model.IdTipoSolicitud;
             solicitud.FechaInicio = DateOnly.FromDateTime(model.FechaInicio);
             solicitud.FechaFin = DateOnly.FromDateTime(model.FechaFin);
@@ -360,7 +353,7 @@ namespace Oclock.Controllers
                 solicitud.IdSolicitud.ToString()
             );
 
-            // 🔥 1️⃣ Si el usuario pidió eliminar el archivo
+            // 1. Si el usuario pidió eliminar el archivo
             if (model.EliminarArchivo && !string.IsNullOrEmpty(solicitud.RutaArchivo))
             {
                 string rutaFisica = Path.Combine(
@@ -378,7 +371,7 @@ namespace Oclock.Controllers
                 solicitud.NombreArchivo = null;
             }
 
-            // 🔥 2️⃣ Si viene un archivo nuevo (reemplazo)
+            // 2. Si viene un archivo nuevo (reemplazo)
             if (model.Archivo != null && model.Archivo.Length > 0)
             {
                 if (!Directory.Exists(carpetaBase))
@@ -426,8 +419,6 @@ namespace Oclock.Controllers
             });
         }
 
-
-
         [HttpPut]
         public IActionResult CancelarSolicitud(int id)
         {
@@ -446,7 +437,7 @@ namespace Oclock.Controllers
             if (solicitud.Estado.ToLower() != "pendiente")
                 return BadRequest("Solo se pueden cancelar solicitudes pendientes.");
 
-            // 🔥 Si tiene archivo, eliminarlo
+            // Si tiene archivo, eliminarlo
             if (!string.IsNullOrEmpty(solicitud.RutaArchivo))
             {
                 string rutaFisica = Path.Combine(
@@ -460,7 +451,7 @@ namespace Oclock.Controllers
                     System.IO.File.Delete(rutaFisica);
                 }
 
-                // 🔥 Limpiar columnas en BD
+                // Limpiar columnas en BD
                 solicitud.RutaArchivo = null;
                 solicitud.NombreArchivo = null;
             }
@@ -483,7 +474,7 @@ namespace Oclock.Controllers
             return View();
         }
 
-        // ── Endpoint JSON que alimenta la vista ──────────────────────────────────────
+        // Endpoint JSON que alimenta la vista
         [HttpGet]
         public IActionResult ObtenerHistorialBonos()
         {
@@ -509,11 +500,10 @@ namespace Oclock.Controllers
             return Json(new { success = true, bonos });
         }
 
-
-
-
-
-
-
+        [HttpGet]
+        public IActionResult CalendarioFeriados()
+        {
+            return View();
+        }
     }
 }

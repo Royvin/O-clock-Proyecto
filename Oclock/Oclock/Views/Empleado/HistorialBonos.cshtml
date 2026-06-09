@@ -374,18 +374,28 @@
                 Marcas
             </a>
         </div>
+
         <div class="menu-item">
             <a href="/Empleado/HistorialMarcas" class="menu-link">
                 <div class="icon">📝</div>
                 Mi Historial
             </a>
         </div>
+
         <div class="menu-item">
             <a href="/Empleado/Solicitudes" class="menu-link">
                 <div class="icon">🗂️</div>
                 Mis Solicitudes
             </a>
         </div>
+
+        <div class="menu-item">
+            <a href="/Empleado/CalendarioFeriados" class="menu-link">
+                <div class="icon">📅</div>
+                Calendario de Feriados
+            </a>
+        </div>
+
         <div class="menu-item">
             <a href="/Empleado/HistorialBonos" class="menu-link active">
                 <div class="icon">🏆</div>
@@ -405,17 +415,25 @@
         <!-- Stats -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-header"><div class="stat-icon">🏆</div></div>
+                <div class="stat-header">
+                    <div class="stat-icon">🏆</div>
+                </div>
                 <div class="stat-value" id="statTotal">—</div>
                 <div class="stat-label">Total bonos</div>
             </div>
+
             <div class="stat-card">
-                <div class="stat-header"><div class="stat-icon">💰</div></div>
+                <div class="stat-header">
+                    <div class="stat-icon">💰</div>
+                </div>
                 <div class="stat-value" id="statMonto">—</div>
                 <div class="stat-label">Monto acumulado</div>
             </div>
+
             <div class="stat-card">
-                <div class="stat-header"><div class="stat-icon">📅</div></div>
+                <div class="stat-header">
+                    <div class="stat-icon">📅</div>
+                </div>
                 <div class="stat-value" id="statPeriodos">—</div>
                 <div class="stat-label">Períodos con bono</div>
             </div>
@@ -452,7 +470,7 @@
     // ── Cargar bonos desde el servidor ───────────────────────────────
     async function cargarBonos() {
         try {
-            const res  = await fetch('/Empleado/ObtenerHistorialBonos');
+            const res = await fetch('/Empleado/ObtenerHistorialBonos');
             const data = await res.json();
 
             if (!data.success) {
@@ -470,18 +488,18 @@
 
     // ── Estadísticas ─────────────────────────────────────────────────
     function actualizarStats(bonos) {
-        const total    = bonos.length;
-        const monto    = bonos.reduce((sum, b) => sum + (b.monto || 0), 0);
+        const total = bonos.length;
+        const monto = bonos.reduce((sum, b) => sum + (b.monto || 0), 0);
         const periodos = new Set(bonos.map(b => b.periodo)).size;
 
-        document.getElementById('statTotal').textContent    = total;
-        document.getElementById('statMonto').textContent    = '₡' + monto.toLocaleString('es-CR');
+        document.getElementById('statTotal').textContent = total;
+        document.getElementById('statMonto').textContent = '₡' + monto.toLocaleString('es-CR');
         document.getElementById('statPeriodos').textContent = periodos;
     }
 
     // ── Render cards ─────────────────────────────────────────────────
     function renderBonos(bonos) {
-        const list  = document.getElementById('bonosList');
+        const list = document.getElementById('bonosList');
         const badge = document.getElementById('totalBadge');
 
         badge.textContent = `${bonos.length} bono${bonos.length !== 1 ? 's' : ''}`;
@@ -515,7 +533,7 @@
     document.getElementById('filterPeriodo').addEventListener('input', aplicarFiltros);
 
     function aplicarFiltros() {
-        const periodo = document.getElementById('filterPeriodo').value; // "YYYY-MM"
+        const periodo = document.getElementById('filterPeriodo').value;
 
         let resultado = todosLosBonos;
 
@@ -534,16 +552,25 @@
     // ── Helpers de formato ───────────────────────────────────────────
     function formatPeriodo(p) {
         if (!p || p.length < 7) return p;
+
         const [y, m] = p.split('-');
-        const meses  = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-                         'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+        const meses = [
+            'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ];
+
         return `${meses[parseInt(m) - 1]} ${y}`;
     }
 
     function formatFecha(f) {
         if (!f) return '—';
+
         const d = new Date(f);
-        return d.toLocaleDateString('es-CR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        return d.toLocaleDateString('es-CR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
     }
 
     function mostrarError(msg) {

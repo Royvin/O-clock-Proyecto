@@ -25,6 +25,9 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddSingleton<EmailService>();
 
+// API pública de feriados.
+builder.Services.AddHttpClient();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

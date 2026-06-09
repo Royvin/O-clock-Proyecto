@@ -1,0 +1,797 @@
+﻿@{
+    ViewData["Title"] = "Calendario de Feriados";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .main-layout {
+        display: flex;
+        min-height: 600px;
+    }
+
+    .sidebar {
+        width: 220px;
+        background: #ffffff;
+        padding: 20px 15px;
+        border-right: 1px solid #e0e0e0;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.02);
+    }
+
+    .menu-item {
+        padding: 0;
+        margin: 3px 0;
+        border-radius: 8px;
+    }
+
+    .menu-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 15px;
+        color: #4a5568;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+        .menu-link:hover {
+            background: #2F6FED;
+            color: white;
+            transform: translateX(3px);
+        }
+
+        .menu-link.active {
+            background: #2457C8;
+            color: white;
+            box-shadow: 0 3px 10px rgba(36,87,200,0.25);
+        }
+
+            .menu-link.active::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 3px;
+                height: 18px;
+                background: white;
+                border-radius: 0 3px 3px 0;
+            }
+
+    .icon {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+    }
+
+    .content {
+        flex: 1;
+        padding: 25px;
+        background: #F6F8FB;
+    }
+
+    .content-header {
+        margin-bottom: 20px;
+    }
+
+        .content-header h1 {
+            color: #2d3748;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .content-header p {
+            color: #718096;
+            font-size: 14px;
+        }
+
+    .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .stat-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 18px;
+        border: 1px solid #E5E7EB;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .stat-value {
+        color: #2457C8;
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 3px;
+    }
+
+    .stat-label {
+        color: #718096;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .calendar-card {
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        border: 1px solid #E5E7EB;
+        overflow: hidden;
+    }
+
+    .calendar-card-header {
+        background: #2457C8;
+        color: white;
+        padding: 18px 22px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .calendar-card-header h2 {
+            font-size: 20px;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .calendar-card-header span {
+            background: rgba(255,255,255,0.22);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+    .calendar-card-body {
+        padding: 22px;
+    }
+
+    .view-toggle {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .toggle-btn {
+        padding: 8px 20px;
+        border-radius: 8px;
+        border: 2px solid #2F6FED;
+        background: white;
+        color: #2F6FED;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .toggle-btn.active {
+            background: #2F6FED;
+            color: white;
+        }
+
+    .calendar-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+        .calendar-nav h3 {
+            font-size: 20px;
+            color: #2d3748;
+            font-weight: 700;
+        }
+
+    .nav-btn {
+        background: #EEF4FF;
+        border: none;
+        color: #2F6FED;
+        font-weight: 700;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 18px;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .nav-btn:hover {
+            background: #2F6FED;
+            color: white;
+            transform: scale(1.1);
+        }
+
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+    }
+
+    .cal-header {
+        text-align: center;
+        padding: 10px 4px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #718096;
+        letter-spacing: 0.05em;
+    }
+
+    .cal-day {
+        min-height: 70px;
+        border-radius: 10px;
+        border: 1px solid #f0f0f0;
+        padding: 6px;
+        cursor: default;
+        transition: all 0.2s;
+        position: relative;
+        background: white;
+    }
+
+        .cal-day.empty {
+            background: transparent;
+            border-color: transparent;
+        }
+
+        .cal-day.today {
+            border: 2px solid #2F6FED;
+            background: #EEF4FF;
+        }
+
+        .cal-day.holiday {
+            background: #FFF7ED;
+            border: 2px solid #f97316;
+            cursor: pointer;
+        }
+
+            .cal-day.holiday:hover {
+                transform: scale(1.04);
+                box-shadow: 0 4px 16px rgba(249,115,22,0.25);
+                z-index: 2;
+            }
+
+        .cal-day.weekend {
+            background: #fafafa;
+        }
+
+    .day-number {
+        font-size: 13px;
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 4px;
+        display: block;
+    }
+
+    .cal-day.today .day-number {
+        color: #2F6FED;
+    }
+
+    .cal-day.holiday .day-number {
+        color: #c2410c;
+    }
+
+    .holiday-dot {
+        font-size: 10px;
+        font-weight: 700;
+        color: #f97316;
+        background: #ffedd5;
+        padding: 2px 5px;
+        border-radius: 4px;
+        display: block;
+        line-height: 1.4;
+        margin-top: 2px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 100%;
+    }
+
+    .months-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .month-card {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        padding: 15px;
+        transition: box-shadow 0.2s;
+    }
+
+        .month-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+    .month-title {
+        text-align: center;
+        font-weight: 700;
+        font-size: 14px;
+        color: #2457C8;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .mini-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 2px;
+    }
+
+    .mini-header {
+        font-size: 9px;
+        text-align: center;
+        color: #a0aec0;
+        font-weight: 700;
+        padding: 2px 0;
+    }
+
+    .mini-day {
+        font-size: 10px;
+        text-align: center;
+        padding: 3px 1px;
+        border-radius: 4px;
+        cursor: default;
+        color: #4a5568;
+    }
+
+        .mini-day.holiday-mini {
+            background: #f97316;
+            color: white;
+            font-weight: 700;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+            .mini-day.holiday-mini:hover {
+                transform: scale(1.3);
+            }
+
+        .mini-day.today-mini {
+            outline: 2px solid #2F6FED;
+            border-radius: 50%;
+        }
+
+        .mini-day.weekend-mini {
+            color: #a0aec0;
+        }
+
+        .mini-day.empty-mini {
+            color: transparent;
+        }
+
+    .modal-header.oc-modal-header {
+        background: #2457C8 !important;
+        color: white !important;
+        border-radius: 15px 15px 0 0;
+        border-bottom: none;
+    }
+
+    @@media (max-width: 900px) {
+        .months-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @@media (max-width: 600px) {
+        .main-layout {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+        }
+
+        .months-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="main-layout">
+    <div class="sidebar">
+        <div class="menu-item">
+            <a href="/Empleado/Marcas" class="menu-link">
+                <div class="icon">⏰</div>
+                Marcas
+            </a>
+        </div>
+
+        <div class="menu-item">
+            <a href="/Empleado/HistorialMarcas" class="menu-link">
+                <div class="icon">📝</div>
+                Mi Historial
+            </a>
+        </div>
+
+        <div class="menu-item">
+            <a href="/Empleado/Solicitudes" class="menu-link">
+                <div class="icon">🗂️</div>
+                Mis Solicitudes
+            </a>
+        </div>
+
+        <div class="menu-item">
+            <a href="/Empleado/CalendarioFeriados" class="menu-link active">
+                <div class="icon">📅</div>
+                Calendario
+            </a>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="content-header">
+            <h1>📅 Calendario de Feriados</h1>
+            <p>Consulta los feriados nacionales de Costa Rica registrados en el sistema</p>
+        </div>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalHolidays">-</div>
+                <div class="stat-label">Feriados del Año</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" id="noLaborables">-</div>
+                <div class="stat-label">No Laborables</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" id="nextHoliday">-</div>
+                <div class="stat-label">Próximo Feriado</div>
+            </div>
+        </div>
+
+        <div class="calendar-card">
+            <div class="calendar-card-header">
+                <h2>📆 Calendario Laboral</h2>
+                <span id="holidayCount">Cargando...</span>
+            </div>
+
+            <div class="calendar-card-body">
+                <div class="view-toggle">
+                    <button class="toggle-btn active" id="btnMensual" onclick="setView('mensual')">
+                        Vista Mensual
+                    </button>
+
+                    <button class="toggle-btn" id="btnAnual" onclick="setView('anual')">
+                        Vista Anual
+                    </button>
+                </div>
+
+                <div id="viewMensual">
+                    <div class="calendar-nav">
+                        <button class="nav-btn" onclick="changeMonth(-1)">‹</button>
+                        <h3 id="calendarTitle"></h3>
+                        <button class="nav-btn" onclick="changeMonth(1)">›</button>
+                    </div>
+
+                    <div class="calendar-grid" id="calendarGrid">
+                        <div class="cal-header">Dom</div>
+                        <div class="cal-header">Lun</div>
+                        <div class="cal-header">Mar</div>
+                        <div class="cal-header">Mié</div>
+                        <div class="cal-header">Jue</div>
+                        <div class="cal-header">Vie</div>
+                        <div class="cal-header">Sáb</div>
+                    </div>
+                </div>
+
+                <div id="viewAnual" style="display:none;">
+                    <div class="calendar-nav">
+                        <button class="nav-btn" onclick="changeYear(-1)">‹</button>
+                        <h3 id="yearTitle"></h3>
+                        <button class="nav-btn" onclick="changeYear(1)">›</button>
+                    </div>
+
+                    <div class="months-grid" id="monthsGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="detailModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content" style="border-radius:15px;border:none;">
+            <div class="modal-header oc-modal-header">
+                <h5 class="modal-title">Detalle del Feriado</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body p-4">
+                <p><strong>Fecha:</strong> <span id="detailFecha"></span></p>
+                <p class="mt-2"><strong>Nombre:</strong> <span id="detailNombre"></span></p>
+                <p class="mt-2"><strong>Estado:</strong> <span id="detailLaborable"></span></p>
+                <p class="mt-2" id="detailDescWrap"><strong>Descripción:</strong> <span id="detailDesc"></span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let holidays = [];
+    let currentDate = new Date();
+    let currentYear = new Date().getFullYear();
+    let loadedYear = null;
+    let currentView = 'mensual';
+
+    const MONTHS = [
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
+
+    const MONTHS_SHORT = [
+        'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+        'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
+    ];
+
+    async function cargarFeriados(anio) {
+        loadedYear = anio;
+
+        const res = await fetch('/Feriados/GetAll?anio=' + anio);
+
+        if (!res.ok) {
+            return;
+        }
+
+        holidays = await res.json();
+
+        updateStats(anio);
+        renderCalendar();
+    }
+
+    function updateStats(anio) {
+        document.getElementById('totalHolidays').textContent = holidays.length;
+
+        const noLaborables = holidays.filter(h => !h.esLaborable).length;
+        document.getElementById('noLaborables').textContent = noLaborables;
+
+        document.getElementById('holidayCount').textContent = holidays.length + ' registrados en ' + anio;
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const proximos = holidays
+            .filter(h => new Date(h.fecha + 'T00:00:00') >= today)
+            .sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+
+        if (proximos.length > 0) {
+            const d = new Date(proximos[0].fecha + 'T00:00:00');
+            document.getElementById('nextHoliday').textContent = d.getDate() + ' ' + MONTHS_SHORT[d.getMonth()];
+        } else {
+            document.getElementById('nextHoliday').textContent = '-';
+        }
+    }
+
+    function getVisibleYear() {
+        if (currentView === 'anual') {
+            return currentYear;
+        }
+
+        return currentDate.getFullYear();
+    }
+
+    async function setView(view) {
+        currentView = view;
+
+        document.getElementById('viewMensual').style.display = view === 'mensual' ? '' : 'none';
+        document.getElementById('viewAnual').style.display = view === 'anual' ? '' : 'none';
+
+        document.getElementById('btnMensual').classList.toggle('active', view === 'mensual');
+        document.getElementById('btnAnual').classList.toggle('active', view === 'anual');
+
+        const anio = getVisibleYear();
+
+        if (loadedYear !== anio) {
+            await cargarFeriados(anio);
+        } else {
+            renderCalendar();
+        }
+    }
+
+    function renderCalendar() {
+        if (currentView === 'mensual') {
+            renderMensual();
+        } else {
+            renderAnual();
+        }
+    }
+
+    async function changeMonth(dir) {
+        currentDate.setMonth(currentDate.getMonth() + dir);
+
+        const anio = currentDate.getFullYear();
+        currentYear = anio;
+
+        if (loadedYear !== anio) {
+            await cargarFeriados(anio);
+        } else {
+            renderMensual();
+        }
+    }
+
+    function renderMensual() {
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+
+        document.getElementById('calendarTitle').textContent = MONTHS[month] + ' ' + year;
+
+        const grid = document.getElementById('calendarGrid');
+
+        grid.innerHTML = `
+            <div class="cal-header">Dom</div>
+            <div class="cal-header">Lun</div>
+            <div class="cal-header">Mar</div>
+            <div class="cal-header">Mié</div>
+            <div class="cal-header">Jue</div>
+            <div class="cal-header">Vie</div>
+            <div class="cal-header">Sáb</div>
+        `;
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        for (let i = 0; i < firstDay; i++) {
+            grid.insertAdjacentHTML('beforeend', '<div class="cal-day empty"></div>');
+        }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+            const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+            const dayDate = new Date(year, month, d);
+
+            const isToday = dayDate.getTime() === today.getTime();
+            const isWeekend = dayDate.getDay() === 0 || dayDate.getDay() === 6;
+            const holiday = holidays.find(h => h.fecha === dateStr);
+
+            let cls = 'cal-day';
+
+            if (isToday) {
+                cls += ' today';
+            }
+
+            if (holiday) {
+                cls += ' holiday';
+            } else if (isWeekend) {
+                cls += ' weekend';
+            }
+
+            const badge = holiday
+                ? '<span class="holiday-dot">🎌 ' + holiday.nombre + '</span>'
+                : '';
+
+            const onclick = holiday
+                ? 'onclick="mostrarDetalle(' + holiday.idFeriado + ')"'
+                : '';
+
+            grid.insertAdjacentHTML('beforeend', `
+                <div class="${cls}" ${onclick} title="${holiday ? holiday.nombre : ''}">
+                    <span class="day-number">${d}</span>
+                    ${badge}
+                </div>
+            `);
+        }
+    }
+
+    async function changeYear(dir) {
+        currentYear += dir;
+
+        if (loadedYear !== currentYear) {
+            await cargarFeriados(currentYear);
+        } else {
+            renderAnual();
+        }
+    }
+
+    function renderAnual() {
+        document.getElementById('yearTitle').textContent = currentYear;
+
+        const container = document.getElementById('monthsGrid');
+        container.innerHTML = '';
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        for (let m = 0; m < 12; m++) {
+            const firstDay = new Date(currentYear, m, 1).getDay();
+            const daysInMonth = new Date(currentYear, m + 1, 0).getDate();
+
+            let daysHtml = '';
+
+            ['D', 'L', 'M', 'X', 'J', 'V', 'S'].forEach(h => {
+                daysHtml += '<div class="mini-header">' + h + '</div>';
+            });
+
+            for (let i = 0; i < firstDay; i++) {
+                daysHtml += '<div class="mini-day empty-mini"></div>';
+            }
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateStr = currentYear + '-' + String(m + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+                const dayDate = new Date(currentYear, m, d);
+
+                const isToday = dayDate.getTime() === today.getTime();
+                const isWeekend = dayDate.getDay() === 0 || dayDate.getDay() === 6;
+                const holiday = holidays.find(h => h.fecha === dateStr);
+
+                let cls = 'mini-day';
+
+                if (holiday) {
+                    cls += ' holiday-mini';
+                } else if (isWeekend) {
+                    cls += ' weekend-mini';
+                }
+
+                if (isToday) {
+                    cls += ' today-mini';
+                }
+
+                const onclick = holiday
+                    ? 'onclick="mostrarDetalle(' + holiday.idFeriado + ')"'
+                    : '';
+
+                daysHtml += '<div class="' + cls + '" ' + onclick + ' title="' + (holiday ? holiday.nombre : '') + '">' + d + '</div>';
+            }
+
+            container.insertAdjacentHTML('beforeend', `
+                <div class="month-card">
+                    <div class="month-title">${MONTHS[m]}</div>
+                    <div class="mini-grid">${daysHtml}</div>
+                </div>
+            `);
+        }
+    }
+
+    function mostrarDetalle(id) {
+        const h = holidays.find(x => x.idFeriado === id);
+
+        if (!h) {
+            return;
+        }
+
+        const d = new Date(h.fecha + 'T00:00:00');
+
+        document.getElementById('detailFecha').textContent = d.getDate() + ' de ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+        document.getElementById('detailNombre').textContent = h.nombre;
+        document.getElementById('detailLaborable').textContent = h.esLaborable ? 'Laborable' : 'No laborable';
+
+        const descWrap = document.getElementById('detailDescWrap');
+
+        if (h.descripcion) {
+            document.getElementById('detailDesc').textContent = h.descripcion;
+            descWrap.style.display = '';
+        } else {
+            descWrap.style.display = 'none';
+        }
+
+        new bootstrap.Modal(document.getElementById('detailModal')).show();
+    }
+
+    document.addEventListener('DOMContentLoaded', async function () {
+        const anioInicial = currentDate.getFullYear();
+        currentYear = anioInicial;
+        await cargarFeriados(anioInicial);
+    });
+</script>
