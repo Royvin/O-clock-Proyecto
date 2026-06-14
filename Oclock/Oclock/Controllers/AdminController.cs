@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Oclock.Data;
 using Oclock.Filters;
 using Oclock.Helpers;
+using Oclock.Models;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -236,10 +237,20 @@ namespace Oclock.Controllers
                 query = query.Where(s => s.IdUsuario == idUsuario.Value);
 
             if (desde.HasValue)
-                query = query.Where(s => s.FechaInicio >= desde.Value);
+            {
+                query = query.Where(s =>
+                    (s.FechaInicioAprobada.HasValue && s.FechaInicioAprobada.Value >= desde.Value) ||
+                    (s.FechaInicio.HasValue && s.FechaInicio.Value >= desde.Value) ||
+                    (!s.FechaInicioAprobada.HasValue && !s.FechaInicio.HasValue && s.FechaSolicitud >= desde.Value));
+            }
 
             if (hasta.HasValue)
-                query = query.Where(s => s.FechaFin <= hasta.Value);
+            {
+                query = query.Where(s =>
+                    (s.FechaFinAprobada.HasValue && s.FechaFinAprobada.Value <= hasta.Value) ||
+                    (s.FechaFin.HasValue && s.FechaFin.Value <= hasta.Value) ||
+                    (!s.FechaFinAprobada.HasValue && !s.FechaFin.HasValue && s.FechaSolicitud <= hasta.Value));
+            }
 
             int totalRegistros = query.Count();
             int totalPaginas = (int)Math.Ceiling(totalRegistros / (double)pageSize);
@@ -258,9 +269,14 @@ namespace Oclock.Controllers
                     Tipo = s.IdTipoSolicitudNavigation.NombreSolicitud,
                     s.FechaInicio,
                     s.FechaFin,
+                    s.FechaInicioAprobada,
+                    s.FechaFinAprobada,
+                    s.DiasOtorgados,
+                    s.DiasOtorgadosDetalle,
                     s.FechaSolicitud,
-                    Estado = char.ToUpper(s.Estado![0]) + s.Estado.Substring(1),
+                    Estado = s.Estado == null ? "" : char.ToUpper(s.Estado[0]) + s.Estado.Substring(1),
                     Observaciones = s.DescripcionEstado,
+                    Motivo = s.Descripcion,
                     rutaArchivo = s.RutaArchivo,
                     nombreArchivo = s.NombreArchivo
                 })
@@ -276,7 +292,14 @@ namespace Oclock.Controllers
         }
 
         [HttpPost]
-        public IActionResult CambiarEstadoSolicitud(int idSolicitud, string nuevoEstado, string? observacion)
+        public IActionResult CambiarEstadoSolicitud(
+            int idSolicitud,
+            string nuevoEstado,
+            string? observacion,
+            DateOnly? fechaInicioAprobada,
+            DateOnly? fechaFinAprobada,
+            int? diasOtorgados,
+            string? diasOtorgadosDetalle)
         {
             if (string.IsNullOrEmpty(nuevoEstado))
                 return BadRequest(new { success = false, message = "Estado inválido." });
@@ -286,7 +309,9 @@ namespace Oclock.Controllers
             if (nuevoEstado != "aprobada" && nuevoEstado != "rechazada")
                 return BadRequest(new { success = false, message = "Estado no permitido." });
 
-            var solicitud = _context.Solicituds.FirstOrDefault(s => s.IdSolicitud == idSolicitud);
+            var solicitud = _context.Solicituds
+                .Include(s => s.IdTipoSolicitudNavigation)
+                .FirstOrDefault(s => s.IdSolicitud == idSolicitud);
 
             if (solicitud == null)
                 return NotFound(new { success = false, message = "Solicitud no encontrada." });
@@ -297,8 +322,74 @@ namespace Oclock.Controllers
             if (nuevoEstado == "rechazada" && string.IsNullOrWhiteSpace(observacion))
                 return BadRequest(new { success = false, message = "Debe indicar una observación para rechazar." });
 
+            var nombreTipo = solicitud.IdTipoSolicitudNavigation?.NombreSolicitud ?? "";
+            bool requiereControlDias = TipoRequiereControlDias(nombreTipo);
+
+            if (nuevoEstado == "aprobada")
+            {
+                var inicioFinal = fechaInicioAprobada ?? solicitud.FechaInicio;
+                var finFinal = fechaFinAprobada ?? solicitud.FechaFin;
+
+                if (requiereControlDias)
+                {
+                    if (!inicioFinal.HasValue || !finFinal.HasValue)
+                    {
+                        return BadRequest(new
+                        {
+                            success = false,
+                            message = "Debe indicar las fechas aprobadas para esta solicitud."
+                        });
+                    }
+
+                    if (finFinal.Value < inicioFinal.Value)
+                    {
+                        return BadRequest(new
+                        {
+                            success = false,
+                            message = "La fecha fin aprobada no puede ser menor a la fecha inicio aprobada."
+                        });
+                    }
+
+                    int diasCalculados = CalcularDiasInclusive(inicioFinal.Value, finFinal.Value);
+
+                    if (!diasOtorgados.HasValue || diasOtorgados.Value <= 0)
+                    {
+                        diasOtorgados = diasCalculados;
+                    }
+
+                    solicitud.FechaInicioAprobada = inicioFinal.Value;
+                    solicitud.FechaFinAprobada = finFinal.Value;
+                    solicitud.DiasOtorgados = diasOtorgados.Value;
+                    solicitud.DiasOtorgadosDetalle = !string.IsNullOrWhiteSpace(diasOtorgadosDetalle)
+                        ? diasOtorgadosDetalle.Trim()
+                        : $"Días aprobados del {FormatearFecha(inicioFinal.Value)} al {FormatearFecha(finFinal.Value)}. Total: {diasOtorgados.Value} día(s).";
+                }
+                else
+                {
+                    solicitud.FechaInicioAprobada = fechaInicioAprobada;
+                    solicitud.FechaFinAprobada = fechaFinAprobada;
+                    solicitud.DiasOtorgados = diasOtorgados;
+                    solicitud.DiasOtorgadosDetalle = diasOtorgadosDetalle;
+                }
+
+                if (string.IsNullOrWhiteSpace(observacion))
+                {
+                    observacion = requiereControlDias
+                        ? "Solicitud aprobada. Días y fechas definidos por administración."
+                        : "Solicitud aprobada por administración.";
+                }
+            }
+            else
+            {
+                solicitud.FechaInicioAprobada = null;
+                solicitud.FechaFinAprobada = null;
+                solicitud.DiasOtorgados = null;
+                solicitud.DiasOtorgadosDetalle = null;
+            }
+
             solicitud.Estado = nuevoEstado;
             solicitud.DescripcionEstado = observacion;
+
             _context.SaveChanges();
 
             if (solicitud.IdUsuario > 0)
@@ -478,6 +569,9 @@ namespace Oclock.Controllers
                 FechaSolicitud = FormatearFecha(s.FechaSolicitud),
                 FechaInicio = FormatearFecha(s.FechaInicio),
                 FechaFin = FormatearFecha(s.FechaFin),
+                FechaInicioAprobada = FormatearFecha(s.FechaInicioAprobada),
+                FechaFinAprobada = FormatearFecha(s.FechaFinAprobada),
+                DiasOtorgados = s.DiasOtorgados?.ToString() ?? "—",
                 Estado = FormatearEstado(s.Estado),
                 Observacion = s.DescripcionEstado ?? ""
             }).ToList();
@@ -538,8 +632,9 @@ namespace Oclock.Controllers
                 "Colaborador",
                 "Tipo",
                 "Fecha Solicitud",
-                "Fecha Inicio",
-                "Fecha Fin",
+                "Inicio Aprobado",
+                "Fin Aprobado",
+                "Días",
                 "Estado"
             };
 
@@ -548,8 +643,9 @@ namespace Oclock.Controllers
                 (s.IdUsuarioNavigation.Nombre ?? "") + " " + (s.IdUsuarioNavigation.Apellido ?? ""),
                 s.IdTipoSolicitudNavigation.NombreSolicitud,
                 FormatearFecha(s.FechaSolicitud),
-                FormatearFecha(s.FechaInicio),
-                FormatearFecha(s.FechaFin),
+                FormatearFecha(s.FechaInicioAprobada ?? s.FechaInicio),
+                FormatearFecha(s.FechaFinAprobada ?? s.FechaFin),
+                s.DiasOtorgados?.ToString() ?? "—",
                 FormatearEstado(s.Estado)
             }).ToList();
 
@@ -600,8 +696,12 @@ namespace Oclock.Controllers
                 "Colaborador",
                 "Tipo",
                 "Fecha Solicitud",
-                "Fecha Inicio",
-                "Fecha Fin",
+                "Fecha Inicio Solicitada",
+                "Fecha Fin Solicitada",
+                "Fecha Inicio Aprobada",
+                "Fecha Fin Aprobada",
+                "Días Otorgados",
+                "Detalle Días",
                 "Estado",
                 "Observación"
             };
@@ -613,6 +713,10 @@ namespace Oclock.Controllers
                 FormatearFecha(s.FechaSolicitud),
                 FormatearFecha(s.FechaInicio),
                 FormatearFecha(s.FechaFin),
+                FormatearFecha(s.FechaInicioAprobada),
+                FormatearFecha(s.FechaFinAprobada),
+                s.DiasOtorgados?.ToString() ?? "—",
+                s.DiasOtorgadosDetalle ?? "",
                 FormatearEstado(s.Estado),
                 s.DescripcionEstado ?? ""
             }).ToList();
@@ -828,8 +932,8 @@ namespace Oclock.Controllers
                     if (!EsTipoAusenciaPermitido(nombreTipo, filtroTipo))
                         return false;
 
-                    var fechaInicio = s.FechaInicio ?? s.FechaSolicitud;
-                    var fechaFin = s.FechaFin ?? s.FechaInicio ?? s.FechaSolicitud;
+                    var fechaInicio = ObtenerFechaInicioGestion(s);
+                    var fechaFin = ObtenerFechaFinGestion(s);
 
                     return fechaInicio <= finMes && fechaFin >= inicioMes;
                 })
@@ -838,8 +942,8 @@ namespace Oclock.Controllers
 
             var detalle = solicitudesBase.Select(s =>
             {
-                var fechaInicio = s.FechaInicio ?? s.FechaSolicitud;
-                var fechaFin = s.FechaFin ?? s.FechaInicio ?? s.FechaSolicitud;
+                var fechaInicio = ObtenerFechaInicioGestion(s);
+                var fechaFin = ObtenerFechaFinGestion(s);
                 var inicioCruce = fechaInicio > inicioMes ? fechaInicio : inicioMes;
                 var finCruce = fechaFin < finMes ? fechaFin : finMes;
                 var diasDentroDelMes = finCruce.DayNumber - inicioCruce.DayNumber + 1;
@@ -851,7 +955,7 @@ namespace Oclock.Controllers
                     TipoAusencia = ObtenerEtiquetaTipoAusencia(s.IdTipoSolicitudNavigation?.NombreSolicitud),
                     FechaInicio = FormatearFecha(fechaInicio),
                     FechaFin = FormatearFecha(fechaFin),
-                    DiasEnMes = diasDentroDelMes,
+                    DiasEnMes = s.DiasOtorgados ?? diasDentroDelMes,
                     Estado = FormatearEstado(s.Estado),
                     Observacion = s.DescripcionEstado ?? ""
                 };
@@ -898,8 +1002,8 @@ namespace Oclock.Controllers
                     if (!EsTipoAusenciaPermitido(nombreTipo, filtroTipo))
                         return false;
 
-                    var fechaInicio = s.FechaInicio ?? s.FechaSolicitud;
-                    var fechaFin = s.FechaFin ?? s.FechaInicio ?? s.FechaSolicitud;
+                    var fechaInicio = ObtenerFechaInicioGestion(s);
+                    var fechaFin = ObtenerFechaFinGestion(s);
 
                     return fechaInicio <= finMes && fechaFin >= inicioMes;
                 })
@@ -908,8 +1012,8 @@ namespace Oclock.Controllers
 
             var filas = solicitudes.Select(s =>
             {
-                var fechaInicio = s.FechaInicio ?? s.FechaSolicitud;
-                var fechaFin = s.FechaFin ?? s.FechaInicio ?? s.FechaSolicitud;
+                var fechaInicio = ObtenerFechaInicioGestion(s);
+                var fechaFin = ObtenerFechaFinGestion(s);
                 var inicioCruce = fechaInicio > inicioMes ? fechaInicio : inicioMes;
                 var finCruce = fechaFin < finMes ? fechaFin : finMes;
                 var diasDentroDelMes = finCruce.DayNumber - inicioCruce.DayNumber + 1;
@@ -920,7 +1024,7 @@ namespace Oclock.Controllers
                     ObtenerEtiquetaTipoAusencia(s.IdTipoSolicitudNavigation?.NombreSolicitud),
                     FormatearFecha(fechaInicio),
                     FormatearFecha(fechaFin),
-                    diasDentroDelMes.ToString(),
+                    (s.DiasOtorgados ?? diasDentroDelMes).ToString(),
                     FormatearEstado(s.Estado)
                 };
             }).ToList();
@@ -944,7 +1048,7 @@ namespace Oclock.Controllers
                 "Tipo",
                 "Fecha Inicio",
                 "Fecha Fin",
-                "Días en Mes",
+                "Días",
                 "Estado"
             };
 
@@ -979,8 +1083,8 @@ namespace Oclock.Controllers
                     if (!EsTipoAusenciaPermitido(nombreTipo, filtroTipo))
                         return false;
 
-                    var fechaInicio = s.FechaInicio ?? s.FechaSolicitud;
-                    var fechaFin = s.FechaFin ?? s.FechaInicio ?? s.FechaSolicitud;
+                    var fechaInicio = ObtenerFechaInicioGestion(s);
+                    var fechaFin = ObtenerFechaFinGestion(s);
 
                     return fechaInicio <= finMes && fechaFin >= inicioMes;
                 })
@@ -989,8 +1093,8 @@ namespace Oclock.Controllers
 
             var filas = solicitudes.Select(s =>
             {
-                var fechaInicio = s.FechaInicio ?? s.FechaSolicitud;
-                var fechaFin = s.FechaFin ?? s.FechaInicio ?? s.FechaSolicitud;
+                var fechaInicio = ObtenerFechaInicioGestion(s);
+                var fechaFin = ObtenerFechaFinGestion(s);
                 var inicioCruce = fechaInicio > inicioMes ? fechaInicio : inicioMes;
                 var finCruce = fechaFin < finMes ? fechaFin : finMes;
                 var diasDentroDelMes = finCruce.DayNumber - inicioCruce.DayNumber + 1;
@@ -1001,7 +1105,7 @@ namespace Oclock.Controllers
                     ObtenerEtiquetaTipoAusencia(s.IdTipoSolicitudNavigation?.NombreSolicitud),
                     FormatearFecha(fechaInicio),
                     FormatearFecha(fechaFin),
-                    diasDentroDelMes.ToString(),
+                    (s.DiasOtorgados ?? diasDentroDelMes).ToString(),
                     FormatearEstado(s.Estado),
                     s.DescripcionEstado ?? ""
                 };
@@ -1026,7 +1130,7 @@ namespace Oclock.Controllers
                 "Tipo",
                 "Fecha Inicio",
                 "Fecha Fin",
-                "Días en Mes",
+                "Días",
                 "Estado",
                 "Observación"
             };
@@ -1066,6 +1170,9 @@ namespace Oclock.Controllers
                 FechaSolicitud = FormatearFecha(s.FechaSolicitud),
                 FechaInicio = FormatearFecha(s.FechaInicio),
                 FechaFin = FormatearFecha(s.FechaFin),
+                FechaInicioAprobada = FormatearFecha(s.FechaInicioAprobada),
+                FechaFinAprobada = FormatearFecha(s.FechaFinAprobada),
+                DiasOtorgados = s.DiasOtorgados?.ToString() ?? "—",
                 Estado = FormatearEstado(s.Estado),
                 Observacion = s.DescripcionEstado ?? "",
                 Archivo = s.NombreArchivo ?? ""
@@ -1128,8 +1235,9 @@ namespace Oclock.Controllers
                 "Colaborador",
                 "Tipo",
                 "Fecha Solicitud",
-                "Fecha Inicio",
-                "Fecha Fin",
+                "Inicio Aprobado",
+                "Fin Aprobado",
+                "Días",
                 "Estado"
             };
 
@@ -1138,8 +1246,9 @@ namespace Oclock.Controllers
                 (s.IdUsuarioNavigation.Nombre ?? "") + " " + (s.IdUsuarioNavigation.Apellido ?? ""),
                 s.IdTipoSolicitudNavigation.NombreSolicitud,
                 FormatearFecha(s.FechaSolicitud),
-                FormatearFecha(s.FechaInicio),
-                FormatearFecha(s.FechaFin),
+                FormatearFecha(s.FechaInicioAprobada ?? s.FechaInicio),
+                FormatearFecha(s.FechaFinAprobada ?? s.FechaFin),
+                s.DiasOtorgados?.ToString() ?? "—",
                 FormatearEstado(s.Estado)
             }).ToList();
 
@@ -1193,8 +1302,12 @@ namespace Oclock.Controllers
                 "Colaborador",
                 "Tipo",
                 "Fecha Solicitud",
-                "Fecha Inicio",
-                "Fecha Fin",
+                "Fecha Inicio Solicitada",
+                "Fecha Fin Solicitada",
+                "Fecha Inicio Aprobada",
+                "Fecha Fin Aprobada",
+                "Días Otorgados",
+                "Detalle Días",
                 "Estado",
                 "Observación",
                 "Archivo"
@@ -1207,6 +1320,10 @@ namespace Oclock.Controllers
                 FormatearFecha(s.FechaSolicitud),
                 FormatearFecha(s.FechaInicio),
                 FormatearFecha(s.FechaFin),
+                FormatearFecha(s.FechaInicioAprobada),
+                FormatearFecha(s.FechaFinAprobada),
+                s.DiasOtorgados?.ToString() ?? "—",
+                s.DiasOtorgadosDetalle ?? "",
                 FormatearEstado(s.Estado),
                 s.DescripcionEstado ?? "",
                 s.NombreArchivo ?? ""
@@ -1293,6 +1410,44 @@ namespace Oclock.Controllers
             return sb.ToString().Normalize(NormalizationForm.FormC);
         }
 
+        private static bool TipoRequiereControlDias(string? nombreTipo)
+        {
+            var tipo = NormalizarTexto(nombreTipo);
+
+            if (string.IsNullOrWhiteSpace(tipo))
+                return false;
+
+            if (tipo.Contains("constancia salarial"))
+                return false;
+
+            return tipo.Contains("vacacion")
+                || tipo.Contains("permiso")
+                || tipo.Contains("incapacidad")
+                || tipo.Contains("licencia")
+                || tipo.Contains("maternidad")
+                || tipo.Contains("fallecimiento")
+                || tipo.Contains("otro");
+        }
+
+        private static int CalcularDiasInclusive(DateOnly fechaInicio, DateOnly fechaFin)
+        {
+            return fechaFin.DayNumber - fechaInicio.DayNumber + 1;
+        }
+
+        private static DateOnly ObtenerFechaInicioGestion(Solicitud solicitud)
+        {
+            return solicitud.FechaInicioAprobada
+                ?? solicitud.FechaInicio
+                ?? solicitud.FechaSolicitud;
+        }
+
+        private static DateOnly ObtenerFechaFinGestion(Solicitud solicitud)
+        {
+            return solicitud.FechaFinAprobada
+                ?? solicitud.FechaFin
+                ?? solicitud.FechaSolicitud;
+        }
+
         private static bool EsTipoAusenciaPermitido(string? nombreTipo, string? filtroTipo)
         {
             var tipo = NormalizarTexto(nombreTipo);
@@ -1311,8 +1466,11 @@ namespace Oclock.Controllers
 
         private static string ObtenerEtiquetaTipoAusencia(string? nombreTipo)
         {
-            var categoria = ObtenerCategoriaAusencia(NormalizarTexto(nombreTipo));
+            var tipo = NormalizarTexto(nombreTipo);
+            var categoria = ObtenerCategoriaAusencia(tipo);
 
+            if (tipo.Contains("fallecimiento")) return "Permiso por Fallecimiento";
+            if (tipo.Contains("maternidad")) return "Licencia de Maternidad";
             if (categoria == "vacaciones") return "Vacaciones";
             if (categoria == "permiso") return "Permiso";
             if (categoria == "incapacidad") return "Incapacidad";
@@ -1332,8 +1490,14 @@ namespace Oclock.Controllers
             if (tipoNormalizado.Contains("permiso"))
                 return "permiso";
 
+            if (tipoNormalizado.Contains("fallecimiento"))
+                return "permiso";
+
             if (tipoNormalizado.Contains("incapacidad"))
                 return "incapacidad";
+
+            if (tipoNormalizado.Contains("maternidad"))
+                return "licencia";
 
             if (tipoNormalizado.Contains("licencia"))
                 return "licencia";

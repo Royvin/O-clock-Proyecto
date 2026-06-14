@@ -18,7 +18,7 @@
     /* SIDEBAR */
     .sidebar {
         width: 280px;
-        background: #ffffff; /* REEMPLAZO de linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%) */
+        background: #ffffff;
         padding: 30px 20px;
         border-right: 1px solid #e0e0e0;
         box-shadow: 2px 0 10px rgba(0,0,0,0.03);
@@ -46,13 +46,13 @@
     }
 
         .menu-link:hover {
-            background: #667eea; /* REEMPLAZO de linear-gradient(135deg, #667eea 0%, #764ba2 100%) */
+            background: #667eea;
             color: white;
             transform: translateX(5px);
         }
 
         .menu-link.active {
-            background: #667eea; /* REEMPLAZO de linear-gradient(135deg, #667eea 0%, #764ba2 100%) */
+            background: #667eea;
             color: white;
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
@@ -100,7 +100,7 @@
         }
 
         .menu-expandable-header.active {
-            background: rgba(102, 126, 234, 0.1); /* REEMPLAZO de linear-gradient(...rgba... ) */
+            background: rgba(102, 126, 234, 0.1);
             color: #667eea;
             font-weight: 600;
         }
@@ -177,7 +177,7 @@
             }
 
         .submenu-link.active {
-            background: rgba(102, 126, 234, 0.15); /* REEMPLAZO de linear-gradient(...rgba... ) */
+            background: rgba(102, 126, 234, 0.15);
             color: #667eea;
             font-weight: 600;
         }
@@ -296,20 +296,45 @@
         }
 
         .form-group select,
-        .form-group input {
+        .form-group input,
+        .form-group textarea {
             padding: 12px 15px;
             border: 2px solid #e2e8f0;
             border-radius: 8px;
             font-size: 14px;
             transition: all 0.3s;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
             .form-group select:focus,
-            .form-group input:focus {
+            .form-group input:focus,
+            .form-group textarea:focus {
                 outline: none;
                 border-color: #667eea;
                 box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
             }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+    .field-help {
+        color: #718096;
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    .admin-note {
+        background: #ebf8ff;
+        color: #2c5282;
+        border-left: 3px solid #4299e1;
+        padding: 12px 15px;
+        border-radius: 8px;
+        font-size: 13px;
+        line-height: 1.5;
+        margin-bottom: 15px;
+    }
 
     /* Tabs */
     .tabs {
@@ -341,7 +366,7 @@
         }
 
         .tab.active {
-            background: #667eea; /* REEMPLAZO de linear-gradient(135deg, #667eea 0%, #764ba2 100%) */
+            background: #667eea;
             color: white;
         }
 
@@ -360,7 +385,7 @@
     }
 
     .btn-primary {
-        background: #667eea; /* REEMPLAZO de linear-gradient(135deg, #667eea 0%, #764ba2 100%) */
+        background: #667eea;
         color: white;
     }
 
@@ -463,6 +488,7 @@
         justify-content: center;
         font-size: 24px;
         flex-shrink: 0;
+        background: #e2e8f0;
     }
 
     .request-info {
@@ -493,6 +519,7 @@
     .request-actions {
         display: flex;
         gap: 10px;
+        flex-wrap: wrap;
     }
 
     /* Table */
@@ -564,6 +591,11 @@
         color: #2c5282;
     }
 
+    .badge-secondary {
+        background: #e2e8f0;
+        color: #4a5568;
+    }
+
     /* Empty State */
     .empty-state {
         text-align: center;
@@ -609,11 +641,15 @@
         background: white;
         border-radius: 15px;
         padding: 30px;
-        max-width: 600px;
+        max-width: 700px;
         width: 90%;
         max-height: 90vh;
         overflow-y: auto;
         box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .modal-content-small {
+        max-width: 520px;
     }
 
     .modal-header {
@@ -664,13 +700,14 @@
     .detail-label {
         font-weight: 700;
         color: #4a5568;
-        width: 150px;
+        width: 170px;
         flex-shrink: 0;
     }
 
     .detail-value {
         color: #2d3748;
         flex: 1;
+        white-space: pre-line;
     }
 
     .tab-content {
@@ -730,7 +767,6 @@
                         🎁 Bonos
                     </a>
                 </div>
-               
             </div>
         </div>
 
@@ -779,28 +815,28 @@
                 <div class="stat-header">
                     <div class="stat-icon">📌</div>
                 </div>
-                <div class="stat-value" id="pendingCount"></div>
+                <div class="stat-value" id="pendingCount">0</div>
                 <div class="stat-label">Pendientes</div>
             </div>
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon">✅</div>
                 </div>
-                <div class="stat-value" id="approvedCount"></div>
+                <div class="stat-value" id="approvedCount">0</div>
                 <div class="stat-label">Aprobadas Este Mes</div>
             </div>
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon">❌</div>
                 </div>
-                <div class="stat-value" id="rejectedCount"></div>
+                <div class="stat-value" id="rejectedCount">0</div>
                 <div class="stat-label">Rechazadas</div>
             </div>
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon">📊</div>
                 </div>
-                <div class="stat-value" id="totalCount"></div>
+                <div class="stat-value" id="totalCount">0</div>
                 <div class="stat-label">Total Solicitudes</div>
             </div>
         </div>
@@ -877,7 +913,8 @@
                             <tr>
                                 <th>Colaborador</th>
                                 <th>Tipo</th>
-                                <th>Fecha</th>
+                                <th>Fechas</th>
+                                <th>Días</th>
                                 <th>Estado</th>
                                 <th>Observaciones</th>
                             </tr>
@@ -916,21 +953,152 @@
     </div>
 </div>
 
-<script>
+<div class="modal" id="approveModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>✅ Aprobar Solicitud</h3>
+            <button class="btn-close" onclick="closeModal('approveModal')">×</button>
+        </div>
 
+        <div class="admin-note">
+            La administración debe confirmar los días otorgados y las fechas oficiales cuando aplique.
+            Esto es importante para solicitudes como vacaciones, incapacidad, licencia de maternidad y permiso por fallecimiento.
+        </div>
+
+        <div id="approveResumen" style="margin-bottom: 20px;"></div>
+
+        <div class="filter-grid">
+            <div class="form-group">
+                <label>Fecha inicio aprobada</label>
+                <input type="date" id="approveFechaInicio">
+            </div>
+
+            <div class="form-group">
+                <label>Fecha fin aprobada</label>
+                <input type="date" id="approveFechaFin">
+            </div>
+
+            <div class="form-group">
+                <label>Días otorgados</label>
+                <input type="number" id="approveDiasOtorgados" min="0" placeholder="Ejemplo: 3">
+                <span class="field-help">Si las fechas aplican, el sistema puede calcularlo automáticamente.</span>
+            </div>
+
+            <div class="form-group">
+                <label>Observación</label>
+                <input type="text" id="approveObservacion" placeholder="Ejemplo: Aprobado según documentación presentada">
+            </div>
+
+            <div class="form-group" style="grid-column: 1 / -1;">
+                <label>Detalle de días otorgados</label>
+                <textarea id="approveDetalleDias" placeholder="Ejemplo: Se aprueban los días 12, 13 y 14 de junio según documentación presentada."></textarea>
+            </div>
+        </div>
+
+        <div class="btn-group" style="margin-top: 20px;">
+            <button class="btn btn-success" onclick="confirmarAprobacion()">
+                ✅ Confirmar Aprobación
+            </button>
+            <button class="btn btn-secondary" onclick="closeModal('approveModal')">
+                ❌ Cancelar
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="rejectModal">
+    <div class="modal-content modal-content-small">
+        <div class="modal-header">
+            <h3>❌ Rechazar Solicitud</h3>
+            <button class="btn-close" onclick="closeModal('rejectModal')">×</button>
+        </div>
+
+        <div class="admin-note">
+            Para rechazar una solicitud se debe indicar una observación clara para el colaborador.
+        </div>
+
+        <div class="form-group">
+            <label>Razón del rechazo</label>
+            <textarea id="rejectObservacion" placeholder="Indique la razón del rechazo..."></textarea>
+        </div>
+
+        <div class="btn-group" style="margin-top: 20px;">
+            <button class="btn btn-danger" onclick="confirmarRechazo()">
+                ❌ Confirmar Rechazo
+            </button>
+            <button class="btn btn-secondary" onclick="closeModal('rejectModal')">
+                Cancelar
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
     let archivoActualRuta = null;
     let solicitudesActuales = [];
     let currentTab = "pendientes";
     let currentPage = 1;
+    let solicitudGestionActual = null;
 
     document.addEventListener("DOMContentLoaded", () => {
         cargarColaboradores();
         cargarSolicitudes();
         cargarEstadisticas();
+
+        document.getElementById("approveFechaInicio").addEventListener("change", calcularDiasAprobados);
+        document.getElementById("approveFechaFin").addEventListener("change", calcularDiasAprobados);
     });
 
-    function cargarSolicitudes(page = 1) {
+    function escapeHtml(valor) {
+        if (valor === null || valor === undefined) return "";
+        return valor.toString()
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
 
+    function normalizarTexto(texto) {
+        return (texto || "")
+            .toString()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .trim()
+            .toLowerCase();
+    }
+
+    function tipoRequiereControlDias(tipo) {
+        const nombre = normalizarTexto(tipo);
+
+        if (!nombre) return false;
+        if (nombre.includes("constancia salarial")) return false;
+
+        return nombre.includes("vacacion")
+            || nombre.includes("permiso")
+            || nombre.includes("incapacidad")
+            || nombre.includes("licencia")
+            || nombre.includes("maternidad")
+            || nombre.includes("fallecimiento")
+            || nombre.includes("otro");
+    }
+
+    function getTipoIcon(tipoNombre) {
+        const nombre = normalizarTexto(tipoNombre);
+
+        if (nombre.includes("vacacion")) return "🏖️";
+        if (nombre.includes("fallecimiento")) return "🕊️";
+        if (nombre.includes("incapacidad")) return "🏥";
+        if (nombre.includes("maternidad")) return "🤱";
+        if (nombre.includes("licencia")) return "📄";
+        if (nombre.includes("permiso")) return "📝";
+        if (nombre.includes("constancia")) return "📑";
+        if (nombre.includes("otro")) return "📌";
+
+        return "📄";
+    }
+
+    function cargarSolicitudes(page = 1) {
         currentPage = page;
 
         const estado = document.getElementById("filterStatus").value;
@@ -941,19 +1109,18 @@
         fetch(`/Admin/ObtenerSolicitudes?tab=${currentTab}&estado=${estado}&idUsuario=${idUsuario}&desde=${desde}&hasta=${hasta}&page=${page}`)
             .then(res => res.json())
             .then(data => {
-
-                renderData(data.data);
-                updateCounters(data);
-
+                renderData(data.data || []);
+            })
+            .catch(error => {
+                console.error(error);
+                alert("Error al cargar solicitudes.");
             });
     }
 
     function renderData(data) {
-
         solicitudesActuales = data;
 
         if (currentTab === "pendientes") {
-
             const container = document.getElementById("pendingRequests");
 
             if (data.length === 0) {
@@ -966,63 +1133,230 @@
             }
 
             container.innerHTML = data.map(req => `
-        <div class="request-card">
-            <div class="request-info">
-                <div class="request-title">${req.tipo} - ${req.colaborador}</div>
-                <div class="request-details">
-                    <div>📅 Inicio: ${formatDate(req.fechaInicio)}</div>
-                    <div>📅 Fin: ${formatDate(req.fechaFin)}</div>
+                <div class="request-card">
+                    <div class="request-icon">
+                        ${getTipoIcon(req.tipo)}
+                    </div>
+
+                    <div class="request-info">
+                        <div class="request-title">${escapeHtml(req.tipo)} - ${escapeHtml(req.colaborador)}</div>
+                        <div class="request-details">
+                            <div class="request-detail-item">📅 Solicitado: ${obtenerTextoRangoSolicitado(req)}</div>
+                            <div class="request-detail-item">📌 ${badgeEstado(req.estado)}</div>
+                            ${req.nombreArchivo ? `<div class="request-detail-item">📎 Documento adjunto</div>` : ""}
+                        </div>
+                    </div>
+
+                    <div class="request-actions">
+                        <button class="btn btn-info" onclick="verSolicitud(${req.idSolicitud})">Ver</button>
+                        <button class="btn btn-success" onclick="abrirModalAprobacion(${req.idSolicitud})">Aprobar</button>
+                        <button class="btn btn-danger" onclick="abrirModalRechazo(${req.idSolicitud})">Rechazar</button>
+                    </div>
                 </div>
-            </div>
-                <div class="request-actions">
-        <button class="btn btn-info" onclick="verSolicitud(${req.idSolicitud})">Ver</button>
-        <button class="btn btn-success" onclick="cambiarEstado(${req.idSolicitud}, 'aprobada')">Aprobar</button>
-        <button class="btn btn-danger" onclick="abrirModalRechazo(${req.idSolicitud})">Rechazar</button>
-    </div>
-        </div>
-    `).join("");
+            `).join("");
         }
 
         if (currentTab === "historial") {
-
             const tbody = document.getElementById("historyTable");
+
+            if (data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📭</div>
+                                <h3>No hay historial</h3>
+                                <p>No se encontraron solicitudes gestionadas</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
 
             tbody.innerHTML = data.map(req => `
                 <tr>
-                    <td>${req.colaborador}</td>
-                    <td>${req.tipo}</td>
-                    <td>${formatDate(req.fechaInicio)}</td>
+                    <td>${escapeHtml(req.colaborador)}</td>
+                    <td>${escapeHtml(req.tipo)}</td>
+                    <td>${obtenerTextoRangoAprobado(req)}</td>
+                    <td>${req.diasOtorgados ? `${req.diasOtorgados} día(s)` : "—"}</td>
                     <td>${badgeEstado(req.estado)}</td>
-                    <td>${req.observaciones ?? "-"}</td>
+                    <td>${escapeHtml(req.observaciones ?? "-")}</td>
                 </tr>
             `).join("");
         }
     }
 
-    function cambiarEstado(id, estado) {
+    function abrirModalAprobacion(id) {
+        const sol = solicitudesActuales.find(s => s.idSolicitud === id);
+
+        if (!sol) {
+            alert("No se encontró la solicitud.");
+            return;
+        }
+
+        solicitudGestionActual = sol;
+
+        document.getElementById("approveResumen").innerHTML = `
+            <div class="detail-row">
+                <div class="detail-label">Colaborador</div>
+                <div class="detail-value">${escapeHtml(sol.colaborador)}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Tipo</div>
+                <div class="detail-value">${escapeHtml(sol.tipo)}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Fechas solicitadas</div>
+                <div class="detail-value">${obtenerTextoRangoSolicitado(sol)}</div>
+            </div>
+        `;
+
+        document.getElementById("approveFechaInicio").value = obtenerFechaInput(sol.fechaInicioAprobada || sol.fechaInicio);
+        document.getElementById("approveFechaFin").value = obtenerFechaInput(sol.fechaFinAprobada || sol.fechaFin);
+        document.getElementById("approveDiasOtorgados").value = sol.diasOtorgados ?? "";
+        document.getElementById("approveDetalleDias").value = sol.diasOtorgadosDetalle ?? "";
+        document.getElementById("approveObservacion").value = "";
+
+        calcularDiasAprobados();
+
+        openModal("approveModal");
+    }
+
+    function confirmarAprobacion() {
+        if (!solicitudGestionActual) {
+            alert("No hay solicitud seleccionada.");
+            return;
+        }
+
+        const fechaInicio = document.getElementById("approveFechaInicio").value;
+        const fechaFin = document.getElementById("approveFechaFin").value;
+        const diasOtorgados = document.getElementById("approveDiasOtorgados").value;
+        const detalleDias = document.getElementById("approveDetalleDias").value;
+        const observacion = document.getElementById("approveObservacion").value;
+
+        const requiereControl = tipoRequiereControlDias(solicitudGestionActual.tipo);
+
+        if (requiereControl) {
+            if (!fechaInicio || !fechaFin) {
+                alert("Debe indicar fecha inicio y fecha fin aprobada.");
+                return;
+            }
+
+            if (fechaFin < fechaInicio) {
+                alert("La fecha fin aprobada no puede ser menor a la fecha inicio aprobada.");
+                return;
+            }
+
+            if (!diasOtorgados || parseInt(diasOtorgados) <= 0) {
+                alert("Debe indicar la cantidad de días otorgados.");
+                return;
+            }
+        }
+
+        const body = new URLSearchParams();
+        body.append("idSolicitud", solicitudGestionActual.idSolicitud);
+        body.append("nuevoEstado", "aprobada");
+        body.append("observacion", observacion);
+
+        if (fechaInicio) body.append("fechaInicioAprobada", fechaInicio);
+        if (fechaFin) body.append("fechaFinAprobada", fechaFin);
+        if (diasOtorgados) body.append("diasOtorgados", diasOtorgados);
+        if (detalleDias) body.append("diasOtorgadosDetalle", detalleDias);
 
         fetch("/Admin/CambiarEstadoSolicitud", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             },
-            body: `idSolicitud=${id}&nuevoEstado=${estado}`
+            body: body.toString()
         })
-            .then(res => res.json())
-            .then(response => {
-                alert(response.message);
+            .then(async res => {
+                const data = await res.json();
+
+                if (!res.ok) {
+                    alert(data.message || "No se pudo aprobar la solicitud.");
+                    return;
+                }
+
+                alert(data.message);
+                closeModal("approveModal");
+                closeModal("detailModal");
                 cargarSolicitudes(currentPage);
                 cargarEstadisticas();
+            })
+            .catch(error => {
+                console.error(error);
+                alert("Error al aprobar la solicitud.");
             });
     }
 
+    function abrirModalRechazo(id) {
+        const sol = solicitudesActuales.find(s => s.idSolicitud === id);
+
+        if (!sol) {
+            alert("No se encontró la solicitud.");
+            return;
+        }
+
+        solicitudGestionActual = sol;
+        document.getElementById("rejectObservacion").value = "";
+        openModal("rejectModal");
+    }
+
+    function confirmarRechazo() {
+        if (!solicitudGestionActual) {
+            alert("No hay solicitud seleccionada.");
+            return;
+        }
+
+        const observacion = document.getElementById("rejectObservacion").value;
+
+        if (!observacion.trim()) {
+            alert("Debe indicar la razón del rechazo.");
+            return;
+        }
+
+        const body = new URLSearchParams();
+        body.append("idSolicitud", solicitudGestionActual.idSolicitud);
+        body.append("nuevoEstado", "rechazada");
+        body.append("observacion", observacion);
+
+        fetch("/Admin/CambiarEstadoSolicitud", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: body.toString()
+        })
+            .then(async res => {
+                const data = await res.json();
+
+                if (!res.ok) {
+                    alert(data.message || "No se pudo rechazar la solicitud.");
+                    return;
+                }
+
+                alert(data.message);
+                closeModal("rejectModal");
+                closeModal("detailModal");
+                cargarSolicitudes(currentPage);
+                cargarEstadisticas();
+            })
+            .catch(error => {
+                console.error(error);
+                alert("Error al rechazar la solicitud.");
+            });
+    }
 
     function verSolicitud(id) {
-
         const sol = solicitudesActuales.find(s => s.idSolicitud === id);
         if (!sol) return;
 
         archivoActualRuta = sol.rutaArchivo ?? null;
+
+        const estadoNormalizado = normalizarTexto(sol.estado);
+        const puedeGestionar = estadoNormalizado === "pendiente";
 
         document.getElementById('detailContent').innerHTML = `
             <div class="detail-row">
@@ -1032,22 +1366,37 @@
 
             <div class="detail-row">
                 <div class="detail-label">Colaborador</div>
-                <div class="detail-value">${sol.colaborador}</div>
+                <div class="detail-value">${escapeHtml(sol.colaborador)}</div>
             </div>
 
             <div class="detail-row">
                 <div class="detail-label">Tipo</div>
-                <div class="detail-value">${sol.tipo}</div>
+                <div class="detail-value">${escapeHtml(sol.tipo)}</div>
             </div>
 
             <div class="detail-row">
-                <div class="detail-label">Fecha Inicio</div>
-                <div class="detail-value">${formatDate(sol.fechaInicio)}</div>
+                <div class="detail-label">Fechas solicitadas</div>
+                <div class="detail-value">${obtenerTextoRangoSolicitado(sol)}</div>
             </div>
 
             <div class="detail-row">
-                <div class="detail-label">Fecha Fin</div>
-                <div class="detail-value">${formatDate(sol.fechaFin)}</div>
+                <div class="detail-label">Fechas aprobadas</div>
+                <div class="detail-value">${obtenerTextoRangoAprobado(sol)}</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Días otorgados</div>
+                <div class="detail-value">${sol.diasOtorgados ? `${sol.diasOtorgados} día(s)` : "Pendiente de definir"}</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Detalle días</div>
+                <div class="detail-value">${sol.diasOtorgadosDetalle ? escapeHtml(sol.diasOtorgadosDetalle) : "Sin detalle registrado"}</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Motivo / detalle</div>
+                <div class="detail-value">${sol.motivo ? escapeHtml(sol.motivo) : "Sin descripción"}</div>
             </div>
 
             <div class="detail-row">
@@ -1057,51 +1406,29 @@
 
             <div class="detail-row">
                 <div class="detail-label">Observaciones</div>
-                <div class="detail-value">${sol.observaciones ?? "-"}</div>
+                <div class="detail-value">${sol.observaciones ? escapeHtml(sol.observaciones) : "-"}</div>
             </div>
 
             <div class="detail-row">
                 <div class="detail-label">Documento</div>
                 <div class="detail-value">
                     ${archivoActualRuta
-            ? `<button class="btn btn-info" onclick="descargarArchivoActual()">Descargar ${sol.nombreArchivo ?? ""}</button>`
-            : "N/A"}
+                        ? `<button class="btn btn-info" onclick="descargarArchivoActual()">Descargar ${escapeHtml(sol.nombreArchivo ?? "")}</button>`
+                        : "N/A"}
                 </div>
             </div>
 
-            <div style="margin-top:20px; display:flex; gap:10px;">
-                <button class="btn btn-success" onclick="cambiarEstado(${sol.idSolicitud}, 'aprobada'); closeModal('detailModal')">Aprobar</button>
-                <button class="btn btn-danger" onclick="abrirModalRechazo(${sol.idSolicitud}); closeModal('detailModal')">Rechazar</button>
-            </div>
+            ${puedeGestionar ? `
+            <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn btn-success" onclick="abrirModalAprobacion(${sol.idSolicitud})">Aprobar</button>
+                <button class="btn btn-danger" onclick="abrirModalRechazo(${sol.idSolicitud})">Rechazar</button>
+            </div>` : ""}
         `;
 
         openModal('detailModal');
     }
 
-
-
-    function abrirModalRechazo(id) {
-
-        const observacion = prompt("Indique la razón del rechazo:");
-
-        if (!observacion) return;
-
-        fetch("/Admin/CambiarEstadoSolicitud", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: `idSolicitud=${id}&nuevoEstado=rechazada&observacion=${encodeURIComponent(observacion)}`
-        })
-            .then(res => res.json())
-            .then(response => {
-                alert(response.message);
-                cargarSolicitudes(currentPage);
-            });
-    }
-
     function switchTab(tabName, element) {
-
         document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
         element.classList.add('active');
 
@@ -1126,45 +1453,75 @@
     }
 
     function cargarColaboradores() {
-
         fetch("/Admin/ObtenerColaboradores")
             .then(res => res.json())
             .then(data => {
-
                 const select = document.getElementById("filterEmployee");
 
                 data.forEach(col => {
-                    select.innerHTML += `<option value="${col.idUsuario}">${col.nombreCompleto}</option>`;
+                    select.innerHTML += `<option value="${col.idUsuario}">${escapeHtml(col.nombreCompleto)}</option>`;
                 });
             });
     }
 
     function formatDate(date) {
-        return new Date(date).toLocaleDateString("es-CR");
+        if (!date) return "—";
+
+        const dateString = date.toString();
+
+        if (dateString.includes("T")) {
+            return new Date(dateString).toLocaleDateString("es-CR");
+        }
+
+        return new Date(dateString + "T00:00:00").toLocaleDateString("es-CR");
+    }
+
+    function obtenerFechaInput(date) {
+        if (!date) return "";
+
+        const texto = date.toString();
+
+        if (texto.includes("T")) {
+            return texto.split("T")[0];
+        }
+
+        return texto.substring(0, 10);
+    }
+
+    function obtenerTextoRangoSolicitado(sol) {
+        if (sol.fechaInicio && sol.fechaFin) {
+            return `${formatDate(sol.fechaInicio)} al ${formatDate(sol.fechaFin)}`;
+        }
+
+        return "No aplica / por definir por administración";
+    }
+
+    function obtenerTextoRangoAprobado(sol) {
+        if (sol.fechaInicioAprobada && sol.fechaFinAprobada) {
+            return `${formatDate(sol.fechaInicioAprobada)} al ${formatDate(sol.fechaFinAprobada)}`;
+        }
+
+        if (sol.fechaInicio && sol.fechaFin) {
+            return `${formatDate(sol.fechaInicio)} al ${formatDate(sol.fechaFin)}`;
+        }
+
+        return "Pendiente de definir";
     }
 
     function badgeEstado(estado) {
+        const estadoNormalizado = normalizarTexto(estado);
 
-        if (estado === "Aprobada")
+        if (estadoNormalizado === "aprobada")
             return `<span class="badge badge-success">Aprobada</span>`;
 
-        if (estado === "Rechazada")
+        if (estadoNormalizado === "rechazada")
             return `<span class="badge badge-danger">Rechazada</span>`;
 
-        if (estado === "Cancelada")
+        if (estadoNormalizado === "cancelada" || estadoNormalizado === "cancelado")
             return `<span class="badge badge-secondary">Cancelada</span>`;
 
         return `<span class="badge badge-warning">Pendiente</span>`;
     }
-
-    function updateCounters(data) {
-
-        document.getElementById("pendingCount").textContent =
-            currentTab === "pendientes" ? data.totalRegistros : 0;
-
-        document.getElementById("totalCount").textContent = data.totalRegistros;
-    }
-
 
     function openModal(id) {
         document.getElementById(id).classList.add("show");
@@ -1174,26 +1531,87 @@
         document.getElementById(id).classList.remove("show");
     }
 
-
     function descargarArchivoActual() {
         if (!archivoActualRuta) return;
         window.open(archivoActualRuta, "_blank");
     }
 
-
     function cargarEstadisticas() {
-
         fetch("/Admin/ObtenerEstadisticasSolicitudes")
             .then(res => res.json())
             .then(data => {
-
                 document.getElementById("pendingCount").textContent = data.pendientes;
                 document.getElementById("approvedCount").textContent = data.aprobadasMes;
                 document.getElementById("rejectedCount").textContent = data.rechazadas;
                 document.getElementById("totalCount").textContent = data.total;
-
             });
     }
 
+    function calcularDiasAprobados() {
+        const inicio = document.getElementById("approveFechaInicio").value;
+        const fin = document.getElementById("approveFechaFin").value;
+        const diasInput = document.getElementById("approveDiasOtorgados");
 
+        if (!inicio || !fin) {
+            return;
+        }
+
+        const inicioDate = new Date(inicio + "T00:00:00");
+        const finDate = new Date(fin + "T00:00:00");
+
+        if (finDate < inicioDate) {
+            return;
+        }
+
+        const diferencia = finDate.getTime() - inicioDate.getTime();
+        const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24)) + 1;
+
+        diasInput.value = dias;
+    }
+
+    function generateReport() {
+        alert("Para reportes completos use la opción Reportes del menú lateral.");
+    }
+
+    function downloadReport() {
+        if (!solicitudesActuales || solicitudesActuales.length === 0) {
+            alert("No hay solicitudes para descargar.");
+            return;
+        }
+
+        let csv = "Colaborador,Tipo,Fechas,Dias,Estado,Observaciones\n";
+
+        solicitudesActuales.forEach(s => {
+            const fila = [
+                limpiarCsv(s.colaborador),
+                limpiarCsv(s.tipo),
+                limpiarCsv(obtenerTextoRangoAprobado(s)),
+                limpiarCsv(s.diasOtorgados ? s.diasOtorgados + " día(s)" : ""),
+                limpiarCsv(s.estado),
+                limpiarCsv(s.observaciones ?? "")
+            ];
+
+            csv += fila.join(",") + "\n";
+        });
+
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "solicitudes.csv";
+        link.click();
+
+        URL.revokeObjectURL(url);
+    }
+
+    function limpiarCsv(valor) {
+        valor = (valor ?? "").toString().replaceAll('"', '""');
+
+        if (valor.includes(",") || valor.includes("\n") || valor.includes('"')) {
+            return `"${valor}"`;
+        }
+
+        return valor;
+    }
 </script>

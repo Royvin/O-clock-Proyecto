@@ -50,7 +50,7 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
 
-    => optionsBuilder.UseMySql("server=bzad1vavdtzjjqhfukdu-mysql.services.clever-cloud.com;port=21791;database=bzad1vavdtzjjqhfukdu;user=uhtuhx1j5cjbucsm;password=ctjpVDBOslwnwliD6fMQ;sslmode=Required",ServerVersion.Parse("8.4.2-mysql"));
+    => optionsBuilder.UseMySql("server=bzad1vavdtzjjqhfukdu-mysql.services.clever-cloud.com;port=21791;database=bzad1vavdtzjjqhfukdu;user=uhtuhx1j5cjbucsm;password=ctjpVDBOslwnwliD6fMQ;sslmode=Required", ServerVersion.Parse("8.4.2-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -66,7 +66,7 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
             entity.HasIndex(e => e.IdTipoBono, "IdTipoBono");
 
             entity.Property(e => e.IdBono)
-                .HasColumnName("IdBono"); 
+                .HasColumnName("IdBono");
 
             entity.Property(e => e.IdTipoBono)
                 .HasColumnName("IdTipoBono");
@@ -80,18 +80,18 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
                 .HasColumnName("Monto");
 
             entity.Property(e => e.Descripcion)
-                .HasMaxLength(255) 
+                .HasMaxLength(255)
                 .HasColumnName("Descripcion");
 
             entity.Property(e => e.Activo)
-                .HasColumnType("tinyint(1)") 
+                .HasColumnType("tinyint(1)")
                 .HasColumnName("Activo")
-                .HasDefaultValue(true); 
+                .HasDefaultValue(true);
 
             entity.Property(e => e.FechaCreacion)
                 .HasColumnType("date")
                 .HasColumnName("FechaCreacion")
-                .HasDefaultValueSql("curdate()"); 
+                .HasDefaultValueSql("curdate()");
 
             entity.HasOne(d => d.IdTipoBonoNavigation)
                 .WithMany(p => p.Bonos)
@@ -99,9 +99,9 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
                 .HasConstraintName("bono_ibfk_1");
 
             entity.Property(e => e.CondicionMinima)
-    .HasColumnType("decimal(10,2)")
-    .HasColumnName("CondicionMinima")
-    .HasDefaultValue(0);
+                .HasColumnType("decimal(10,2)")
+                .HasColumnName("CondicionMinima")
+                .HasDefaultValue(0);
         });
 
         modelBuilder.Entity<Capacitacion>(entity =>
@@ -140,7 +140,6 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
 
             entity.HasIndex(e => e.IdUsuario, "fk_documento_usuario");
 
-
             entity.Property(e => e.IdDocumento).HasColumnName("id_documento");
             entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
             entity.Property(e => e.NombreArchivo).HasMaxLength(255).HasColumnName("nombre_archivo");
@@ -152,13 +151,9 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("fecha_subida");
 
-
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Documentos)
-
                 .HasForeignKey(d => d.IdUsuario)
                 .HasConstraintName("fk_documento_usuario");
-
-
         });
 
         modelBuilder.Entity<Expediente>(entity =>
@@ -341,12 +336,17 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
             entity.Property(e => e.FechaFin).HasColumnName("fecha_fin");
             entity.Property(e => e.FechaInicio).HasColumnName("fecha_inicio");
             entity.Property(e => e.FechaSolicitud).HasColumnName("fecha_solicitud");
+            entity.Property(e => e.FechaInicioAprobada).HasColumnName("fecha_inicio_aprobada");
+            entity.Property(e => e.FechaFinAprobada).HasColumnName("fecha_fin_aprobada");
+            entity.Property(e => e.DiasOtorgados).HasColumnName("dias_otorgados");
+            entity.Property(e => e.DiasOtorgadosDetalle)
+                .HasColumnType("text")
+                .HasColumnName("dias_otorgados_detalle");
             entity.Property(e => e.IdTipoSolicitud).HasColumnName("id_tipo_solicitud");
             entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
             entity.Property(e => e.RutaArchivo)
-            .HasMaxLength(500)
-            .HasColumnName("RutaArchivo");
-
+                .HasMaxLength(500)
+                .HasColumnName("RutaArchivo");
             entity.Property(e => e.NombreArchivo)
                 .HasMaxLength(255)
                 .HasColumnName("NombreArchivo");
@@ -358,9 +358,6 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Solicituds)
                 .HasForeignKey(d => d.IdUsuario)
                 .HasConstraintName("fk_solicitud_usuario");
-
-
-
         });
 
         modelBuilder.Entity<TipoSolicitud>(entity =>
@@ -486,7 +483,6 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
                 .HasForeignKey(d => d.IdUsuario)
                 .HasConstraintName("fk_bonoasignado_usuario");
         });
-
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

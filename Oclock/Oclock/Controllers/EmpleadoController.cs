@@ -29,6 +29,172 @@ namespace Oclock.Controllers
             return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tz);
         }
 
+        private static string NormalizarTexto(string? texto)
+        {
+            return (texto ?? "").Trim().ToLower();
+        }
+
+        private static bool TipoRequiereFechas(string tipoSolicitud)
+        {
+            tipoSolicitud = NormalizarTexto(tipoSolicitud);
+
+            return tipoSolicitud.Contains("vacaciones")
+                || tipoSolicitud.Contains("permiso personal")
+                || tipoSolicitud == "otro";
+        }
+
+        private static bool TipoRequiereDocumento(string tipoSolicitud)
+        {
+            tipoSolicitud = NormalizarTexto(tipoSolicitud);
+
+            return tipoSolicitud.Contains("incapacidad")
+                || tipoSolicitud.Contains("maternidad")
+                || tipoSolicitud.Contains("fallecimiento");
+        }
+
+        private static bool TipoGestionAdministrativa(string tipoSolicitud)
+        {
+            tipoSolicitud = NormalizarTexto(tipoSolicitud);
+
+            return tipoSolicitud.Contains("incapacidad")
+                || tipoSolicitud.Contains("maternidad")
+                || tipoSolicitud.Contains("fallecimiento")
+                || tipoSolicitud.Contains("constancia salarial");
+        }
+
+        private static string ConstruirDescripcionSolicitud(SolicitudPost model, string tipoSolicitud)
+        {
+            var partes = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(model.Descripcion))
+            {
+                partes.Add(model.Descripcion.Trim());
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.ParentescoFamiliar))
+            {
+                partes.Add("Parentesco familiar: " + model.ParentescoFamiliar.Trim());
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.NombreFamiliar))
+            {
+                partes.Add("Nombre del familiar: " + model.NombreFamiliar.Trim());
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.MotivoConstancia))
+            {
+                partes.Add("Motivo de constancia salarial: " + model.MotivoConstancia.Trim());
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.DetalleOtro))
+            {
+                partes.Add("Detalle adicional: " + model.DetalleOtro.Trim());
+            }
+
+            if (TipoGestionAdministrativa(tipoSolicitud))
+            {
+                partes.Add("Nota: solicitud sujeta a revisión administrativa para determinar días otorgados y fechas aplicables.");
+            }
+
+            return partes.Count > 0 ? string.Join("\n", partes) : "";
+        }
+
+        private static string ConstruirDescripcionSolicitud(SolicitudPut model, string tipoSolicitud)
+        {
+            var partes = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(model.Descripcion))
+            {
+                partes.Add(model.Descripcion.Trim());
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.ParentescoFamiliar))
+            {
+                partes.Add("Parentesco familiar: " + model.ParentescoFamiliar.Trim());
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.NombreFamiliar))
+            {
+                partes.Add("Nombre del familiar: " + model.NombreFamiliar.Trim());
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.MotivoConstancia))
+            {
+                partes.Add("Motivo de constancia salarial: " + model.MotivoConstancia.Trim());
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.DetalleOtro))
+            {
+                partes.Add("Detalle adicional: " + model.DetalleOtro.Trim());
+            }
+
+            if (TipoGestionAdministrativa(tipoSolicitud))
+            {
+                partes.Add("Nota: solicitud sujeta a revisión administrativa para determinar días otorgados y fechas aplicables.");
+            }
+
+            return partes.Count > 0 ? string.Join("\n", partes) : "";
+        }
+
+        private static bool ArchivoPermitido(IFormFile archivo)
+        {
+            var extension = Path.GetExtension(archivo.FileName).ToLower();
+
+            return extension == ".pdf"
+                || extension == ".jpg"
+                || extension == ".jpeg"
+                || extension == ".png";
+        }
+
+        private static bool ArchivoPesoValido(IFormFile archivo)
+        {
+            const long maxSize = 5 * 1024 * 1024;
+            return archivo.Length <= maxSize;
+        }
+
+        private async Task GuardarArchivoSolicitud(Solicitud solicitud, IFormFile archivo)
+        {
+            string carpetaBase = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot/uploads/solicitudes",
+                solicitud.IdSolicitud.ToString());
+
+            if (!Directory.Exists(carpetaBase))
+            {
+                Directory.CreateDirectory(carpetaBase);
+            }
+
+            string nombreUnico = Guid.NewGuid().ToString() + Path.GetExtension(archivo.FileName);
+            string rutaCompleta = Path.Combine(carpetaBase, nombreUnico);
+
+            using (var stream = new FileStream(rutaCompleta, FileMode.Create))
+            {
+                await archivo.CopyToAsync(stream);
+            }
+
+            solicitud.RutaArchivo = $"/uploads/solicitudes/{solicitud.IdSolicitud}/{nombreUnico}";
+            solicitud.NombreArchivo = archivo.FileName;
+        }
+
+        private static void EliminarArchivoFisico(string? rutaArchivo)
+        {
+            if (string.IsNullOrWhiteSpace(rutaArchivo))
+            {
+                return;
+            }
+
+            string rutaFisica = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                rutaArchivo.TrimStart('/')
+            );
+
+            if (System.IO.File.Exists(rutaFisica))
+            {
+                System.IO.File.Delete(rutaFisica);
+            }
+        }
+
         public IActionResult Marcas()
         {
             int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
@@ -188,6 +354,7 @@ namespace Oclock.Controllers
         public IActionResult ObtenerTiposSolicitud()
         {
             var tipos = _context.TipoSolicituds
+                .OrderBy(t => t.NombreSolicitud)
                 .Select(t => new
                 {
                     idTipoSolicitud = t.IdTipoSolicitud,
@@ -204,76 +371,92 @@ namespace Oclock.Controllers
             int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
 
             if (idUsuario == null)
+            {
                 return Json(new { success = false, message = "Sesión no válida." });
+            }
 
-            if (model.FechaFin < model.FechaInicio)
-                return Json(new { success = false, message = "El rango de fechas es inválido." });
+            var tipoSolicitud = await _context.TipoSolicituds
+                .FirstOrDefaultAsync(t => t.IdTipoSolicitud == model.IdTipoSolicitud);
 
-            if (model.FechaInicio.Date < DateTime.Today)
-                return Json(new { success = false, message = "No puede registrar fechas pasadas." });
+            if (tipoSolicitud == null)
+            {
+                return Json(new { success = false, message = "Seleccione un tipo de solicitud válido." });
+            }
 
-            // 1. Crear solicitud primero (sin archivo aún)
+            string nombreTipo = tipoSolicitud.NombreSolicitud ?? "";
+            bool requiereFechas = TipoRequiereFechas(nombreTipo);
+            bool requiereDocumento = TipoRequiereDocumento(nombreTipo);
+
+            if (requiereFechas)
+            {
+                if (!model.FechaInicio.HasValue || !model.FechaFin.HasValue)
+                {
+                    return Json(new { success = false, message = "Debe indicar la fecha de inicio y la fecha fin para este tipo de solicitud." });
+                }
+
+                if (model.FechaFin.Value.Date < model.FechaInicio.Value.Date)
+                {
+                    return Json(new { success = false, message = "El rango de fechas es inválido." });
+                }
+
+                if (model.FechaInicio.Value.Date < AhoraCostaRica().Date)
+                {
+                    return Json(new { success = false, message = "No puede registrar fechas pasadas." });
+                }
+            }
+
+            if (requiereDocumento && (model.Archivo == null || model.Archivo.Length == 0))
+            {
+                return Json(new { success = false, message = "Este tipo de solicitud requiere adjuntar un documento de respaldo." });
+            }
+
+            if (model.Archivo != null && model.Archivo.Length > 0)
+            {
+                if (!ArchivoPermitido(model.Archivo))
+                {
+                    return Json(new { success = false, message = "Formato de archivo no permitido. Use PDF, JPG o PNG." });
+                }
+
+                if (!ArchivoPesoValido(model.Archivo))
+                {
+                    return Json(new { success = false, message = "El archivo no puede superar los 5MB." });
+                }
+            }
+
             var nuevaSolicitud = new Solicitud
             {
                 IdUsuario = idUsuario.Value,
                 IdTipoSolicitud = model.IdTipoSolicitud,
-                Descripcion = model.Descripcion,
+                Descripcion = ConstruirDescripcionSolicitud(model, nombreTipo),
                 FechaSolicitud = DateOnly.FromDateTime(AhoraCostaRica()),
-                FechaInicio = DateOnly.FromDateTime(model.FechaInicio),
-                FechaFin = DateOnly.FromDateTime(model.FechaFin),
+                FechaInicio = requiereFechas && model.FechaInicio.HasValue ? DateOnly.FromDateTime(model.FechaInicio.Value) : null,
+                FechaFin = requiereFechas && model.FechaFin.HasValue ? DateOnly.FromDateTime(model.FechaFin.Value) : null,
                 Estado = "pendiente",
-                DescripcionEstado = "Pendiente de aprobación"
+                DescripcionEstado = TipoGestionAdministrativa(nombreTipo)
+                    ? "Pendiente de revisión administrativa"
+                    : "Pendiente de aprobación"
             };
 
             _context.Solicituds.Add(nuevaSolicitud);
             await _context.SaveChangesAsync();
 
-            int idSolicitud = nuevaSolicitud.IdSolicitud;
-
-            // 2. Si viene archivo
             if (model.Archivo != null && model.Archivo.Length > 0)
             {
-                string carpetaBase = Path.Combine(
-                    Directory.GetCurrentDirectory(),
-                    "wwwroot/uploads/solicitudes",
-                    idSolicitud.ToString());
-
-                if (!Directory.Exists(carpetaBase))
-                    Directory.CreateDirectory(carpetaBase);
-
-                string nombreUnico = Guid.NewGuid().ToString() +
-                                     Path.GetExtension(model.Archivo.FileName);
-
-                string rutaCompleta = Path.Combine(carpetaBase, nombreUnico);
-
-                using (var stream = new FileStream(rutaCompleta, FileMode.Create))
-                    await model.Archivo.CopyToAsync(stream);
-
-                nuevaSolicitud.RutaArchivo = $"/uploads/solicitudes/{idSolicitud}/{nombreUnico}";
-                nuevaSolicitud.NombreArchivo = model.Archivo.FileName;
-
+                await GuardarArchivoSolicitud(nuevaSolicitud, model.Archivo);
                 await _context.SaveChangesAsync();
             }
 
-            // 3. Notificar a todos los administradores (rol = 1)
             var admins = _context.Usuarios
                 .Where(u => u.IdRol == 1 && u.Activo == true)
                 .Select(u => u.IdUsuario)
                 .ToList();
 
-            // Obtener nombre del empleado que hizo la solicitud
             var empleado = _context.Usuarios
                 .FirstOrDefault(u => u.IdUsuario == idUsuario.Value);
 
             string nombreEmpleado = empleado != null
                 ? $"{empleado.Nombre} {empleado.Apellido}"
                 : $"Empleado #{idUsuario.Value}";
-
-            // Obtener nombre del tipo de solicitud
-            var tipoSolicitud = _context.TipoSolicituds
-                .FirstOrDefault(t => t.IdTipoSolicitud == model.IdTipoSolicitud);
-
-            string nombreTipo = tipoSolicitud?.NombreSolicitud ?? "N/A";
 
             foreach (var adminId in admins)
             {
@@ -299,21 +482,26 @@ namespace Oclock.Controllers
 
             var solicitudes = _context.Solicituds
                 .Include(s => s.IdTipoSolicitudNavigation)
-                .Where(s => s.IdUsuario == idUsuario)
+                .Where(s => s.IdUsuario == idUsuario.Value)
                 .Select(s => new
                 {
                     id = s.IdSolicitud,
                     tipo = s.IdTipoSolicitud,
                     tipoNombre = s.IdTipoSolicitudNavigation.NombreSolicitud.ToLower(),
-                    fechaInicio = s.FechaInicio.Value.ToString("yyyy-MM-dd"),
-                    fechaFin = s.FechaFin.Value.ToString("yyyy-MM-dd"),
-                    estado = s.Estado.ToLower(),
+                    fechaInicio = s.FechaInicio.HasValue ? s.FechaInicio.Value.ToString("yyyy-MM-dd") : null,
+                    fechaFin = s.FechaFin.HasValue ? s.FechaFin.Value.ToString("yyyy-MM-dd") : null,
+                    fechaInicioAprobada = s.FechaInicioAprobada.HasValue ? s.FechaInicioAprobada.Value.ToString("yyyy-MM-dd") : null,
+                    fechaFinAprobada = s.FechaFinAprobada.HasValue ? s.FechaFinAprobada.Value.ToString("yyyy-MM-dd") : null,
+                    diasOtorgados = s.DiasOtorgados,
+                    diasOtorgadosDetalle = s.DiasOtorgadosDetalle,
+                    estado = (s.Estado ?? "").ToLower(),
                     fechaSolicitud = s.FechaSolicitud.ToString("yyyy-MM-dd"),
                     motivo = s.Descripcion,
                     prioridad = "normal",
                     archivos = new List<string>(),
-                    RutaArchivo = s.RutaArchivo,
-                    NombreArchivo = s.NombreArchivo
+                    rutaArchivo = s.RutaArchivo,
+                    nombreArchivo = s.NombreArchivo,
+                    descripcionEstado = s.DescripcionEstado
                 })
                 .ToList();
 
@@ -326,88 +514,101 @@ namespace Oclock.Controllers
             int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
 
             if (idUsuario == null)
+            {
                 return Unauthorized();
+            }
 
             var solicitud = await _context.Solicituds
+                .Include(s => s.IdTipoSolicitudNavigation)
                 .FirstOrDefaultAsync(s => s.IdSolicitud == model.IdSolicitud
                                        && s.IdUsuario == idUsuario.Value);
 
             if (solicitud == null)
-                return NotFound();
-
-            if (solicitud.Estado.ToLower() != "pendiente")
-                return BadRequest("Solo se pueden editar solicitudes pendientes.");
-
-            if (model.FechaFin < model.FechaInicio)
-                return BadRequest("Rango de fechas inválido.");
-
-            // Actualizar datos normales
-            solicitud.IdTipoSolicitud = model.IdTipoSolicitud;
-            solicitud.FechaInicio = DateOnly.FromDateTime(model.FechaInicio);
-            solicitud.FechaFin = DateOnly.FromDateTime(model.FechaFin);
-            solicitud.Descripcion = model.Descripcion;
-
-            string carpetaBase = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "wwwroot/uploads/solicitudes",
-                solicitud.IdSolicitud.ToString()
-            );
-
-            // 1. Si el usuario pidió eliminar el archivo
-            if (model.EliminarArchivo && !string.IsNullOrEmpty(solicitud.RutaArchivo))
             {
-                string rutaFisica = Path.Combine(
-                    Directory.GetCurrentDirectory(),
-                    "wwwroot",
-                    solicitud.RutaArchivo.TrimStart('/')
-                );
-
-                if (System.IO.File.Exists(rutaFisica))
-                {
-                    System.IO.File.Delete(rutaFisica);
-                }
-
-                solicitud.RutaArchivo = null;
-                solicitud.NombreArchivo = null;
+                return NotFound();
             }
 
-            // 2. Si viene un archivo nuevo (reemplazo)
+            if ((solicitud.Estado ?? "").ToLower() != "pendiente")
+            {
+                return BadRequest("Solo se pueden editar solicitudes pendientes.");
+            }
+
+            var tipoSolicitud = await _context.TipoSolicituds
+                .FirstOrDefaultAsync(t => t.IdTipoSolicitud == model.IdTipoSolicitud);
+
+            if (tipoSolicitud == null)
+            {
+                return BadRequest("Seleccione un tipo de solicitud válido.");
+            }
+
+            string nombreTipo = tipoSolicitud.NombreSolicitud ?? "";
+            bool requiereFechas = TipoRequiereFechas(nombreTipo);
+            bool requiereDocumento = TipoRequiereDocumento(nombreTipo);
+
+            if (requiereFechas)
+            {
+                if (!model.FechaInicio.HasValue || !model.FechaFin.HasValue)
+                {
+                    return BadRequest("Debe indicar la fecha de inicio y la fecha fin para este tipo de solicitud.");
+                }
+
+                if (model.FechaFin.Value.Date < model.FechaInicio.Value.Date)
+                {
+                    return BadRequest("Rango de fechas inválido.");
+                }
+
+                if (model.FechaInicio.Value.Date < AhoraCostaRica().Date)
+                {
+                    return BadRequest("No puede registrar fechas pasadas.");
+                }
+            }
+
             if (model.Archivo != null && model.Archivo.Length > 0)
             {
-                if (!Directory.Exists(carpetaBase))
+                if (!ArchivoPermitido(model.Archivo))
                 {
-                    Directory.CreateDirectory(carpetaBase);
+                    return BadRequest("Formato de archivo no permitido. Use PDF, JPG o PNG.");
                 }
 
-                // Si había archivo anterior, borrarlo
+                if (!ArchivoPesoValido(model.Archivo))
+                {
+                    return BadRequest("El archivo no puede superar los 5MB.");
+                }
+            }
+
+            string? rutaArchivoFinal = solicitud.RutaArchivo;
+            string? nombreArchivoFinal = solicitud.NombreArchivo;
+
+            if (model.EliminarArchivo && !string.IsNullOrEmpty(solicitud.RutaArchivo))
+            {
+                EliminarArchivoFisico(solicitud.RutaArchivo);
+                rutaArchivoFinal = null;
+                nombreArchivoFinal = null;
+            }
+
+            if (requiereDocumento && string.IsNullOrEmpty(rutaArchivoFinal) && (model.Archivo == null || model.Archivo.Length == 0))
+            {
+                return BadRequest("Este tipo de solicitud requiere adjuntar un documento de respaldo.");
+            }
+
+            solicitud.IdTipoSolicitud = model.IdTipoSolicitud;
+            solicitud.FechaInicio = requiereFechas && model.FechaInicio.HasValue ? DateOnly.FromDateTime(model.FechaInicio.Value) : null;
+            solicitud.FechaFin = requiereFechas && model.FechaFin.HasValue ? DateOnly.FromDateTime(model.FechaFin.Value) : null;
+            solicitud.Descripcion = ConstruirDescripcionSolicitud(model, nombreTipo);
+            solicitud.RutaArchivo = rutaArchivoFinal;
+            solicitud.NombreArchivo = nombreArchivoFinal;
+            solicitud.DescripcionEstado = TipoGestionAdministrativa(nombreTipo)
+                ? "Pendiente de revisión administrativa"
+                : "Pendiente de aprobación";
+
+            if (model.Archivo != null && model.Archivo.Length > 0)
+            {
                 if (!string.IsNullOrEmpty(solicitud.RutaArchivo))
                 {
-                    string rutaAnterior = Path.Combine(
-                        Directory.GetCurrentDirectory(),
-                        "wwwroot",
-                        solicitud.RutaArchivo.TrimStart('/')
-                    );
-
-                    if (System.IO.File.Exists(rutaAnterior))
-                    {
-                        System.IO.File.Delete(rutaAnterior);
-                    }
+                    EliminarArchivoFisico(solicitud.RutaArchivo);
                 }
 
-                string nombreUnico = Guid.NewGuid().ToString() +
-                                     Path.GetExtension(model.Archivo.FileName);
-
-                string rutaCompleta = Path.Combine(carpetaBase, nombreUnico);
-
-                using (var stream = new FileStream(rutaCompleta, FileMode.Create))
-                {
-                    await model.Archivo.CopyToAsync(stream);
-                }
-
-                solicitud.RutaArchivo =
-                    $"/uploads/solicitudes/{solicitud.IdSolicitud}/{nombreUnico}";
-
-                solicitud.NombreArchivo = model.Archivo.FileName;
+                await GuardarArchivoSolicitud(solicitud, model.Archivo);
             }
 
             await _context.SaveChangesAsync();
@@ -425,33 +626,27 @@ namespace Oclock.Controllers
             int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
 
             if (idUsuario == null)
+            {
                 return Unauthorized();
+            }
 
             var solicitud = _context.Solicituds
                 .FirstOrDefault(s => s.IdSolicitud == id
                                   && s.IdUsuario == idUsuario.Value);
 
             if (solicitud == null)
+            {
                 return NotFound();
+            }
 
-            if (solicitud.Estado.ToLower() != "pendiente")
+            if ((solicitud.Estado ?? "").ToLower() != "pendiente")
+            {
                 return BadRequest("Solo se pueden cancelar solicitudes pendientes.");
+            }
 
-            // Si tiene archivo, eliminarlo
             if (!string.IsNullOrEmpty(solicitud.RutaArchivo))
             {
-                string rutaFisica = Path.Combine(
-                    Directory.GetCurrentDirectory(),
-                    "wwwroot",
-                    solicitud.RutaArchivo.TrimStart('/')
-                );
-
-                if (System.IO.File.Exists(rutaFisica))
-                {
-                    System.IO.File.Delete(rutaFisica);
-                }
-
-                // Limpiar columnas en BD
+                EliminarArchivoFisico(solicitud.RutaArchivo);
                 solicitud.RutaArchivo = null;
                 solicitud.NombreArchivo = null;
             }
@@ -469,7 +664,9 @@ namespace Oclock.Controllers
             int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
 
             if (idUsuario == null)
+            {
                 return RedirectToAction("Index", "Usuario");
+            }
 
             return View();
         }
@@ -481,7 +678,9 @@ namespace Oclock.Controllers
             int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
 
             if (idUsuario == null)
+            {
                 return Json(new { success = false, message = "Sesión no válida." });
+            }
 
             var bonos = _context.BonosAsignados
                 .Include(ba => ba.IdBonoNavigation)

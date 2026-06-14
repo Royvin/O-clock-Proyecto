@@ -27,8 +27,15 @@ public partial class Solicitud
 
     public string? NombreArchivo { get; set; }
 
+    public DateOnly? FechaInicioAprobada { get; set; }
+
+    public DateOnly? FechaFinAprobada { get; set; }
+
+    public int? DiasOtorgados { get; set; }
+
+    public string? DiasOtorgadosDetalle { get; set; }
+
     public virtual TipoSolicitud IdTipoSolicitudNavigation { get; set; } = null!;
 
     public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
-
 }

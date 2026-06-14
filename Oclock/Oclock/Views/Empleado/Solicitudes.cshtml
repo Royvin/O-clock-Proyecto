@@ -269,6 +269,37 @@
         grid-column: 1 / -1;
     }
 
+    .hidden {
+        display: none !important;
+    }
+
+    .field-help {
+        color: #718096;
+        font-size: 11px;
+        line-height: 1.4;
+    }
+
+    .tipo-info {
+        background: #ebf8ff;
+        color: #2c5282;
+        border-left: 3px solid #4299e1;
+        padding: 12px 15px;
+        border-radius: 8px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .admin-note {
+        background: #f7fafc;
+        color: #4a5568;
+        border-left: 3px solid #667eea;
+        padding: 10px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        margin-top: 8px;
+        line-height: 1.5;
+    }
+
     .file-upload {
         border: 2px dashed #cbd5e0;
         border-radius: 8px;
@@ -528,6 +559,7 @@
         font-weight: 700;
         margin-bottom: 5px;
         font-size: 14px;
+        text-transform: capitalize;
     }
 
     .request-details {
@@ -626,7 +658,7 @@
         background: white;
         border-radius: 12px;
         padding: 25px;
-        max-width: 600px;
+        max-width: 650px;
         width: 90%;
         max-height: 90vh;
         overflow-y: auto;
@@ -681,7 +713,7 @@
     .detail-label {
         font-weight: 700;
         color: #4a5568;
-        width: 130px;
+        width: 160px;
         flex-shrink: 0;
         font-size: 13px;
     }
@@ -690,6 +722,7 @@
         color: #2d3748;
         flex: 1;
         font-size: 13px;
+        white-space: pre-line;
     }
 
     .alert {
@@ -769,7 +802,7 @@
         <div class="content-header">
             <div>
                 <h1>Mis Solicitudes de Permisos</h1>
-                <p>Gestiona tus solicitudes de ausencias y permisos</p>
+                <p>Gestiona tus solicitudes según el tipo requerido por recursos humanos</p>
             </div>
         </div>
 
@@ -778,28 +811,28 @@
                 <div class="stat-header">
                     <div class="stat-icon">📌</div>
                 </div>
-                <div class="stat-value" id="pendingCount"></div>
+                <div class="stat-value" id="pendingCount">0</div>
                 <div class="stat-label">Pendientes</div>
             </div>
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon">✅</div>
                 </div>
-                <div class="stat-value" id="approvedCount"></div>
+                <div class="stat-value" id="approvedCount">0</div>
                 <div class="stat-label">Aprobadas</div>
             </div>
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon">❌</div>
                 </div>
-                <div class="stat-value" id="rejectedCount"></div>
+                <div class="stat-value" id="rejectedCount">0</div>
                 <div class="stat-label">Rechazadas</div>
             </div>
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon">📊</div>
                 </div>
-                <div class="stat-value" id="totalCount"></div>
+                <div class="stat-value" id="totalCount">0</div>
                 <div class="stat-label">Total</div>
             </div>
         </div>
@@ -818,55 +851,80 @@
 
             <div class="form-section">
                 <h2>📝 Registrar Nueva Solicitud</h2>
+
                 <form id="solicitudForm">
                     <div class="form-grid">
-                        <div class="form-group">
+                        <div class="form-group full-width">
                             <label>Tipo de Solicitud <span class="required">*</span></label>
                             <select id="tipoSolicitud" required>
                                 <option value="">Seleccione un tipo</option>
-                                <option value="vacaciones">Vacaciones</option>
-                                <option value="permiso">Permiso Personal</option>
-                                <option value="incapacidad">Incapacidad</option>
-                                <option value="licencia">Licencia</option>
                             </select>
                             <span class="error-message" id="tipoError"></span>
                         </div>
 
-                        <div class="form-group">
-                            <label>Prioridad <span class="required">*</span></label>
-                            <select id="prioridad" required>
-                                <option value="">Seleccione prioridad</option>
+                        <div class="form-group full-width hidden" id="grupoInfoTipo">
+                            <div class="tipo-info" id="infoTipoSolicitud"></div>
+                        </div>
+
+                        <div class="form-group hidden" id="grupoPrioridad">
+                            <label>Prioridad</label>
+                            <select id="prioridad">
                                 <option value="normal">Normal</option>
                                 <option value="urgente">Urgente</option>
                             </select>
+                            <span class="field-help">Usar urgente solo cuando la solicitud requiera atención rápida.</span>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group hidden" id="grupoFechaInicio">
                             <label>Fecha Inicio <span class="required">*</span></label>
-                            <input type="date" id="fechaInicio" required>
+                            <input type="date" id="fechaInicio">
                             <span class="error-message" id="fechaInicioError"></span>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group hidden" id="grupoFechaFin">
                             <label>Fecha Fin <span class="required">*</span></label>
-                            <input type="date" id="fechaFin" required>
+                            <input type="date" id="fechaFin">
                             <span class="error-message" id="fechaFinError"></span>
                         </div>
 
-                        <div class="form-group full-width">
-                            <label>Motivo / Descripción <span class="required">*</span></label>
-                            <textarea id="motivo" placeholder="Describa el motivo de su solicitud..." required></textarea>
+                        <div class="form-group full-width hidden" id="grupoMotivo">
+                            <label id="labelMotivo">Motivo / Descripción</label>
+                            <textarea id="motivo" placeholder="Describa el motivo de su solicitud..."></textarea>
                             <span class="error-message" id="motivoError"></span>
                         </div>
 
-                        <div class="form-group full-width">
-                            <label>Adjuntar Documentos de Respaldo</label>
+                        <div class="form-group hidden" id="grupoParentesco">
+                            <label>Parentesco del familiar</label>
+                            <input type="text" id="parentescoFamiliar" placeholder="Ejemplo: padre, madre, hermano(a), cónyuge">
+                            <span class="field-help">Dato de apoyo para la revisión administrativa.</span>
+                        </div>
+
+                        <div class="form-group hidden" id="grupoNombreFamiliar">
+                            <label>Nombre del familiar</label>
+                            <input type="text" id="nombreFamiliar" placeholder="Nombre del familiar fallecido">
+                            <span class="field-help">Opcional, según el documento presentado.</span>
+                        </div>
+
+                        <div class="form-group full-width hidden" id="grupoMotivoConstancia">
+                            <label>Motivo de la constancia salarial</label>
+                            <textarea id="motivoConstancia" placeholder="Ejemplo: trámite bancario, alquiler, estudio, otro..."></textarea>
+                            <span class="error-message" id="motivoConstanciaError"></span>
+                        </div>
+
+                        <div class="form-group full-width hidden" id="grupoDetalleOtro">
+                            <label>Detalle adicional</label>
+                            <textarea id="detalleOtro" placeholder="Explique el tipo de solicitud que necesita..."></textarea>
+                            <span class="error-message" id="detalleOtroError"></span>
+                        </div>
+
+                        <div class="form-group full-width hidden" id="grupoDocumento">
+                            <label id="labelDocumento">Adjuntar Documento</label>
                             <div class="file-upload" onclick="document.getElementById('fileInput').click()">
                                 <div class="file-upload-icon">📎</div>
-                                <div class="file-upload-text">Haz clic para adjuntar archivos</div>
+                                <div class="file-upload-text" id="textoDocumento">Haz clic para adjuntar archivo</div>
                                 <div class="file-upload-hint">PDF, JPG, PNG (Máximo 5MB)</div>
                             </div>
-                            <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileSelect(event)">
+                            <input type="file" id="fileInput" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileSelect(event)">
                             <span class="error-message" id="fileError"></span>
                             <div id="uploadedFiles" class="uploaded-files"></div>
                         </div>
@@ -899,25 +957,25 @@
                             <option value="cancelado">Cancelado</option>
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label>Tipo</label>
                         <select id="filterTipo" onchange="applyFilters()">
                             <option value="">Todos</option>
-                            <option value="vacaciones">Vacaciones</option>
-                            <option value="permiso">Permiso</option>
-                            <option value="incapacidad">Incapacidad</option>
-                            <option value="licencia">Licencia</option>
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label>Desde</label>
                         <input type="date" id="filterDesde" onchange="applyFilters()">
                     </div>
+
                     <div class="form-group">
                         <label>Hasta</label>
                         <input type="date" id="filterHasta" onchange="applyFilters()">
                     </div>
                 </div>
+
                 <button class="btn btn-secondary" onclick="clearFilters()">
                     🔄 Limpiar Filtros
                 </button>
@@ -951,41 +1009,66 @@
             <h3>✏️ Editar Solicitud</h3>
             <button class="btn-close" onclick="closeModal('editModal')">×</button>
         </div>
+
         <div id="editContent">
             <form id="editForm">
                 <div class="form-grid">
-                    <div class="form-group">
+                    <div class="form-group full-width">
                         <label>Tipo <span class="required">*</span></label>
                         <select id="editTipoSolicitud" required>
                             <option value="">Seleccione un tipo</option>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label>Prioridad <span class="required">*</span></label>
-                        <select id="editPrioridad" required>
+                    <div class="form-group full-width hidden" id="editGrupoInfoTipo">
+                        <div class="tipo-info" id="editInfoTipoSolicitud"></div>
+                    </div>
+
+                    <div class="form-group hidden" id="editGrupoPrioridad">
+                        <label>Prioridad</label>
+                        <select id="editPrioridad">
                             <option value="normal">Normal</option>
                             <option value="urgente">Urgente</option>
                         </select>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group hidden" id="editGrupoFechaInicio">
                         <label>Fecha Inicio <span class="required">*</span></label>
-                        <input type="date" id="editFechaInicio" required>
+                        <input type="date" id="editFechaInicio">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group hidden" id="editGrupoFechaFin">
                         <label>Fecha Fin <span class="required">*</span></label>
-                        <input type="date" id="editFechaFin" required>
+                        <input type="date" id="editFechaFin">
                     </div>
 
-                    <div class="form-group full-width">
-                        <label>Motivo <span class="required">*</span></label>
-                        <textarea id="editMotivo" required></textarea>
+                    <div class="form-group full-width hidden" id="editGrupoMotivo">
+                        <label id="editLabelMotivo">Motivo / Descripción</label>
+                        <textarea id="editMotivo"></textarea>
                     </div>
 
-                    <div class="form-group full-width">
-                        <label>Documento de Respaldo</label>
+                    <div class="form-group hidden" id="editGrupoParentesco">
+                        <label>Parentesco del familiar</label>
+                        <input type="text" id="editParentescoFamiliar">
+                    </div>
+
+                    <div class="form-group hidden" id="editGrupoNombreFamiliar">
+                        <label>Nombre del familiar</label>
+                        <input type="text" id="editNombreFamiliar">
+                    </div>
+
+                    <div class="form-group full-width hidden" id="editGrupoMotivoConstancia">
+                        <label>Motivo de la constancia salarial</label>
+                        <textarea id="editMotivoConstancia"></textarea>
+                    </div>
+
+                    <div class="form-group full-width hidden" id="editGrupoDetalleOtro">
+                        <label>Detalle adicional</label>
+                        <textarea id="editDetalleOtro"></textarea>
+                    </div>
+
+                    <div class="form-group full-width hidden" id="editGrupoDocumento">
+                        <label id="editLabelDocumento">Documento de Respaldo</label>
 
                         <div id="archivoActualContainer" style="margin-bottom:10px; display:none;">
                             <div class="uploaded-file">
@@ -1006,7 +1089,7 @@
 
                         <div class="file-upload" onclick="document.getElementById('editFileInput').click()">
                             <div class="file-upload-icon">📎</div>
-                            <div class="file-upload-text">Haz clic para adjuntar nuevo archivo</div>
+                            <div class="file-upload-text" id="editTextoDocumento">Haz clic para adjuntar nuevo archivo</div>
                             <div class="file-upload-hint">PDF, JPG, PNG (Máximo 5MB)</div>
                         </div>
 
@@ -1055,50 +1138,215 @@
 
 <script>
     let solicitudes = [];
-    let uploadedFiles = [];
+    let tiposSolicitud = [];
+    let uploadedFile = null;
     let currentEditId = null;
     let currentCancelId = null;
     let editFile = null;
     let eliminarArchivo = false;
     let archivoActualRuta = null;
 
-    document.addEventListener('DOMContentLoaded', () => {
-        cargarTiposSolicitud();
-        cargarSolicitudes();
+    document.addEventListener('DOMContentLoaded', async () => {
+        await cargarTiposSolicitud();
+        await cargarSolicitudes();
+
         document.getElementById('solicitudForm').addEventListener('submit', handleFormSubmit);
         document.getElementById('editForm').addEventListener('submit', handleEditSubmit);
+
+        document.getElementById('tipoSolicitud').addEventListener('change', () => actualizarFormularioPorTipo(false));
+        document.getElementById('editTipoSolicitud').addEventListener('change', () => actualizarFormularioPorTipo(true));
+
+        actualizarFormularioPorTipo(false);
+        actualizarFormularioPorTipo(true);
     });
+
+    function normalizarTexto(texto) {
+        return (texto || '')
+            .toString()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .trim()
+            .toLowerCase();
+    }
+
+    function escapeHtml(valor) {
+        if (valor === null || valor === undefined) return '';
+        return valor.toString()
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
+    }
+
+    function obtenerReglasTipo(nombreTipo) {
+        const nombre = normalizarTexto(nombreTipo);
+
+        const esVacaciones = nombre.includes('vacacion');
+        const esPermisoPersonal = nombre.includes('permiso personal');
+        const esIncapacidad = nombre.includes('incapacidad');
+        const esMaternidad = nombre.includes('maternidad');
+        const esFallecimiento = nombre.includes('fallecimiento');
+        const esConstancia = nombre.includes('constancia salarial');
+        const esOtro = nombre === 'otro' || nombre.includes('otro');
+
+        return {
+            esVacaciones,
+            esPermisoPersonal,
+            esIncapacidad,
+            esMaternidad,
+            esFallecimiento,
+            esConstancia,
+            esOtro,
+            requiereFechas: esVacaciones || esPermisoPersonal || esOtro,
+            requiereDocumento: esIncapacidad || esMaternidad || esFallecimiento,
+            mostrarDocumento: esIncapacidad || esMaternidad || esFallecimiento || esPermisoPersonal || esOtro,
+            mostrarPrioridad: esVacaciones || esPermisoPersonal || esOtro,
+            mostrarMotivo: esVacaciones || esPermisoPersonal || esIncapacidad || esMaternidad || esFallecimiento,
+            requiereMotivo: esVacaciones || esPermisoPersonal,
+            mostrarFallecimiento: esFallecimiento,
+            mostrarConstancia: esConstancia,
+            mostrarOtro: esOtro,
+            gestionAdministrativa: esIncapacidad || esMaternidad || esFallecimiento || esConstancia
+        };
+    }
+
+    function obtenerTipoPorId(id) {
+        return tiposSolicitud.find(t => String(t.idTipoSolicitud) === String(id));
+    }
+
+    function setVisible(id, visible) {
+        const element = document.getElementById(id);
+        if (!element) return;
+
+        if (visible) {
+            element.classList.remove('hidden');
+        } else {
+            element.classList.add('hidden');
+        }
+    }
+
+    function setRequired(id, required) {
+        const element = document.getElementById(id);
+        if (!element) return;
+
+        if (required) {
+            element.setAttribute('required', 'required');
+        } else {
+            element.removeAttribute('required');
+        }
+    }
+
+    function obtenerMensajeTipo(nombreTipo, reglas) {
+        if (!nombreTipo) {
+            return '';
+        }
+
+        if (reglas.esIncapacidad) {
+            return 'Para incapacidad, el colaborador solo debe adjuntar el documento de respaldo. La administración revisará la validez, fechas y cantidad de días otorgados.';
+        }
+
+        if (reglas.esMaternidad) {
+            return 'Para licencia de maternidad, adjunte el documento correspondiente. La administración determinará las fechas oficiales y los días otorgados.';
+        }
+
+        if (reglas.esFallecimiento) {
+            return 'Para permiso por fallecimiento, adjunte el documento de respaldo. Puede indicar parentesco como dato de apoyo, pero la administración determinará los días aplicables.';
+        }
+
+        if (reglas.esConstancia) {
+            return 'Para constancia salarial, indique el motivo de la solicitud. La gestión administrativa se encargará de generar el documento correspondiente.';
+        }
+
+        if (reglas.esVacaciones) {
+            return 'Para vacaciones, indique el rango de fechas solicitado. La administración validará disponibilidad y aprobará los días correspondientes.';
+        }
+
+        if (reglas.esPermisoPersonal) {
+            return 'Para permiso personal, indique el rango de fechas y el motivo. Puede adjuntar un documento si aplica.';
+        }
+
+        if (reglas.esOtro) {
+            return 'Para otro tipo de solicitud, indique fechas y detalle del caso para que la administración pueda revisarlo.';
+        }
+
+        return 'Complete únicamente la información necesaria para este tipo de solicitud.';
+    }
+
+    function actualizarFormularioPorTipo(esEdicion) {
+        const prefijo = esEdicion ? 'edit' : '';
+        const selectId = esEdicion ? 'editTipoSolicitud' : 'tipoSolicitud';
+        const select = document.getElementById(selectId);
+        const tipo = obtenerTipoPorId(select?.value);
+        const nombreTipo = tipo?.nombreSolicitud || '';
+        const reglas = obtenerReglasTipo(nombreTipo);
+
+        const grupoInfo = esEdicion ? 'editGrupoInfoTipo' : 'grupoInfoTipo';
+        const info = esEdicion ? 'editInfoTipoSolicitud' : 'infoTipoSolicitud';
+
+        setVisible(grupoInfo, !!nombreTipo);
+        document.getElementById(info).textContent = obtenerMensajeTipo(nombreTipo, reglas);
+
+        setVisible(esEdicion ? 'editGrupoPrioridad' : 'grupoPrioridad', reglas.mostrarPrioridad);
+        setVisible(esEdicion ? 'editGrupoFechaInicio' : 'grupoFechaInicio', reglas.requiereFechas);
+        setVisible(esEdicion ? 'editGrupoFechaFin' : 'grupoFechaFin', reglas.requiereFechas);
+        setVisible(esEdicion ? 'editGrupoMotivo' : 'grupoMotivo', reglas.mostrarMotivo);
+        setVisible(esEdicion ? 'editGrupoParentesco' : 'grupoParentesco', reglas.mostrarFallecimiento);
+        setVisible(esEdicion ? 'editGrupoNombreFamiliar' : 'grupoNombreFamiliar', reglas.mostrarFallecimiento);
+        setVisible(esEdicion ? 'editGrupoMotivoConstancia' : 'grupoMotivoConstancia', reglas.mostrarConstancia);
+        setVisible(esEdicion ? 'editGrupoDetalleOtro' : 'grupoDetalleOtro', reglas.mostrarOtro);
+        setVisible(esEdicion ? 'editGrupoDocumento' : 'grupoDocumento', reglas.mostrarDocumento);
+
+        setRequired(esEdicion ? 'editFechaInicio' : 'fechaInicio', reglas.requiereFechas);
+        setRequired(esEdicion ? 'editFechaFin' : 'fechaFin', reglas.requiereFechas);
+        setRequired(esEdicion ? 'editMotivo' : 'motivo', reglas.requiereMotivo);
+        setRequired(esEdicion ? 'editMotivoConstancia' : 'motivoConstancia', reglas.mostrarConstancia);
+        setRequired(esEdicion ? 'editDetalleOtro' : 'detalleOtro', reglas.mostrarOtro);
+
+        const labelMotivo = document.getElementById(esEdicion ? 'editLabelMotivo' : 'labelMotivo');
+        if (labelMotivo) {
+            if (reglas.requiereMotivo) {
+                labelMotivo.innerHTML = 'Motivo / Descripción <span class="required">*</span>';
+            } else {
+                labelMotivo.innerHTML = 'Motivo / Descripción';
+            }
+        }
+
+        const labelDocumento = document.getElementById(esEdicion ? 'editLabelDocumento' : 'labelDocumento');
+        const textoDocumento = document.getElementById(esEdicion ? 'editTextoDocumento' : 'textoDocumento');
+
+        if (labelDocumento && textoDocumento) {
+            if (reglas.requiereDocumento) {
+                labelDocumento.innerHTML = 'Documento de Respaldo <span class="required">*</span>';
+                textoDocumento.textContent = 'Documento obligatorio para este tipo de solicitud';
+            } else {
+                labelDocumento.innerHTML = 'Documento de Respaldo';
+                textoDocumento.textContent = 'Documento opcional si aplica';
+            }
+        }
+    }
 
     async function cargarTiposSolicitud() {
         try {
             const response = await fetch('/Empleado/ObtenerTiposSolicitud');
-            const tipos = await response.json();
+            tiposSolicitud = await response.json();
 
-            const selects = [
-                document.getElementById('tipoSolicitud'),
-                document.getElementById('editTipoSolicitud'),
-                document.getElementById('filterTipo')
-            ];
+            const tipoSelect = document.getElementById('tipoSolicitud');
+            const editTipoSelect = document.getElementById('editTipoSolicitud');
+            const filterTipoSelect = document.getElementById('filterTipo');
 
-            selects.forEach(select => {
-                if (!select) return;
+            tipoSelect.innerHTML = '<option value="">Seleccione un tipo</option>';
+            editTipoSelect.innerHTML = '<option value="">Seleccione un tipo</option>';
+            filterTipoSelect.innerHTML = '<option value="">Todos</option>';
 
-                if (select.id === "filterTipo") {
-                    select.innerHTML = '<option value="">Todos</option>';
-                } else {
-                    select.innerHTML = '<option value="">Seleccione un tipo</option>';
-                }
-
-                tipos.forEach(tipo => {
-                    if (select.id === "filterTipo") {
-                        select.innerHTML += `<option value="${tipo.nombreSolicitud}">${tipo.nombreSolicitud}</option>`;
-                    } else {
-                        select.innerHTML += `<option value="${tipo.idTipoSolicitud}">${tipo.nombreSolicitud}</option>`;
-                    }
-                });
+            tiposSolicitud.forEach(tipo => {
+                tipoSelect.innerHTML += `<option value="${tipo.idTipoSolicitud}">${escapeHtml(tipo.nombreSolicitud)}</option>`;
+                editTipoSelect.innerHTML += `<option value="${tipo.idTipoSolicitud}">${escapeHtml(tipo.nombreSolicitud)}</option>`;
+                filterTipoSelect.innerHTML += `<option value="${normalizarTexto(tipo.nombreSolicitud)}">${escapeHtml(tipo.nombreSolicitud)}</option>`;
             });
         } catch (error) {
             console.error("Error cargando tipos:", error);
+            showAlert("Error al cargar los tipos de solicitud", "error");
         }
     }
 
@@ -1120,6 +1368,10 @@
         }
     }
 
+    function obtenerFechaParaFiltro(sol) {
+        return sol.fechaInicio || sol.fechaInicioAprobada || sol.fechaSolicitud;
+    }
+
     function renderSolicitudes() {
         const container = document.getElementById('solicitudesList');
         let filtered = [...solicitudes];
@@ -1129,10 +1381,21 @@
         const filterDesde = document.getElementById('filterDesde')?.value;
         const filterHasta = document.getElementById('filterHasta')?.value;
 
-        if (filterEstado) filtered = filtered.filter(s => s.estado === filterEstado);
-        if (filterTipo) filtered = filtered.filter(s => s.tipoNombre === filterTipo);
-        if (filterDesde) filtered = filtered.filter(s => s.fechaInicio >= filterDesde);
-        if (filterHasta) filtered = filtered.filter(s => s.fechaFin <= filterHasta);
+        if (filterEstado) {
+            filtered = filtered.filter(s => s.estado === filterEstado);
+        }
+
+        if (filterTipo) {
+            filtered = filtered.filter(s => normalizarTexto(s.tipoNombre) === filterTipo);
+        }
+
+        if (filterDesde) {
+            filtered = filtered.filter(s => obtenerFechaParaFiltro(s) >= filterDesde);
+        }
+
+        if (filterHasta) {
+            filtered = filtered.filter(s => obtenerFechaParaFiltro(s) <= filterHasta);
+        }
 
         if (filtered.length === 0) {
             container.innerHTML = `
@@ -1141,6 +1404,7 @@
                     <h3>No se encontraron solicitudes</h3>
                     <p>No hay solicitudes que coincidan con los filtros</p>
                 </div>`;
+            document.getElementById('totalBadge').textContent = `0 solicitudes`;
             return;
         }
 
@@ -1155,17 +1419,20 @@
         filtered.sort((a, b) => new Date(b.fechaSolicitud) - new Date(a.fechaSolicitud));
 
         container.innerHTML = filtered.map(sol => `
-            <div class="request-card ${sol.estado}">
+            <div class="request-card ${escapeHtml(sol.estado)}">
                 <div class="request-icon" style="background:${estadoColors[sol.estado] || '#e2e8f0'};color:#2d3748;">
                     ${getTipoIcon(sol.tipoNombre)}
                 </div>
                 <div class="request-info">
-                    <div class="request-title">${sol.tipoNombre}</div>
+                    <div class="request-title">${escapeHtml(sol.tipoNombre)}</div>
                     <div class="request-details">
                         <div class="request-detail-item">
-                            📅 <strong>${formatDate(sol.fechaInicio)}</strong> al <strong>${formatDate(sol.fechaFin)}</strong>
+                            📅 ${obtenerTextoRango(sol)}
                         </div>
                         <div class="request-detail-item">${getStatusBadge(sol.estado)}</div>
+                        ${sol.diasOtorgados
+                            ? `<div class="request-detail-item">🗓️ ${sol.diasOtorgados} día(s) otorgado(s)</div>`
+                            : ''}
                         ${sol.nombreArchivo
                             ? `<div class="request-detail-item">📎 1 archivo</div>`
                             : ''}
@@ -1180,6 +1447,8 @@
                 </div>
             </div>
         `).join('');
+
+        document.getElementById('totalBadge').textContent = `${filtered.length} solicitud(es)`;
     }
 
     function updateCounters() {
@@ -1195,12 +1464,15 @@
     }
 
     function getTipoIcon(tipoNombre) {
-        const nombre = tipoNombre?.toLowerCase();
+        const nombre = normalizarTexto(tipoNombre);
         if (!nombre) return "📄";
         if (nombre.includes("vacacion")) return "🏖️";
-        if (nombre.includes("permiso")) return "📝";
+        if (nombre.includes("permiso personal")) return "📝";
+        if (nombre.includes("fallecimiento")) return "🕊️";
         if (nombre.includes("incapacidad")) return "🏥";
-        if (nombre.includes("licencia")) return "📄";
+        if (nombre.includes("maternidad")) return "🤱";
+        if (nombre.includes("constancia")) return "📑";
+        if (nombre.includes("otro")) return "📌";
         return "📄";
     }
 
@@ -1217,8 +1489,24 @@
     }
 
     function formatDate(dateStr) {
+        if (!dateStr) {
+            return 'No definido';
+        }
+
         const date = new Date(dateStr + 'T00:00:00');
         return date.toLocaleDateString('es-CR', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    function obtenerTextoRango(sol) {
+        if (sol.fechaInicio && sol.fechaFin) {
+            return `<strong>${formatDate(sol.fechaInicio)}</strong> al <strong>${formatDate(sol.fechaFin)}</strong>`;
+        }
+
+        if (sol.fechaInicioAprobada && sol.fechaFinAprobada) {
+            return `<strong>${formatDate(sol.fechaInicioAprobada)}</strong> al <strong>${formatDate(sol.fechaFinAprobada)}</strong>`;
+        }
+
+        return '<strong>Fechas por definir por administración</strong>';
     }
 
     function formatFileSize(bytes) {
@@ -1232,7 +1520,7 @@
         alertDiv.className = `alert alert-${type}`;
         alertDiv.innerHTML = `
             <span style="font-size:18px;">${type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️'}</span>
-            <span>${message}</span>
+            <span>${escapeHtml(message)}</span>
         `;
         alertDiv.style.display = 'flex';
         setTimeout(() => alertDiv.style.display = 'none', 5000);
@@ -1256,6 +1544,10 @@
         element.classList.add('active');
         document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
         document.getElementById(tabName + 'Tab').classList.add('active');
+
+        if (tabName === 'mis') {
+            cargarSolicitudes();
+        }
     }
 
     function openModal(modalId) {
@@ -1270,36 +1562,94 @@
         event.preventDefault();
         clearErrors();
 
-        const tipo = document.getElementById('tipoSolicitud').value;
+        const tipoId = document.getElementById('tipoSolicitud').value;
+        const tipo = obtenerTipoPorId(tipoId);
+
+        if (!tipoId || !tipo) {
+            showError('tipoError', 'Campo obligatorio');
+            showAlert('Seleccione un tipo de solicitud', 'error');
+            return;
+        }
+
+        const reglas = obtenerReglasTipo(tipo.nombreSolicitud);
+
         const prioridad = document.getElementById('prioridad').value;
         const fechaInicio = document.getElementById('fechaInicio').value;
         const fechaFin = document.getElementById('fechaFin').value;
         const motivo = document.getElementById('motivo').value;
+        const parentescoFamiliar = document.getElementById('parentescoFamiliar').value;
+        const nombreFamiliar = document.getElementById('nombreFamiliar').value;
+        const motivoConstancia = document.getElementById('motivoConstancia').value;
+        const detalleOtro = document.getElementById('detalleOtro').value;
 
         let isValid = true;
-        if (!tipo) { showError('tipoError', 'Campo obligatorio'); isValid = false; }
-        if (!fechaInicio) { showError('fechaInicioError', 'Campo obligatorio'); isValid = false; }
-        if (!fechaFin) { showError('fechaFinError', 'Campo obligatorio'); isValid = false; }
-        if (!motivo.trim()) { showError('motivoError', 'Campo obligatorio'); isValid = false; }
+
+        if (reglas.requiereFechas) {
+            if (!fechaInicio) {
+                showError('fechaInicioError', 'Campo obligatorio');
+                isValid = false;
+            }
+
+            if (!fechaFin) {
+                showError('fechaFinError', 'Campo obligatorio');
+                isValid = false;
+            }
+
+            if (fechaInicio && fechaFin && fechaFin < fechaInicio) {
+                showError('fechaFinError', 'La fecha fin no puede ser menor a la fecha inicio');
+                isValid = false;
+            }
+        }
+
+        if (reglas.requiereMotivo && !motivo.trim()) {
+            showError('motivoError', 'Campo obligatorio');
+            isValid = false;
+        }
+
+        if (reglas.mostrarConstancia && !motivoConstancia.trim()) {
+            showError('motivoConstanciaError', 'Indique el motivo de la constancia salarial');
+            isValid = false;
+        }
+
+        if (reglas.mostrarOtro && !detalleOtro.trim()) {
+            showError('detalleOtroError', 'Indique el detalle de la solicitud');
+            isValid = false;
+        }
+
+        if (reglas.requiereDocumento && !uploadedFile) {
+            showError('fileError', 'Debe adjuntar un documento de respaldo');
+            isValid = false;
+        }
 
         if (!isValid) {
-            showAlert('Complete todos los campos obligatorios', 'error');
+            showAlert('Revise los campos requeridos para este tipo de solicitud', 'error');
             return;
         }
 
         const formData = new FormData();
-        formData.append("IdTipoSolicitud", parseInt(tipo));
+        formData.append("IdTipoSolicitud", parseInt(tipoId));
         formData.append("Descripcion", motivo);
-        formData.append("FechaInicio", fechaInicio);
-        formData.append("FechaFin", fechaFin);
         formData.append("Prioridad", prioridad);
-        uploadedFiles.forEach(file => formData.append("archivo", file));
+        formData.append("ParentescoFamiliar", parentescoFamiliar);
+        formData.append("NombreFamiliar", nombreFamiliar);
+        formData.append("MotivoConstancia", motivoConstancia);
+        formData.append("DetalleOtro", detalleOtro);
+
+        if (reglas.requiereFechas) {
+            formData.append("FechaInicio", fechaInicio);
+            formData.append("FechaFin", fechaFin);
+        }
+
+        if (uploadedFile) {
+            formData.append("Archivo", uploadedFile);
+        }
 
         try {
             const response = await fetch('/Empleado/RegistrarSolicitud', {
                 method: 'POST',
                 body: formData
             });
+
             const data = await response.json();
 
             if (data.success) {
@@ -1307,7 +1657,7 @@
                 clearForm();
                 await cargarSolicitudes();
             } else {
-                showAlert(data.message, 'error');
+                showAlert(data.message || 'No se pudo registrar la solicitud', 'error');
             }
         } catch (error) {
             console.error("Error:", error);
@@ -1317,56 +1667,64 @@
 
     function clearForm() {
         document.getElementById('solicitudForm').reset();
-        uploadedFiles = [];
-        renderUploadedFiles();
+        uploadedFile = null;
+        renderUploadedFile();
         clearErrors();
+        actualizarFormularioPorTipo(false);
     }
 
     function handleFileSelect(event) {
-        const files = Array.from(event.target.files);
+        const file = event.target.files[0];
         const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
         const maxSize = 5 * 1024 * 1024;
 
         document.getElementById('fileError').textContent = '';
 
-        for (const file of files) {
-            if (!allowedTypes.includes(file.type)) {
-                showError('fileError', 'Formato no permitido. Use PDF, JPG o PNG.');
-                continue;
-            }
-            if (file.size > maxSize) {
-                showError('fileError', 'Archivo excede 5MB máximo.');
-                continue;
-            }
-            uploadedFiles.push(file);
+        if (!file) {
+            return;
         }
 
-        renderUploadedFiles();
+        if (!allowedTypes.includes(file.type)) {
+            showError('fileError', 'Formato no permitido. Use PDF, JPG o PNG.');
+            event.target.value = '';
+            return;
+        }
+
+        if (file.size > maxSize) {
+            showError('fileError', 'Archivo excede 5MB máximo.');
+            event.target.value = '';
+            return;
+        }
+
+        uploadedFile = file;
+        renderUploadedFile();
         event.target.value = '';
     }
 
-    function renderUploadedFiles() {
+    function renderUploadedFile() {
         const container = document.getElementById('uploadedFiles');
-        if (uploadedFiles.length === 0) {
+
+        if (!uploadedFile) {
             container.innerHTML = '';
             return;
         }
 
-        container.innerHTML = uploadedFiles.map((file, index) => `
+        container.innerHTML = `
             <div class="uploaded-file">
                 <div class="file-icon">📄</div>
                 <div class="file-info">
-                    <div class="file-name">${file.name}</div>
-                    <div class="file-size">${formatFileSize(file.size)}</div>
+                    <div class="file-name">${escapeHtml(uploadedFile.name)}</div>
+                    <div class="file-size">${formatFileSize(uploadedFile.size)}</div>
                 </div>
-                <button type="button" class="file-remove" onclick="removeFile(${index})">🗑️</button>
+                <button type="button" class="file-remove" onclick="removeFile()">🗑️</button>
             </div>
-        `).join('');
+        `;
     }
 
-    function removeFile(index) {
-        uploadedFiles.splice(index, 1);
-        renderUploadedFiles();
+    function removeFile() {
+        uploadedFile = null;
+        document.getElementById("fileInput").value = "";
+        renderUploadedFile();
     }
 
     function viewDetail(id) {
@@ -1380,40 +1738,50 @@
             </div>
             <div class="detail-row">
                 <div class="detail-label">Tipo</div>
-                <div class="detail-value">${sol.tipoNombre}</div>
+                <div class="detail-value">${escapeHtml(sol.tipoNombre)}</div>
             </div>
             <div class="detail-row">
-                <div class="detail-label">Fecha Inicio</div>
-                <div class="detail-value">${formatDate(sol.fechaInicio)}</div>
+                <div class="detail-label">Fechas solicitadas</div>
+                <div class="detail-value">${sol.fechaInicio && sol.fechaFin ? `${formatDate(sol.fechaInicio)} al ${formatDate(sol.fechaFin)}` : 'No aplica / por definir por administración'}</div>
             </div>
             <div class="detail-row">
-                <div class="detail-label">Fecha Fin</div>
-                <div class="detail-value">${formatDate(sol.fechaFin)}</div>
+                <div class="detail-label">Fechas aprobadas</div>
+                <div class="detail-value">${sol.fechaInicioAprobada && sol.fechaFinAprobada ? `${formatDate(sol.fechaInicioAprobada)} al ${formatDate(sol.fechaFinAprobada)}` : 'Pendiente de definir'}</div>
             </div>
             <div class="detail-row">
-                <div class="detail-label">Motivo</div>
-                <div class="detail-value">${sol.motivo}</div>
+                <div class="detail-label">Días otorgados</div>
+                <div class="detail-value">${sol.diasOtorgados ? `${sol.diasOtorgados} día(s)` : 'Pendiente de definir'}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Detalle días</div>
+                <div class="detail-value">${sol.diasOtorgadosDetalle ? escapeHtml(sol.diasOtorgadosDetalle) : 'Sin detalle registrado'}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Motivo / Detalle</div>
+                <div class="detail-value">${sol.motivo ? escapeHtml(sol.motivo) : 'Sin descripción'}</div>
             </div>
             <div class="detail-row">
                 <div class="detail-label">Estado</div>
                 <div class="detail-value">${getStatusBadge(sol.estado)}</div>
             </div>
             <div class="detail-row">
-                <div class="detail-label">Prioridad</div>
-                <div class="detail-value">${sol.prioridad === 'urgente' ? '🔴 Urgente' : '🟢 Normal'}</div>
+                <div class="detail-label">Comentario estado</div>
+                <div class="detail-value">${sol.descripcionEstado ? escapeHtml(sol.descripcionEstado) : 'Sin comentarios'}</div>
             </div>
             <div class="detail-row">
                 <div class="detail-label">Fecha Solicitud</div>
                 <div class="detail-value">${formatDate(sol.fechaSolicitud)}</div>
             </div>
-            ${sol.observaciones ? `
             <div class="detail-row">
-                <div class="detail-label">Observaciones</div>
-                <div class="detail-value">${sol.observaciones}</div>
-            </div>` : ''}
-            <div class="detail-row">
-                <div class="detail-label">Documento de Respaldo</div>
-                <div class="detail-value">${sol.nombreArchivo ? `📎 ${sol.nombreArchivo}` : 'N/A'}</div>
+                <div class="detail-label">Documento</div>
+                <div class="detail-value">
+                    ${sol.rutaArchivo
+                        ? `<a href="${sol.rutaArchivo}" target="_blank" class="btn btn-info">📎 Ver documento</a>`
+                        : 'N/A'}
+                </div>
+            </div>
+            <div class="admin-note">
+                La cantidad de días otorgados y las fechas finales son definidas por administración según el tipo de solicitud.
             </div>
         `;
 
@@ -1422,6 +1790,7 @@
 
     function editSolicitud(id) {
         const sol = solicitudes.find(s => s.id === id);
+
         if (!sol || sol.estado !== 'pendiente') {
             showAlert('No es posible editar solicitudes ya atendidas', 'error');
             return;
@@ -1431,9 +1800,13 @@
 
         document.getElementById('editTipoSolicitud').value = sol.tipo;
         document.getElementById('editPrioridad').value = sol.prioridad ?? "normal";
-        document.getElementById('editFechaInicio').value = sol.fechaInicio;
-        document.getElementById('editFechaFin').value = sol.fechaFin;
-        document.getElementById('editMotivo').value = sol.motivo;
+        document.getElementById('editFechaInicio').value = sol.fechaInicio || '';
+        document.getElementById('editFechaFin').value = sol.fechaFin || '';
+        document.getElementById('editMotivo').value = sol.motivo || '';
+        document.getElementById('editParentescoFamiliar').value = '';
+        document.getElementById('editNombreFamiliar').value = '';
+        document.getElementById('editMotivoConstancia').value = '';
+        document.getElementById('editDetalleOtro').value = '';
 
         editFile = null;
         eliminarArchivo = false;
@@ -1451,27 +1824,98 @@
         }
 
         document.getElementById("editUploadedFiles").innerHTML = "";
+        actualizarFormularioPorTipo(true);
         openModal('editModal');
     }
 
     async function handleEditSubmit(event) {
         event.preventDefault();
 
+        const tipoId = document.getElementById('editTipoSolicitud').value;
+        const tipo = obtenerTipoPorId(tipoId);
+
+        if (!tipoId || !tipo) {
+            showAlert("Seleccione un tipo de solicitud válido", "error");
+            return;
+        }
+
+        const reglas = obtenerReglasTipo(tipo.nombreSolicitud);
+
+        const fechaInicio = document.getElementById('editFechaInicio').value;
+        const fechaFin = document.getElementById('editFechaFin').value;
+        const motivo = document.getElementById('editMotivo').value;
+        const parentescoFamiliar = document.getElementById('editParentescoFamiliar').value;
+        const nombreFamiliar = document.getElementById('editNombreFamiliar').value;
+        const motivoConstancia = document.getElementById('editMotivoConstancia').value;
+        const detalleOtro = document.getElementById('editDetalleOtro').value;
+
+        if (reglas.requiereFechas && (!fechaInicio || !fechaFin)) {
+            showAlert("Debe indicar fecha inicio y fecha fin", "error");
+            return;
+        }
+
+        if (reglas.requiereFechas && fechaFin < fechaInicio) {
+            showAlert("La fecha fin no puede ser menor a la fecha inicio", "error");
+            return;
+        }
+
+        if (reglas.requiereMotivo && !motivo.trim()) {
+            showAlert("Debe indicar el motivo de la solicitud", "error");
+            return;
+        }
+
+        if (reglas.mostrarConstancia && !motivoConstancia.trim()) {
+            showAlert("Debe indicar el motivo de la constancia salarial", "error");
+            return;
+        }
+
+        if (reglas.mostrarOtro && !detalleOtro.trim()) {
+            showAlert("Debe indicar el detalle de la solicitud", "error");
+            return;
+        }
+
+        if (reglas.requiereDocumento && !archivoActualRuta && !editFile && !eliminarArchivo) {
+            showAlert("Este tipo de solicitud requiere documento de respaldo", "error");
+            return;
+        }
+
+        if (reglas.requiereDocumento && eliminarArchivo && !editFile) {
+            showAlert("Debe adjuntar un nuevo documento de respaldo", "error");
+            return;
+        }
+
         const formData = new FormData();
         formData.append("IdSolicitud", currentEditId);
-        formData.append("IdTipoSolicitud", parseInt(document.getElementById('editTipoSolicitud').value));
-        formData.append("FechaInicio", document.getElementById('editFechaInicio').value);
-        formData.append("FechaFin", document.getElementById('editFechaFin').value);
-        formData.append("Descripcion", document.getElementById('editMotivo').value);
+        formData.append("IdTipoSolicitud", parseInt(tipoId));
+        formData.append("Descripcion", motivo);
+        formData.append("Prioridad", document.getElementById('editPrioridad').value);
         formData.append("EliminarArchivo", eliminarArchivo);
+        formData.append("ParentescoFamiliar", parentescoFamiliar);
+        formData.append("NombreFamiliar", nombreFamiliar);
+        formData.append("MotivoConstancia", motivoConstancia);
+        formData.append("DetalleOtro", detalleOtro);
 
-        if (editFile) formData.append("Archivo", editFile);
+        if (reglas.requiereFechas) {
+            formData.append("FechaInicio", fechaInicio);
+            formData.append("FechaFin", fechaFin);
+        }
+
+        if (editFile) {
+            formData.append("Archivo", editFile);
+        }
 
         try {
             const response = await fetch('/Empleado/EditarSolicitud', {
                 method: 'PUT',
                 body: formData
             });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                showAlert(errorText || "No se pudo actualizar la solicitud", "error");
+                return;
+            }
+
             const data = await response.json();
 
             if (data.success) {
@@ -1479,7 +1923,7 @@
                 closeModal('editModal');
                 await cargarSolicitudes();
             } else {
-                showAlert(data.message, "error");
+                showAlert(data.message || "No se pudo actualizar la solicitud", "error");
             }
         } catch (error) {
             console.error(error);
@@ -1515,18 +1959,23 @@
 
     function handleEditFileSelect(event) {
         const file = event.target.files[0];
-        if (!file) return;
+
+        if (!file) {
+            return;
+        }
 
         const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
         const maxSize = 5 * 1024 * 1024;
 
         if (!allowedTypes.includes(file.type)) {
-            showAlert("Formato no permitido", "error");
+            showAlert("Formato no permitido. Use PDF, JPG o PNG.", "error");
+            event.target.value = "";
             return;
         }
 
         if (file.size > maxSize) {
             showAlert("Archivo supera 5MB", "error");
+            event.target.value = "";
             return;
         }
 
@@ -1537,6 +1986,7 @@
 
     function renderEditUploadedFile() {
         const container = document.getElementById("editUploadedFiles");
+
         if (!editFile) {
             container.innerHTML = "";
             return;
@@ -1546,7 +1996,7 @@
             <div class="uploaded-file">
                 <div class="file-icon">📄</div>
                 <div class="file-info">
-                    <div class="file-name">${editFile.name}</div>
+                    <div class="file-name">${escapeHtml(editFile.name)}</div>
                     <div class="file-size">${formatFileSize(editFile.size)}</div>
                 </div>
                 <button type="button" class="file-remove" onclick="removeEditFile()">🗑️</button>
@@ -1562,6 +2012,7 @@
 
     function cancelSolicitud(id) {
         const sol = solicitudes.find(s => s.id === id);
+
         if (!sol || sol.estado !== 'pendiente') {
             showAlert('Solo se pueden cancelar solicitudes pendientes', 'error');
             return;
@@ -1585,6 +2036,7 @@
             }
 
             const data = await response.json();
+
             if (data.success) {
                 showAlert("Solicitud cancelada correctamente", "success");
                 closeModal('cancelModal');
