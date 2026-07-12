@@ -3,7 +3,48 @@
 @{
     ViewData["Title"] = "Historial de Marcas";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var marcas = Model ?? new List<Oclock.Models.Marca>();
+    var marcasOrdenadas = marcas
+        .OrderByDescending(x => x.Fecha)
+        .ThenByDescending(x => x.IdMarca)
+        .ToList();
+
+    string desdeValue = "";
+    string hastaValue = "";
+
+    if (ViewBag.Desde is DateOnly desdeDateOnly)
+    {
+        desdeValue = desdeDateOnly.ToString("yyyy-MM-dd");
+    }
+    else if (ViewBag.Desde is DateTime desdeDateTime)
+    {
+        desdeValue = desdeDateTime.ToString("yyyy-MM-dd");
+    }
+    else if (ViewBag.Desde != null)
+    {
+        desdeValue = ViewBag.Desde.ToString();
+    }
+
+    if (ViewBag.Hasta is DateOnly hastaDateOnly)
+    {
+        hastaValue = hastaDateOnly.ToString("yyyy-MM-dd");
+    }
+    else if (ViewBag.Hasta is DateTime hastaDateTime)
+    {
+        hastaValue = hastaDateTime.ToString("yyyy-MM-dd");
+    }
+    else if (ViewBag.Hasta != null)
+    {
+        hastaValue = ViewBag.Hasta.ToString();
+    }
+
+    var totalEntradas = marcas.Count(m => (m.Nombre ?? "").Trim().ToLower() == "entrada");
+    var totalSalidas = marcas.Count(m => (m.Nombre ?? "").Trim().ToLower() == "salida");
+    var totalAlmuerzos = marcas.Count(m => (m.Nombre ?? "").Trim().ToLower() == "almuerzo");
+    var totalDescansos = marcas.Count(m => (m.Nombre ?? "").Trim().ToLower() == "descanso");
 }
+
 <style>
     * {
         margin: 0;
@@ -11,19 +52,18 @@
         box-sizing: border-box;
     }
 
-    /* Sidebar + Content Layout */
     .main-layout {
         display: flex;
         min-height: 600px;
     }
 
-    /* SIDEBAR */
     .sidebar {
         width: 280px;
         background: #ffffff;
         padding: 30px 20px;
         border-right: 1px solid #e0e0e0;
         box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+        flex-shrink: 0;
     }
 
     .menu-item {
@@ -48,15 +88,15 @@
     }
 
         .menu-link:hover {
-            background: #667eea;
+            background: #2F6FED;
             color: white;
             transform: translateX(5px);
         }
 
         .menu-link.active {
-            background: #667eea;
+            background: #2F6FED;
             color: white;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 12px rgba(47,111,237,0.3);
         }
 
             .menu-link.active::before {
@@ -80,29 +120,91 @@
         font-size: 18px;
     }
 
-    /* Main Content */
     .content {
         flex: 1;
         padding: 40px;
         background: #f5f7fa;
+        min-width: 0;
     }
 
     .content-header {
         margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+        flex-wrap: wrap;
     }
 
         .content-header h1 {
             color: #2d3748;
             font-size: 28px;
             margin-bottom: 8px;
+            font-weight: 800;
         }
 
         .content-header p {
             color: #718096;
             font-size: 14px;
+            margin-bottom: 0;
+            line-height: 1.5;
         }
 
-    /* History Section */
+    .message-box {
+        display: none;
+        padding: 14px 16px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.5;
+    }
+
+    .message-error {
+        background: #fff5f5;
+        color: #742a2a;
+        border-left: 4px solid #e53e3e;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 22px;
+        border-radius: 14px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        transition: transform 0.3s;
+        border-left: 4px solid #2F6FED;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+    .stat-icon {
+        font-size: 26px;
+        margin-bottom: 10px;
+    }
+
+    .stat-value {
+        font-size: 28px;
+        font-weight: 800;
+        color: #2d3748;
+        margin-bottom: 4px;
+    }
+
+    .stat-label {
+        color: #718096;
+        font-size: 12px;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+
     .history-section {
         background: white;
         padding: 30px;
@@ -111,23 +213,41 @@
         margin-bottom: 30px;
     }
 
-        .history-section h2 {
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 22px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+        .section-header h2 {
             color: #2d3748;
             font-size: 20px;
-            margin-bottom: 20px;
+            font-weight: 800;
             display: flex;
             align-items: center;
             gap: 10px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
+            margin: 0;
         }
+
+    .helper-text {
+        color: #718096;
+        margin-bottom: 20px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
 
     .badge {
         display: inline-block;
         padding: 6px 14px;
         border-radius: 20px;
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 700;
+        white-space: nowrap;
     }
 
     .badge-success {
@@ -151,28 +271,31 @@
     }
 
     .btn {
-        padding: 12px 28px;
+        padding: 12px 24px;
         border: none;
         border-radius: 10px;
-        font-weight: 600;
+        font-weight: 700;
         cursor: pointer;
         transition: all 0.3s;
         font-size: 14px;
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 8px;
         width: auto;
-        justify-content: center;
+        text-decoration: none;
     }
 
     .btn-primary {
-        background: #667eea;
+        background: #2F6FED;
         color: white;
     }
 
         .btn-primary:hover {
+            background: #2457C8;
+            color: white;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(47,111,237,0.25);
         }
 
     .btn-secondary {
@@ -182,68 +305,190 @@
 
         .btn-secondary:hover {
             background: #cbd5e0;
+            color: #2d3748;
         }
 
     .filter-bar {
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
-        margin-bottom: 20px;
+        gap: 14px;
+        margin-bottom: 22px;
         align-items: end;
+        background: #f7fafc;
+        padding: 20px;
+        border-radius: 14px;
+        border: 1px solid #e2e8f0;
     }
 
     .filter-group {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 7px;
     }
 
         .filter-group label {
-            font-size: 13px;
-            color: #718096;
-            font-weight: 600;
+            font-size: 14px;
+            color: #4a5568;
+            font-weight: 700;
         }
 
     .filter-input {
-        padding: 10px 12px;
-        border: 1px solid #e2e8f0;
+        padding: 12px 15px;
+        border: 2px solid #e2e8f0;
         border-radius: 10px;
         font-size: 14px;
         outline: none;
         background: #fff;
-        min-width: 180px;
+        min-width: 190px;
+        color: #2d3748;
     }
 
         .filter-input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102,126,234,0.15);
+            border-color: #2F6FED;
+            box-shadow: 0 0 0 3px rgba(47,111,237,0.10);
         }
+
+    .summary-card {
+        background: #EEF4FF;
+        color: #1e3a8a;
+        border-left: 4px solid #2F6FED;
+        padding: 14px 18px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.5;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .history-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        background: white;
+        min-width: 760px;
+    }
+
+        .history-table thead {
+            background: #f7fafc;
+        }
+
+        .history-table th {
+            padding: 15px;
+            text-align: left;
+            color: #4a5568;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        .history-table td {
+            padding: 16px 15px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #2d3748;
+            vertical-align: top;
+        }
+
+        .history-table tr:hover {
+            background: #f7fafc;
+        }
+
+        .history-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+    .comment-cell {
+        max-width: 360px;
+        line-height: 1.5;
+        color: #4a5568;
+    }
+
+    .location-cell {
+        color: #4a5568;
+    }
+
+    .hour-cell {
+        font-weight: 800;
+        color: #2d3748;
+        white-space: nowrap;
+    }
 
     .empty-state {
         text-align: center;
-        padding: 60px 20px;
+        padding: 55px 20px;
         color: #718096;
     }
 
     .empty-state-icon {
-        font-size: 64px;
-        margin-bottom: 20px;
+        font-size: 54px;
+        margin-bottom: 16px;
         opacity: 0.5;
     }
 
     .empty-state h3 {
         color: #4a5568;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
         font-size: 18px;
+        font-weight: 800;
     }
 
     .empty-state p {
         font-size: 14px;
+        margin-bottom: 0;
+        line-height: 1.5;
+    }
+
+    @@media (max-width: 1100px) {
+        .main-layout {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+            border-right: none;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .content {
+            padding: 25px;
+        }
+    }
+
+    @@media (max-width: 650px) {
+        .content {
+            padding: 20px 14px;
+        }
+
+        .content-header h1 {
+            font-size: 24px;
+        }
+
+        .history-section {
+            padding: 22px;
+        }
+
+        .filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .filter-group,
+        .filter-input,
+        .btn {
+            width: 100%;
+        }
     }
 </style>
 
 <div class="main-layout">
-    <!-- Sidebar -->
     <div class="sidebar">
         <div class="menu-item">
             <a href="/Empleado/Marcas" class="menu-link">
@@ -281,33 +526,75 @@
         </div>
     </div>
 
-    <!-- Main Content -->
     <div class="content">
         <div class="content-header">
-            <h1>Mi Historial de Asistencia</h1>
-            <p>Consulta todas tus marcas de asistencia registradas en el sistema</p>
+            <div>
+                <h1>Mi Historial de Asistencia</h1>
+                <p>Consulte todas sus marcas de asistencia registradas en el sistema.</p>
+            </div>
+        </div>
+
+        <div id="messageBox" class="message-box"></div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-value">@marcas.Count</div>
+                <div class="stat-label">Registros mostrados</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🟢</div>
+                <div class="stat-value">@totalEntradas</div>
+                <div class="stat-label">Entradas</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🔴</div>
+                <div class="stat-value">@totalSalidas</div>
+                <div class="stat-label">Salidas</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">☕</div>
+                <div class="stat-value">@(totalAlmuerzos + totalDescansos)</div>
+                <div class="stat-label">Almuerzos / Descansos</div>
+            </div>
         </div>
 
         <div class="history-section">
-            <h2>📋 Historial de Marcas</h2>
+            <div class="section-header">
+                <h2>📋 Historial de marcas</h2>
+            </div>
 
-            <!-- Filtros (Desde / Hasta) -->
-            <form method="get" action="/Empleado/HistorialMarcas" class="filter-bar">
+            <p class="helper-text">
+                Puede filtrar el historial por rango de fechas para revisar sus registros de asistencia.
+            </p>
+
+            <form method="get"
+                  action="/Empleado/HistorialMarcas"
+                  class="filter-bar"
+                  onsubmit="return validarFiltroFechas()">
                 <div class="filter-group">
                     <label for="desde">Desde</label>
-                    <input class="filter-input" type="date" id="desde" name="desde" value="@(ViewBag.Desde ?? "")" />
+                    <input class="filter-input" type="date" id="desde" name="desde" value="@desdeValue" />
                 </div>
 
                 <div class="filter-group">
                     <label for="hasta">Hasta</label>
-                    <input class="filter-input" type="date" id="hasta" name="hasta" value="@(ViewBag.Hasta ?? "")" />
+                    <input class="filter-input" type="date" id="hasta" name="hasta" value="@hastaValue" />
                 </div>
 
-                <button type="submit" class="btn btn-primary">Filtrar</button>
-                <a href="/Empleado/HistorialMarcas" class="btn btn-secondary">Limpiar</a>
+                <button type="submit" class="btn btn-primary">
+                    🔍 Filtrar
+                </button>
+
+                <a href="/Empleado/HistorialMarcas" class="btn btn-secondary">
+                    🔄 Limpiar
+                </a>
             </form>
 
-            @if (Model == null || Model.Count == 0)
+            @if (!marcas.Any())
             {
                 <div class="empty-state">
                     <div class="empty-state-icon">📝</div>
@@ -317,58 +604,80 @@
             }
             else
             {
-                <div style="overflow-x:auto;">
-                    <table style="width:100%; border-collapse: collapse; font-size:14px;">
+                <div class="summary-card">
+                    Mostrando @marcas.Count registro(s) en el rango seleccionado.
+                </div>
+
+                <div class="table-container">
+                    <table class="history-table">
                         <thead>
-                            <tr style="background:#f1f5f9; text-align:left;">
-                                <th style="padding:14px;">Fecha</th>
-                                <th style="padding:14px;">Tipo</th>
-                                <th style="padding:14px;">Hora</th>
-                                <th style="padding:14px;">Ubicación</th>
-                                <th style="padding:14px;">Comentario</th>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Hora</th>
+                                <th>Ubicación</th>
+                                <th>Comentario</th>
                             </tr>
                         </thead>
+
                         <tbody>
-                            @foreach (var m in Model.OrderByDescending(x => x.Fecha).ThenByDescending(x => x.IdMarca))
+                            @foreach (var m in marcasOrdenadas)
                             {
-                                var tipo = (m.Nombre ?? "").ToLower();
+                                var tipo = (m.Nombre ?? "").Trim().ToLower();
 
                                 var hora = m.HoraEntrada.HasValue
                                     ? m.HoraEntrada.Value.ToString("HH:mm:ss")
                                     : (m.HoraSalida.HasValue ? m.HoraSalida.Value.ToString("HH:mm:ss") : "--:--:--");
 
                                 string badgeClass = "badge-info";
-                                string label = m.Nombre;
+                                string label = "Marca";
+                                string comentarioDefault = "Marca registrada correctamente";
 
                                 if (tipo == "entrada")
                                 {
                                     badgeClass = "badge-success";
                                     label = "Entrada";
+                                    comentarioDefault = "Inicio de jornada laboral";
                                 }
                                 else if (tipo == "salida")
                                 {
                                     badgeClass = "badge-danger";
                                     label = "Salida";
+                                    comentarioDefault = "Fin de jornada laboral";
                                 }
                                 else if (tipo == "almuerzo")
                                 {
                                     badgeClass = "badge-warning";
                                     label = "Almuerzo";
+                                    comentarioDefault = "Registro de almuerzo";
                                 }
                                 else if (tipo == "descanso")
                                 {
                                     badgeClass = "badge-info";
                                     label = "Descanso";
+                                    comentarioDefault = "Registro de descanso";
                                 }
 
-                                <tr style="border-bottom:1px solid #e5e7eb;">
-                                    <td style="padding:14px;">@m.Fecha.ToString("dd/MM/yyyy")</td>
-                                    <td style="padding:14px;">
+                                var comentario = string.IsNullOrWhiteSpace(m.Comentario)
+                                    ? comentarioDefault
+                                    : m.Comentario;
+
+                                var ubicacion = string.IsNullOrWhiteSpace(m.Ubicancia)
+                                    ? "Ubicación no registrada"
+                                    : m.Ubicancia;
+
+                                <tr>
+                                    <td>@m.Fecha.ToString("dd/MM/yyyy")</td>
+
+                                    <td>
                                         <span class="badge @badgeClass">@label</span>
                                     </td>
-                                    <td style="padding:14px;">@hora</td>
-                                    <td style="padding:14px;">@(m.Ubicancia ?? "San José, Costa Rica")</td>
-                                    <td style="padding:14px;">@(string.IsNullOrWhiteSpace(m.Comentario) ? "—" : m.Comentario)</td>
+
+                                    <td class="hour-cell">@hora</td>
+
+                                    <td class="location-cell">@ubicacion</td>
+
+                                    <td class="comment-cell">@comentario</td>
                                 </tr>
                             }
                         </tbody>
@@ -378,3 +687,34 @@
         </div>
     </div>
 </div>
+
+<script>
+    function mostrarMensaje(mensaje, tipo) {
+        const box = document.getElementById('messageBox');
+
+        box.className = 'message-box';
+
+        if (tipo === 'error') {
+            box.classList.add('message-error');
+        }
+
+        box.textContent = mensaje;
+        box.style.display = 'block';
+
+        setTimeout(() => {
+            box.style.display = 'none';
+        }, 5000);
+    }
+
+    function validarFiltroFechas() {
+        const desde = document.getElementById('desde').value;
+        const hasta = document.getElementById('hasta').value;
+
+        if (desde && hasta && desde > hasta) {
+            mostrarMensaje('La fecha inicial no puede ser mayor que la fecha final.', 'error');
+            return false;
+        }
+
+        return true;
+    }
+</script>

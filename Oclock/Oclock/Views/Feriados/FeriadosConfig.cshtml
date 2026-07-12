@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Configuracion de Feriados";
+    ViewData["Title"] = "Configuración de Feriados";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -200,10 +200,12 @@
             color: #2d3748;
             font-size: 28px;
             margin-bottom: 8px;
+            font-weight: 800;
         }
 
         .content-header p {
             color: #718096;
+            margin-bottom: 0;
         }
 
     .config-card {
@@ -226,6 +228,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 12px;
     }
 
         .card-header-custom h2 {
@@ -239,6 +242,7 @@
             padding: 6px 15px;
             border-radius: 20px;
             font-size: 13px;
+            white-space: nowrap;
         }
 
     .card-body-custom {
@@ -252,7 +256,8 @@
         font-size: 14px;
     }
 
-    .form-control, .form-select {
+    .form-control,
+    .form-select {
         border: 2px solid #e2e8f0;
         border-radius: 10px;
         padding: 12px 15px;
@@ -260,10 +265,32 @@
         font-size: 14px;
     }
 
-        .form-control:focus, .form-select:focus {
+        .form-control:focus,
+        .form-select:focus {
             border-color: #2F6FED;
             box-shadow: 0 0 0 3px rgba(47,111,237,0.12);
         }
+
+        .form-control.is-invalid,
+        .form-select.is-invalid {
+            border-color: #e53e3e;
+            box-shadow: 0 0 0 3px rgba(229,62,62,0.12);
+        }
+
+    .field-help {
+        display: block;
+        margin-top: 6px;
+        font-size: 12px;
+        color: #718096;
+    }
+
+    .field-error {
+        display: block;
+        margin-top: 6px;
+        color: #e53e3e;
+        font-size: 12px;
+        font-weight: 700;
+    }
 
     .btn-primary-custom {
         background: #2F6FED;
@@ -280,6 +307,14 @@
             background: #2457C8;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(36,87,200,0.25);
+            color: white;
+        }
+
+        .btn-primary-custom:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
     .btn-outline-custom {
@@ -318,22 +353,32 @@
         opacity: 0.9;
     }
 
-    .alert-danger-custom {
-        border-left: 4px solid #e53e3e;
-        background: #fff5f5;
+    .alert-danger-custom,
+    .alert-success-custom,
+    .alert-info-custom {
         border-radius: 10px;
         padding: 15px 20px;
         margin-top: 15px;
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    .alert-danger-custom {
+        border-left: 4px solid #e53e3e;
+        background: #fff5f5;
         color: #742a2a;
     }
 
     .alert-success-custom {
         border-left: 4px solid #38a169;
         background: #f0fff4;
-        border-radius: 10px;
-        padding: 15px 20px;
-        margin-top: 15px;
         color: #22543d;
+    }
+
+    .alert-info-custom {
+        border-left: 4px solid #2F6FED;
+        background: #EEF4FF;
+        color: #1e3a8a;
     }
 
     .modal-header.oc-modal-header {
@@ -348,12 +393,15 @@
         align-items: center;
         justify-content: space-between;
         margin-bottom: 20px;
+        gap: 12px;
     }
 
         .calendar-nav h3 {
             font-size: 20px;
             color: #2d3748;
             font-weight: 700;
+            margin: 0;
+            text-align: center;
         }
 
     .nav-btn {
@@ -370,6 +418,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
     }
 
         .nav-btn:hover {
@@ -561,6 +610,18 @@
             color: white;
         }
 
+    .empty-calendar-message {
+        background: #f7fafc;
+        border: 1px dashed #cbd5e0;
+        border-radius: 12px;
+        padding: 20px;
+        color: #718096;
+        text-align: center;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: none;
+    }
+
     @@media (max-width: 900px) {
         .months-grid {
             grid-template-columns: repeat(2, 1fr);
@@ -576,8 +637,25 @@
             width: 100%;
         }
 
+        .content {
+            padding: 25px 15px;
+        }
+
         .months-grid {
             grid-template-columns: 1fr;
+        }
+
+        .calendar-grid {
+            gap: 2px;
+        }
+
+        .cal-day {
+            min-height: 60px;
+            padding: 4px;
+        }
+
+        .holiday-dot {
+            font-size: 9px;
         }
     }
 </style>
@@ -623,14 +701,14 @@
         <div class="menu-item">
             <a href="/Bono/AsignarBono" class="menu-link">
                 <div class="icon">💵</div>
-                Bonos
+                Asignación de Bonos
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link">
                 <div class="icon">📝</div>
-                Gestion de Empleados
+                Gestión de Empleados
             </a>
         </div>
 
@@ -652,8 +730,10 @@
     <div class="content">
         <div class="content-header">
             <h1>📅 Calendario Laboral</h1>
-            <p>Gestión de feriados nacionales de Costa Rica y días especiales</p>
+            <p>Administre los feriados nacionales de Costa Rica y días especiales de la organización.</p>
         </div>
+
+        <div id="globalAlert" style="display:none;"></div>
 
         <div class="row mb-4">
             <div class="col-md-4">
@@ -681,7 +761,7 @@
         <div class="config-card">
             <div class="card-header-custom">
                 <h2>➕ Registrar Nuevo Feriado</h2>
-                <span class="badge">Manual</span>
+                <span class="badge">Registro manual</span>
             </div>
 
             <div class="card-body-custom">
@@ -689,33 +769,37 @@
 
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <label class="form-label">Fecha del Feriado</label>
-                        <input type="date" id="holidayDate" class="form-control">
+                        <label class="form-label">Fecha del Feriado <span style="color:#e53e3e;">*</span></label>
+                        <input type="date" id="holidayDate" class="form-control" min="1900-01-01" max="2200-12-31">
+                        <span class="field-error" id="holidayDateError"></span>
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">¿Es Laborable?</label>
+                        <label class="form-label">Tipo de día <span style="color:#e53e3e;">*</span></label>
                         <select id="holidayLaborable" class="form-select">
                             <option value="false">No laborable</option>
-                            <option value="true">Laborable (día especial)</option>
+                            <option value="true">Laborable / día especial</option>
                         </select>
+                        <small class="field-help">Seleccione si el día se trabaja o no.</small>
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Nombre del Feriado</label>
-                        <input type="text" id="holidayName" class="form-control" placeholder="Ej: Día de la Independencia">
+                        <label class="form-label">Nombre del Feriado <span style="color:#e53e3e;">*</span></label>
+                        <input type="text" id="holidayName" class="form-control" maxlength="100" placeholder="Ej: Día de la Independencia">
+                        <span class="field-error" id="holidayNameError"></span>
                     </div>
                 </div>
 
                 <div class="row mt-3">
                     <div class="col-md-12">
-                        <label class="form-label">Descripción (Opcional)</label>
-                        <textarea id="holidayDescription" class="form-control" rows="2" placeholder="Agrega una descripción o notas adicionales..."></textarea>
+                        <label class="form-label">Descripción</label>
+                        <textarea id="holidayDescription" class="form-control" rows="2" maxlength="250" placeholder="Agregue una nota opcional para este feriado..."></textarea>
+                        <small class="field-help">Este campo es opcional.</small>
                     </div>
                 </div>
 
-                <div class="d-flex gap-2 mt-4">
-                    <button class="btn btn-primary-custom" onclick="guardarFeriado()">
+                <div class="d-flex gap-2 mt-4 flex-wrap">
+                    <button class="btn btn-primary-custom" id="btnGuardarFeriado" onclick="guardarFeriado()">
                         Guardar Feriado
                     </button>
 
@@ -743,11 +827,15 @@
                     </button>
                 </div>
 
+                <div id="emptyCalendarMessage" class="empty-calendar-message">
+                    No hay feriados registrados para el año seleccionado.
+                </div>
+
                 <div id="viewMensual">
                     <div class="calendar-nav">
-                        <button class="nav-btn" onclick="changeMonth(-1)">‹</button>
+                        <button class="nav-btn" onclick="changeMonth(-1)" title="Mes anterior">‹</button>
                         <h3 id="calendarTitle"></h3>
-                        <button class="nav-btn" onclick="changeMonth(1)">›</button>
+                        <button class="nav-btn" onclick="changeMonth(1)" title="Mes siguiente">›</button>
                     </div>
 
                     <div class="calendar-grid" id="calendarGrid">
@@ -763,9 +851,9 @@
 
                 <div id="viewAnual" style="display:none;">
                     <div class="calendar-nav">
-                        <button class="nav-btn" onclick="changeYear(-1)">‹</button>
+                        <button class="nav-btn" onclick="changeYear(-1)" title="Año anterior">‹</button>
                         <h3 id="yearTitle"></h3>
-                        <button class="nav-btn" onclick="changeYear(1)">›</button>
+                        <button class="nav-btn" onclick="changeYear(1)" title="Año siguiente">›</button>
                     </div>
 
                     <div class="months-grid" id="monthsGrid"></div>
@@ -789,30 +877,33 @@
                 <input type="hidden" id="editId">
 
                 <div class="mb-3">
-                    <label class="form-label">Fecha</label>
-                    <input type="date" id="editDate" class="form-control">
+                    <label class="form-label">Fecha <span style="color:#e53e3e;">*</span></label>
+                    <input type="date" id="editDate" class="form-control" min="1900-01-01" max="2200-12-31">
+                    <span class="field-error" id="editDateError"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">¿Es Laborable?</label>
+                    <label class="form-label">Tipo de día <span style="color:#e53e3e;">*</span></label>
                     <select id="editLaborable" class="form-select">
                         <option value="false">No laborable</option>
-                        <option value="true">Laborable (día especial)</option>
+                        <option value="true">Laborable / día especial</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Nombre</label>
-                    <input type="text" id="editName" class="form-control">
+                    <label class="form-label">Nombre <span style="color:#e53e3e;">*</span></label>
+                    <input type="text" id="editName" class="form-control" maxlength="100">
+                    <span class="field-error" id="editNameError"></span>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Descripción</label>
-                    <textarea id="editDescription" class="form-control" rows="2"></textarea>
+                    <textarea id="editDescription" class="form-control" rows="2" maxlength="250"></textarea>
+                    <small class="field-help">Este campo es opcional.</small>
                 </div>
 
                 <div class="d-flex gap-2 mt-4">
-                    <button class="btn btn-primary-custom flex-fill" onclick="guardarEdicion()">
+                    <button class="btn btn-primary-custom flex-fill" id="btnGuardarEdicion" onclick="guardarEdicion()">
                         Guardar Cambios
                     </button>
 
@@ -836,7 +927,7 @@
             <div class="modal-body p-4">
                 <p><strong>Fecha:</strong> <span id="detailFecha"></span></p>
                 <p class="mt-2"><strong>Nombre:</strong> <span id="detailNombre"></span></p>
-                <p class="mt-2"><strong>Estado:</strong> <span id="detailLaborable"></span></p>
+                <p class="mt-2"><strong>Tipo de día:</strong> <span id="detailLaborable"></span></p>
                 <p class="mt-2" id="detailDescWrap"><strong>Descripción:</strong> <span id="detailDesc"></span></p>
 
                 <div class="d-flex gap-2 mt-4">
@@ -860,6 +951,9 @@
     let loadedYear = null;
     let currentView = 'mensual';
     let currentHolidayId = null;
+
+    const MIN_DATE = '1900-01-01';
+    const MAX_DATE = '2200-12-31';
 
     const MONTHS = [
         'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -885,130 +979,296 @@
         }
     }
 
-    async function cargarFeriados(anio) {
-        loadedYear = anio;
+    function escapeHtml(value) {
+        if (value === null || value === undefined) {
+            return '';
+        }
 
-        const res = await fetch('/Feriados/GetAll?anio=' + anio);
+        return value.toString()
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
+    }
 
-        if (!res.ok) {
-            showAlert('formAlert', 'No se pudieron cargar los feriados registrados.', 'danger');
+    function limpiarErroresFormulario() {
+        ['holidayDate', 'holidayName', 'editDate', 'editName'].forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.classList.remove('is-invalid');
+            }
+        });
+
+        ['holidayDateError', 'holidayNameError', 'editDateError', 'editNameError'].forEach(id => {
+            const error = document.getElementById(id);
+            if (error) {
+                error.textContent = '';
+            }
+        });
+    }
+
+    function marcarError(inputId, errorId, mensaje) {
+        const input = document.getElementById(inputId);
+        const error = document.getElementById(errorId);
+
+        if (input) {
+            input.classList.add('is-invalid');
+        }
+
+        if (error) {
+            error.textContent = mensaje;
+        }
+    }
+
+    function fechaDentroDeRango(fecha) {
+        return fecha >= MIN_DATE && fecha <= MAX_DATE;
+    }
+
+    function validarFeriado(fecha, nombre, modo) {
+        let valido = true;
+
+        if (!fecha) {
+            valido = false;
+            marcarError(
+                modo === 'editar' ? 'editDate' : 'holidayDate',
+                modo === 'editar' ? 'editDateError' : 'holidayDateError',
+                'Seleccione la fecha del feriado.'
+            );
+        } else if (!fechaDentroDeRango(fecha)) {
+            valido = false;
+            marcarError(
+                modo === 'editar' ? 'editDate' : 'holidayDate',
+                modo === 'editar' ? 'editDateError' : 'holidayDateError',
+                'La fecha debe estar entre 1900 y 2200.'
+            );
+        }
+
+        if (!nombre) {
+            valido = false;
+            marcarError(
+                modo === 'editar' ? 'editName' : 'holidayName',
+                modo === 'editar' ? 'editNameError' : 'holidayNameError',
+                'Ingrese el nombre del feriado.'
+            );
+        } else if (nombre.length > 100) {
+            valido = false;
+            marcarError(
+                modo === 'editar' ? 'editName' : 'holidayName',
+                modo === 'editar' ? 'editNameError' : 'holidayNameError',
+                'El nombre no puede superar los 100 caracteres.'
+            );
+        }
+
+        return valido;
+    }
+
+    async function leerRespuesta(res) {
+        try {
+            return await res.json();
+        } catch {
+            return {
+                mensaje: 'No se recibió una respuesta válida del sistema.'
+            };
+        }
+    }
+
+    function setButtonLoading(buttonId, loading, textLoading, textNormal) {
+        const btn = document.getElementById(buttonId);
+
+        if (!btn) {
             return;
         }
 
-        holidays = await res.json();
+        btn.disabled = loading;
+        btn.textContent = loading ? textLoading : textNormal;
+    }
 
-        updateStats(anio);
-        renderCalendar();
+    async function cargarFeriados(anio) {
+        try {
+            loadedYear = anio;
+            document.getElementById('holidayCount').textContent = 'Cargando...';
+
+            const res = await fetch('/Feriados/GetAll?anio=' + anio);
+            const data = await leerRespuesta(res);
+
+            if (!res.ok) {
+                showAlert('globalAlert', data.mensaje || 'No se pudieron cargar los feriados registrados.', 'danger', 6000);
+                holidays = [];
+                updateStats(anio);
+                renderCalendar();
+                return;
+            }
+
+            holidays = Array.isArray(data) ? data : [];
+
+            updateStats(anio);
+            renderCalendar();
+
+            if (holidays.length === 0) {
+                showAlert('globalAlert', 'No hay feriados registrados para el año seleccionado.', 'info', 4000);
+            }
+        } catch {
+            showAlert('globalAlert', 'No se pudieron cargar los feriados en este momento. Intente nuevamente.', 'danger', 6000);
+            holidays = [];
+            updateStats(anio);
+            renderCalendar();
+        }
     }
 
     async function guardarFeriado() {
+        limpiarErroresFormulario();
+
         const fecha = document.getElementById('holidayDate').value;
         const nombre = document.getElementById('holidayName').value.trim();
         const laborable = document.getElementById('holidayLaborable').value === 'true';
         const descripcion = document.getElementById('holidayDescription').value.trim();
 
-        if (!fecha || !nombre) {
-            showAlert('formAlert', 'Debe ingresar la fecha y el nombre del feriado.', 'danger');
+        if (!validarFeriado(fecha, nombre, 'crear')) {
+            showAlert('formAlert', 'Revise los campos marcados antes de guardar.', 'danger');
             return;
         }
 
-        const res = await fetch('/Feriados/Crear', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre, fecha, esLaborable: laborable, descripcion })
-        });
+        try {
+            setButtonLoading('btnGuardarFeriado', true, 'Guardando...', 'Guardar Feriado');
 
-        const data = await res.json();
+            const res = await fetch('/Feriados/Crear', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nombre, fecha, esLaborable: laborable, descripcion })
+            });
 
-        if (res.ok) {
-            showAlert('formAlert', data.mensaje, 'success');
+            const data = await leerRespuesta(res);
 
-            const fechaNueva = new Date(fecha + 'T00:00:00');
-            currentDate = fechaNueva;
-            currentYear = fechaNueva.getFullYear();
+            if (res.ok) {
+                showAlert('formAlert', data.mensaje || 'Feriado creado correctamente.', 'success');
 
-            resetForm();
-            await cargarFeriados(currentYear);
-        } else {
-            showAlert('formAlert', data.mensaje || 'No se pudo guardar el feriado.', 'danger');
+                const fechaNueva = new Date(fecha + 'T00:00:00');
+                currentDate = fechaNueva;
+                currentYear = fechaNueva.getFullYear();
+
+                resetForm(false);
+                await cargarFeriados(currentYear);
+            } else {
+                showAlert('formAlert', data.mensaje || 'No se pudo guardar el feriado. Intente nuevamente.', 'danger');
+            }
+        } catch {
+            showAlert('formAlert', 'No se pudo guardar el feriado. Intente nuevamente.', 'danger');
+        } finally {
+            setButtonLoading('btnGuardarFeriado', false, 'Guardando...', 'Guardar Feriado');
         }
     }
 
     async function abrirEditar(id) {
-        const detailModal = bootstrap.Modal.getInstance(document.getElementById('detailModal'));
+        try {
+            const detailModal = bootstrap.Modal.getInstance(document.getElementById('detailModal'));
 
-        if (detailModal) {
-            detailModal.hide();
+            if (detailModal) {
+                detailModal.hide();
+            }
+
+            limpiarErroresFormulario();
+
+            const res = await fetch('/Feriados/ObtenerPorId?id=' + id);
+            const data = await leerRespuesta(res);
+
+            if (!res.ok) {
+                showAlert('globalAlert', data.mensaje || 'No se pudo consultar el feriado seleccionado.', 'danger');
+                return;
+            }
+
+            document.getElementById('editId').value = data.idFeriado;
+            document.getElementById('editDate').value = data.fecha;
+            document.getElementById('editLaborable').value = data.esLaborable ? 'true' : 'false';
+            document.getElementById('editName').value = data.nombre;
+            document.getElementById('editDescription').value = data.descripcion || '';
+            document.getElementById('editAlert').style.display = 'none';
+
+            new bootstrap.Modal(document.getElementById('editModal')).show();
+        } catch {
+            showAlert('globalAlert', 'No se pudo abrir la edición del feriado. Intente nuevamente.', 'danger');
         }
-
-        const res = await fetch('/Feriados/ObtenerPorId?id=' + id);
-
-        if (!res.ok) {
-            return;
-        }
-
-        const f = await res.json();
-
-        document.getElementById('editId').value = f.idFeriado;
-        document.getElementById('editDate').value = f.fecha;
-        document.getElementById('editLaborable').value = f.esLaborable ? 'true' : 'false';
-        document.getElementById('editName').value = f.nombre;
-        document.getElementById('editDescription').value = f.descripcion || '';
-        document.getElementById('editAlert').style.display = 'none';
-
-        new bootstrap.Modal(document.getElementById('editModal')).show();
     }
 
     async function guardarEdicion() {
+        limpiarErroresFormulario();
+
         const id = parseInt(document.getElementById('editId').value);
         const fecha = document.getElementById('editDate').value;
         const nombre = document.getElementById('editName').value.trim();
         const laborable = document.getElementById('editLaborable').value === 'true';
         const descripcion = document.getElementById('editDescription').value.trim();
 
-        if (!fecha || !nombre) {
-            showAlert('editAlert', 'Debe ingresar la fecha y el nombre del feriado.', 'danger');
+        if (!validarFeriado(fecha, nombre, 'editar')) {
+            showAlert('editAlert', 'Revise los campos marcados antes de guardar.', 'danger');
             return;
         }
 
-        const res = await fetch('/Feriados/Editar', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ idFeriado: id, nombre, fecha, esLaborable: laborable, descripcion })
-        });
+        try {
+            setButtonLoading('btnGuardarEdicion', true, 'Guardando...', 'Guardar Cambios');
 
-        const data = await res.json();
+            const res = await fetch('/Feriados/Editar', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ idFeriado: id, nombre, fecha, esLaborable: laborable, descripcion })
+            });
 
-        if (res.ok) {
-            bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+            const data = await leerRespuesta(res);
 
-            const fechaEditada = new Date(fecha + 'T00:00:00');
-            currentDate = fechaEditada;
-            currentYear = fechaEditada.getFullYear();
+            if (res.ok) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
 
-            await cargarFeriados(currentYear);
-        } else {
-            showAlert('editAlert', data.mensaje || 'No se pudo actualizar el feriado.', 'danger');
+                if (modal) {
+                    modal.hide();
+                }
+
+                const fechaEditada = new Date(fecha + 'T00:00:00');
+                currentDate = fechaEditada;
+                currentYear = fechaEditada.getFullYear();
+
+                await cargarFeriados(currentYear);
+                showAlert('globalAlert', data.mensaje || 'Feriado actualizado correctamente.', 'success');
+            } else {
+                showAlert('editAlert', data.mensaje || 'No se pudo actualizar el feriado. Intente nuevamente.', 'danger');
+            }
+        } catch {
+            showAlert('editAlert', 'No se pudo actualizar el feriado. Intente nuevamente.', 'danger');
+        } finally {
+            setButtonLoading('btnGuardarEdicion', false, 'Guardando...', 'Guardar Cambios');
         }
     }
 
     async function eliminarFeriado(id) {
+        if (!id) {
+            showAlert('globalAlert', 'Seleccione un feriado válido para eliminar.', 'danger');
+            return;
+        }
+
         if (!confirm('¿Está seguro de que desea eliminar este feriado?')) {
             return;
         }
 
-        const detailModal = bootstrap.Modal.getInstance(document.getElementById('detailModal'));
+        try {
+            const detailModal = bootstrap.Modal.getInstance(document.getElementById('detailModal'));
 
-        if (detailModal) {
-            detailModal.hide();
-        }
+            if (detailModal) {
+                detailModal.hide();
+            }
 
-        const res = await fetch('/Feriados/Eliminar?id=' + id, {
-            method: 'DELETE'
-        });
+            const res = await fetch('/Feriados/Eliminar?id=' + id, {
+                method: 'DELETE'
+            });
 
-        if (res.ok) {
-            await cargarFeriados(getVisibleYear());
+            const data = await leerRespuesta(res);
+
+            if (res.ok) {
+                await cargarFeriados(getVisibleYear());
+                showAlert('globalAlert', data.mensaje || 'Feriado eliminado correctamente.', 'success');
+            } else {
+                showAlert('globalAlert', data.mensaje || 'No se pudo eliminar el feriado. Intente nuevamente.', 'danger');
+            }
+        } catch {
+            showAlert('globalAlert', 'No se pudo eliminar el feriado. Intente nuevamente.', 'danger');
         }
     }
 
@@ -1032,6 +1292,12 @@
             document.getElementById('nextHoliday').textContent = d.getDate() + ' ' + MONTHS_SHORT[d.getMonth()];
         } else {
             document.getElementById('nextHoliday').textContent = '-';
+        }
+
+        const emptyMessage = document.getElementById('emptyCalendarMessage');
+
+        if (emptyMessage) {
+            emptyMessage.style.display = holidays.length === 0 ? 'block' : 'none';
         }
     }
 
@@ -1131,7 +1397,7 @@
             }
 
             const badge = holiday
-                ? '<span class="holiday-dot">🎌 ' + holiday.nombre + '</span>'
+                ? '<span class="holiday-dot">🎌 ' + escapeHtml(holiday.nombre) + '</span>'
                 : '';
 
             const onclick = holiday
@@ -1139,7 +1405,7 @@
                 : '';
 
             grid.insertAdjacentHTML('beforeend', `
-                <div class="${cls}" ${onclick} title="${holiday ? holiday.nombre : ''}">
+                <div class="${cls}" ${onclick} title="${holiday ? escapeHtml(holiday.nombre) : ''}">
                     <span class="day-number">${d}</span>
                     ${badge}
                 </div>
@@ -1204,7 +1470,7 @@
                     ? 'onclick="mostrarDetalle(' + holiday.idFeriado + ')"'
                     : '';
 
-                daysHtml += '<div class="' + cls + '" ' + onclick + ' title="' + (holiday ? holiday.nombre : '') + '">' + d + '</div>';
+                daysHtml += '<div class="' + cls + '" ' + onclick + ' title="' + (holiday ? escapeHtml(holiday.nombre) : '') + '">' + d + '</div>';
             }
 
             container.insertAdjacentHTML('beforeend', `
@@ -1220,6 +1486,7 @@
         const h = holidays.find(x => x.idFeriado === id);
 
         if (!h) {
+            showAlert('globalAlert', 'No se encontró el detalle del feriado seleccionado.', 'danger');
             return;
         }
 
@@ -1227,10 +1494,10 @@
 
         const d = new Date(h.fecha + 'T00:00:00');
 
-        document.getElementById('detailTitle').textContent = 'Feriado';
+        document.getElementById('detailTitle').textContent = 'Detalle del Feriado';
         document.getElementById('detailFecha').textContent = d.getDate() + ' de ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
         document.getElementById('detailNombre').textContent = h.nombre;
-        document.getElementById('detailLaborable').textContent = h.esLaborable ? 'Laborable' : 'No laborable';
+        document.getElementById('detailLaborable').textContent = h.esLaborable ? 'Laborable / día especial' : 'No laborable';
 
         const descWrap = document.getElementById('detailDescWrap');
 
@@ -1238,30 +1505,49 @@
             document.getElementById('detailDesc').textContent = h.descripcion;
             descWrap.style.display = '';
         } else {
+            document.getElementById('detailDesc').textContent = '';
             descWrap.style.display = 'none';
         }
 
         new bootstrap.Modal(document.getElementById('detailModal')).show();
     }
 
-    function resetForm() {
+    function resetForm(ocultarAlerta = true) {
         document.getElementById('holidayDate').value = '';
         document.getElementById('holidayName').value = '';
         document.getElementById('holidayLaborable').value = 'false';
         document.getElementById('holidayDescription').value = '';
-        document.getElementById('formAlert').style.display = 'none';
+
+        limpiarErroresFormulario();
+
+        if (ocultarAlerta) {
+            document.getElementById('formAlert').style.display = 'none';
+        }
     }
 
-    function showAlert(containerId, msg, type) {
+    function showAlert(containerId, msg, type, timeout = 5000) {
         const el = document.getElementById(containerId);
 
-        el.className = type === 'success' ? 'alert-success-custom' : 'alert-danger-custom';
-        el.innerHTML = msg;
+        if (!el) {
+            return;
+        }
+
+        if (type === 'success') {
+            el.className = 'alert-success-custom';
+        } else if (type === 'info') {
+            el.className = 'alert-info-custom';
+        } else {
+            el.className = 'alert-danger-custom';
+        }
+
+        el.innerHTML = escapeHtml(msg);
         el.style.display = 'block';
 
-        setTimeout(() => {
-            el.style.display = 'none';
-        }, 5000);
+        if (timeout > 0) {
+            setTimeout(() => {
+                el.style.display = 'none';
+            }, timeout);
+        }
     }
 
     document.addEventListener('DOMContentLoaded', async function () {

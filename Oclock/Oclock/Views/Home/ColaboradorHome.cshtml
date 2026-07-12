@@ -1,7 +1,8 @@
 ﻿@{
-    ViewData["Title"] = "Menu Colaborador";
+    ViewData["Title"] = "Inicio Colaborador";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <style>
     * {
         margin: 0;
@@ -9,51 +10,51 @@
         box-sizing: border-box;
     }
 
-    /* Sidebar + Content Layout */
     .main-layout {
         display: flex;
-        min-height: 500px;
+        min-height: 600px;
     }
 
-    /* SIDEBAR */
     .sidebar {
-        width: 220px;
+        width: 280px;
         background: #ffffff;
-        padding: 20px 15px;
+        padding: 30px 20px;
         border-right: 1px solid #e0e0e0;
-        box-shadow: 2px 0 8px rgba(0,0,0,0.02);
+        box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+        flex-shrink: 0;
     }
 
     .menu-item {
         padding: 0;
-        margin: 3px 0;
-        border-radius: 8px;
+        margin: 4px 0;
+        border-radius: 10px;
+        transition: all 0.3s;
+        position: relative;
     }
 
     .menu-link {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 10px 15px;
+        gap: 12px;
+        padding: 15px 20px;
         color: #4a5568;
         text-decoration: none;
         font-weight: 500;
-        font-size: 14px;
-        border-radius: 8px;
+        border-radius: 10px;
         transition: all 0.3s;
         position: relative;
     }
 
         .menu-link:hover {
-            background: #667eea;
+            background: #2F6FED;
             color: white;
-            transform: translateX(3px);
+            transform: translateX(5px);
         }
 
         .menu-link.active {
-            background: #667eea;
+            background: #2F6FED;
             color: white;
-            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 12px rgba(47,111,237,0.3);
         }
 
             .menu-link.active::before {
@@ -62,87 +63,126 @@
                 left: 0;
                 top: 50%;
                 transform: translateY(-50%);
-                width: 3px;
-                height: 18px;
+                width: 4px;
+                height: 24px;
                 background: white;
-                border-radius: 0 3px 3px 0;
+                border-radius: 0 4px 4px 0;
             }
 
     .icon {
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 16px;
+        font-size: 18px;
     }
 
-    /* Main Content */
     .content {
         flex: 1;
-        padding: 25px;
+        padding: 40px;
         background: #f5f7fa;
+        min-width: 0;
     }
 
     .content-header {
-        margin-bottom: 20px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+        flex-wrap: wrap;
     }
 
         .content-header h1 {
             color: #2d3748;
-            font-size: 22px;
-            margin-bottom: 5px;
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 800;
         }
 
         .content-header p {
             color: #718096;
-            font-size: 13px;
+            font-size: 14px;
+            margin-bottom: 0;
+            line-height: 1.5;
         }
 
-    /* Current Time Display */
-    .time-display {
-        background: #667eea;
-        color: white;
-        padding: 20px;
+    .alert-box {
+        display: none;
+        padding: 14px 18px;
         border-radius: 12px;
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.25);
         margin-bottom: 20px;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 1.5;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+
+    .alert-success {
+        background: #f0fff4;
+        color: #22543d;
+        border-left: 4px solid #38a169;
+    }
+
+    .alert-error {
+        background: #fff5f5;
+        color: #742a2a;
+        border-left: 4px solid #e53e3e;
+    }
+
+    .alert-info {
+        background: #EEF4FF;
+        color: #1e3a8a;
+        border-left: 4px solid #2F6FED;
+    }
+
+    .time-display {
+        background: #2F6FED;
+        color: white;
+        padding: 42px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(47,111,237,0.28);
+        margin-bottom: 30px;
         text-align: center;
     }
 
     .current-time {
-        font-size: 32px;
-        font-weight: bold;
-        margin-bottom: 6px;
-        letter-spacing: 1px;
+        font-size: 50px;
+        font-weight: 800;
+        margin-bottom: 10px;
+        letter-spacing: 2px;
     }
 
     .current-date {
-        font-size: 14px;
-        opacity: 0.9;
+        font-size: 18px;
+        opacity: 0.92;
+        line-height: 1.5;
     }
 
-    /* Marking Buttons Grid */
     .marking-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 15px;
-        margin-bottom: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
     }
 
     .marking-button {
         background: white;
-        border: 2px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 20px;
+        border: 3px solid #e2e8f0;
+        border-radius: 15px;
+        padding: 30px;
         cursor: pointer;
         transition: all 0.3s;
         text-align: center;
+        position: relative;
+        overflow: hidden;
+        min-height: 180px;
     }
 
         .marking-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.14);
         }
 
         .marking-button.entrada {
@@ -181,150 +221,173 @@
                 color: white;
             }
 
+        .marking-button.disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            pointer-events: none;
+            filter: grayscale(0.4);
+        }
+
+            .marking-button.disabled::after {
+                content: 'No disponible';
+                position: absolute;
+                top: 12px;
+                right: 12px;
+                background: #e2e8f0;
+                color: #4a5568;
+                font-size: 11px;
+                font-weight: 800;
+                padding: 5px 10px;
+                border-radius: 14px;
+            }
+
     .marking-icon {
-        font-size: 32px;
-        margin-bottom: 10px;
+        font-size: 50px;
+        margin-bottom: 15px;
     }
 
     .marking-label {
-        font-size: 15px;
-        font-weight: 700;
-        margin-bottom: 5px;
+        font-size: 19px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        color: #2d3748;
     }
 
     .marking-description {
-        font-size: 11px;
+        font-size: 14px;
+        color: #718096;
+        line-height: 1.5;
+    }
+
+    .marking-button:hover .marking-label,
+    .marking-button:hover .marking-description {
+        color: white;
+    }
+
+    .marking-button.disabled:hover .marking-label {
+        color: #2d3748;
+    }
+
+    .marking-button.disabled:hover .marking-description {
         color: #718096;
     }
 
-    .marking-button:hover .marking-description {
-        color: rgba(255, 255, 255, 0.9);
-    }
-
-    /* Status Info */
-    .status-section {
+    .status-section,
+    .history-section {
         background: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        margin-bottom: 20px;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        margin-bottom: 30px;
     }
 
-        .status-section h2 {
+        .status-section h2,
+        .history-section h2 {
             color: #2d3748;
-            font-size: 16px;
-            margin-bottom: 15px;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+        }
+
+        .history-section h2 {
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
         }
 
     .status-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 15px;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
     }
 
     .status-item {
         background: #f7fafc;
-        padding: 15px;
-        border-radius: 10px;
-        border-left: 3px solid #667eea;
+        padding: 22px;
+        border-radius: 12px;
+        border-left: 4px solid #2F6FED;
     }
 
     .status-item-label {
         color: #718096;
-        font-size: 11px;
-        font-weight: 600;
+        font-size: 13px;
+        font-weight: 700;
         text-transform: uppercase;
-        margin-bottom: 6px;
+        margin-bottom: 8px;
     }
 
     .status-item-value {
         color: #2d3748;
-        font-size: 18px;
-        font-weight: bold;
+        font-size: 24px;
+        font-weight: 800;
+        word-break: break-word;
     }
-
-    /* History Section */
-    .history-section {
-        background: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        margin-bottom: 20px;
-    }
-
-        .history-section h2 {
-            color: #2d3748;
-            font-size: 16px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #f0f0f0;
-        }
 
     .history-item {
         display: flex;
         align-items: center;
-        gap: 15px;
-        padding: 15px;
+        gap: 18px;
+        padding: 18px;
         background: #f8f9fa;
-        border-radius: 10px;
+        border-radius: 12px;
         margin-bottom: 12px;
-        border-left: 3px solid #667eea;
+        border-left: 4px solid #2F6FED;
         transition: all 0.3s;
     }
 
         .history-item:hover {
-            background: #e8edf3;
-            transform: translateX(3px);
+            background: #EEF4FF;
+            transform: translateX(4px);
         }
 
     .history-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 20px;
+        font-size: 24px;
         flex-shrink: 0;
     }
 
     .history-info {
         flex: 1;
+        min-width: 0;
     }
 
     .history-title {
         color: #2d3748;
-        font-weight: 700;
-        margin-bottom: 5px;
-        font-size: 14px;
+        font-weight: 800;
+        margin-bottom: 6px;
+        font-size: 16px;
     }
 
     .history-details {
         color: #718096;
-        font-size: 12px;
+        font-size: 13px;
         display: flex;
-        gap: 15px;
+        gap: 16px;
         flex-wrap: wrap;
+        line-height: 1.5;
     }
 
     .history-detail-item {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 5px;
+        word-break: break-word;
     }
 
     .badge {
         display: inline-block;
-        padding: 4px 10px;
-        border-radius: 15px;
-        font-size: 11px;
-        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 800;
+        white-space: nowrap;
     }
 
     .badge-success {
@@ -347,56 +410,80 @@
         color: #742a2a;
     }
 
-    /* Modal */
-    .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-        z-index: 1000;
-        align-items: center;
-        justify-content: center;
+    .empty-state {
+        text-align: center;
+        padding: 55px 20px;
+        color: #718096;
     }
 
-        .modal.show {
+    .empty-state-icon {
+        font-size: 54px;
+        margin-bottom: 16px;
+        opacity: 0.5;
+    }
+
+    .empty-state h3 {
+        color: #4a5568;
+        margin-bottom: 8px;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .empty-state p {
+        font-size: 14px;
+        margin-bottom: 0;
+        line-height: 1.5;
+    }
+
+    .modal-custom {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+        .modal-custom.show {
             display: flex;
         }
 
-    .modal-content {
+    .modal-content-custom {
         background: white;
-        border-radius: 12px;
-        padding: 25px;
-        max-width: 450px;
-        width: 90%;
+        border-radius: 16px;
+        padding: 28px;
+        max-width: 460px;
+        width: 100%;
         box-shadow: 0 15px 40px rgba(0,0,0,0.3);
     }
 
-    .modal-header {
+    .modal-header-custom {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 12px;
+        margin-bottom: 22px;
+        padding-bottom: 14px;
         border-bottom: 2px solid #f0f0f0;
     }
 
-        .modal-header h3 {
+        .modal-header-custom h3 {
             color: #2d3748;
-            font-size: 18px;
+            font-size: 19px;
+            font-weight: 800;
+            margin: 0;
         }
 
-    .btn-close {
+    .btn-close-custom {
         background: none;
         border: none;
         font-size: 24px;
         cursor: pointer;
         color: #718096;
         padding: 0;
-        width: 28px;
-        height: 28px;
+        width: 30px;
+        height: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -404,21 +491,21 @@
         transition: all 0.3s;
     }
 
-        .btn-close:hover {
+        .btn-close-custom:hover {
             background: #e2e8f0;
             color: #2d3748;
         }
 
     .success-icon {
-        width: 60px;
-        height: 60px;
+        width: 64px;
+        height: 64px;
         background: #c6f6d5;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 32px;
-        margin: 0 auto 15px;
+        font-size: 34px;
+        margin: 0 auto 16px;
     }
 
     .modal-message {
@@ -428,26 +515,29 @@
 
         .modal-message h4 {
             color: #2d3748;
-            font-size: 17px;
+            font-size: 18px;
+            font-weight: 800;
             margin-bottom: 8px;
         }
 
         .modal-message p {
             color: #718096;
             font-size: 13px;
+            margin-bottom: 0;
         }
 
     .modal-details {
         background: #f7fafc;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 15px;
+        padding: 16px;
+        border-radius: 10px;
+        margin-bottom: 18px;
     }
 
     .detail-row {
         display: flex;
         justify-content: space-between;
-        padding: 8px 0;
+        gap: 12px;
+        padding: 9px 0;
         border-bottom: 1px solid #e2e8f0;
     }
 
@@ -457,67 +547,101 @@
 
     .detail-label {
         color: #718096;
-        font-weight: 600;
+        font-weight: 700;
         font-size: 13px;
     }
 
     .detail-value {
         color: #2d3748;
-        font-weight: 700;
+        font-weight: 800;
         font-size: 13px;
+        text-align: right;
     }
 
-    .btn {
-        padding: 10px 24px;
+    .btn-primary-custom {
+        padding: 12px 24px;
         border: none;
-        border-radius: 8px;
-        font-weight: 600;
+        border-radius: 10px;
+        font-weight: 700;
         cursor: pointer;
         transition: all 0.3s;
-        font-size: 13px;
+        font-size: 14px;
         display: inline-flex;
         align-items: center;
         gap: 6px;
         width: 100%;
         justify-content: center;
-    }
-
-    .btn-primary {
-        background: #667eea;
+        background: #2F6FED;
         color: white;
     }
 
-        .btn-primary:hover {
+        .btn-primary-custom:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 12px rgba(47,111,237,0.35);
         }
 
-    .empty-state {
-        text-align: center;
-        padding: 40px 20px;
-        color: #718096;
+    @@media (max-width: 1100px) {
+        .main-layout {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+            border-right: none;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .content {
+            padding: 25px;
+        }
     }
 
-    .empty-state-icon {
-        font-size: 48px;
-        margin-bottom: 15px;
-        opacity: 0.5;
-    }
+    @@media (max-width: 650px) {
+        .content {
+            padding: 20px 14px;
+        }
 
-    .empty-state h3 {
-        color: #4a5568;
-        margin-bottom: 8px;
-        font-size: 16px;
-    }
+        .content-header h1 {
+            font-size: 24px;
+        }
 
-    .empty-state p {
-        font-size: 13px;
+        .time-display {
+            padding: 32px 20px;
+        }
+
+        .current-time {
+            font-size: 38px;
+        }
+
+        .marking-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .status-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .status-section,
+        .history-section {
+            padding: 22px;
+        }
+
+        .history-item {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .detail-row {
+            flex-direction: column;
+        }
+
+        .detail-value {
+            text-align: left;
+        }
     }
 </style>
 
-<!-- Main Layout -->
 <div class="main-layout">
-    <!-- Sidebar -->
     <div class="sidebar">
         <div class="menu-item">
             <a href="/Empleado/Marcas" class="menu-link active">
@@ -546,119 +670,280 @@
                 Calendario de Feriados
             </a>
         </div>
+
+        <div class="menu-item">
+            <a href="/Empleado/HistorialBonos" class="menu-link">
+                <div class="icon">🏆</div>
+                Mis Bonos
+            </a>
+        </div>
     </div>
 
-    <!-- Main Content -->
     <div class="content">
         <div class="content-header">
-            <h1>Registro de Asistencia</h1>
-            <p>Marca tu entrada, salida, almuerzo y descansos del día</p>
+            <div>
+                <h1>Registro de Asistencia</h1>
+                <p>Marque su entrada, salida, almuerzo o descanso del día.</p>
+            </div>
         </div>
+
+        <div id="alertBox" class="alert-box"></div>
 
         <div class="time-display">
             <div class="current-time" id="currentTime">00:00:00</div>
-            <div class="current-date" id="currentDate">Cargando...</div>
+            <div class="current-date" id="currentDate">Cargando fecha...</div>
         </div>
 
         <div class="marking-grid">
-            <div class="marking-button entrada" onclick="registerMark('entrada')">
+            <div class="marking-button entrada" id="btnEntrada" onclick="registrarMarca('entrada')">
                 <div class="marking-icon">🚪</div>
-                <div class="marking-label">Marcar Entrada</div>
-                <div class="marking-description">Registra tu llegada</div>
+                <div class="marking-label">Marcar entrada</div>
+                <div class="marking-description">Registra el inicio de tu jornada.</div>
             </div>
 
-            <div class="marking-button almuerzo" onclick="registerMark('almuerzo')">
+            <div class="marking-button almuerzo" id="btnAlmuerzo" onclick="registrarMarca('almuerzo')">
                 <div class="marking-icon">🍽️</div>
-                <div class="marking-label">Marcar Almuerzo</div>
-                <div class="marking-description">Hora de almuerzo</div>
+                <div class="marking-label">Marcar almuerzo</div>
+                <div class="marking-description">Registra tu pausa de almuerzo.</div>
             </div>
 
-            <div class="marking-button descanso" onclick="registerMark('descanso')">
+            <div class="marking-button descanso" id="btnDescanso" onclick="registrarMarca('descanso')">
                 <div class="marking-icon">☕</div>
-                <div class="marking-label">Marcar Descanso</div>
-                <div class="marking-description">Tiempo de descanso</div>
+                <div class="marking-label">Marcar descanso</div>
+                <div class="marking-description">Registra un descanso del día.</div>
             </div>
 
-            <div class="marking-button salida" onclick="registerMark('salida')">
+            <div class="marking-button salida" id="btnSalida" onclick="registrarMarca('salida')">
                 <div class="marking-icon">🏠</div>
-                <div class="marking-label">Marcar Salida</div>
-                <div class="marking-description">Registra tu salida</div>
+                <div class="marking-label">Marcar salida</div>
+                <div class="marking-description">Registra el cierre de tu jornada.</div>
             </div>
         </div>
 
         <div class="status-section">
-            <h2>📊 Resumen del Día</h2>
+            <h2>📊 Resumen del día</h2>
+
             <div class="status-grid">
                 <div class="status-item">
-                    <div class="status-item-label">Hora de Entrada</div>
+                    <div class="status-item-label">Hora de entrada</div>
                     <div class="status-item-value" id="entradaTime">--:--</div>
                 </div>
+
                 <div class="status-item">
-                    <div class="status-item-label">Hora de Salida</div>
+                    <div class="status-item-label">Hora de salida</div>
                     <div class="status-item-value" id="salidaTime">--:--</div>
                 </div>
+
                 <div class="status-item">
-                    <div class="status-item-label">Tiempo Trabajado</div>
+                    <div class="status-item-label">Tiempo trabajado</div>
                     <div class="status-item-value" id="workedTime">0h 0m</div>
                 </div>
+
                 <div class="status-item">
-                    <div class="status-item-label">Estado Actual</div>
+                    <div class="status-item-label">Estado actual</div>
                     <div class="status-item-value" id="currentStatus">
-                        <span class="badge badge-info" style="font-size: 12px;">Sin marcar</span>
+                        <span class="badge badge-info">Sin marcar</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="history-section">
-            <h2>📝 Marcas de Hoy</h2>
+            <h2>📝 Marcas de hoy</h2>
+
             <div id="todayHistory">
                 <div class="empty-state">
                     <div class="empty-state-icon">⏰</div>
-                    <h3>Sin marcas registradas</h3>
-                    <p>Aún no has registrado ninguna marca el día de hoy</p>
+                    <h3>Cargando marcas</h3>
+                    <p>Estamos consultando tus marcas del día.</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Success Modal -->
-<div class="modal" id="successModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>✅ Marca Registrada</h3>
-            <button class="btn-close" onclick="closeModal()">×</button>
+<div class="modal-custom" id="successModal">
+    <div class="modal-content-custom">
+        <div class="modal-header-custom">
+            <h3>✅ Marca registrada</h3>
+            <button class="btn-close-custom" onclick="cerrarModal()">×</button>
         </div>
+
         <div class="success-icon">✅</div>
+
         <div class="modal-message">
-            <h4>¡Marca registrada exitosamente!</h4>
-            <p>Tu marca ha sido guardada correctamente</p>
+            <h4>¡Marca guardada correctamente!</h4>
+            <p id="modalMessage">El registro fue guardado en el sistema.</p>
         </div>
+
         <div class="modal-details" id="modalDetails"></div>
-        <button class="btn btn-primary" onclick="closeModal()">Continuar</button>
+
+        <button class="btn-primary-custom" onclick="cerrarModal()">Continuar</button>
     </div>
 </div>
 
 <script>
     let todayMarks = [];
+    let registrandoMarca = false;
 
-    function updateClock() {
+    let accionesDisponibles = {
+        entrada: true,
+        almuerzo: false,
+        descanso: false,
+        salida: false
+    };
+
+    const markConfig = {
+        entrada: {
+            icon: '🚪',
+            color: '#c6f6d5',
+            text: '#22543d',
+            label: 'Entrada',
+            comentarioDefault: 'Inicio de jornada laboral',
+            status: '<span class="badge badge-success">Trabajando</span>'
+        },
+        salida: {
+            icon: '🏠',
+            color: '#fed7d7',
+            text: '#742a2a',
+            label: 'Salida',
+            comentarioDefault: 'Fin de jornada laboral',
+            status: '<span class="badge badge-danger">Fuera de turno</span>'
+        },
+        almuerzo: {
+            icon: '🍽️',
+            color: '#feebc8',
+            text: '#7c2d12',
+            label: 'Almuerzo',
+            comentarioDefault: 'Registro de almuerzo',
+            status: '<span class="badge badge-warning">En almuerzo</span>'
+        },
+        descanso: {
+            icon: '☕',
+            color: '#bee3f8',
+            text: '#2c5282',
+            label: 'Descanso',
+            comentarioDefault: 'Registro de descanso',
+            status: '<span class="badge badge-info">En descanso</span>'
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', async function () {
+        actualizarReloj();
+        setInterval(actualizarReloj, 1000);
+
+        await cargarMarcasDelDia();
+        setInterval(actualizarTiempoTrabajado, 60000);
+    });
+
+    function actualizarReloj() {
         const now = new Date();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        document.getElementById('currentTime').textContent = `${hours}:${minutes}:${seconds}`;
 
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('currentTime').textContent = now.toLocaleTimeString('es-CR', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+
+        const options = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        };
+
         const dateStr = now.toLocaleDateString('es-CR', options);
         document.getElementById('currentDate').textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
     }
 
-    async function registerMark(type) {
+    async function leerRespuesta(response) {
+        try {
+            const contentType = response.headers.get('content-type') || '';
+
+            if (contentType.includes('application/json')) {
+                return await response.json();
+            }
+
+            const texto = await response.text();
+
+            return {
+                success: response.ok,
+                message: texto,
+                mensaje: texto
+            };
+        } catch {
+            return {
+                success: false,
+                message: 'No se recibió una respuesta válida del sistema.'
+            };
+        }
+    }
+
+    async function cargarMarcasDelDia(mostrarError = true) {
+        try {
+            const response = await fetch('/Empleado/ObtenerMarcas');
+            const data = await leerRespuesta(response);
+
+            if (!response.ok || data.success === false) {
+                if (mostrarError) {
+                    mostrarAlerta(data.message || data.mensaje || 'No se pudieron cargar tus marcas del día.', 'error');
+                }
+
+                todayMarks = [];
+                accionesDisponibles = {
+                    entrada: true,
+                    almuerzo: false,
+                    descanso: false,
+                    salida: false
+                };
+
+                renderizarHistorial();
+                actualizarResumen('Sin jornada iniciada');
+                actualizarBotones();
+                return;
+            }
+
+            todayMarks = Array.isArray(data.marcas) ? data.marcas : [];
+            accionesDisponibles = normalizarAccionesDisponibles(data.accionesDisponibles || {});
+
+            renderizarHistorial();
+            actualizarResumen(data.estadoActual);
+            actualizarBotones();
+        } catch {
+            if (mostrarError) {
+                mostrarAlerta('No se pudieron cargar tus marcas del día. Intente nuevamente.', 'error');
+            }
+
+            todayMarks = [];
+            accionesDisponibles = {
+                entrada: true,
+                almuerzo: false,
+                descanso: false,
+                salida: false
+            };
+
+            renderizarHistorial();
+            actualizarResumen('Sin jornada iniciada');
+            actualizarBotones();
+        }
+    }
+
+    async function registrarMarca(tipo) {
+        if (registrandoMarca) {
+            return;
+        }
+
+        if (!tipo || !accionesDisponibles[tipo]) {
+            mostrarAlerta('Esta marca no está disponible en este momento.', 'info');
+            return;
+        }
+
+        registrandoMarca = true;
+        bloquearBotones(true);
+
         try {
             const body = new URLSearchParams();
-            body.append('tipo', type);
+            body.append('tipo', tipo);
 
             const response = await fetch('/Empleado/RegistrarMarca', {
                 method: 'POST',
@@ -668,154 +953,367 @@
                 body: body.toString()
             });
 
-            const data = await response.json();
+            const data = await leerRespuesta(response);
 
-            if (!data.success) {
-                alert((data.message || 'No se pudo registrar la marca.') + (data.detail ? ("\n\nDetalle: " + data.detail) : ""));
+            if (!response.ok || data.success === false) {
+                mostrarAlerta(data.message || data.mensaje || 'No se pudo registrar la marca.', 'error');
+                await cargarMarcasDelDia(false);
                 return;
             }
 
-            const now = new Date();
-            const time = data.marca && data.marca.hora ? data.marca.hora : now.toLocaleTimeString('es-CR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            mostrarAlerta(data.message || data.mensaje || 'Marca registrada correctamente.', 'success');
 
-            const mark = {
-                id: todayMarks.length + 1,
-                type: type,
-                timestamp: now.toISOString(),
-                time: time,
-                date: now.toLocaleDateString('es-CR'),
-                location: "San José, Costa Rica",
-                employeeId: "EMP001",
-                employeeName: "María González"
-            };
+            if (data.marca) {
+                mostrarModalExito(data.marca, data.message || data.mensaje);
+            }
 
-            todayMarks.push(mark);
-            updateStatusSection();
-            renderTodayHistory();
-            showSuccessModal(mark);
-        } catch (e) {
-            alert('Ocurrió un error al registrar la marca.');
+            await cargarMarcasDelDia(false);
+        } catch {
+            mostrarAlerta('No se pudo registrar la marca. Intente nuevamente.', 'error');
+            await cargarMarcasDelDia(false);
+        } finally {
+            registrandoMarca = false;
+            actualizarBotones();
         }
     }
 
-    function updateStatusSection() {
-        const entradaMark = todayMarks.find(m => m.type === 'entrada');
-        const salidaMark = todayMarks.find(m => m.type === 'salida');
+    function normalizarAccionesDisponibles(acciones) {
+        return {
+            entrada: obtenerAccionDisponible(acciones, 'entrada'),
+            almuerzo: obtenerAccionDisponible(acciones, 'almuerzo'),
+            descanso: obtenerAccionDisponible(acciones, 'descanso'),
+            salida: obtenerAccionDisponible(acciones, 'salida')
+        };
+    }
 
-        if (entradaMark) {
-            document.getElementById('entradaTime').textContent = entradaMark.time.substring(0, 5);
+    function obtenerAccionDisponible(acciones, nombre) {
+        if (!acciones) {
+            return false;
         }
 
-        if (salidaMark) {
-            document.getElementById('salidaTime').textContent = salidaMark.time.substring(0, 5);
+        if (acciones[nombre] === true) {
+            return true;
         }
 
-        if (entradaMark && salidaMark) {
-            const entrada = new Date(entradaMark.timestamp);
-            const salida = new Date(salidaMark.timestamp);
-            const diff = salida - entrada;
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            document.getElementById('workedTime').textContent = `${hours}h ${minutes}m`;
-        }
+        const pascal = nombre.charAt(0).toUpperCase() + nombre.slice(1);
+
+        return acciones[pascal] === true;
+    }
+
+    function actualizarResumen(estadoActual) {
+        const marcasAscendentes = [...todayMarks].sort((a, b) => {
+            const idA = parseInt(a.idMarca || a.id || 0);
+            const idB = parseInt(b.idMarca || b.id || 0);
+
+            return idA - idB;
+        });
+
+        const entradaMark = marcasAscendentes.find(marca => normalizarTipo(marca.tipo || marca.nombre || marca.tipoTexto) === 'entrada');
+        const salidaMark = marcasAscendentes.find(marca => normalizarTipo(marca.tipo || marca.nombre || marca.tipoTexto) === 'salida');
+        const ultimaMarca = marcasAscendentes.length > 0 ? marcasAscendentes[marcasAscendentes.length - 1] : null;
+
+        document.getElementById('entradaTime').textContent = entradaMark ? obtenerHoraMarca(entradaMark).substring(0, 5) : '--:--';
+        document.getElementById('salidaTime').textContent = salidaMark ? obtenerHoraMarca(salidaMark).substring(0, 5) : '--:--';
+
+        actualizarTiempoTrabajado();
 
         const statusEl = document.getElementById('currentStatus');
-        const lastMark = todayMarks[todayMarks.length - 1];
 
-        if (!lastMark) {
-            statusEl.innerHTML = '<span class="badge badge-info" style="font-size: 12px;">Sin marcar</span>';
-        } else if (lastMark.type === 'entrada') {
-            statusEl.innerHTML = '<span class="badge badge-success" style="font-size: 12px;">Trabajando</span>';
-        } else if (lastMark.type === 'almuerzo') {
-            statusEl.innerHTML = '<span class="badge badge-warning" style="font-size: 12px;">En almuerzo</span>';
-        } else if (lastMark.type === 'descanso') {
-            statusEl.innerHTML = '<span class="badge badge-info" style="font-size: 12px;">En descanso</span>';
-        } else if (lastMark.type === 'salida') {
-            statusEl.innerHTML = '<span class="badge badge-danger" style="font-size: 12px;">Fuera de turno</span>';
+        if (estadoActual) {
+            statusEl.innerHTML = construirEstadoVisual(estadoActual);
+            return;
+        }
+
+        if (!ultimaMarca) {
+            statusEl.innerHTML = '<span class="badge badge-info">Sin marcar</span>';
+            return;
+        }
+
+        const tipoUltimaMarca = normalizarTipo(ultimaMarca.tipo || ultimaMarca.nombre || ultimaMarca.tipoTexto);
+
+        if (markConfig[tipoUltimaMarca]) {
+            statusEl.innerHTML = markConfig[tipoUltimaMarca].status;
+        } else {
+            statusEl.innerHTML = '<span class="badge badge-info">Sin marcar</span>';
         }
     }
 
-    function renderTodayHistory() {
+    function actualizarTiempoTrabajado() {
+        const marcasAscendentes = [...todayMarks].sort((a, b) => {
+            const idA = parseInt(a.idMarca || a.id || 0);
+            const idB = parseInt(b.idMarca || b.id || 0);
+
+            return idA - idB;
+        });
+
+        const entradaMark = marcasAscendentes.find(marca => normalizarTipo(marca.tipo || marca.nombre || marca.tipoTexto) === 'entrada');
+        const salidaMark = marcasAscendentes.find(marca => normalizarTipo(marca.tipo || marca.nombre || marca.tipoTexto) === 'salida');
+
+        if (!entradaMark) {
+            document.getElementById('workedTime').textContent = '0h 0m';
+            return;
+        }
+
+        const entradaDate = obtenerFechaHoraMarca(entradaMark);
+
+        if (!entradaDate) {
+            document.getElementById('workedTime').textContent = '0h 0m';
+            return;
+        }
+
+        let finDate = new Date();
+
+        if (salidaMark) {
+            const salidaDate = obtenerFechaHoraMarca(salidaMark);
+
+            if (salidaDate) {
+                finDate = salidaDate;
+            }
+        }
+
+        let diff = finDate - entradaDate;
+
+        if (diff < 0) {
+            diff = 0;
+        }
+
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+        document.getElementById('workedTime').textContent = `${hours}h ${minutes}m`;
+    }
+
+    function renderizarHistorial() {
         const container = document.getElementById('todayHistory');
 
-        if (todayMarks.length === 0) {
+        if (!todayMarks || todayMarks.length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">⏰</div>
                     <h3>Sin marcas registradas</h3>
-                    <p>Aún no has registrado ninguna marca el día de hoy</p>
+                    <p>Aún no has registrado marcas el día de hoy.</p>
                 </div>`;
             return;
         }
 
-        const markIcons = {
-            entrada: { icon: '🚪', color: '#c6f6d5', text: '#22543d', label: 'Entrada' },
-            salida: { icon: '🏠', color: '#fed7d7', text: '#742a2a', label: 'Salida' },
-            almuerzo: { icon: '🍽️', color: '#feebc8', text: '#7c2d12', label: 'Almuerzo' },
-            descanso: { icon: '☕', color: '#bee3f8', text: '#2c5282', label: 'Descanso' }
-        };
+        const marcasOrdenadas = [...todayMarks].sort((a, b) => {
+            const idA = parseInt(a.idMarca || a.id || 0);
+            const idB = parseInt(b.idMarca || b.id || 0);
 
-        container.innerHTML = todayMarks.slice().reverse().map(mark => {
-            const config = markIcons[mark.type];
+            return idB - idA;
+        });
+
+        container.innerHTML = marcasOrdenadas.map(mark => {
+            const tipo = normalizarTipo(mark.tipo || mark.nombre || mark.tipoTexto);
+            const config = markConfig[tipo] || {
+                icon: '⏰',
+                color: '#edf2f7',
+                text: '#4a5568',
+                label: mark.tipoTexto || mark.tipo || mark.nombre || 'Marca',
+                comentarioDefault: 'Marca registrada correctamente'
+            };
+
+            const hora = obtenerHoraMarca(mark);
+            const ubicacion = mark.ubicancia || mark.ubicacion || 'Ubicación no registrada';
+            const comentario = mark.comentario || config.comentarioDefault;
+
             return `
                 <div class="history-item">
                     <div class="history-icon" style="background:${config.color};color:${config.text};">
                         ${config.icon}
                     </div>
+
                     <div class="history-info">
-                        <div class="history-title">${config.label}</div>
+                        <div class="history-title">${escapeHtml(config.label)}</div>
+
                         <div class="history-details">
-                            <div class="history-detail-item">🕐 <strong>${mark.time}</strong></div>
-                            <div class="history-detail-item">📍 ${mark.location}</div>
-                            <div class="history-detail-item">✅ Registrado</div>
+                            <div class="history-detail-item">🕐 <strong>${escapeHtml(hora)}</strong></div>
+                            <div class="history-detail-item">📍 ${escapeHtml(ubicacion)}</div>
+                            <div class="history-detail-item">💬 ${escapeHtml(comentario)}</div>
                         </div>
                     </div>
-                </div>
-            `;
+                </div>`;
         }).join('');
     }
 
-    function showSuccessModal(mark) {
+    function actualizarBotones() {
+        setBotonDisponible('btnEntrada', accionesDisponibles.entrada);
+        setBotonDisponible('btnAlmuerzo', accionesDisponibles.almuerzo);
+        setBotonDisponible('btnDescanso', accionesDisponibles.descanso);
+        setBotonDisponible('btnSalida', accionesDisponibles.salida);
+    }
+
+    function setBotonDisponible(id, disponible) {
+        const btn = document.getElementById(id);
+
+        if (!btn) {
+            return;
+        }
+
+        if (disponible && !registrandoMarca) {
+            btn.classList.remove('disabled');
+        } else {
+            btn.classList.add('disabled');
+        }
+    }
+
+    function bloquearBotones(bloquear) {
+        ['btnEntrada', 'btnAlmuerzo', 'btnDescanso', 'btnSalida'].forEach(id => {
+            const btn = document.getElementById(id);
+
+            if (!btn) {
+                return;
+            }
+
+            if (bloquear) {
+                btn.classList.add('disabled');
+            }
+        });
+    }
+
+    function mostrarModalExito(mark, mensaje) {
         const modal = document.getElementById('successModal');
         const details = document.getElementById('modalDetails');
+        const modalMessage = document.getElementById('modalMessage');
 
-        const markLabels = {
-            entrada: 'Entrada',
-            salida: 'Salida',
-            almuerzo: 'Almuerzo',
-            descanso: 'Descanso'
-        };
+        const tipo = normalizarTipo(mark.tipo || mark.nombre || mark.tipoTexto);
+        const label = markConfig[tipo]?.label || mark.tipoTexto || mark.tipo || mark.nombre || 'Marca';
+        const hora = obtenerHoraMarca(mark);
+        const fecha = obtenerFechaTextoMarca(mark);
+        const ubicacion = mark.ubicancia || mark.ubicacion || 'Ubicación no registrada';
+
+        modalMessage.textContent = mensaje || 'El registro fue guardado correctamente.';
 
         details.innerHTML = `
             <div class="detail-row">
-                <div class="detail-label">Tipo de Marca</div>
-                <div class="detail-value">${markLabels[mark.type]}</div>
+                <div class="detail-label">Tipo de marca</div>
+                <div class="detail-value">${escapeHtml(label)}</div>
             </div>
+
             <div class="detail-row">
                 <div class="detail-label">Fecha</div>
-                <div class="detail-value">${mark.date}</div>
+                <div class="detail-value">${escapeHtml(fecha)}</div>
             </div>
+
             <div class="detail-row">
                 <div class="detail-label">Hora</div>
-                <div class="detail-value">${mark.time}</div>
+                <div class="detail-value">${escapeHtml(hora)}</div>
             </div>
+
             <div class="detail-row">
                 <div class="detail-label">Ubicación</div>
-                <div class="detail-value">${mark.location}</div>
-            </div>
-            <div class="detail-row">
-                <div class="detail-label">Colaborador</div>
-                <div class="detail-value">${mark.employeeName}</div>
-            </div>
-        `;
+                <div class="detail-value">${escapeHtml(ubicacion)}</div>
+            </div>`;
 
-        modal.style.display = 'flex';
+        modal.classList.add('show');
     }
 
-    function closeModal() {
-        document.getElementById('successModal').style.display = 'none';
+    function cerrarModal() {
+        document.getElementById('successModal').classList.remove('show');
     }
 
-    setInterval(updateClock, 1000);
-    updateClock();
+    function mostrarAlerta(mensaje, tipo) {
+        const alertBox = document.getElementById('alertBox');
+
+        alertBox.className = 'alert-box';
+
+        if (tipo === 'success') {
+            alertBox.classList.add('alert-success');
+        } else if (tipo === 'info') {
+            alertBox.classList.add('alert-info');
+        } else {
+            alertBox.classList.add('alert-error');
+        }
+
+        alertBox.textContent = mensaje;
+        alertBox.style.display = 'block';
+
+        setTimeout(() => {
+            alertBox.style.display = 'none';
+        }, 5000);
+    }
+
+    function construirEstadoVisual(estadoActual) {
+        const estado = (estadoActual || '').toString().toLowerCase();
+
+        if (estado.includes('trabajando') || estado.includes('jornada')) {
+            return '<span class="badge badge-success">Trabajando</span>';
+        }
+
+        if (estado.includes('almuerzo')) {
+            return '<span class="badge badge-warning">En almuerzo</span>';
+        }
+
+        if (estado.includes('descanso')) {
+            return '<span class="badge badge-info">En descanso</span>';
+        }
+
+        if (estado.includes('finalizada') || estado.includes('fuera') || estado.includes('salida')) {
+            return '<span class="badge badge-danger">Fuera de turno</span>';
+        }
+
+        return `<span class="badge badge-info">${escapeHtml(estadoActual || 'Sin marcar')}</span>`;
+    }
+
+    function obtenerHoraMarca(mark) {
+        return mark.hora || mark.horaEntrada || mark.horaSalida || '--:--';
+    }
+
+    function obtenerFechaTextoMarca(mark) {
+        if (mark.fecha) {
+            const fecha = new Date(mark.fecha + 'T00:00:00');
+
+            if (!isNaN(fecha.getTime())) {
+                return fecha.toLocaleDateString('es-CR');
+            }
+
+            return mark.fecha;
+        }
+
+        return new Date().toLocaleDateString('es-CR');
+    }
+
+    function obtenerFechaHoraMarca(mark) {
+        const hora = obtenerHoraMarca(mark);
+
+        if (!hora || hora === '--:--') {
+            return null;
+        }
+
+        let fechaTexto = mark.fecha;
+
+        if (!fechaTexto) {
+            const hoy = new Date();
+            fechaTexto = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+        }
+
+        const fechaHora = new Date(`${fechaTexto}T${hora}`);
+
+        if (isNaN(fechaHora.getTime())) {
+            return null;
+        }
+
+        return fechaHora;
+    }
+
+    function normalizarTipo(tipo) {
+        if (!tipo) {
+            return '';
+        }
+
+        return tipo.toString().trim().toLowerCase();
+    }
+
+    function escapeHtml(value) {
+        if (value === null || value === undefined) {
+            return '';
+        }
+
+        return value.toString()
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
+    }
 </script>

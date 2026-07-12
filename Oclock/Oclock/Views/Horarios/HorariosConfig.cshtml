@@ -1,16 +1,16 @@
 ﻿@using Oclock.Models
 @{
-    ViewData["Title"] = "Configuracion de Horarios";
+    ViewData["Title"] = "Configuración de Horarios";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var horarios = (List<Horario>)ViewBag.Horarios;
-    var usuarios = (List<Usuario>)ViewBag.Usuarios;
-    var totalAsignados = (int)ViewBag.TotalAsignados;
-    var editarId = (int?)ViewBag.EditarId;
-    var asignarId = (int?)ViewBag.AsignarId;
-    var horarioEditando = (Horario?)ViewBag.HorarioEditando;
-    var horarioAsignando = (Horario?)ViewBag.HorarioAsignando;
-    var yaAsignados = (List<int>)ViewBag.UsuariosYaAsignados;
+    var horarios = ViewBag.Horarios as List<Horario> ?? new List<Horario>();
+    var usuarios = ViewBag.Usuarios as List<Usuario> ?? new List<Usuario>();
+    var totalAsignados = ViewBag.TotalAsignados != null ? (int)ViewBag.TotalAsignados : 0;
+    var editarId = ViewBag.EditarId as int?;
+    var asignarId = ViewBag.AsignarId as int?;
+    var horarioEditando = ViewBag.HorarioEditando as Horario;
+    var horarioAsignando = ViewBag.HorarioAsignando as Horario;
+    var yaAsignados = ViewBag.UsuariosYaAsignados as List<int> ?? new List<int>();
 }
 
 <style>
@@ -25,10 +25,9 @@
         min-height: 600px;
     }
 
-    /* SIDEBAR */
     .sidebar {
         width: 280px;
-        background: #fff;
+        background: #ffffff;
         padding: 30px 20px;
         border-right: 1px solid #e0e0e0;
         box-shadow: 2px 0 10px rgba(0,0,0,0.03);
@@ -105,11 +104,12 @@
     }
 
         .menu-expandable-header:hover {
-            background: #f0f0f0;
+            background: #EEF4FF;
             color: #2F6FED;
         }
 
         .menu-expandable-header.active {
+            background: rgba(47,111,237,0.10);
             color: #2F6FED;
             font-weight: 600;
         }
@@ -139,6 +139,7 @@
 
         .submenu.show {
             max-height: 500px;
+            transition: max-height 0.5s ease-in;
         }
 
     .submenu-item {
@@ -149,7 +150,8 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 12px 16px 12px 40px;
+        padding: 12px 16px;
+        padding-left: 40px;
         color: #718096;
         text-decoration: none;
         font-weight: 500;
@@ -184,7 +186,7 @@
             }
 
         .submenu-link.active {
-            background: rgba(47,111,237,0.1);
+            background: rgba(47,111,237,0.12);
             color: #2F6FED;
             font-weight: 600;
         }
@@ -195,11 +197,10 @@
                 height: 8px;
             }
 
-    /* CONTENT */
     .content {
         flex: 1;
         padding: 40px;
-        background: #fafbfc;
+        background: #f5f7fa;
         min-width: 0;
     }
 
@@ -211,40 +212,74 @@
             color: #2d3748;
             font-size: 28px;
             margin-bottom: 8px;
+            font-weight: 800;
         }
 
         .content-header p {
             color: #718096;
+            font-size: 14px;
+            margin-bottom: 0;
+            line-height: 1.5;
         }
 
-    /* STATS */
+    .message-box {
+        display: none;
+        padding: 14px 16px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    .message-success {
+        background: #f0fff4;
+        color: #22543d;
+        border-left: 4px solid #38a169;
+    }
+
+    .message-error {
+        background: #fff5f5;
+        color: #742a2a;
+        border-left: 4px solid #e53e3e;
+    }
+
+    .message-info {
+        background: #EEF4FF;
+        color: #1e3a8a;
+        border-left: 4px solid #2F6FED;
+    }
+
     .stats-row {
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
         gap: 16px;
         margin-bottom: 24px;
     }
 
     .stat-mini {
-        background: #2F6FED;
-        color: white;
-        padding: 20px;
-        border-radius: 12px;
+        background: white;
+        color: #2d3748;
+        padding: 22px;
+        border-radius: 14px;
         text-align: center;
-        flex: 1;
+        border-left: 4px solid #2F6FED;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
 
     .stat-mini-value {
         font-size: 32px;
-        font-weight: bold;
+        font-weight: 800;
         margin-bottom: 5px;
     }
 
     .stat-mini-label {
         font-size: 13px;
-        opacity: 0.9;
+        color: #718096;
+        font-weight: 700;
+        text-transform: uppercase;
     }
 
-    /* CARDS */
     .config-card {
         background: white;
         border-radius: 15px;
@@ -260,12 +295,14 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
     }
 
         .card-header-custom h2 {
             margin: 0;
             font-size: 20px;
-            font-weight: 600;
+            font-weight: 800;
         }
 
     .badge-custom {
@@ -273,6 +310,7 @@
         padding: 6px 15px;
         border-radius: 20px;
         font-size: 13px;
+        font-weight: 700;
         white-space: nowrap;
     }
 
@@ -280,27 +318,37 @@
         padding: 25px;
     }
 
-    /* FORM */
+    .helper-text {
+        color: #718096;
+        font-size: 13px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
     .form-label {
-        font-weight: 600;
+        font-weight: 700;
         color: #4a5568;
         margin-bottom: 6px;
         font-size: 14px;
         display: block;
     }
 
-    .form-control, .form-select {
+    .form-control,
+    .form-select {
         border: 2px solid #e2e8f0;
         border-radius: 10px;
         padding: 12px 15px;
         font-size: 14px;
         width: 100%;
-        transition: border-color 0.2s;
+        transition: all 0.2s;
+        color: #2d3748;
+        background: white;
     }
 
-        .form-control:focus, .form-select:focus {
+        .form-control:focus,
+        .form-select:focus {
             border-color: #2F6FED;
-            box-shadow: 0 0 0 3px rgba(47,111,237,0.1);
+            box-shadow: 0 0 0 3px rgba(47,111,237,0.10);
             outline: none;
         }
 
@@ -312,7 +360,7 @@
 
     .form-group {
         flex: 1;
-        min-width: 160px;
+        min-width: 180px;
         margin-bottom: 16px;
     }
 
@@ -321,24 +369,51 @@
         margin-bottom: 16px;
     }
 
-    /* BUTTONS */
+    .field-help {
+        color: #718096;
+        font-size: 12px;
+        line-height: 1.4;
+        margin-top: 4px;
+        display: block;
+    }
+
+    .field-error {
+        color: #c53030;
+        font-size: 12px;
+        font-weight: 700;
+        display: none;
+        margin-top: 4px;
+    }
+
+        .field-error.show {
+            display: block;
+        }
+
+    .input-error {
+        border-color: #e53e3e !important;
+        box-shadow: 0 0 0 3px rgba(229,62,62,0.10) !important;
+    }
+
     .btn-primary-custom {
         background: #2F6FED;
         border: none;
         padding: 12px 24px;
         border-radius: 10px;
         color: white;
-        font-weight: 600;
+        font-weight: 700;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 8px;
         font-size: 14px;
+        text-decoration: none;
         transition: all 0.2s;
     }
 
         .btn-primary-custom:hover {
-            background: #1a5fd4;
+            background: #2457C8;
+            color: white;
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(47,111,237,0.35);
         }
@@ -348,11 +423,12 @@
         color: #2F6FED;
         padding: 12px 24px;
         border-radius: 10px;
-        font-weight: 600;
+        font-weight: 700;
         background: white;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 8px;
         font-size: 14px;
         text-decoration: none;
@@ -368,35 +444,42 @@
         display: flex;
         gap: 8px;
         flex-wrap: wrap;
-        margin-top: 20px;
+        margin-top: 10px;
     }
 
-    /* TABLE */
     .table-wrap {
         overflow-x: auto;
+        border-radius: 0 0 15px 15px;
     }
 
     table.tbl {
         width: 100%;
         border-collapse: collapse;
+        min-width: 850px;
     }
 
         table.tbl thead {
-            background: #2F6FED;
-            color: white;
+            background: #f7fafc;
+            color: #4a5568;
         }
 
             table.tbl thead th {
-                padding: 14px 16px;
-                font-weight: 600;
+                padding: 15px 16px;
+                font-weight: 800;
                 text-align: left;
                 white-space: nowrap;
+                font-size: 13px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                border-bottom: 2px solid #e2e8f0;
             }
 
         table.tbl tbody td {
-            padding: 14px 16px;
+            padding: 15px 16px;
             border-bottom: 1px solid #f0f0f0;
             vertical-align: middle;
+            color: #2d3748;
+            font-size: 14px;
         }
 
         table.tbl tbody tr:last-child td {
@@ -407,45 +490,46 @@
             background: #f7fafc;
         }
 
-    /* BADGES */
     .badge-time {
         background: #e6f2ff;
         color: #0066cc;
         padding: 5px 10px;
-        border-radius: 7px;
-        font-weight: 600;
+        border-radius: 8px;
+        font-weight: 700;
         font-size: 13px;
         white-space: nowrap;
+        display: inline-block;
     }
 
     .badge-dias {
         background: #f0fff4;
         color: #276749;
         padding: 5px 10px;
-        border-radius: 7px;
+        border-radius: 8px;
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 700;
+        display: inline-block;
     }
 
     .badge-count {
         background: #fef3c7;
         color: #92400e;
         padding: 5px 10px;
-        border-radius: 7px;
+        border-radius: 8px;
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 700;
         text-decoration: none;
         display: inline-block;
     }
 
         .badge-count:hover {
             background: #fde68a;
+            color: #92400e;
         }
 
-    /* ICON BUTTONS */
     .btn-icon {
-        width: 34px;
-        height: 34px;
+        width: 36px;
+        height: 36px;
         border-radius: 8px;
         display: inline-flex;
         align-items: center;
@@ -463,7 +547,7 @@
 
         .btn-assign:hover {
             background: #9ae6b4;
-            transform: scale(1.1);
+            transform: scale(1.08);
         }
 
     .btn-edit {
@@ -472,7 +556,7 @@
 
         .btn-edit:hover {
             background: #90cdf4;
-            transform: scale(1.1);
+            transform: scale(1.08);
         }
 
     .btn-del {
@@ -481,28 +565,27 @@
 
         .btn-del:hover {
             background: #fc8181;
-            transform: scale(1.1);
+            transform: scale(1.08);
         }
 
-    /* CHIPS */
     .chips-row {
         display: flex;
         flex-wrap: wrap;
-        gap: 6px;
-        padding: 12px 16px 16px;
+        gap: 8px;
+        padding: 14px 16px 16px;
         background: #f9fafb;
     }
 
     .chip {
         background: #ebf4ff;
         color: #2c5282;
-        padding: 5px 10px;
+        padding: 6px 10px;
         border-radius: 20px;
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 700;
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: 6px;
     }
 
     .chip-btn {
@@ -519,7 +602,6 @@
             color: #9b2c2c;
         }
 
-    /* ALERTS */
     .alert-ok {
         background: #f0fff4;
         border-left: 4px solid #38a169;
@@ -527,6 +609,7 @@
         padding: 14px 18px;
         border-radius: 10px;
         margin-bottom: 20px;
+        font-weight: 700;
     }
 
     .alert-err {
@@ -536,6 +619,7 @@
         padding: 14px 18px;
         border-radius: 10px;
         margin-bottom: 20px;
+        font-weight: 700;
     }
 
     .alert-info {
@@ -546,21 +630,33 @@
         color: #2d3748;
         font-size: 14px;
         margin-top: 16px;
+        line-height: 1.5;
     }
 
-    /* EMPTY */
     .empty-state {
         text-align: center;
-        padding: 40px 20px;
-        color: #a0aec0;
+        padding: 45px 20px;
+        color: #718096;
     }
 
     .empty-icon {
-        font-size: 48px;
-        margin-bottom: 10px;
+        font-size: 50px;
+        margin-bottom: 12px;
+        opacity: 0.6;
     }
 
-    /* MODAL */
+    .empty-state h3 {
+        color: #4a5568;
+        margin-bottom: 8px;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .empty-state p {
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+
     .modal-overlay {
         display: none;
         position: fixed;
@@ -570,6 +666,7 @@
         align-items: center;
         justify-content: center;
         backdrop-filter: blur(3px);
+        padding: 20px;
     }
 
         .modal-overlay.open {
@@ -580,7 +677,7 @@
         background: white;
         border-radius: 16px;
         max-width: 540px;
-        width: 90%;
+        width: 100%;
         max-height: 88vh;
         display: flex;
         flex-direction: column;
@@ -612,12 +709,14 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 15px;
         flex-shrink: 0;
     }
 
         .modal-head h3 {
             margin: 0;
             font-size: 17px;
+            font-weight: 800;
         }
 
     .modal-close {
@@ -633,6 +732,7 @@
         align-items: center;
         justify-content: center;
         text-decoration: none;
+        flex-shrink: 0;
     }
 
         .modal-close:hover {
@@ -655,19 +755,30 @@
         border-top: 1px solid #f0f0f0;
     }
 
-    /* USER LIST */
+    .modal-error {
+        display: none;
+        background: #fff5f5;
+        color: #742a2a;
+        border-left: 4px solid #e53e3e;
+        padding: 12px 14px;
+        border-radius: 10px;
+        margin-bottom: 14px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
     .user-filter {
         position: relative;
         margin-bottom: 10px;
     }
 
         .user-filter input {
-            padding-left: 36px;
+            padding-left: 38px;
         }
 
     .user-filter-icon {
         position: absolute;
-        left: 12px;
+        left: 13px;
         top: 50%;
         transform: translateY(-50%);
         color: #a0aec0;
@@ -712,19 +823,21 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-weight: 700;
+        font-weight: 800;
         font-size: 13px;
         flex-shrink: 0;
     }
 
     .user-info {
         flex: 1;
+        min-width: 0;
     }
 
     .user-name {
-        font-weight: 600;
+        font-weight: 700;
         color: #2d3748;
         font-size: 14px;
+        word-break: break-word;
     }
 
     .user-sub {
@@ -744,10 +857,10 @@
         text-align: center;
         background: #ebf4ff;
         color: #2F6FED;
-        padding: 7px;
+        padding: 9px;
         border-radius: 8px;
         font-size: 13px;
-        font-weight: 600;
+        font-weight: 700;
         margin-bottom: 10px;
     }
 
@@ -766,91 +879,227 @@
     .fade-in {
         animation: fadeUp 0.4s ease both;
     }
+
+    @@media (max-width: 1100px) {
+        .main-layout {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+            border-right: none;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .content {
+            padding: 25px;
+        }
+    }
+
+    @@media (max-width: 650px) {
+        .content {
+            padding: 20px 14px;
+        }
+
+        .content-header h1 {
+            font-size: 24px;
+        }
+
+        .card-body-custom {
+            padding: 20px;
+        }
+
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .form-group {
+            min-width: 100%;
+        }
+
+        .btn-actions,
+        .modal-foot {
+            flex-direction: column;
+        }
+
+        .btn-primary-custom,
+        .btn-outline-custom {
+            width: 100%;
+        }
+
+        .stats-row {
+            grid-template-columns: 1fr;
+        }
+
+        .modal-box {
+            width: 95%;
+        }
+    }
 </style>
 
 <div class="main-layout">
-    <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="menu-item">
-            <a href="/Home/AdminHome" class="menu-link"><div class="icon">📊</div> Dashboard</a>
+            <a href="/Home/AdminHome" class="menu-link">
+                <div class="icon">📊</div>
+                Dashboard
+            </a>
         </div>
+
         <div class="menu-item">
-            <a href="/Admin/VerMarcas" class="menu-link"><div class="icon">⏰</div> Marcas de Asistencia</a>
+            <a href="/Admin/VerMarcas" class="menu-link">
+                <div class="icon">⏰</div>
+                Marcas de Asistencia
+            </a>
         </div>
+
         <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
             <div class="menu-expandable-header active">
-                <div class="menu-expandable-left"><div class="icon">⚙️</div><span>Configuración y Políticas</span></div>
+                <div class="menu-expandable-left">
+                    <div class="icon">⚙️</div>
+                    <span>Configuración y Políticas</span>
+                </div>
                 <div class="menu-arrow">▶</div>
             </div>
-            <div class="submenu show">
-                <div class="submenu-item"><a href="/Horarios/HorariosConfig" class="submenu-link active">⏰ Horarios</a></div>
 
-                <div class="submenu-item"><a href="/Feriados/FeriadosConfig" class="submenu-link">📅 Feriados</a></div>
-                <div class="submenu-item"><a href="/Bono/GestionBonos" class="submenu-link">🎁 Bonos</a></div>
-</div>
+            <div class="submenu show">
+                <div class="submenu-item">
+                    <a href="/Horarios/HorariosConfig" class="submenu-link active">
+                        ⏰ Horarios
+                    </a>
+                </div>
+
+                <div class="submenu-item">
+                    <a href="/Feriados/FeriadosConfig" class="submenu-link">
+                        📅 Feriados
+                    </a>
+                </div>
+
+                <div class="submenu-item">
+                    <a href="/Bono/GestionBonos" class="submenu-link">
+                        🎁 Bonos
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="menu-item"><a href="/Bono/AsignarBono" class="menu-link"><div class="icon">💵</div> Bonos</a></div>
-        <div class="menu-item"><a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link"><div class="icon">📝</div> Gestion de Empleados</a></div>
-        <div class="menu-item"><a href="/Admin/RankingPuntualidad" class="menu-link"><div class="icon">⏱️</div> Indicadores de Puntualidad</a></div>
-        <div class="menu-item"><a href="/Admin/Reportes" class="menu-link"><div class="icon">📄</div> Reportes</a></div>
+
+        <div class="menu-item">
+            <a href="/Bono/AsignarBono" class="menu-link">
+                <div class="icon">💵</div>
+                Asignación de Bonos
+            </a>
+        </div>
+
+        <div class="menu-item">
+            <a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link">
+                <div class="icon">📝</div>
+                Gestión de Empleados
+            </a>
+        </div>
+
+        <div class="menu-item">
+            <a href="/Admin/RankingPuntualidad" class="menu-link">
+                <div class="icon">⏱️</div>
+                Indicadores de Puntualidad
+            </a>
+        </div>
+
+        <div class="menu-item">
+            <a href="/Admin/Reportes" class="menu-link">
+                <div class="icon">📄</div>
+                Reportes
+            </a>
+        </div>
     </div>
 
     <div class="content">
         <div class="content-header fade-in">
             <h1>⏰ Configuración de Horarios</h1>
-            <p>Gestiona horarios y asigna empleados a cada turno</p>
+            <p>Gestione horarios laborales y asigne colaboradores a cada turno.</p>
         </div>
+
+        <div id="messageBox" class="message-box"></div>
 
         @if (TempData["Exito"] != null)
         {
             <div class="alert-ok fade-in">✅ @TempData["Exito"]</div>
         }
+
         @if (TempData["Error"] != null)
         {
             <div class="alert-err fade-in">❌ @TempData["Error"]</div>
         }
 
-        <!-- Stats -->
         <div class="stats-row fade-in">
             <div class="stat-mini">
                 <div class="stat-mini-value">@horarios.Count</div>
-                <div class="stat-mini-label">Horarios Configurados</div>
+                <div class="stat-mini-label">Horarios configurados</div>
             </div>
+
             <div class="stat-mini">
                 <div class="stat-mini-value">@totalAsignados</div>
-                <div class="stat-mini-label">Empleados Asignados</div>
+                <div class="stat-mini-label">Colaboradores asignados</div>
             </div>
+
             <div class="stat-mini">
                 <div class="stat-mini-value">@usuarios.Count</div>
-                <div class="stat-mini-label">Empleados Activos</div>
+                <div class="stat-mini-label">Colaboradores activos</div>
             </div>
         </div>
 
-        <!-- Crear Horario -->
         <div class="config-card fade-in">
             <div class="card-header-custom">
-                <h2>➕ Nuevo Horario</h2>
+                <h2>➕ Nuevo horario</h2>
                 <span class="badge-custom">Configuración</span>
             </div>
+
             <div class="card-body-custom">
-                <form method="post" action="/Horarios/CrearHorario">
+                <p class="helper-text">
+                    Cree un horario laboral indicando nombre, hora de entrada, hora de salida y días laborales.
+                </p>
+
+                <form method="post" action="/Horarios/CrearHorario" id="formCrearHorario" onsubmit="return validarFormularioHorario(this, 'crear')">
                     @Html.AntiForgeryToken()
+
                     <div class="form-group-full">
-                        <label class="form-label">📝 Nombre del Horario</label>
-                        <input type="text" name="nombreHorario" class="form-control" placeholder="Ej: Turno Mañana, Horario Estándar..." required>
+                        <label class="form-label" for="crearNombreHorario">📝 Nombre del horario</label>
+                        <input type="text"
+                               id="crearNombreHorario"
+                               name="nombreHorario"
+                               class="form-control"
+                               placeholder="Ejemplo: Turno mañana, Horario estándar"
+                               maxlength="100"
+                               required>
+                        <span class="field-error" id="crearNombreError"></span>
                     </div>
+
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">🟢 Hora de Entrada</label>
-                            <input type="time" name="horaEntrada" class="form-control" value="08:00" required>
+                            <label class="form-label" for="crearHoraEntrada">🟢 Hora de entrada</label>
+                            <input type="time"
+                                   id="crearHoraEntrada"
+                                   name="horaEntrada"
+                                   class="form-control"
+                                   value="08:00"
+                                   required>
+                            <span class="field-error" id="crearEntradaError"></span>
                         </div>
+
                         <div class="form-group">
-                            <label class="form-label">🔴 Hora de Salida</label>
-                            <input type="time" name="horaSalida" class="form-control" value="17:00" required>
+                            <label class="form-label" for="crearHoraSalida">🔴 Hora de salida</label>
+                            <input type="time"
+                                   id="crearHoraSalida"
+                                   name="horaSalida"
+                                   class="form-control"
+                                   value="17:00"
+                                   required>
+                            <span class="field-error" id="crearSalidaError"></span>
                         </div>
+
                         <div class="form-group">
-                            <label class="form-label">📅 Días Laborales</label>
-                            <select name="dias" class="form-select">
+                            <label class="form-label" for="crearDias">📅 Días laborales</label>
+                            <select id="crearDias" name="dias" class="form-select">
                                 <option value="Lunes a Viernes">Lunes a Viernes</option>
                                 <option value="Lunes a Sábado">Lunes a Sábado</option>
                                 <option value="Lunes a Domingo">Lunes a Domingo</option>
@@ -858,25 +1107,29 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="btn-actions">
-                        <button type="submit" class="btn-primary-custom">💾 Crear Horario</button>
+                        <button type="submit" class="btn-primary-custom">
+                            💾 Crear horario
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- Tabla -->
         <div class="config-card fade-in">
             <div class="card-header-custom">
-                <h2>📋 Horarios Configurados</h2>
-                <span class="badge-custom">@horarios.Count registros</span>
+                <h2>📋 Horarios configurados</h2>
+                <span class="badge-custom">@horarios.Count registro(s)</span>
             </div>
+
             <div class="card-body-custom" style="padding:0">
                 @if (!horarios.Any())
                 {
                     <div class="empty-state">
                         <div class="empty-icon">⏰</div>
-                        <p>No hay horarios configurados. Crea el primero arriba.</p>
+                        <h3>No hay horarios configurados</h3>
+                        <p>Cree el primer horario desde el formulario superior.</p>
                     </div>
                 }
                 else
@@ -890,51 +1143,90 @@
                                     <th>Salida</th>
                                     <th>Horas/día</th>
                                     <th>Días</th>
-                                    <th>Empleados</th>
+                                    <th>Colaboradores</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
+
                             <tbody>
                                 @foreach (var h in horarios)
                                 {
                                     var horas = (h.HoraSalida - h.HoraEntrada).TotalHours;
+
+                                    if (horas < 0)
+                                    {
+                                        horas += 24;
+                                    }
+
+                                    var nombreHorario = h.NombreHorario ?? "Horario sin nombre";
+
                                     <tr>
-                                        <td><strong>@h.NombreHorario</strong></td>
+                                        <td><strong>@nombreHorario</strong></td>
                                         <td><span class="badge-time">@h.HoraEntrada.ToString("hh:mm tt")</span></td>
                                         <td><span class="badge-time">@h.HoraSalida.ToString("hh:mm tt")</span></td>
                                         <td><span class="badge-time">@horas.ToString("F1")h</span></td>
                                         <td><span class="badge-dias">@(h.Dias ?? "—")</span></td>
                                         <td>
                                             <a href="/Horarios/HorariosConfig?asignarId=@h.IdHorario"
-                                               class="badge-count">👥 @h.UsuarioHorarios.Count</a>
+                                               class="badge-count">
+                                                👥 @h.UsuarioHorarios.Count
+                                            </a>
                                         </td>
                                         <td style="white-space:nowrap">
                                             <a href="/Horarios/HorariosConfig?editarId=@h.IdHorario"
-                                               class="btn-icon btn-edit" title="Editar">✏️</a>
+                                               class="btn-icon btn-edit"
+                                               title="Editar horario">
+                                                ✏️
+                                            </a>
+
                                             <a href="/Horarios/HorariosConfig?asignarId=@h.IdHorario"
-                                               class="btn-icon btn-assign" title="Asignar empleados">👥</a>
-                                            <form method="post" action="/Horarios/EliminarHorario" style="display:inline"
-                                                  onsubmit="return confirm('¿Eliminar el horario @h.NombreHorario?')">
+                                               class="btn-icon btn-assign"
+                                               title="Asignar colaboradores">
+                                                👥
+                                            </a>
+
+                                            <form method="post"
+                                                  action="/Horarios/EliminarHorario"
+                                                  class="form-eliminar-horario"
+                                                  data-nombre="@nombreHorario"
+                                                  style="display:inline">
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="idHorario" value="@h.IdHorario" />
-                                                <button type="submit" class="btn-icon btn-del" title="Eliminar">🗑️</button>
+                                                <button type="submit" class="btn-icon btn-del" title="Eliminar horario">
+                                                    🗑️
+                                                </button>
                                             </form>
                                         </td>
                                     </tr>
+
                                     @if (h.UsuarioHorarios.Any())
                                     {
                                         <tr style="background:#f9fafb">
-                                            <td colspan="8" style="padding:0">
+                                            <td colspan="7" style="padding:0">
                                                 <div class="chips-row">
                                                     @foreach (var uh in h.UsuarioHorarios)
                                                     {
+                                                        var nombreUsuario = ((uh.IdUsuarioNavigation?.Nombre ?? "") + " " + (uh.IdUsuarioNavigation?.Apellido ?? "")).Trim();
+
+                                                        if (string.IsNullOrWhiteSpace(nombreUsuario))
+                                                        {
+                                                            nombreUsuario = "Usuario no disponible";
+                                                        }
+
                                                         <span class="chip">
-                                                            👤 @uh.IdUsuarioNavigation?.Nombre @uh.IdUsuarioNavigation?.Apellido
-                                                            <form method="post" action="/Horarios/DesasignarUsuario" style="display:inline">
+                                                            👤 @nombreUsuario
+
+                                                            <form method="post"
+                                                                  action="/Horarios/DesasignarUsuario"
+                                                                  class="form-desasignar-usuario"
+                                                                  data-nombre="@nombreUsuario"
+                                                                  style="display:inline">
                                                                 @Html.AntiForgeryToken()
                                                                 <input type="hidden" name="idHorario" value="@h.IdHorario" />
                                                                 <input type="hidden" name="idUsuario" value="@uh.IdUsuario" />
-                                                                <button type="submit" class="chip-btn" title="Desasignar">✕</button>
+                                                                <button type="submit" class="chip-btn" title="Desasignar colaborador">
+                                                                    ✕
+                                                                </button>
                                                             </form>
                                                         </span>
                                                     }
@@ -952,47 +1244,73 @@
     </div>
 </div>
 
-
-<!-- MODAL EDITAR -->
-<div class="modal-overlay @(editarId.HasValue ? "open" : "")">
+<div class="modal-overlay @(editarId.HasValue ? "open" : "")" id="modalEditarHorario">
     <div class="modal-box">
         <div class="modal-head">
-            <h3>✏️ Editar Horario</h3>
+            <h3>✏️ Editar horario</h3>
             <a href="/Horarios/HorariosConfig" class="modal-close">✕</a>
         </div>
+
         @if (horarioEditando != null)
         {
-            <form method="post" action="/Horarios/EditarHorario">
+            <form method="post" action="/Horarios/EditarHorario" id="formEditarHorario" onsubmit="return validarFormularioHorario(this, 'editar')">
                 @Html.AntiForgeryToken()
+
                 <input type="hidden" name="idHorario" value="@horarioEditando.IdHorario" />
+
                 <div class="modal-body">
+                    <div class="modal-error" id="editarModalError"></div>
+
                     <div class="form-group-full">
-                        <label class="form-label">📝 Nombre del Horario</label>
-                        <input type="text" name="nombreHorario" class="form-control"
-                               value="@horarioEditando.NombreHorario" required>
+                        <label class="form-label" for="editarNombreHorario">📝 Nombre del horario</label>
+                        <input type="text"
+                               id="editarNombreHorario"
+                               name="nombreHorario"
+                               class="form-control"
+                               value="@horarioEditando.NombreHorario"
+                               maxlength="100"
+                               required>
+                        <span class="field-error" id="editarNombreError"></span>
                     </div>
+
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">🟢 Hora Entrada</label>
-                            <input type="time" name="horaEntrada" class="form-control"
-                                   value="@horarioEditando.HoraEntrada.ToString("HH:mm")" required>
+                            <label class="form-label" for="editarHoraEntrada">🟢 Hora de entrada</label>
+                            <input type="time"
+                                   id="editarHoraEntrada"
+                                   name="horaEntrada"
+                                   class="form-control"
+                                   value="@horarioEditando.HoraEntrada.ToString("HH:mm")"
+                                   required>
+                            <span class="field-error" id="editarEntradaError"></span>
                         </div>
+
                         <div class="form-group">
-                            <label class="form-label">🔴 Hora Salida</label>
-                            <input type="time" name="horaSalida" class="form-control"
-                                   value="@horarioEditando.HoraSalida.ToString("HH:mm")" required>
+                            <label class="form-label" for="editarHoraSalida">🔴 Hora de salida</label>
+                            <input type="time"
+                                   id="editarHoraSalida"
+                                   name="horaSalida"
+                                   class="form-control"
+                                   value="@horarioEditando.HoraSalida.ToString("HH:mm")"
+                                   required>
+                            <span class="field-error" id="editarSalidaError"></span>
                         </div>
                     </div>
+
                     <div class="form-group-full">
-                        <label class="form-label">📅 Días Laborales</label>
+                        <label class="form-label" for="editarDias">📅 Días laborales</label>
+
                         @{
-                            var diasVal = horarioEditando!.Dias;
-                            var opcionesDias = new[] { "Lunes a Viernes", "Lunes a Sabado", "Lunes a Domingo", "Personalizado" };
+                            var diasVal = horarioEditando.Dias ?? "";
+                            var opcionesDias = new[] { "Lunes a Viernes", "Lunes a Sábado", "Lunes a Domingo", "Personalizado" };
                         }
-                        <select name="dias" class="form-select">
+
+                        <select id="editarDias" name="dias" class="form-select">
                             @foreach (var op in opcionesDias)
                             {
-                                if (diasVal == op)
+                                var seleccionado = diasVal == op || (diasVal == "Lunes a Sabado" && op == "Lunes a Sábado");
+
+                                if (seleccionado)
                                 {
                                     <option value="@op" selected="selected">@op</option>
                                 }
@@ -1004,83 +1322,263 @@
                         </select>
                     </div>
                 </div>
+
                 <div class="modal-foot">
-                    <a href="/Horarios/HorariosConfig" class="btn-outline-custom">Cancelar</a>
-                    <button type="submit" class="btn-primary-custom">💾 Guardar Cambios</button>
+                    <a href="/Horarios/HorariosConfig" class="btn-outline-custom">
+                        Cancelar
+                    </a>
+
+                    <button type="submit" class="btn-primary-custom">
+                        💾 Guardar cambios
+                    </button>
                 </div>
             </form>
         }
     </div>
 </div>
 
-
-<!-- MODAL ASIGNAR -->
-<div class="modal-overlay @(asignarId.HasValue ? "open" : "")">
+<div class="modal-overlay @(asignarId.HasValue ? "open" : "")" id="modalAsignarHorario">
     <div class="modal-box modal-box-lg">
         <div class="modal-head">
-            <h3>👥 Asignar Empleados — @(horarioAsignando?.NombreHorario ?? "")</h3>
+            <h3>👥 Asignar colaboradores — @(horarioAsignando?.NombreHorario ?? "")</h3>
             <a href="/Horarios/HorariosConfig" class="modal-close">✕</a>
         </div>
+
         @if (horarioAsignando != null)
         {
             <form method="post" action="/Horarios/AsignarUsuarios">
                 @Html.AntiForgeryToken()
+
                 <input type="hidden" name="idHorario" value="@horarioAsignando.IdHorario" />
+
                 <div class="modal-body">
                     <div class="sel-count" id="selCount">
-                        @yaAsignados.Count empleado(s) actualmente asignados
+                        @yaAsignados.Count colaborador(es) actualmente asignado(s)
                     </div>
+
                     <div class="user-filter">
                         <span class="user-filter-icon">🔍</span>
-                        <input type="text" class="form-control" placeholder="Buscar empleado..."
-                               oninput="filtrar(this.value)">
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Buscar colaborador..."
+                               oninput="filtrarUsuarios(this.value)">
                     </div>
+
                     <div class="user-list">
                         @foreach (var u in usuarios)
                         {
-                            var iniciales = new string(new[] { u.Nombre[0], u.Apellido[0] });
+                            var nombre = (u.Nombre ?? "").Trim();
+                            var apellido = (u.Apellido ?? "").Trim();
+                            var nombreCompleto = (nombre + " " + apellido).Trim();
+
+                            if (string.IsNullOrWhiteSpace(nombreCompleto))
+                            {
+                                nombreCompleto = "Usuario sin nombre";
+                            }
+
+                            var inicialNombre = !string.IsNullOrWhiteSpace(nombre) ? nombre[0].ToString() : "U";
+                            var inicialApellido = !string.IsNullOrWhiteSpace(apellido) ? apellido[0].ToString() : "";
+                            var iniciales = (inicialNombre + inicialApellido).ToUpper();
+
                             var marcado = yaAsignados.Contains(u.IdUsuario);
+
                             <label class="user-row @(marcado ? "checked" : "")" for="chk-@u.IdUsuario">
                                 <div class="user-avatar">@iniciales</div>
+
                                 <div class="user-info">
-                                    <div class="user-name">@u.Nombre @u.Apellido</div>
+                                    <div class="user-name">@nombreCompleto</div>
+                                    <div class="user-sub">Colaborador activo</div>
                                 </div>
-                                <input type="checkbox" class="user-cb emp-cb"
+
+                                <input type="checkbox"
+                                       class="user-cb emp-cb"
                                        id="chk-@u.IdUsuario"
                                        name="idsUsuarios"
                                        value="@u.IdUsuario"
-                                       @(marcado ? "checked" : "")
+                                @(marcado ? "checked" : "")
                                        onchange="actualizarContador()" />
                             </label>
                         }
+
                         @if (!usuarios.Any())
                         {
-                            <div class="empty-state"><div class="empty-icon">👤</div><p>No hay empleados activos.</p></div>
+                            <div class="empty-state">
+                                <div class="empty-icon">👤</div>
+                                <h3>No hay colaboradores activos</h3>
+                                <p>No hay usuarios disponibles para asignar a este horario.</p>
+                            </div>
                         }
                     </div>
+
                     <div class="alert-info">
-                        ℹ️ Los cambios reemplazarán las asignaciones actuales del horario.
+                        ℹ️ Al guardar, las asignaciones seleccionadas reemplazarán las asignaciones actuales de este horario.
                     </div>
                 </div>
+
                 <div class="modal-foot">
-                    <a href="/Horarios/HorariosConfig" class="btn-outline-custom">Cancelar</a>
-                    <button type="submit" class="btn-primary-custom">💾 Guardar Asignaciones</button>
+                    <a href="/Horarios/HorariosConfig" class="btn-outline-custom">
+                        Cancelar
+                    </a>
+
+                    <button type="submit" class="btn-primary-custom">
+                        💾 Guardar asignaciones
+                    </button>
                 </div>
             </form>
         }
     </div>
 </div>
 
-
 <script>
-    function toggleSubmenu(el) {
-        el.classList.toggle('expanded');
-        el.querySelector('.submenu').classList.toggle('show');
-        el.querySelector('.menu-expandable-header').classList.toggle('active', el.classList.contains('expanded'));
+    function toggleSubmenu(element) {
+        const submenu = element.querySelector('.submenu');
+        const header = element.querySelector('.menu-expandable-header');
+
+        element.classList.toggle('expanded');
+        submenu.classList.toggle('show');
+
+        if (element.classList.contains('expanded')) {
+            header.classList.add('active');
+        } else {
+            header.classList.remove('active');
+        }
     }
 
-    function filtrar(q) {
-        q = q.toLowerCase();
+    function mostrarMensaje(mensaje, tipo) {
+        const box = document.getElementById('messageBox');
+
+        if (!box) {
+            return;
+        }
+
+        box.className = 'message-box';
+
+        if (tipo === 'success') {
+            box.classList.add('message-success');
+        } else if (tipo === 'error') {
+            box.classList.add('message-error');
+        } else {
+            box.classList.add('message-info');
+        }
+
+        box.textContent = mensaje;
+        box.style.display = 'block';
+
+        setTimeout(() => {
+            box.style.display = 'none';
+        }, 5000);
+    }
+
+    function limpiarErrorCampo(input, span) {
+        if (input) {
+            input.classList.remove('input-error');
+        }
+
+        if (span) {
+            span.textContent = '';
+            span.classList.remove('show');
+        }
+    }
+
+    function marcarErrorCampo(input, span, mensaje) {
+        if (input) {
+            input.classList.add('input-error');
+        }
+
+        if (span) {
+            span.textContent = mensaje;
+            span.classList.add('show');
+        }
+    }
+
+    function mostrarErrorModal(id, mensaje) {
+        const modalError = document.getElementById(id);
+
+        if (!modalError) {
+            return;
+        }
+
+        modalError.textContent = mensaje;
+        modalError.style.display = 'block';
+    }
+
+    function ocultarErrorModal(id) {
+        const modalError = document.getElementById(id);
+
+        if (!modalError) {
+            return;
+        }
+
+        modalError.textContent = '';
+        modalError.style.display = 'none';
+    }
+
+    function validarFormularioHorario(form, modo) {
+        const prefijo = modo === 'editar' ? 'editar' : 'crear';
+
+        const nombre = document.getElementById(`${prefijo}NombreHorario`);
+        const entrada = document.getElementById(`${prefijo}HoraEntrada`);
+        const salida = document.getElementById(`${prefijo}HoraSalida`);
+
+        const nombreError = document.getElementById(`${prefijo}NombreError`);
+        const entradaError = document.getElementById(`${prefijo}EntradaError`);
+        const salidaError = document.getElementById(`${prefijo}SalidaError`);
+
+        limpiarErrorCampo(nombre, nombreError);
+        limpiarErrorCampo(entrada, entradaError);
+        limpiarErrorCampo(salida, salidaError);
+
+        if (modo === 'editar') {
+            ocultarErrorModal('editarModalError');
+        }
+
+        let valido = true;
+        let primerMensaje = '';
+
+        if (!nombre.value.trim()) {
+            marcarErrorCampo(nombre, nombreError, 'El nombre del horario es obligatorio.');
+            primerMensaje = primerMensaje || 'El nombre del horario es obligatorio.';
+            valido = false;
+        } else if (nombre.value.trim().length > 100) {
+            marcarErrorCampo(nombre, nombreError, 'El nombre no puede superar los 100 caracteres.');
+            primerMensaje = primerMensaje || 'El nombre no puede superar los 100 caracteres.';
+            valido = false;
+        }
+
+        if (!entrada.value) {
+            marcarErrorCampo(entrada, entradaError, 'La hora de entrada es obligatoria.');
+            primerMensaje = primerMensaje || 'La hora de entrada es obligatoria.';
+            valido = false;
+        }
+
+        if (!salida.value) {
+            marcarErrorCampo(salida, salidaError, 'La hora de salida es obligatoria.');
+            primerMensaje = primerMensaje || 'La hora de salida es obligatoria.';
+            valido = false;
+        }
+
+        if (entrada.value && salida.value && entrada.value === salida.value) {
+            marcarErrorCampo(salida, salidaError, 'La hora de salida no puede ser igual a la hora de entrada.');
+            primerMensaje = primerMensaje || 'La hora de salida no puede ser igual a la hora de entrada.';
+            valido = false;
+        }
+
+        if (!valido) {
+            if (modo === 'editar') {
+                mostrarErrorModal('editarModalError', primerMensaje || 'Revise los datos del horario.');
+            } else {
+                mostrarMensaje(primerMensaje || 'Revise los datos del horario.', 'error');
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    function filtrarUsuarios(valor) {
+        const q = (valor || '').toLowerCase();
+
         document.querySelectorAll('.user-row').forEach(row => {
             const name = row.querySelector('.user-name')?.textContent.toLowerCase() || '';
             row.style.display = name.includes(q) ? 'flex' : 'none';
@@ -1089,14 +1587,48 @@
 
     function actualizarContador() {
         const checks = document.querySelectorAll('.emp-cb');
-        let n = 0;
+        let total = 0;
+
         checks.forEach(cb => {
-            cb.closest('.user-row').classList.toggle('checked', cb.checked);
-            if (cb.checked) n++;
+            const row = cb.closest('.user-row');
+
+            if (row) {
+                row.classList.toggle('checked', cb.checked);
+            }
+
+            if (cb.checked) {
+                total++;
+            }
         });
+
         const el = document.getElementById('selCount');
-        if (el) el.textContent = n === 1 ? '1 empleado seleccionado' : `${n} empleados seleccionados`;
+
+        if (el) {
+            el.textContent = total === 1
+                ? '1 colaborador seleccionado'
+                : `${total} colaboradores seleccionados`;
+        }
     }
+
+    document.querySelectorAll('.form-eliminar-horario').forEach(form => {
+        form.addEventListener('submit', function (event) {
+            const nombre = this.dataset.nombre || 'este horario';
+
+            if (!confirm(`¿Desea eliminar ${nombre}? Esta acción no se puede deshacer.`)) {
+                event.preventDefault();
+            }
+        });
+    });
+
+    document.querySelectorAll('.form-desasignar-usuario').forEach(form => {
+        form.addEventListener('submit', function (event) {
+            const nombre = this.dataset.nombre || 'este colaborador';
+
+            if (!confirm(`¿Desea desasignar a ${nombre} de este horario?`)) {
+                event.preventDefault();
+            }
+        });
+    });
 
     document.addEventListener('DOMContentLoaded', actualizarContador);
 </script>

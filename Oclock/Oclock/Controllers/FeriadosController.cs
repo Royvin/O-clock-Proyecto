@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Oclock.Data;
 using Oclock.Filters;
 using Oclock.Models;
+using System.Globalization;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 
@@ -29,159 +30,350 @@ namespace Oclock.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll(int? anio)
         {
-            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
-            var usuarioRol = HttpContext.Session.GetInt32("UsuarioRol");
-
-            if (!usuarioId.HasValue || !usuarioRol.HasValue)
+            try
             {
-                return Unauthorized(new { mensaje = "Debe iniciar sesión para consultar los feriados." });
-            }
+                var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+                var usuarioRol = HttpContext.Session.GetInt32("UsuarioRol");
 
-            if (usuarioRol != 1 && usuarioRol != 2)
-            {
-                return Unauthorized(new { mensaje = "No tiene permisos para consultar los feriados." });
-            }
-
-            int anioConsulta = anio ?? DateTime.Now.Year;
-
-            if (anioConsulta < 1900 || anioConsulta > 2200)
-            {
-                anioConsulta = DateTime.Now.Year;
-            }
-
-            await SincronizarFeriadosCostaRica(anioConsulta);
-
-            var feriados = await _context.Feriados
-                .Where(f => f.Fecha.Year == anioConsulta)
-                .OrderBy(f => f.Fecha)
-                .Select(f => new
+                if (!usuarioId.HasValue || !usuarioRol.HasValue)
                 {
-                    f.IdFeriado,
-                    f.Nombre,
-                    Fecha = f.Fecha.ToString("yyyy-MM-dd"),
-                    f.EsLaborable,
-                    f.Descripcion
-                })
-                .ToListAsync();
+                    return Unauthorized(new
+                    {
+                        mensaje = "Su sesión expiró. Inicie sesión nuevamente para consultar los feriados."
+                    });
+                }
 
-            return Json(feriados);
+                if (usuarioRol != 1 && usuarioRol != 2)
+                {
+                    return Unauthorized(new
+                    {
+                        mensaje = "No tiene permisos para consultar el calendario de feriados."
+                    });
+                }
+
+                int anioConsulta = ObtenerAnioValido(anio);
+
+                await SincronizarFeriadosCostaRica(anioConsulta);
+
+                var feriados = await _context.Feriados
+                    .AsNoTracking()
+                    .Where(f => f.Fecha.Year == anioConsulta)
+                    .OrderBy(f => f.Fecha)
+                    .Select(f => new
+                    {
+                        f.IdFeriado,
+                        f.Nombre,
+                        Fecha = f.Fecha.ToString("yyyy-MM-dd"),
+                        f.EsLaborable,
+                        Descripcion = string.IsNullOrWhiteSpace(f.Descripcion)
+                            ? "Sin descripción adicional."
+                            : f.Descripcion
+                    })
+                    .ToListAsync();
+
+                return Json(feriados);
+            }
+            catch
+            {
+                return StatusCode(500, new
+                {
+                    mensaje = "No se pudieron cargar los feriados en este momento. Intente nuevamente."
+                });
+            }
         }
 
         [AuthorizeRole(1)]
         [HttpPost]
         public async Task<IActionResult> Crear([FromBody] FeriadoDto dto)
         {
-            if (string.IsNullOrWhiteSpace(dto.Nombre) || string.IsNullOrWhiteSpace(dto.Fecha))
+            try
             {
-                return BadRequest(new { mensaje = "Nombre y fecha son requeridos." });
+                if (dto == null)
+                {
+                    return BadRequest(new
+                    {
+                        mensaje = "No se recibieron los datos del feriado."
+                    });
+                }
+
+                string nombre = LimpiarTexto(dto.Nombre);
+                string descripcion = LimpiarTexto(dto.Descripcion);
+
+                if (string.IsNullOrWhiteSpace(nombre))
+                {
+                    return BadRequest(new
+                    {
+                        mensaje = "Ingrese el nombre del feriado."
+                    });
+                }
+
+                if (nombre.Length > 100)
+                {
+                    return BadRequest(new
+                    {
+                        mensaje = "El nombre del feriado no puede superar los 100 caracteres."
+                    });
+                }
+
+                if (string.IsNullOrWhiteSpace(dto.Fecha))
+                {
+                    return BadRequest(new
+                    {
+                        mensaje = "Seleccione la fecha del feriado."
+                    });
+                }
+
+                if (!FechaValida(dto.Fecha, out DateOnly fecha))
+                {
+                    return BadRequest(new
+                    {
+                        mensaje = "La fecha ingresada no es válida."
+                    });
+                }
+
+                if (!FechaEnRangoPermitido(fecha))
+                {
+                    return BadRequest(new
+                    {
+                        mensaje = "La fecha del feriado está fuera del rango permitido."
+                    });
+                }
+
+                bool duplicado = await _context.Feriados
+                    .AnyAsync(f => f.Fecha == fecha);
+
+                if (duplicado)
+                {
+                    return Conflict(new
+                    {
+                        mensaje = "Ya existe un feriado registrado en esa fecha."
+                    });
+                }
+
+                var nuevo = new Feriado
+                {
+                    Nombre = nombre,
+                    Fecha = fecha,
+                    EsLaborable = dto.EsLaborable ?? false,
+                    Descripcion = string.IsNullOrWhiteSpace(descripcion)
+                        ? "Feriado registrado manualmente."
+                        : descripcion
+                };
+
+                _context.Feriados.Add(nuevo);
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    mensaje = "Feriado creado correctamente.",
+                    id = nuevo.IdFeriado
+                });
             }
-
-            if (!DateOnly.TryParse(dto.Fecha, out DateOnly fecha))
+            catch
             {
-                return BadRequest(new { mensaje = "La fecha ingresada no es válida." });
+                return StatusCode(500, new
+                {
+                    mensaje = "No se pudo crear el feriado. Intente nuevamente."
+                });
             }
-
-            bool duplicado = await _context.Feriados.AnyAsync(f => f.Fecha == fecha);
-
-            if (duplicado)
-            {
-                return Conflict(new { mensaje = "Ya existe un feriado registrado en esa fecha." });
-            }
-
-            var nuevo = new Feriado
-            {
-                Nombre = dto.Nombre.Trim(),
-                Fecha = fecha,
-                EsLaborable = dto.EsLaborable ?? false,
-                Descripcion = dto.Descripcion
-            };
-
-            _context.Feriados.Add(nuevo);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { mensaje = "Feriado creado exitosamente.", id = nuevo.IdFeriado });
         }
 
         [AuthorizeRole(1)]
         [HttpGet]
         public async Task<IActionResult> ObtenerPorId(int id)
         {
-            var feriado = await _context.Feriados.FindAsync(id);
-
-            if (feriado == null)
+            try
             {
-                return NotFound(new { mensaje = "No se encontró el feriado solicitado." });
+                if (id <= 0)
+                {
+                    return BadRequest(new
+                    {
+                        mensaje = "El feriado seleccionado no es válido."
+                    });
+                }
+
+                var feriado = await _context.Feriados
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(f => f.IdFeriado == id);
+
+                if (feriado == null)
+                {
+                    return NotFound(new
+                    {
+                        mensaje = "No se encontró el feriado solicitado."
+                    });
+                }
+
+                return Json(new
+                {
+                    feriado.IdFeriado,
+                    feriado.Nombre,
+                    Fecha = feriado.Fecha.ToString("yyyy-MM-dd"),
+                    feriado.EsLaborable,
+                    Descripcion = string.IsNullOrWhiteSpace(feriado.Descripcion)
+                        ? ""
+                        : feriado.Descripcion
+                });
             }
-
-            return Json(new
+            catch
             {
-                feriado.IdFeriado,
-                feriado.Nombre,
-                Fecha = feriado.Fecha.ToString("yyyy-MM-dd"),
-                feriado.EsLaborable,
-                feriado.Descripcion
-            });
+                return StatusCode(500, new
+                {
+                    mensaje = "No se pudo consultar el feriado. Intente nuevamente."
+                });
+            }
         }
 
         [AuthorizeRole(1)]
         [HttpPut]
         public async Task<IActionResult> Editar([FromBody] FeriadoDto dto)
         {
-            if (!dto.IdFeriado.HasValue)
+            try
             {
-                return BadRequest(new { mensaje = "ID requerido." });
-            }
+                if (dto == null)
+                {
+                    return BadRequest(new
+                    {
+                        mensaje = "No se recibieron los datos del feriado."
+                    });
+                }
 
-            if (string.IsNullOrWhiteSpace(dto.Nombre) || string.IsNullOrWhiteSpace(dto.Fecha))
+                if (!dto.IdFeriado.HasValue || dto.IdFeriado.Value <= 0)
+                {
+                    return BadRequest(new
+                    {
+                        mensaje = "Seleccione un feriado válido para editar."
+                    });
+                }
+
+                string nombre = LimpiarTexto(dto.Nombre);
+                string descripcion = LimpiarTexto(dto.Descripcion);
+
+                if (string.IsNullOrWhiteSpace(nombre))
+                {
+                    return BadRequest(new
+                    {
+                        mensaje = "Ingrese el nombre del feriado."
+                    });
+                }
+
+                if (nombre.Length > 100)
+                {
+                    return BadRequest(new
+                    {
+                        mensaje = "El nombre del feriado no puede superar los 100 caracteres."
+                    });
+                }
+
+                if (string.IsNullOrWhiteSpace(dto.Fecha))
+                {
+                    return BadRequest(new
+                    {
+                        mensaje = "Seleccione la fecha del feriado."
+                    });
+                }
+
+                if (!FechaValida(dto.Fecha, out DateOnly fecha))
+                {
+                    return BadRequest(new
+                    {
+                        mensaje = "La fecha ingresada no es válida."
+                    });
+                }
+
+                if (!FechaEnRangoPermitido(fecha))
+                {
+                    return BadRequest(new
+                    {
+                        mensaje = "La fecha del feriado está fuera del rango permitido."
+                    });
+                }
+
+                bool duplicado = await _context.Feriados
+                    .AnyAsync(f => f.Fecha == fecha && f.IdFeriado != dto.IdFeriado.Value);
+
+                if (duplicado)
+                {
+                    return Conflict(new
+                    {
+                        mensaje = "Ya existe otro feriado registrado en esa fecha."
+                    });
+                }
+
+                var feriado = await _context.Feriados
+                    .FirstOrDefaultAsync(f => f.IdFeriado == dto.IdFeriado.Value);
+
+                if (feriado == null)
+                {
+                    return NotFound(new
+                    {
+                        mensaje = "No se encontró el feriado solicitado."
+                    });
+                }
+
+                feriado.Nombre = nombre;
+                feriado.Fecha = fecha;
+                feriado.EsLaborable = dto.EsLaborable ?? false;
+                feriado.Descripcion = string.IsNullOrWhiteSpace(descripcion)
+                    ? "Sin descripción adicional."
+                    : descripcion;
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    mensaje = "Feriado actualizado correctamente."
+                });
+            }
+            catch
             {
-                return BadRequest(new { mensaje = "Nombre y fecha son requeridos." });
+                return StatusCode(500, new
+                {
+                    mensaje = "No se pudo actualizar el feriado. Intente nuevamente."
+                });
             }
-
-            if (!DateOnly.TryParse(dto.Fecha, out DateOnly fecha))
-            {
-                return BadRequest(new { mensaje = "La fecha ingresada no es válida." });
-            }
-
-            bool duplicado = await _context.Feriados
-                .AnyAsync(f => f.Fecha == fecha && f.IdFeriado != dto.IdFeriado.Value);
-
-            if (duplicado)
-            {
-                return Conflict(new { mensaje = "Ya existe otro feriado registrado en esa fecha." });
-            }
-
-            var feriado = await _context.Feriados.FindAsync(dto.IdFeriado.Value);
-
-            if (feriado == null)
-            {
-                return NotFound(new { mensaje = "No se encontró el feriado solicitado." });
-            }
-
-            feriado.Nombre = dto.Nombre.Trim();
-            feriado.Fecha = fecha;
-            feriado.EsLaborable = dto.EsLaborable ?? false;
-            feriado.Descripcion = dto.Descripcion;
-
-            await _context.SaveChangesAsync();
-
-            return Ok(new { mensaje = "Feriado actualizado correctamente." });
         }
 
         [AuthorizeRole(1)]
         [HttpDelete]
         public async Task<IActionResult> Eliminar(int id)
         {
-            var feriado = await _context.Feriados.FindAsync(id);
-
-            if (feriado == null)
+            try
             {
-                return NotFound(new { mensaje = "No se encontró el feriado solicitado." });
+                if (id <= 0)
+                {
+                    return BadRequest(new
+                    {
+                        mensaje = "Seleccione un feriado válido para eliminar."
+                    });
+                }
+
+                var feriado = await _context.Feriados
+                    .FirstOrDefaultAsync(f => f.IdFeriado == id);
+
+                if (feriado == null)
+                {
+                    return NotFound(new
+                    {
+                        mensaje = "No se encontró el feriado solicitado."
+                    });
+                }
+
+                _context.Feriados.Remove(feriado);
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    mensaje = "Feriado eliminado correctamente."
+                });
             }
-
-            _context.Feriados.Remove(feriado);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { mensaje = "Feriado eliminado correctamente." });
+            catch
+            {
+                return StatusCode(500, new
+                {
+                    mensaje = "No se pudo eliminar el feriado. Intente nuevamente."
+                });
+            }
         }
 
         private async Task SincronizarFeriadosCostaRica(int year)
@@ -207,12 +399,13 @@ namespace Oclock.Controllers
                         continue;
                     }
 
-                    if (!DateOnly.TryParse(item.Date, out DateOnly fecha))
+                    if (!FechaValida(item.Date, out DateOnly fecha))
                     {
                         continue;
                     }
 
-                    bool existe = await _context.Feriados.AnyAsync(f => f.Fecha == fecha);
+                    bool existe = await _context.Feriados
+                        .AnyAsync(f => f.Fecha == fecha);
 
                     if (existe)
                     {
@@ -225,10 +418,10 @@ namespace Oclock.Controllers
 
                     var nuevo = new Feriado
                     {
-                        Nombre = nombre.Trim(),
+                        Nombre = LimpiarTexto(nombre),
                         Fecha = fecha,
                         EsLaborable = false,
-                        Descripcion = "Feriado nacional de Costa Rica cargado automáticamente desde API."
+                        Descripcion = "Feriado nacional de Costa Rica."
                     };
 
                     _context.Feriados.Add(nuevo);
@@ -238,6 +431,69 @@ namespace Oclock.Controllers
             }
             catch
             {
+                // No se muestra error técnico al usuario.
+                // Si la sincronización externa falla, el sistema sigue mostrando los feriados guardados localmente.
+            }
+        }
+
+        private static int ObtenerAnioValido(int? anio)
+        {
+            int anioActual = AhoraCostaRica().Year;
+            int anioConsulta = anio ?? anioActual;
+
+            if (anioConsulta < 1900 || anioConsulta > 2200)
+            {
+                return anioActual;
+            }
+
+            return anioConsulta;
+        }
+
+        private static bool FechaValida(string fechaTexto, out DateOnly fecha)
+        {
+            fecha = default;
+
+            if (string.IsNullOrWhiteSpace(fechaTexto))
+            {
+                return false;
+            }
+
+            return DateOnly.TryParseExact(
+                fechaTexto.Trim(),
+                "yyyy-MM-dd",
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out fecha);
+        }
+
+        private static bool FechaEnRangoPermitido(DateOnly fecha)
+        {
+            var fechaMinima = new DateOnly(1900, 1, 1);
+            var fechaMaxima = new DateOnly(2200, 12, 31);
+
+            return fecha >= fechaMinima && fecha <= fechaMaxima;
+        }
+
+        private static string LimpiarTexto(string? texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto))
+            {
+                return "";
+            }
+
+            return texto.Trim();
+        }
+
+        private static DateTime AhoraCostaRica()
+        {
+            try
+            {
+                var tz = TimeZoneInfo.FindSystemTimeZoneById("America/Costa_Rica");
+                return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tz);
+            }
+            catch
+            {
+                return DateTime.Now;
             }
         }
     }

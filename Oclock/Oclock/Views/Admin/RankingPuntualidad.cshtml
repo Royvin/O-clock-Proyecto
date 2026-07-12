@@ -15,7 +15,6 @@
         min-height: 600px;
     }
 
-    /* SIDEBAR */
     .sidebar {
         width: 280px;
         background: #ffffff;
@@ -46,15 +45,15 @@
     }
 
         .menu-link:hover {
-            background: #667eea;
+            background: #2F6FED;
             color: white;
             transform: translateX(5px);
         }
 
         .menu-link.active {
-            background: #667eea;
+            background: #2F6FED;
             color: white;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 12px rgba(47,111,237,0.3);
         }
 
             .menu-link.active::before {
@@ -78,7 +77,6 @@
         font-size: 18px;
     }
 
-    /* Menu Expandible */
     .menu-expandable {
         cursor: pointer;
     }
@@ -95,13 +93,13 @@
     }
 
         .menu-expandable-header:hover {
-            background: #f0f0f0;
-            color: #667eea;
+            background: #EEF4FF;
+            color: #2F6FED;
         }
 
         .menu-expandable-header.active {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
+            background: rgba(47,111,237,0.10);
+            color: #2F6FED;
             font-weight: 600;
         }
 
@@ -167,26 +165,27 @@
 
         .submenu-link:hover {
             background: #f7fafc;
-            color: #667eea;
+            color: #2F6FED;
             transform: translateX(3px);
         }
 
             .submenu-link:hover::before {
-                background: #667eea;
+                background: #2F6FED;
                 transform: translateY(-50%) scale(1.3);
             }
 
         .submenu-link.active {
-            background: rgba(102, 126, 234, 0.15);
-            color: #667eea;
+            background: rgba(47,111,237,0.12);
+            color: #2F6FED;
             font-weight: 600;
         }
 
             .submenu-link.active::before {
-                background: #667eea;
+                background: #2F6FED;
                 width: 8px;
                 height: 8px;
             }
+
     .content {
         flex: 1;
         padding: 40px;
@@ -206,57 +205,84 @@
             color: #2d3748;
             font-size: 28px;
             margin-bottom: 8px;
+            font-weight: 800;
         }
 
         .content-header p {
             color: #718096;
             font-size: 14px;
+            margin-bottom: 0;
+            line-height: 1.5;
         }
 
-    /* Period selector */
+    .message-box {
+        display: none;
+        padding: 14px 16px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    .message-error {
+        background: #fff5f5;
+        color: #742a2a;
+        border-left: 4px solid #e53e3e;
+    }
+
+    .message-info {
+        background: #EEF4FF;
+        color: #1e3a8a;
+        border-left: 4px solid #2F6FED;
+    }
+
     .period-selector {
         display: flex;
         align-items: center;
         gap: 10px;
         background: white;
-        padding: 10px 16px;
-        border-radius: 10px;
+        padding: 12px 16px;
+        border-radius: 12px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        flex-wrap: wrap;
     }
 
         .period-selector label {
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 700;
             color: #4a5568;
         }
 
         .period-selector select {
-            padding: 8px 12px;
+            padding: 10px 12px;
             border: 2px solid #e2e8f0;
             border-radius: 8px;
             font-size: 13px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             cursor: pointer;
             outline: none;
-            transition: border-color 0.2s;
+            transition: all 0.2s;
+            color: #2d3748;
+            background: white;
         }
 
             .period-selector select:focus {
                 border-color: #2F6FED;
+                box-shadow: 0 0 0 3px rgba(47,111,237,0.10);
             }
 
-    /* Stats */
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
         gap: 15px;
         margin-bottom: 25px;
     }
 
     .stat-card {
         background: white;
-        padding: 18px;
-        border-radius: 12px;
+        padding: 20px;
+        border-radius: 14px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         transition: transform 0.3s;
         border-left: 4px solid #2F6FED;
@@ -279,30 +305,30 @@
         }
 
     .stat-icon {
-        font-size: 22px;
+        font-size: 24px;
         margin-bottom: 8px;
     }
 
     .stat-value {
         font-size: 26px;
-        font-weight: bold;
+        font-weight: 800;
         color: #2d3748;
         margin-bottom: 4px;
+        word-break: break-word;
     }
 
     .stat-label {
         color: #718096;
         font-size: 11px;
         text-transform: uppercase;
-        font-weight: 600;
+        font-weight: 700;
     }
 
-    /* Table section */
     .table-section {
         background: white;
-        padding: 24px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        padding: 28px;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
 
     .section-header {
@@ -310,41 +336,57 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
-        padding-bottom: 12px;
+        padding-bottom: 15px;
         border-bottom: 2px solid #f0f0f0;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 15px;
     }
 
         .section-header h2 {
             color: #2d3748;
-            font-size: 16px;
+            font-size: 20px;
+            font-weight: 800;
             display: flex;
             align-items: center;
             gap: 8px;
+            margin: 0;
         }
 
-    /* Search */
+    .helper-text {
+        color: #718096;
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
     .search-box {
-        padding: 8px 14px;
+        padding: 11px 14px;
         border: 2px solid #e2e8f0;
-        border-radius: 8px;
+        border-radius: 10px;
         font-size: 13px;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         outline: none;
-        transition: border-color 0.2s;
-        width: 220px;
+        transition: all 0.2s;
+        width: 260px;
+        color: #2d3748;
     }
 
         .search-box:focus {
             border-color: #2F6FED;
+            box-shadow: 0 0 0 3px rgba(47,111,237,0.10);
         }
 
-    /* Table */
+    .table-wrapper {
+        overflow-x: auto;
+        border-radius: 12px;
+        border: 1px solid #edf2f7;
+    }
+
     .ranking-table {
         width: 100%;
         border-collapse: collapse;
         font-size: 13px;
+        min-width: 900px;
     }
 
         .ranking-table thead tr {
@@ -352,9 +394,9 @@
         }
 
         .ranking-table th {
-            padding: 12px 14px;
+            padding: 14px 16px;
             text-align: left;
-            font-weight: 700;
+            font-weight: 800;
             color: #4a5568;
             font-size: 12px;
             text-transform: uppercase;
@@ -371,7 +413,7 @@
 
             .ranking-table th .sort-icon {
                 margin-left: 4px;
-                opacity: 0.4;
+                opacity: 0.5;
                 font-size: 10px;
             }
 
@@ -394,7 +436,7 @@
             }
 
         .ranking-table td {
-            padding: 13px 14px;
+            padding: 14px 16px;
             color: #2d3748;
             vertical-align: middle;
         }
@@ -406,12 +448,12 @@
     }
 
     .avatar {
-        width: 34px;
-        height: 34px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
         background: #EBF2FF;
         color: #2F6FED;
-        font-weight: 700;
+        font-weight: 800;
         font-size: 12px;
         display: flex;
         align-items: center;
@@ -420,16 +462,15 @@
     }
 
     .empleado-name {
-        font-weight: 600;
+        font-weight: 700;
         color: #2d3748;
     }
 
-    /* Progress bar */
     .progress-wrap {
         display: flex;
         align-items: center;
         gap: 10px;
-        min-width: 160px;
+        min-width: 170px;
     }
 
     .progress-bar-bg {
@@ -447,19 +488,19 @@
     }
 
     .progress-label {
-        font-weight: 700;
+        font-weight: 800;
         font-size: 13px;
-        min-width: 42px;
+        min-width: 45px;
         text-align: right;
     }
 
-    /* Badges */
     .badge {
         display: inline-block;
-        padding: 4px 10px;
+        padding: 5px 11px;
         border-radius: 15px;
         font-size: 11px;
-        font-weight: 600;
+        font-weight: 700;
+        white-space: nowrap;
     }
 
     .badge-success {
@@ -482,28 +523,26 @@
         color: #2c5282;
     }
 
-    /* hora promedio */
     .hora-chip {
         display: inline-flex;
         align-items: center;
         gap: 4px;
         background: #f1f5f9;
-        padding: 4px 10px;
+        padding: 5px 11px;
         border-radius: 20px;
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 700;
         color: #4a5568;
     }
 
-    /* Empty / loading */
     .empty-state {
         text-align: center;
-        padding: 50px 20px;
+        padding: 55px 20px;
         color: #718096;
     }
 
     .empty-state-icon {
-        font-size: 48px;
+        font-size: 54px;
         margin-bottom: 15px;
         opacity: 0.5;
     }
@@ -511,21 +550,68 @@
     .empty-state h3 {
         color: #4a5568;
         margin-bottom: 8px;
-        font-size: 16px;
+        font-size: 18px;
+        font-weight: 800;
     }
 
     .empty-state p {
         font-size: 13px;
+        margin-bottom: 0;
+        line-height: 1.5;
     }
 
-    /* Responsive overflow */
-    .table-wrapper {
-        overflow-x: auto;
+    @@media (max-width: 1100px) {
+        .main-layout {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+            border-right: none;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .content {
+            padding: 25px;
+        }
+    }
+
+    @@media (max-width: 650px) {
+        .content {
+            padding: 20px 14px;
+        }
+
+        .content-header h1 {
+            font-size: 24px;
+        }
+
+        .period-selector {
+            width: 100%;
+        }
+
+            .period-selector select {
+                width: 100%;
+            }
+
+        .table-section {
+            padding: 22px;
+        }
+
+        .section-header {
+            align-items: stretch;
+        }
+
+        .search-box {
+            width: 100%;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
     }
 </style>
 
 <div class="main-layout">
-    <!-- Sidebar -->
     <div class="sidebar">
         <div class="menu-item">
             <a href="/Home/AdminHome" class="menu-link">
@@ -549,66 +635,92 @@
                 </div>
                 <div class="menu-arrow">▶</div>
             </div>
-            <div class="submenu show">
-                <div class="submenu-item"><a href="/Horarios/HorariosConfig" class="submenu-link">⏰ Horarios</a></div>
 
-                <div class="submenu-item"><a href="/Feriados/FeriadosConfig" class="submenu-link">📅 Feriados</a></div>
-                <div class="submenu-item"><a href="/Bono/GestionBonos" class="submenu-link">🎁 Bonos</a></div>
+            <div class="submenu show">
+                <div class="submenu-item">
+                    <a href="/Horarios/HorariosConfig" class="submenu-link">
+                        ⏰ Horarios
+                    </a>
+                </div>
+
+                <div class="submenu-item">
+                    <a href="/Feriados/FeriadosConfig" class="submenu-link">
+                        📅 Feriados
+                    </a>
+                </div>
+
+                <div class="submenu-item">
+                    <a href="/Bono/GestionBonos" class="submenu-link">
+                        🎁 Bonos
+                    </a>
+                </div>
             </div>
         </div>
 
         <div class="menu-item">
-            <a href="/Bono/AsignarBono" class="menu-link"><div class="icon">💵 </div>Bonos</a>
+            <a href="/Bono/AsignarBono" class="menu-link">
+                <div class="icon">💵</div>
+                Asignación de Bonos
+            </a>
         </div>
 
         <div class="menu-item">
             <a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link">
                 <div class="icon">📝</div>
-                Gestion de Empleados
+                Gestión de Empleados
             </a>
         </div>
 
         <div class="menu-item">
-            <a href="/Admin/RankingPuntualidad" class="menu-link active"><div class="icon">⏱️</div>Indicadores de Puntualidad</a>
+            <a href="/Admin/RankingPuntualidad" class="menu-link active">
+                <div class="icon">⏱️</div>
+                Indicadores de Puntualidad
+            </a>
         </div>
 
         <div class="menu-item">
-            <a href="/Admin/Reportes" class="menu-link"><div class="icon">📄</div>Reportes</a>
+            <a href="/Admin/Reportes" class="menu-link">
+                <div class="icon">📄</div>
+                Reportes
+            </a>
         </div>
     </div>
 
-    <!-- Content -->
     <div class="content">
         <div class="content-header">
             <div>
                 <h1>🏅 Ranking de Puntualidad</h1>
-                <p>Comparativa de asistencia y puntualidad de los colaboradores</p>
+                <p>Compare asistencia, tardanzas y porcentaje de puntualidad de los colaboradores.</p>
             </div>
+
             <div class="period-selector">
-                <label>Período:</label>
+                <label for="periodoSelect">Período</label>
                 <select id="periodoSelect" onchange="cargarRanking()">
-                    <!-- Se llena con JS -->
                 </select>
             </div>
         </div>
 
-        <!-- Stats -->
+        <div id="messageBox" class="message-box"></div>
+
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon">👥</div>
                 <div class="stat-value" id="statEmpleados">—</div>
                 <div class="stat-label">Colaboradores</div>
             </div>
+
             <div class="stat-card green">
                 <div class="stat-icon">✅</div>
                 <div class="stat-value" id="statPromedio">—</div>
                 <div class="stat-label">Puntualidad promedio</div>
             </div>
+
             <div class="stat-card green">
                 <div class="stat-icon">🥇</div>
                 <div class="stat-value" id="statMejor">—</div>
                 <div class="stat-label">Mejor colaborador</div>
             </div>
+
             <div class="stat-card red">
                 <div class="stat-icon">⚠️</div>
                 <div class="stat-value" id="statTardanzas">—</div>
@@ -616,34 +728,42 @@
             </div>
         </div>
 
-        <!-- Tabla -->
         <div class="table-section">
             <div class="section-header">
-                <h2>📋 Detalle por colaborador</h2>
+                <div>
+                    <h2>📋 Detalle por colaborador</h2>
+                    <p class="helper-text" style="margin-bottom:0;">
+                        El ranking se calcula con base en las marcas de entrada y los horarios asignados.
+                    </p>
+                </div>
+
                 <input type="text"
                        class="search-box"
                        id="searchBox"
                        placeholder="🔍 Buscar colaborador..."
                        oninput="filtrarTabla()" />
             </div>
+
             <div class="table-wrapper">
                 <table class="ranking-table" id="rankingTable">
                     <thead>
                         <tr>
-                            <th onclick="sortBy('nombre')">Colaborador <span class="sort-icon">⇅</span></th>
-                            <th onclick="sortBy('diasTrabajados')">Días trabajados <span class="sort-icon">⇅</span></th>
-                            <th onclick="sortBy('diasPuntuales')">Días puntuales <span class="sort-icon">⇅</span></th>
-                            <th onclick="sortBy('tardanzas')">Tardanzas <span class="sort-icon">⇅</span></th>
-                            <th onclick="sortBy('horaPromedio')">Hora prom. entrada <span class="sort-icon">⇅</span></th>
-                            <th onclick="sortBy('puntualidad')">% Puntualidad <span class="sort-icon">⇅</span></th>
+                            <th onclick="sortBy('nombre')" data-col="nombre">Colaborador <span class="sort-icon">⇅</span></th>
+                            <th onclick="sortBy('diasTrabajados')" data-col="diasTrabajados">Días trabajados <span class="sort-icon">⇅</span></th>
+                            <th onclick="sortBy('diasPuntuales')" data-col="diasPuntuales">Días puntuales <span class="sort-icon">⇅</span></th>
+                            <th onclick="sortBy('tardanzas')" data-col="tardanzas">Tardanzas <span class="sort-icon">⇅</span></th>
+                            <th onclick="sortBy('horaPromedioEntrada')" data-col="horaPromedioEntrada">Hora prom. entrada <span class="sort-icon">⇅</span></th>
+                            <th onclick="sortBy('puntualidad')" data-col="puntualidad">% Puntualidad <span class="sort-icon">⇅</span></th>
                         </tr>
                     </thead>
+
                     <tbody id="rankingBody">
                         <tr>
                             <td colspan="6">
                                 <div class="empty-state">
                                     <div class="empty-state-icon">⏳</div>
-                                    <h3>Cargando datos...</h3>
+                                    <h3>Cargando datos</h3>
+                                    <p>Estamos consultando la información de puntualidad.</p>
                                 </div>
                             </td>
                         </tr>
@@ -656,189 +776,418 @@
 
 <script>
     let todosLosDatos = [];
-    let sortColumn    = 'puntualidad';
-    let sortAsc       = false;
+    let sortColumn = 'puntualidad';
+    let sortAsc = false;
 
-    // ── Generar opciones de quarters ────────────────────────────────
+    document.addEventListener('DOMContentLoaded', function () {
+        generarQuarters();
+        cargarRanking();
+    });
+
+    function toggleSubmenu(element) {
+        const submenu = element.querySelector('.submenu');
+        const header = element.querySelector('.menu-expandable-header');
+
+        element.classList.toggle('expanded');
+        submenu.classList.toggle('show');
+
+        if (element.classList.contains('expanded')) {
+            header.classList.add('active');
+        } else {
+            header.classList.remove('active');
+        }
+    }
+
     function generarQuarters() {
-        const sel  = document.getElementById('periodoSelect');
-        const hoy  = new Date();
-        const anio = hoy.getFullYear();
+        const sel = document.getElementById('periodoSelect');
+        const hoy = new Date();
+        const anioActual = hoy.getFullYear();
+        const quarterActual = Math.floor(hoy.getMonth() / 3);
         const quarters = [];
 
-        // Últimos 6 quarters (incluyendo el actual)
-        for (let i = 0; i < 6; i++) {
-            let q = Math.floor((hoy.getMonth()) / 3) - i;
-            let y = anio;
+        sel.innerHTML = '';
 
-            while (q < 0) { q += 4; y--; }
+        for (let i = 0; i < 6; i++) {
+            let q = quarterActual - i;
+            let y = anioActual;
+
+            while (q < 0) {
+                q += 4;
+                y--;
+            }
 
             const inicio = new Date(y, q * 3, 1);
-            const fin    = new Date(y, q * 3 + 3, 0);
+            const fin = new Date(y, q * 3 + 3, 0);
 
-            const key    = `${inicio.toISOString().slice(0,10)}_${fin.toISOString().slice(0,10)}`;
-            const label  = `Q${q + 1} ${y} (${fmtMes(inicio)} - ${fmtMes(fin)})`;
+            const key = `${formatDateInput(inicio)}_${formatDateInput(fin)}`;
+            const label = `Q${q + 1} ${y} (${fmtMes(inicio)} - ${fmtMes(fin)})`;
 
             quarters.push({ key, label });
         }
 
-        quarters.forEach((qt, idx) => {
-            const opt       = document.createElement('option');
-            opt.value       = qt.key;
-            opt.textContent = qt.label;
-            if (idx === 0) opt.selected = true;
-            sel.appendChild(opt);
+        quarters.forEach((qt, index) => {
+            const option = document.createElement('option');
+            option.value = qt.key;
+            option.textContent = qt.label;
+
+            if (index === 0) {
+                option.selected = true;
+            }
+
+            sel.appendChild(option);
         });
     }
 
-    function fmtMes(d) {
-        return d.toLocaleDateString('es-CR', { month: 'short', year: '2-digit' });
+    function formatDateInput(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
     }
 
-    // ── Cargar ranking desde API ────────────────────────────────────
-    async function cargarRanking() {
-        const val    = document.getElementById('periodoSelect').value;
-        const [desde, hasta] = val.split('_');
+    function fmtMes(date) {
+        return date.toLocaleDateString('es-CR', {
+            month: 'short',
+            year: '2-digit'
+        });
+    }
 
-        document.getElementById('rankingBody').innerHTML = `
-            <tr><td colspan="6">
-                <div class="empty-state">
-                    <div class="empty-state-icon">⏳</div>
-                    <h3>Cargando...</h3>
-                </div>
-            </td></tr>`;
+    async function cargarRanking() {
+        const value = document.getElementById('periodoSelect').value;
+
+        if (!value || !value.includes('_')) {
+            mostrarMensaje('Debe seleccionar un período válido.', 'error');
+            return;
+        }
+
+        const [desde, hasta] = value.split('_');
+
+        document.getElementById('searchBox').value = '';
+        mostrarCargando();
 
         try {
-            const res  = await fetch(`/Admin/ObtenerRankingPuntualidad?desde=${desde}&hasta=${hasta}`);
-            const data = await res.json();
+            const response = await fetch(`/Admin/ObtenerRankingPuntualidad?desde=${encodeURIComponent(desde)}&hasta=${encodeURIComponent(hasta)}`);
+            const data = await leerRespuesta(response);
 
-            if (!data.success) { mostrarError(data.message); return; }
+            if (!response.ok || data.success === false) {
+                mostrarError(data.message || data.mensaje || 'No se pudo cargar el ranking de puntualidad.');
+                return;
+            }
 
-            todosLosDatos = data.ranking;
+            todosLosDatos = Array.isArray(data.ranking) ? data.ranking : [];
+
             actualizarStats(todosLosDatos);
             renderTabla(todosLosDatos);
-        } catch (e) {
-            mostrarError('Error al conectar con el servidor.');
+            marcarColumnaOrdenada();
+        } catch {
+            mostrarError('No se pudo conectar con el servidor. Intente nuevamente.');
         }
     }
 
-    // ── Stats resumen ───────────────────────────────────────────────
+    async function leerRespuesta(response) {
+        try {
+            const contentType = response.headers.get('content-type') || '';
+
+            if (contentType.includes('application/json')) {
+                return await response.json();
+            }
+
+            const texto = await response.text();
+
+            return {
+                success: response.ok,
+                message: texto,
+                mensaje: texto
+            };
+        } catch {
+            return {
+                success: false,
+                message: 'No se recibió una respuesta válida del sistema.'
+            };
+        }
+    }
+
     function actualizarStats(ranking) {
         const total = ranking.length;
 
         const promedio = total > 0
-            ? (ranking.reduce((s, r) => s + r.puntualidad, 0) / total).toFixed(1)
-            : 0;
+            ? (ranking.reduce((suma, item) => suma + obtenerNumero(item.puntualidad), 0) / total).toFixed(1)
+            : '0.0';
 
         const mejor = total > 0
-            ? ranking.reduce((a, b) => a.puntualidad > b.puntualidad ? a : b)
+            ? ranking.reduce((actual, siguiente) =>
+                obtenerNumero(actual.puntualidad) > obtenerNumero(siguiente.puntualidad) ? actual : siguiente)
             : null;
 
-        const tardanzas = ranking.reduce((s, r) => s + r.tardanzas, 0);
+        const tardanzas = ranking.reduce((suma, item) => suma + obtenerNumero(item.tardanzas), 0);
 
-        document.getElementById('statEmpleados').textContent  = total;
-        document.getElementById('statPromedio').textContent   = `${promedio}%`;
-        document.getElementById('statMejor').textContent      = mejor ? mejor.nombre.split(' ')[0] : '—';
-        document.getElementById('statTardanzas').textContent  = tardanzas;
+        document.getElementById('statEmpleados').textContent = total;
+        document.getElementById('statPromedio').textContent = `${promedio}%`;
+        document.getElementById('statMejor').textContent = mejor ? obtenerPrimerNombre(mejor.nombre) : '—';
+        document.getElementById('statTardanzas').textContent = tardanzas;
     }
 
-    // ── Render tabla ────────────────────────────────────────────────
     function renderTabla(datos) {
         const body = document.getElementById('rankingBody');
 
         if (!datos || datos.length === 0) {
             body.innerHTML = `
-                <tr><td colspan="6">
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📭</div>
-                        <h3>Sin datos</h3>
-                        <p>No hay marcas registradas en este período.</p>
-                    </div>
-                </td></tr>`;
+                <tr>
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📭</div>
+                            <h3>Sin datos</h3>
+                            <p>No hay marcas registradas para el período seleccionado.</p>
+                        </div>
+                    </td>
+                </tr>`;
             return;
         }
 
-        // Ordenar
-        const sorted = [...datos].sort((a, b) => {
-            let va = a[sortColumn], vb = b[sortColumn];
-            if (typeof va === 'string') va = va.toLowerCase();
-            if (typeof vb === 'string') vb = vb.toLowerCase();
-            if (va < vb) return sortAsc ? -1 : 1;
-            if (va > vb) return sortAsc ?  1 : -1;
-            return 0;
-        });
+        const sorted = [...datos].sort((a, b) => compararValores(a, b, sortColumn));
 
-        body.innerHTML = sorted.map(r => {
-            const pct     = r.puntualidad.toFixed(1);
-            const color   = pct >= 90 ? '#48bb78' : pct >= 70 ? '#f59e0b' : '#e53e3e';
-            const badgeCls = pct >= 90 ? 'badge-success' : pct >= 70 ? 'badge-warning' : 'badge-danger';
-            const iniciales = r.nombre.split(' ').slice(0,2).map(p => p[0]).join('').toUpperCase();
+        body.innerHTML = sorted.map(item => {
+            const nombre = item.nombre || 'Colaborador no disponible';
+            const puntualidad = obtenerNumero(item.puntualidad);
+            const pct = puntualidad.toFixed(1);
+            const porcentajeBarra = Math.min(Math.max(puntualidad, 0), 100);
+            const color = obtenerColorPuntualidad(puntualidad);
+            const iniciales = obtenerIniciales(nombre);
 
             return `
-            <tr>
-                <td>
-                    <div class="empleado-cell">
-                        <div class="avatar">${iniciales}</div>
-                        <span class="empleado-name">${r.nombre}</span>
-                    </div>
-                </td>
-                <td>${r.diasTrabajados}</td>
-                <td>${r.diasPuntuales}</td>
-                <td>
-                    <span class="badge ${r.tardanzas === 0 ? 'badge-success' : r.tardanzas <= 3 ? 'badge-warning' : 'badge-danger'}">
-                        ${r.tardanzas}
-                    </span>
-                </td>
-                <td>
-                    <span class="hora-chip">🕐 ${r.horaPromedioEntrada}</span>
-                </td>
-                <td>
-                    <div class="progress-wrap">
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill"
-                                 style="width:${pct}%; background:${color};"></div>
+                <tr>
+                    <td>
+                        <div class="empleado-cell">
+                            <div class="avatar">${escapeHtml(iniciales)}</div>
+                            <span class="empleado-name">${escapeHtml(nombre)}</span>
                         </div>
-                        <span class="progress-label" style="color:${color};">${pct}%</span>
-                    </div>
-                </td>
-            </tr>`;
+                    </td>
+
+                    <td>${escapeHtml(item.diasTrabajados ?? 0)}</td>
+
+                    <td>${escapeHtml(item.diasPuntuales ?? 0)}</td>
+
+                    <td>
+                        <span class="badge ${obtenerBadgeTardanzas(item.tardanzas)}">
+                            ${escapeHtml(item.tardanzas ?? 0)}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="hora-chip">🕐 ${escapeHtml(item.horaPromedioEntrada || '—')}</span>
+                    </td>
+
+                    <td>
+                        <div class="progress-wrap">
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill"
+                                     style="width:${porcentajeBarra}%; background:${color};"></div>
+                            </div>
+
+                            <span class="progress-label" style="color:${color};">${escapeHtml(pct)}%</span>
+                        </div>
+                    </td>
+                </tr>`;
         }).join('');
 
-        // Actualizar íconos de sort
-        document.querySelectorAll('.ranking-table th').forEach(th => th.classList.remove('sorted'));
+        marcarColumnaOrdenada();
     }
 
-    // ── Ordenar al hacer click en header ───────────────────────────
-    function sortBy(col) {
-        if (sortColumn === col) sortAsc = !sortAsc;
-        else { sortColumn = col; sortAsc = false; }
+    function compararValores(a, b, columna) {
+        let valorA = obtenerValorOrden(a, columna);
+        let valorB = obtenerValorOrden(b, columna);
 
-        const busqueda = document.getElementById('searchBox').value.toLowerCase();
-        const filtrado = todosLosDatos.filter(r =>
-            r.nombre.toLowerCase().includes(busqueda));
+        if (typeof valorA === 'string') {
+            valorA = valorA.toLowerCase();
+        }
+
+        if (typeof valorB === 'string') {
+            valorB = valorB.toLowerCase();
+        }
+
+        if (valorA < valorB) {
+            return sortAsc ? -1 : 1;
+        }
+
+        if (valorA > valorB) {
+            return sortAsc ? 1 : -1;
+        }
+
+        return 0;
+    }
+
+    function obtenerValorOrden(item, columna) {
+        if (columna === 'puntualidad' ||
+            columna === 'diasTrabajados' ||
+            columna === 'diasPuntuales' ||
+            columna === 'tardanzas') {
+            return obtenerNumero(item[columna]);
+        }
+
+        return item[columna] || '';
+    }
+
+    function sortBy(columna) {
+        if (sortColumn === columna) {
+            sortAsc = !sortAsc;
+        } else {
+            sortColumn = columna;
+            sortAsc = columna === 'nombre';
+        }
+
+        filtrarTabla();
+        marcarColumnaOrdenada();
+    }
+
+    function filtrarTabla() {
+        const busqueda = document.getElementById('searchBox').value.trim().toLowerCase();
+
+        const filtrado = todosLosDatos.filter(item =>
+            (item.nombre || '').toLowerCase().includes(busqueda));
 
         renderTabla(filtrado);
     }
 
-    // ── Filtro de búsqueda ──────────────────────────────────────────
-    function filtrarTabla() {
-        const q = document.getElementById('searchBox').value.toLowerCase();
-        renderTabla(todosLosDatos.filter(r => r.nombre.toLowerCase().includes(q)));
+    function marcarColumnaOrdenada() {
+        document.querySelectorAll('.ranking-table th').forEach(th => {
+            th.classList.remove('sorted');
+
+            const icon = th.querySelector('.sort-icon');
+            if (icon) {
+                icon.textContent = '⇅';
+            }
+        });
+
+        const thActual = document.querySelector(`.ranking-table th[data-col="${sortColumn}"]`);
+
+        if (thActual) {
+            thActual.classList.add('sorted');
+
+            const icon = thActual.querySelector('.sort-icon');
+            if (icon) {
+                icon.textContent = sortAsc ? '↑' : '↓';
+            }
+        }
     }
 
-    // ── Error ───────────────────────────────────────────────────────
-    function mostrarError(msg) {
+    function mostrarCargando() {
         document.getElementById('rankingBody').innerHTML = `
-            <tr><td colspan="6">
-                <div class="empty-state">
-                    <div class="empty-state-icon">⚠️</div>
-                    <h3>Error</h3>
-                    <p>${msg}</p>
-                </div>
-            </td></tr>`;
+            <tr>
+                <td colspan="6">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⏳</div>
+                        <h3>Cargando datos</h3>
+                        <p>Estamos consultando la información de puntualidad.</p>
+                    </div>
+                </td>
+            </tr>`;
     }
 
-    // ── Init ────────────────────────────────────────────────────────
-    generarQuarters();
-    cargarRanking();
+    function mostrarError(mensaje) {
+        todosLosDatos = [];
+        actualizarStats([]);
+
+        document.getElementById('rankingBody').innerHTML = `
+            <tr>
+                <td colspan="6">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <h3>No se pudo cargar el ranking</h3>
+                        <p>${escapeHtml(mensaje || 'Intente nuevamente.')}</p>
+                    </div>
+                </td>
+            </tr>`;
+
+        mostrarMensaje(mensaje || 'No se pudo cargar el ranking.', 'error');
+    }
+
+    function mostrarMensaje(mensaje, tipo) {
+        const box = document.getElementById('messageBox');
+
+        box.className = 'message-box';
+
+        if (tipo === 'error') {
+            box.classList.add('message-error');
+        } else {
+            box.classList.add('message-info');
+        }
+
+        box.textContent = mensaje;
+        box.style.display = 'block';
+
+        setTimeout(() => {
+            box.style.display = 'none';
+        }, 5000);
+    }
+
+    function obtenerNumero(valor) {
+        const numero = Number(valor);
+        return isNaN(numero) ? 0 : numero;
+    }
+
+    function obtenerPrimerNombre(nombre) {
+        if (!nombre) {
+            return '—';
+        }
+
+        return nombre.toString().trim().split(' ')[0] || '—';
+    }
+
+    function obtenerIniciales(nombre) {
+        if (!nombre) {
+            return 'ND';
+        }
+
+        const partes = nombre.toString()
+            .trim()
+            .split(' ')
+            .filter(p => p.length > 0)
+            .slice(0, 2);
+
+        if (partes.length === 0) {
+            return 'ND';
+        }
+
+        return partes.map(p => p[0]).join('').toUpperCase();
+    }
+
+    function obtenerColorPuntualidad(puntualidad) {
+        if (puntualidad >= 90) {
+            return '#48bb78';
+        }
+
+        if (puntualidad >= 70) {
+            return '#f59e0b';
+        }
+
+        return '#e53e3e';
+    }
+
+    function obtenerBadgeTardanzas(tardanzas) {
+        const total = obtenerNumero(tardanzas);
+
+        if (total === 0) {
+            return 'badge-success';
+        }
+
+        if (total <= 3) {
+            return 'badge-warning';
+        }
+
+        return 'badge-danger';
+    }
+
+    function escapeHtml(value) {
+        if (value === null || value === undefined) {
+            return '';
+        }
+
+        return value.toString()
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
+    }
 </script>

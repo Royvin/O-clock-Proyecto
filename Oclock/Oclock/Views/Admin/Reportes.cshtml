@@ -2,6 +2,7 @@
     ViewData["Title"] = "Reportes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <style>
     * {
         margin: 0;
@@ -52,7 +53,7 @@
         .menu-link.active {
             background: #2F6FED;
             color: white;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 12px rgba(47, 111, 237, 0.3);
         }
 
             .menu-link.active::before {
@@ -92,8 +93,8 @@
     }
 
         .menu-expandable-header:hover {
-            background: #f0f0f0;
-            color: #667eea;
+            background: #EEF4FF;
+            color: #2F6FED;
         }
 
         .menu-expandable-header.active {
@@ -164,12 +165,12 @@
 
         .submenu-link:hover {
             background: #f7fafc;
-            color: #667eea;
+            color: #2F6FED;
             transform: translateX(3px);
         }
 
             .submenu-link:hover::before {
-                background: #667eea;
+                background: #2F6FED;
                 transform: translateY(-50%) scale(1.3);
             }
 
@@ -202,11 +203,58 @@
             color: #2d3748;
             font-size: 28px;
             margin-bottom: 8px;
+            font-weight: 800;
         }
 
         .content-header p {
             color: #718096;
             font-size: 14px;
+            margin-bottom: 0;
+        }
+
+    .guide-section {
+        background: #EEF4FF;
+        border: 1px solid #d6e4ff;
+        border-left: 5px solid #2F6FED;
+        padding: 20px 24px;
+        border-radius: 14px;
+        margin-bottom: 25px;
+        color: #1e3a8a;
+    }
+
+        .guide-section h2 {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #1e3a8a;
+        }
+
+        .guide-section p {
+            font-size: 14px;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+    .guide-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    .guide-item {
+        background: white;
+        border-radius: 12px;
+        padding: 14px;
+        border: 1px solid #dbeafe;
+        font-size: 13px;
+        color: #2d3748;
+    }
+
+        .guide-item strong {
+            color: #2F6FED;
+            display: block;
+            margin-bottom: 5px;
         }
 
     .filter-section,
@@ -233,6 +281,7 @@
             color: #718096;
             margin-bottom: 20px;
             font-size: 14px;
+            line-height: 1.5;
         }
 
     .filter-grid {
@@ -272,6 +321,12 @@
                 box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.10);
             }
 
+    .field-help {
+        color: #718096;
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
     .tabs {
         display: flex;
         gap: 10px;
@@ -296,6 +351,7 @@
         flex: 1;
         justify-content: center;
         min-width: 220px;
+        text-align: center;
     }
 
         .tab:hover {
@@ -330,6 +386,7 @@
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(47, 111, 237, 0.35);
+            color: white;
         }
 
     .btn-secondary {
@@ -339,6 +396,7 @@
 
         .btn-secondary:hover {
             background: #cbd5e0;
+            color: #2d3748;
         }
 
     .btn-group {
@@ -481,6 +539,7 @@
 
     .empty-state p {
         font-size: 14px;
+        line-height: 1.5;
     }
 
     .loading-state {
@@ -507,6 +566,7 @@
         color: #718096;
         font-size: 14px;
         margin-bottom: 18px;
+        line-height: 1.5;
     }
 
     .message-box {
@@ -515,6 +575,8 @@
         font-size: 14px;
         margin-bottom: 16px;
         display: none;
+        font-weight: 600;
+        line-height: 1.5;
     }
 
     .message-error {
@@ -527,6 +589,12 @@
         background: #ecfdf3;
         color: #166534;
         border: 1px solid #bbf7d0;
+    }
+
+    .message-info {
+        background: #eff6ff;
+        color: #1d4ed8;
+        border: 1px solid #bfdbfe;
     }
 
     .modal {
@@ -607,6 +675,25 @@
             padding: 25px;
         }
     }
+
+    @@media (max-width: 600px) {
+        .content {
+            padding: 20px 14px;
+        }
+
+        .filter-section,
+        .preview-section {
+            padding: 22px;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .btn-group {
+            width: 100%;
+        }
+    }
 </style>
 
 <div class="main-layout">
@@ -633,6 +720,7 @@
                 </div>
                 <div class="menu-arrow">▶</div>
             </div>
+
             <div class="submenu show">
                 <div class="submenu-item">
                     <a href="/Horarios/HorariosConfig" class="submenu-link">
@@ -655,14 +743,14 @@
         <div class="menu-item">
             <a href="/Bono/AsignarBono" class="menu-link">
                 <div class="icon">💵</div>
-                Bonos
+                Asignación de Bonos
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link">
                 <div class="icon">📝</div>
-                Gestion de Empleados
+                Gestión de Empleados
             </a>
         </div>
 
@@ -684,13 +772,38 @@
     <div class="content">
         <div class="content-header">
             <div>
-                <h1>Generación de Reportes</h1>
-                <p>Descargue reportes en PDF o Excel según sus necesidades</p>
+                <h1>📄 Generación de Reportes</h1>
+                <p>Consulte información del sistema y descargue reportes en PDF o Excel.</p>
+            </div>
+        </div>
+
+        <div class="guide-section">
+            <h2>Guía rápida</h2>
+            <p>
+                Primero seleccione los filtros y presione <strong>Generar vista previa</strong>.
+                Luego puede descargar el reporte en PDF o Excel usando los mismos filtros seleccionados.
+            </p>
+
+            <div class="guide-actions">
+                <div class="guide-item">
+                    <strong>📊 Generar vista previa</strong>
+                    Muestra los datos en pantalla antes de descargar.
+                </div>
+
+                <div class="guide-item">
+                    <strong>📄 Descargar PDF</strong>
+                    Abre el reporte en una nueva pestaña para imprimir o guardar.
+                </div>
+
+                <div class="guide-item">
+                    <strong>📗 Descargar Excel</strong>
+                    Descarga un archivo editable para análisis o respaldo.
+                </div>
             </div>
         </div>
 
         <div class="tabs">
-            <div class="tab active" onclick="switchReportTab('general', this)">📊 Reportes Generales</div>
+            <div class="tab active" onclick="switchReportTab('general', this)">📊 Reporte General</div>
             <div class="tab" onclick="switchReportTab('asistencia', this)">🕒 Asistencia por Empleado</div>
             <div class="tab" onclick="switchReportTab('ausencias', this)">📅 Ausencias Mensuales</div>
             <div class="tab" onclick="switchReportTab('seguimiento', this)">📂 Seguimiento de Solicitudes</div>
@@ -701,39 +814,49 @@
         <div id="generalTab" class="tab-content active">
             <div class="filter-section">
                 <h2>📊 Reporte General</h2>
-                <p class="helper-text">Previsualización consolidada con resumen general y detalle de solicitudes para control y auditoría.</p>
+                <p class="helper-text">
+                    Resume empleados activos, marcas y solicitudes dentro del rango seleccionado.
+                    Útil para revisar el comportamiento general del sistema.
+                </p>
 
                 <div class="filter-grid">
                     <div class="form-group">
-                        <label for="generalDesde">Fecha Inicio</label>
+                        <label for="generalDesde">Fecha inicial</label>
                         <input type="date" id="generalDesde">
+                        <span class="field-help">Inicio del período a consultar.</span>
                     </div>
+
                     <div class="form-group">
-                        <label for="generalHasta">Fecha Final</label>
+                        <label for="generalHasta">Fecha final</label>
                         <input type="date" id="generalHasta">
+                        <span class="field-help">Fin del período a consultar.</span>
                     </div>
                 </div>
 
                 <div class="btn-group">
-                    <button id="btnGeneralGenerar" class="btn btn-primary" onclick="generarReporteGeneral()">📊 Generar Reporte</button>
-                    <button id="btnGeneralPdf" class="btn btn-secondary" onclick="exportarReporteGeneralPdf()">📄 Exportar PDF</button>
-                    <button id="btnGeneralExcel" class="btn btn-secondary" onclick="exportarReporteGeneralExcel()">📗 Exportar Excel</button>
+                    <button id="btnGeneralGenerar" class="btn btn-primary" onclick="generarReporteGeneral()">📊 Generar vista previa</button>
+                    <button id="btnGeneralPdf" class="btn btn-secondary" onclick="exportarReporteGeneralPdf()">📄 Descargar PDF</button>
+                    <button id="btnGeneralExcel" class="btn btn-secondary" onclick="exportarReporteGeneralExcel()">📗 Descargar Excel</button>
                 </div>
             </div>
 
             <div class="preview-section">
                 <div class="report-title-line">
-                    <h2>👁️ Previsualización</h2>
+                    <h2>👁️ Vista previa del reporte</h2>
                 </div>
-                <div id="generalPreviewMeta" class="preview-meta">Seleccione un rango y genere el reporte.</div>
-                <div id="generalLoading" class="loading-state section-hidden">Generando previsualización...</div>
+
+                <div id="generalPreviewMeta" class="preview-meta">Seleccione un rango de fechas y genere la vista previa.</div>
+                <div id="generalLoading" class="loading-state section-hidden">Generando vista previa...</div>
+
                 <div id="generalEmpty" class="empty-state">
                     <div class="empty-state-icon">📭</div>
-                    <h3>Sin previsualización</h3>
+                    <h3>Sin vista previa</h3>
                     <p>Cuando genere el reporte, aquí se mostrará el resumen y el detalle.</p>
                 </div>
+
                 <div id="generalPreview" class="section-hidden">
                     <div id="generalSummary" class="summary-grid"></div>
+
                     <div class="table-responsive">
                         <table class="report-table">
                             <thead>
@@ -757,7 +880,9 @@
         <div id="asistenciaTab" class="tab-content">
             <div class="filter-section">
                 <h2>🕒 Asistencia por Empleado</h2>
-                <p class="helper-text">Seleccione un colaborador y un rango de fechas para consultar sus marcas y exportar el resultado.</p>
+                <p class="helper-text">
+                    Muestra las marcas de entrada, salida, almuerzo o descanso de un colaborador dentro del período seleccionado.
+                </p>
 
                 <div class="filter-grid">
                     <div class="form-group">
@@ -765,37 +890,44 @@
                         <select id="asistenciaEmpleado">
                             <option value="">Seleccione un empleado</option>
                         </select>
+                        <span class="field-help">Debe seleccionar un colaborador para generar este reporte.</span>
                     </div>
+
                     <div class="form-group">
-                        <label for="asistenciaDesde">Fecha Inicio</label>
+                        <label for="asistenciaDesde">Fecha inicial</label>
                         <input type="date" id="asistenciaDesde">
                     </div>
+
                     <div class="form-group">
-                        <label for="asistenciaHasta">Fecha Final</label>
+                        <label for="asistenciaHasta">Fecha final</label>
                         <input type="date" id="asistenciaHasta">
                     </div>
                 </div>
 
                 <div class="btn-group">
-                    <button id="btnAsistenciaGenerar" class="btn btn-primary" onclick="generarReporteAsistencia()">📊 Generar Reporte</button>
-                    <button id="btnAsistenciaPdf" class="btn btn-secondary" onclick="exportarReporteAsistenciaPdf()">📄 Exportar PDF</button>
-                    <button id="btnAsistenciaExcel" class="btn btn-secondary" onclick="exportarReporteAsistenciaExcel()">📗 Exportar Excel</button>
+                    <button id="btnAsistenciaGenerar" class="btn btn-primary" onclick="generarReporteAsistencia()">📊 Generar vista previa</button>
+                    <button id="btnAsistenciaPdf" class="btn btn-secondary" onclick="exportarReporteAsistenciaPdf()">📄 Descargar PDF</button>
+                    <button id="btnAsistenciaExcel" class="btn btn-secondary" onclick="exportarReporteAsistenciaExcel()">📗 Descargar Excel</button>
                 </div>
             </div>
 
             <div class="preview-section">
                 <div class="report-title-line">
-                    <h2>👁️ Previsualización</h2>
+                    <h2>👁️ Vista previa del reporte</h2>
                 </div>
-                <div id="asistenciaPreviewMeta" class="preview-meta">Seleccione un empleado y genere el reporte.</div>
-                <div id="asistenciaLoading" class="loading-state section-hidden">Generando previsualización...</div>
+
+                <div id="asistenciaPreviewMeta" class="preview-meta">Seleccione un empleado y genere la vista previa.</div>
+                <div id="asistenciaLoading" class="loading-state section-hidden">Generando vista previa...</div>
+
                 <div id="asistenciaEmpty" class="empty-state">
                     <div class="empty-state-icon">🕒</div>
-                    <h3>Sin previsualización</h3>
+                    <h3>Sin vista previa</h3>
                     <p>Cuando genere el reporte, aquí se mostrarán las marcas del colaborador.</p>
                 </div>
+
                 <div id="asistenciaPreview" class="section-hidden">
                     <div id="asistenciaSummary" class="summary-grid"></div>
+
                     <div class="table-responsive">
                         <table class="report-table">
                             <thead>
@@ -817,15 +949,19 @@
         <div id="ausenciasTab" class="tab-content">
             <div class="filter-section">
                 <h2>📅 Ausencias Mensuales</h2>
-                <p class="helper-text">Consulta mensual de ausencias por Vacaciones, Permiso, Incapacidad o Licencia.</p>
+                <p class="helper-text">
+                    Consulta solicitudes relacionadas con vacaciones, permisos, incapacidades o licencias dentro de un mes específico.
+                </p>
 
                 <div class="filter-grid">
                     <div class="form-group">
                         <label for="ausenciasMes">Mes</label>
                         <input type="month" id="ausenciasMes">
+                        <span class="field-help">Seleccione el mes que desea revisar.</span>
                     </div>
+
                     <div class="form-group">
-                        <label for="ausenciasTipo">Tipo de Ausencia</label>
+                        <label for="ausenciasTipo">Tipo de ausencia</label>
                         <select id="ausenciasTipo">
                             <option value="todos">Todos</option>
                             <option value="vacaciones">Vacaciones</option>
@@ -837,25 +973,29 @@
                 </div>
 
                 <div class="btn-group">
-                    <button id="btnAusenciasGenerar" class="btn btn-primary" onclick="generarReporteAusencias()">📊 Generar Reporte</button>
-                    <button id="btnAusenciasPdf" class="btn btn-secondary" onclick="exportarReporteAusenciasPdf()">📄 Exportar PDF</button>
-                    <button id="btnAusenciasExcel" class="btn btn-secondary" onclick="exportarReporteAusenciasExcel()">📗 Exportar Excel</button>
+                    <button id="btnAusenciasGenerar" class="btn btn-primary" onclick="generarReporteAusencias()">📊 Generar vista previa</button>
+                    <button id="btnAusenciasPdf" class="btn btn-secondary" onclick="exportarReporteAusenciasPdf()">📄 Descargar PDF</button>
+                    <button id="btnAusenciasExcel" class="btn btn-secondary" onclick="exportarReporteAusenciasExcel()">📗 Descargar Excel</button>
                 </div>
             </div>
 
             <div class="preview-section">
                 <div class="report-title-line">
-                    <h2>👁️ Previsualización</h2>
+                    <h2>👁️ Vista previa del reporte</h2>
                 </div>
-                <div id="ausenciasPreviewMeta" class="preview-meta">Seleccione el mes y genere el reporte.</div>
-                <div id="ausenciasLoading" class="loading-state section-hidden">Generando previsualización...</div>
+
+                <div id="ausenciasPreviewMeta" class="preview-meta">Seleccione el mes y genere la vista previa.</div>
+                <div id="ausenciasLoading" class="loading-state section-hidden">Generando vista previa...</div>
+
                 <div id="ausenciasEmpty" class="empty-state">
                     <div class="empty-state-icon">📅</div>
-                    <h3>Sin previsualización</h3>
+                    <h3>Sin vista previa</h3>
                     <p>Cuando genere el reporte, aquí se mostrarán las ausencias del mes.</p>
                 </div>
+
                 <div id="ausenciasPreview" class="section-hidden">
                     <div id="ausenciasSummary" class="summary-grid"></div>
+
                     <div class="table-responsive">
                         <table class="report-table">
                             <thead>
@@ -879,7 +1019,9 @@
         <div id="seguimientoTab" class="tab-content">
             <div class="filter-section">
                 <h2>📂 Seguimiento de Solicitudes</h2>
-                <p class="helper-text">Historial detallado filtrable por estado, con su propia previsualización y exportaciones.</p>
+                <p class="helper-text">
+                    Permite revisar solicitudes por estado y rango de fechas. Útil para auditoría, seguimiento y control administrativo.
+                </p>
 
                 <div class="filter-grid">
                     <div class="form-group">
@@ -892,36 +1034,42 @@
                             <option value="cancelada">Cancelada</option>
                         </select>
                     </div>
+
                     <div class="form-group">
-                        <label for="seguimientoDesde">Fecha Inicio</label>
+                        <label for="seguimientoDesde">Fecha inicial</label>
                         <input type="date" id="seguimientoDesde">
                     </div>
+
                     <div class="form-group">
-                        <label for="seguimientoHasta">Fecha Final</label>
+                        <label for="seguimientoHasta">Fecha final</label>
                         <input type="date" id="seguimientoHasta">
                     </div>
                 </div>
 
                 <div class="btn-group">
-                    <button id="btnSeguimientoGenerar" class="btn btn-primary" onclick="generarReporteSeguimiento()">📊 Generar Reporte</button>
-                    <button id="btnSeguimientoPdf" class="btn btn-secondary" onclick="exportarReporteSeguimientoPdf()">📄 Exportar PDF</button>
-                    <button id="btnSeguimientoExcel" class="btn btn-secondary" onclick="exportarReporteSeguimientoExcel()">📗 Exportar Excel</button>
+                    <button id="btnSeguimientoGenerar" class="btn btn-primary" onclick="generarReporteSeguimiento()">📊 Generar vista previa</button>
+                    <button id="btnSeguimientoPdf" class="btn btn-secondary" onclick="exportarReporteSeguimientoPdf()">📄 Descargar PDF</button>
+                    <button id="btnSeguimientoExcel" class="btn btn-secondary" onclick="exportarReporteSeguimientoExcel()">📗 Descargar Excel</button>
                 </div>
             </div>
 
             <div class="preview-section">
                 <div class="report-title-line">
-                    <h2>👁️ Previsualización</h2>
+                    <h2>👁️ Vista previa del reporte</h2>
                 </div>
-                <div id="seguimientoPreviewMeta" class="preview-meta">Seleccione los filtros y genere el reporte.</div>
-                <div id="seguimientoLoading" class="loading-state section-hidden">Generando previsualización...</div>
+
+                <div id="seguimientoPreviewMeta" class="preview-meta">Seleccione los filtros y genere la vista previa.</div>
+                <div id="seguimientoLoading" class="loading-state section-hidden">Generando vista previa...</div>
+
                 <div id="seguimientoEmpty" class="empty-state">
                     <div class="empty-state-icon">📂</div>
-                    <h3>Sin previsualización</h3>
+                    <h3>Sin vista previa</h3>
                     <p>Cuando genere el reporte, aquí se mostrará el historial filtrado.</p>
                 </div>
+
                 <div id="seguimientoPreview" class="section-hidden">
                     <div id="seguimientoSummary" class="summary-grid"></div>
+
                     <div class="table-responsive">
                         <table class="report-table">
                             <thead>
@@ -951,6 +1099,7 @@
             <h3>📋 Detalle</h3>
             <button class="btn-close" onclick="closeModal()">×</button>
         </div>
+
         <div id="modalContent"></div>
     </div>
 </div>
@@ -984,6 +1133,8 @@
 
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         document.getElementById(tab + 'Tab').classList.add('active');
+
+        ocultarMensaje();
     }
 
     function closeModal() {
@@ -993,13 +1144,27 @@
     function showMessage(message, type) {
         const box = document.getElementById('messageBox');
         box.className = 'message-box';
-        box.classList.add(type === 'success' ? 'message-success' : 'message-error');
+
+        if (type === 'success') {
+            box.classList.add('message-success');
+        } else if (type === 'info') {
+            box.classList.add('message-info');
+        } else {
+            box.classList.add('message-error');
+        }
+
         box.textContent = message;
         box.style.display = 'block';
 
         setTimeout(() => {
             box.style.display = 'none';
-        }, 4500);
+        }, 5000);
+    }
+
+    function ocultarMensaje() {
+        const box = document.getElementById('messageBox');
+        box.style.display = 'none';
+        box.textContent = '';
     }
 
     function establecerFechasPorDefecto() {
@@ -1026,14 +1191,18 @@
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
+
         return `${year}-${month}-${day}`;
     }
 
     async function cargarColaboradores() {
-        if (colaboradoresCargados) return;
+        if (colaboradoresCargados) {
+            return;
+        }
 
         try {
             const response = await fetch('/Admin/ObtenerColaboradores');
+
             if (!response.ok) {
                 throw new Error('No se pudieron cargar los colaboradores.');
             }
@@ -1051,13 +1220,16 @@
             });
 
             colaboradoresCargados = true;
-        } catch (error) {
-            showMessage(error.message || 'Ocurrió un error al cargar los colaboradores.', 'error');
+        } catch {
+            showMessage('No se pudieron cargar los colaboradores. Intente actualizar la página.', 'error');
         }
     }
 
     function escapeHtml(value) {
-        if (value === null || value === undefined) return '';
+        if (value === null || value === undefined) {
+            return '';
+        }
+
         return String(value)
             .replaceAll('&', '&amp;')
             .replaceAll('<', '&lt;')
@@ -1068,11 +1240,24 @@
 
     function getBadgeClass(estado) {
         const valor = (estado || '').toString().trim().toLowerCase();
+
         if (valor === 'pendiente') return 'badge-status badge-pendiente';
         if (valor === 'aprobada') return 'badge-status badge-aprobada';
         if (valor === 'rechazada') return 'badge-status badge-rechazada';
-        if (valor === 'cancelada') return 'badge-status badge-cancelada';
+        if (valor === 'cancelada' || valor === 'cancelado') return 'badge-status badge-cancelada';
+
         return 'badge-status badge-cancelada';
+    }
+
+    function normalizarEstado(estado) {
+        const valor = (estado || '').toString().trim().toLowerCase();
+
+        if (valor === 'pendiente') return 'Pendiente';
+        if (valor === 'aprobada') return 'Aprobada';
+        if (valor === 'rechazada') return 'Rechazada';
+        if (valor === 'cancelada' || valor === 'cancelado') return 'Cancelada';
+
+        return estado || '—';
     }
 
     function renderSummaryCards(containerId, items) {
@@ -1091,6 +1276,7 @@
 
     function setLoading(prefix, isLoading) {
         const loading = document.getElementById(prefix + 'Loading');
+
         if (loading) {
             loading.classList.toggle('section-hidden', !isLoading);
         }
@@ -1107,20 +1293,35 @@
         empty.style.display = show ? 'none' : 'block';
     }
 
+    async function leerRespuesta(response) {
+        try {
+            const contentType = response.headers.get('content-type') || '';
+
+            if (contentType.includes('application/json')) {
+                return await response.json();
+            }
+
+            const text = await response.text();
+
+            return {
+                mensaje: text
+            };
+        } catch {
+            return {
+                mensaje: 'No se recibió una respuesta válida del sistema.'
+            };
+        }
+    }
+
     async function fetchJson(url) {
         const response = await fetch(url);
+        const data = await leerRespuesta(response);
 
         if (!response.ok) {
-            let message = 'Ocurrió un error al consultar la información.';
-            try {
-                const text = await response.text();
-                if (text) message = text;
-            } catch (e) {
-            }
-            throw new Error(message);
+            throw new Error(data.mensaje || data.message || 'Ocurrió un error al consultar la información.');
         }
 
-        return await response.json();
+        return data;
     }
 
     function construirQuery(params) {
@@ -1128,6 +1329,7 @@
 
         Object.keys(params).forEach(key => {
             const value = params[key];
+
             if (value !== null && value !== undefined && value !== '') {
                 search.append(key, value);
             }
@@ -1136,17 +1338,51 @@
         return search.toString();
     }
 
-    async function generarReporteGeneral() {
-        const desde = document.getElementById('generalDesde').value;
-        const hasta = document.getElementById('generalHasta').value;
-
+    function validarRangoFechas(desde, hasta) {
         if (!desde || !hasta) {
             showMessage('Debe seleccionar la fecha inicial y la fecha final.', 'error');
-            return;
+            return false;
         }
 
         if (desde > hasta) {
             showMessage('La fecha inicial no puede ser mayor que la fecha final.', 'error');
+            return false;
+        }
+
+        return true;
+    }
+
+    function validarEmpleadoSeleccionado(idUsuario) {
+        if (!idUsuario) {
+            showMessage('Debe seleccionar un empleado para generar o descargar este reporte.', 'error');
+            return false;
+        }
+
+        return true;
+    }
+
+    function validarPeriodoMensual(periodo) {
+        if (!periodo) {
+            showMessage('Debe seleccionar un mes válido.', 'error');
+            return false;
+        }
+
+        return true;
+    }
+
+    function informarDescarga(tipo) {
+        if (tipo === 'pdf') {
+            showMessage('El reporte PDF se abrirá en una nueva pestaña.', 'info');
+        } else {
+            showMessage('La descarga del reporte Excel iniciará en unos segundos.', 'info');
+        }
+    }
+
+    async function generarReporteGeneral() {
+        const desde = document.getElementById('generalDesde').value;
+        const hasta = document.getElementById('generalHasta').value;
+
+        if (!validarRangoFechas(desde, hasta)) {
             return;
         }
 
@@ -1160,7 +1396,7 @@
             const detalle = data.detalle || [];
 
             document.getElementById('generalPreviewMeta').textContent =
-                `Período consultado: ${resumen.desde || ''} al ${resumen.hasta || ''}`;
+                `Período consultado: ${resumen.desde || desde} al ${resumen.hasta || hasta}`;
 
             renderSummaryCards('generalSummary', [
                 { label: 'Empleados Activos', value: resumen.totalEmpleadosActivos ?? 0 },
@@ -1180,12 +1416,14 @@
                 document.getElementById('generalEmpty').innerHTML = `
                     <div class="empty-state-icon">📭</div>
                     <h3>No hay datos disponibles</h3>
-                    <p>No se encontraron solicitudes en el rango indicado.</p>
+                    <p>No se encontraron solicitudes en el rango indicado. Puede cambiar las fechas y volver a generar la vista previa.</p>
                 `;
                 return;
             }
 
             detalle.forEach(item => {
+                const estado = normalizarEstado(item.estado);
+
                 tbody.innerHTML += `
                     <tr>
                         <td>${escapeHtml(item.colaborador)}</td>
@@ -1193,15 +1431,15 @@
                         <td>${escapeHtml(item.fechaSolicitud)}</td>
                         <td>${escapeHtml(item.fechaInicio)}</td>
                         <td>${escapeHtml(item.fechaFin)}</td>
-                        <td><span class="${getBadgeClass(item.estado)}">${escapeHtml(item.estado)}</span></td>
+                        <td><span class="${getBadgeClass(estado)}">${escapeHtml(estado)}</span></td>
                         <td>${escapeHtml(item.observacion)}</td>
                     </tr>
                 `;
             });
 
             showPreview('general', true);
-        } catch (error) {
-            showMessage(error.message || 'No se pudo generar el reporte general.', 'error');
+        } catch {
+            showMessage('No se pudo generar el reporte general. Revise los filtros e intente nuevamente.', 'error');
         } finally {
             setLoading('general', false);
         }
@@ -1211,12 +1449,12 @@
         const desde = document.getElementById('generalDesde').value;
         const hasta = document.getElementById('generalHasta').value;
 
-        if (!desde || !hasta) {
-            showMessage('Debe seleccionar la fecha inicial y la fecha final.', 'error');
+        if (!validarRangoFechas(desde, hasta)) {
             return;
         }
 
         const query = construirQuery({ desde, hasta });
+        informarDescarga('pdf');
         window.open(`/Admin/ExportarReporteGeneralPdf?${query}`, '_blank');
     }
 
@@ -1224,12 +1462,12 @@
         const desde = document.getElementById('generalDesde').value;
         const hasta = document.getElementById('generalHasta').value;
 
-        if (!desde || !hasta) {
-            showMessage('Debe seleccionar la fecha inicial y la fecha final.', 'error');
+        if (!validarRangoFechas(desde, hasta)) {
             return;
         }
 
         const query = construirQuery({ desde, hasta });
+        informarDescarga('excel');
         window.location.href = `/Admin/ExportarReporteGeneralExcel?${query}`;
     }
 
@@ -1239,18 +1477,11 @@
         const hasta = document.getElementById('asistenciaHasta').value;
         const nombreEmpleado = document.getElementById('asistenciaEmpleado').selectedOptions[0]?.text || '';
 
-        if (!idUsuario) {
-            showMessage('Debe seleccionar un empleado.', 'error');
+        if (!validarEmpleadoSeleccionado(idUsuario)) {
             return;
         }
 
-        if (!desde || !hasta) {
-            showMessage('Debe seleccionar la fecha inicial y la fecha final.', 'error');
-            return;
-        }
-
-        if (desde > hasta) {
-            showMessage('La fecha inicial no puede ser mayor que la fecha final.', 'error');
+        if (!validarRangoFechas(desde, hasta)) {
             return;
         }
 
@@ -1264,7 +1495,7 @@
             const detalle = data.detalle || [];
 
             document.getElementById('asistenciaPreviewMeta').textContent =
-                `Empleado consultado: ${data.empleado || nombreEmpleado} | Período: ${resumen.desde || ''} al ${resumen.hasta || ''}`;
+                `Empleado consultado: ${data.empleado || nombreEmpleado} | Período: ${resumen.desde || desde} al ${resumen.hasta || hasta}`;
 
             renderSummaryCards('asistenciaSummary', [
                 { label: 'Empleado', value: data.empleado || nombreEmpleado },
@@ -1283,7 +1514,7 @@
                 document.getElementById('asistenciaEmpty').innerHTML = `
                     <div class="empty-state-icon">🕒</div>
                     <h3>No hay datos disponibles</h3>
-                    <p>El colaborador no tiene marcas en el rango indicado.</p>
+                    <p>El colaborador no tiene marcas en el rango indicado. Puede cambiar las fechas o seleccionar otro colaborador.</p>
                 `;
                 return;
             }
@@ -1301,8 +1532,8 @@
             });
 
             showPreview('asistencia', true);
-        } catch (error) {
-            showMessage(error.message || 'No se pudo generar el reporte de asistencia.', 'error');
+        } catch {
+            showMessage('No se pudo generar el reporte de asistencia. Revise los filtros e intente nuevamente.', 'error');
         } finally {
             setLoading('asistencia', false);
         }
@@ -1313,12 +1544,16 @@
         const desde = document.getElementById('asistenciaDesde').value;
         const hasta = document.getElementById('asistenciaHasta').value;
 
-        if (!idUsuario) {
-            showMessage('Debe seleccionar un empleado.', 'error');
+        if (!validarEmpleadoSeleccionado(idUsuario)) {
+            return;
+        }
+
+        if (!validarRangoFechas(desde, hasta)) {
             return;
         }
 
         const query = construirQuery({ idUsuario, desde, hasta });
+        informarDescarga('pdf');
         window.open(`/Admin/ExportarReporteAsistenciaEmpleadoPdf?${query}`, '_blank');
     }
 
@@ -1327,12 +1562,16 @@
         const desde = document.getElementById('asistenciaDesde').value;
         const hasta = document.getElementById('asistenciaHasta').value;
 
-        if (!idUsuario) {
-            showMessage('Debe seleccionar un empleado.', 'error');
+        if (!validarEmpleadoSeleccionado(idUsuario)) {
+            return;
+        }
+
+        if (!validarRangoFechas(desde, hasta)) {
             return;
         }
 
         const query = construirQuery({ idUsuario, desde, hasta });
+        informarDescarga('excel');
         window.location.href = `/Admin/ExportarReporteAsistenciaEmpleadoExcel?${query}`;
     }
 
@@ -1344,6 +1583,7 @@
         }
 
         const partes = valor.split('-');
+
         if (partes.length !== 2) {
             return null;
         }
@@ -1358,8 +1598,7 @@
         const periodo = obtenerAnioMesAusencias();
         const tipoAusencia = document.getElementById('ausenciasTipo').value;
 
-        if (!periodo) {
-            showMessage('Debe seleccionar un mes válido.', 'error');
+        if (!validarPeriodoMensual(periodo)) {
             return;
         }
 
@@ -1377,7 +1616,7 @@
             const detalle = data.detalle || [];
 
             document.getElementById('ausenciasPreviewMeta').textContent =
-                `Período consultado: ${resumen.mes || ''}`;
+                `Período consultado: ${resumen.mes || `${periodo.mes}/${periodo.anio}`}`;
 
             renderSummaryCards('ausenciasSummary', [
                 { label: 'Mes', value: resumen.mes ?? '—' },
@@ -1398,12 +1637,14 @@
                 document.getElementById('ausenciasEmpty').innerHTML = `
                     <div class="empty-state-icon">📅</div>
                     <h3>No hay datos disponibles</h3>
-                    <p>No se encontraron ausencias para el mes y tipo seleccionados.</p>
+                    <p>No se encontraron ausencias para el mes y tipo seleccionados. Puede cambiar el filtro y generar nuevamente.</p>
                 `;
                 return;
             }
 
             detalle.forEach(item => {
+                const estado = normalizarEstado(item.estado);
+
                 tbody.innerHTML += `
                     <tr>
                         <td>${escapeHtml(item.colaborador)}</td>
@@ -1411,15 +1652,15 @@
                         <td>${escapeHtml(item.fechaInicio)}</td>
                         <td>${escapeHtml(item.fechaFin)}</td>
                         <td>${escapeHtml(item.diasEnMes)}</td>
-                        <td><span class="${getBadgeClass(item.estado)}">${escapeHtml(item.estado)}</span></td>
+                        <td><span class="${getBadgeClass(estado)}">${escapeHtml(estado)}</span></td>
                         <td>${escapeHtml(item.observacion)}</td>
                     </tr>
                 `;
             });
 
             showPreview('ausencias', true);
-        } catch (error) {
-            showMessage(error.message || 'No se pudo generar el reporte de ausencias.', 'error');
+        } catch {
+            showMessage('No se pudo generar el reporte de ausencias. Revise los filtros e intente nuevamente.', 'error');
         } finally {
             setLoading('ausencias', false);
         }
@@ -1429,8 +1670,7 @@
         const periodo = obtenerAnioMesAusencias();
         const tipoAusencia = document.getElementById('ausenciasTipo').value;
 
-        if (!periodo) {
-            showMessage('Debe seleccionar un mes válido.', 'error');
+        if (!validarPeriodoMensual(periodo)) {
             return;
         }
 
@@ -1440,6 +1680,7 @@
             tipoAusencia: tipoAusencia
         });
 
+        informarDescarga('pdf');
         window.open(`/Admin/ExportarReporteAusenciasMensualesPdf?${query}`, '_blank');
     }
 
@@ -1447,8 +1688,7 @@
         const periodo = obtenerAnioMesAusencias();
         const tipoAusencia = document.getElementById('ausenciasTipo').value;
 
-        if (!periodo) {
-            showMessage('Debe seleccionar un mes válido.', 'error');
+        if (!validarPeriodoMensual(periodo)) {
             return;
         }
 
@@ -1458,6 +1698,7 @@
             tipoAusencia: tipoAusencia
         });
 
+        informarDescarga('excel');
         window.location.href = `/Admin/ExportarReporteAusenciasMensualesExcel?${query}`;
     }
 
@@ -1466,13 +1707,7 @@
         const desde = document.getElementById('seguimientoDesde').value;
         const hasta = document.getElementById('seguimientoHasta').value;
 
-        if (!desde || !hasta) {
-            showMessage('Debe seleccionar la fecha inicial y la fecha final.', 'error');
-            return;
-        }
-
-        if (desde > hasta) {
-            showMessage('La fecha inicial no puede ser mayor que la fecha final.', 'error');
+        if (!validarRangoFechas(desde, hasta)) {
             return;
         }
 
@@ -1486,7 +1721,7 @@
             const detalle = data.detalle || [];
 
             document.getElementById('seguimientoPreviewMeta').textContent =
-                `Período consultado: ${resumen.desde || ''} al ${resumen.hasta || ''}`;
+                `Período consultado: ${resumen.desde || desde} al ${resumen.hasta || hasta}`;
 
             renderSummaryCards('seguimientoSummary', [
                 { label: 'Total Solicitudes', value: resumen.totalSolicitudes ?? 0 },
@@ -1504,12 +1739,14 @@
                 document.getElementById('seguimientoEmpty').innerHTML = `
                     <div class="empty-state-icon">📂</div>
                     <h3>No hay datos disponibles</h3>
-                    <p>No se encontraron solicitudes con los filtros indicados.</p>
+                    <p>No se encontraron solicitudes con los filtros indicados. Puede cambiar el estado o el rango de fechas.</p>
                 `;
                 return;
             }
 
             detalle.forEach(item => {
+                const estadoNormalizado = normalizarEstado(item.estado);
+
                 tbody.innerHTML += `
                     <tr>
                         <td>${escapeHtml(item.colaborador)}</td>
@@ -1517,16 +1754,16 @@
                         <td>${escapeHtml(item.fechaSolicitud)}</td>
                         <td>${escapeHtml(item.fechaInicio)}</td>
                         <td>${escapeHtml(item.fechaFin)}</td>
-                        <td><span class="${getBadgeClass(item.estado)}">${escapeHtml(item.estado)}</span></td>
+                        <td><span class="${getBadgeClass(estadoNormalizado)}">${escapeHtml(estadoNormalizado)}</span></td>
                         <td>${escapeHtml(item.observacion)}</td>
-                        <td>${escapeHtml(item.archivo)}</td>
+                        <td>${escapeHtml(item.archivo || 'Sin archivo')}</td>
                     </tr>
                 `;
             });
 
             showPreview('seguimiento', true);
-        } catch (error) {
-            showMessage(error.message || 'No se pudo generar el reporte de seguimiento.', 'error');
+        } catch {
+            showMessage('No se pudo generar el reporte de seguimiento. Revise los filtros e intente nuevamente.', 'error');
         } finally {
             setLoading('seguimiento', false);
         }
@@ -1537,12 +1774,12 @@
         const desde = document.getElementById('seguimientoDesde').value;
         const hasta = document.getElementById('seguimientoHasta').value;
 
-        if (!desde || !hasta) {
-            showMessage('Debe seleccionar la fecha inicial y la fecha final.', 'error');
+        if (!validarRangoFechas(desde, hasta)) {
             return;
         }
 
         const query = construirQuery({ estado, desde, hasta });
+        informarDescarga('pdf');
         window.open(`/Admin/ExportarReporteSeguimientoSolicitudesPdf?${query}`, '_blank');
     }
 
@@ -1551,12 +1788,12 @@
         const desde = document.getElementById('seguimientoDesde').value;
         const hasta = document.getElementById('seguimientoHasta').value;
 
-        if (!desde || !hasta) {
-            showMessage('Debe seleccionar la fecha inicial y la fecha final.', 'error');
+        if (!validarRangoFechas(desde, hasta)) {
             return;
         }
 
         const query = construirQuery({ estado, desde, hasta });
+        informarDescarga('excel');
         window.location.href = `/Admin/ExportarReporteSeguimientoSolicitudesExcel?${query}`;
     }
 </script>

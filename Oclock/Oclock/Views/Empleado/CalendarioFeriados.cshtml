@@ -16,29 +16,32 @@
     }
 
     .sidebar {
-        width: 220px;
+        width: 280px;
         background: #ffffff;
-        padding: 20px 15px;
+        padding: 30px 20px;
         border-right: 1px solid #e0e0e0;
-        box-shadow: 2px 0 8px rgba(0,0,0,0.02);
+        box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+        flex-shrink: 0;
     }
 
     .menu-item {
         padding: 0;
-        margin: 3px 0;
-        border-radius: 8px;
+        margin: 4px 0;
+        border-radius: 10px;
+        transition: all 0.3s;
+        position: relative;
     }
 
     .menu-link {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 10px 15px;
+        gap: 12px;
+        padding: 15px 20px;
         color: #4a5568;
         text-decoration: none;
         font-weight: 500;
-        font-size: 14px;
-        border-radius: 8px;
+        font-size: 15px;
+        border-radius: 10px;
         transition: all 0.3s;
         position: relative;
     }
@@ -46,13 +49,13 @@
         .menu-link:hover {
             background: #2F6FED;
             color: white;
-            transform: translateX(3px);
+            transform: translateX(5px);
         }
 
         .menu-link.active {
-            background: #2457C8;
+            background: #2F6FED;
             color: white;
-            box-shadow: 0 3px 10px rgba(36,87,200,0.25);
+            box-shadow: 0 4px 12px rgba(47,111,237,0.3);
         }
 
             .menu-link.active::before {
@@ -61,62 +64,105 @@
                 left: 0;
                 top: 50%;
                 transform: translateY(-50%);
-                width: 3px;
-                height: 18px;
+                width: 4px;
+                height: 24px;
                 background: white;
-                border-radius: 0 3px 3px 0;
+                border-radius: 0 4px 4px 0;
             }
 
     .icon {
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 16px;
+        font-size: 18px;
     }
 
     .content {
         flex: 1;
-        padding: 25px;
-        background: #F6F8FB;
+        padding: 40px;
+        background: #f5f7fa;
+        min-width: 0;
     }
 
     .content-header {
-        margin-bottom: 20px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+        flex-wrap: wrap;
     }
 
         .content-header h1 {
             color: #2d3748;
-            font-size: 24px;
-            margin-bottom: 5px;
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 800;
         }
 
         .content-header p {
             color: #718096;
             font-size: 14px;
+            margin-bottom: 0;
+            line-height: 1.5;
         }
+
+    .message-box {
+        display: none;
+        padding: 14px 16px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.5;
+    }
+
+    .message-error {
+        background: #fff5f5;
+        color: #742a2a;
+        border-left: 4px solid #e53e3e;
+    }
+
+    .message-info {
+        background: #EEF4FF;
+        color: #1e3a8a;
+        border-left: 4px solid #2F6FED;
+    }
+
+    .message-success {
+        background: #f0fff4;
+        color: #22543d;
+        border-left: 4px solid #38a169;
+    }
 
     .stat-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
         gap: 15px;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
     }
 
     .stat-card {
         background: #ffffff;
-        border-radius: 12px;
-        padding: 18px;
-        border: 1px solid #E5E7EB;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        border-radius: 14px;
+        padding: 22px;
+        border-left: 4px solid #2F6FED;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        transition: transform 0.3s;
     }
 
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
     .stat-value {
-        color: #2457C8;
-        font-size: 28px;
+        color: #2d3748;
+        font-size: 30px;
         font-weight: 800;
-        margin-bottom: 3px;
+        margin-bottom: 4px;
+        word-break: break-word;
     }
 
     .stat-label {
@@ -135,18 +181,20 @@
     }
 
     .calendar-card-header {
-        background: #2457C8;
+        background: #2F6FED;
         color: white;
-        padding: 18px 22px;
+        padding: 20px 24px;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
     }
 
         .calendar-card-header h2 {
             font-size: 20px;
             margin: 0;
-            font-weight: 700;
+            font-weight: 800;
         }
 
         .calendar-card-header span {
@@ -158,26 +206,30 @@
         }
 
     .calendar-card-body {
-        padding: 22px;
+        padding: 24px;
     }
 
     .view-toggle {
         display: flex;
-        gap: 8px;
+        gap: 10px;
         margin-bottom: 20px;
         flex-wrap: wrap;
     }
 
     .toggle-btn {
-        padding: 8px 20px;
-        border-radius: 8px;
+        padding: 10px 22px;
+        border-radius: 10px;
         border: 2px solid #2F6FED;
         background: white;
         color: #2F6FED;
-        font-weight: 600;
+        font-weight: 700;
         cursor: pointer;
         transition: all 0.2s;
     }
+
+        .toggle-btn:hover {
+            background: #EEF4FF;
+        }
 
         .toggle-btn.active {
             background: #2F6FED;
@@ -188,61 +240,66 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 15px;
         margin-bottom: 20px;
     }
 
         .calendar-nav h3 {
-            font-size: 20px;
+            font-size: 22px;
             color: #2d3748;
-            font-weight: 700;
+            font-weight: 800;
+            margin: 0;
+            text-align: center;
         }
 
     .nav-btn {
         background: #EEF4FF;
         border: none;
         color: #2F6FED;
-        font-weight: 700;
-        width: 38px;
-        height: 38px;
+        font-weight: 800;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         cursor: pointer;
-        font-size: 18px;
+        font-size: 20px;
         transition: all 0.2s;
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
     }
 
         .nav-btn:hover {
             background: #2F6FED;
             color: white;
-            transform: scale(1.1);
+            transform: scale(1.08);
         }
 
     .calendar-grid {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-        gap: 4px;
+        gap: 5px;
     }
 
     .cal-header {
         text-align: center;
         padding: 10px 4px;
         font-size: 12px;
-        font-weight: 700;
+        font-weight: 800;
         color: #718096;
         letter-spacing: 0.05em;
     }
 
     .cal-day {
-        min-height: 70px;
+        min-height: 78px;
         border-radius: 10px;
         border: 1px solid #f0f0f0;
-        padding: 6px;
+        padding: 7px;
         cursor: default;
         transition: all 0.2s;
         position: relative;
         background: white;
+        min-width: 0;
     }
 
         .cal-day.empty {
@@ -273,7 +330,7 @@
 
     .day-number {
         font-size: 13px;
-        font-weight: 600;
+        font-weight: 700;
         color: #4a5568;
         margin-bottom: 4px;
         display: block;
@@ -290,10 +347,10 @@
     .holiday-dot {
         font-size: 10px;
         font-weight: 700;
-        color: #f97316;
+        color: #c2410c;
         background: #ffedd5;
-        padding: 2px 5px;
-        border-radius: 4px;
+        padding: 3px 5px;
+        border-radius: 5px;
         display: block;
         line-height: 1.4;
         margin-top: 2px;
@@ -313,7 +370,7 @@
         background: white;
         border-radius: 12px;
         border: 1px solid #e2e8f0;
-        padding: 15px;
+        padding: 16px;
         transition: box-shadow 0.2s;
     }
 
@@ -323,9 +380,9 @@
 
     .month-title {
         text-align: center;
-        font-weight: 700;
+        font-weight: 800;
         font-size: 14px;
-        color: #2457C8;
+        color: #2F6FED;
         margin-bottom: 10px;
         text-transform: uppercase;
         letter-spacing: 0.04em;
@@ -341,14 +398,14 @@
         font-size: 9px;
         text-align: center;
         color: #a0aec0;
-        font-weight: 700;
+        font-weight: 800;
         padding: 2px 0;
     }
 
     .mini-day {
         font-size: 10px;
         text-align: center;
-        padding: 3px 1px;
+        padding: 4px 1px;
         border-radius: 4px;
         cursor: default;
         color: #4a5568;
@@ -357,13 +414,13 @@
         .mini-day.holiday-mini {
             background: #f97316;
             color: white;
-            font-weight: 700;
+            font-weight: 800;
             border-radius: 50%;
             cursor: pointer;
         }
 
             .mini-day.holiday-mini:hover {
-                transform: scale(1.3);
+                transform: scale(1.25);
             }
 
         .mini-day.today-mini {
@@ -379,30 +436,101 @@
             color: transparent;
         }
 
+    .empty-calendar {
+        text-align: center;
+        padding: 45px 20px;
+        color: #718096;
+    }
+
+    .empty-calendar-icon {
+        font-size: 52px;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
+
+    .empty-calendar h3 {
+        color: #4a5568;
+        font-size: 18px;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .empty-calendar p {
+        font-size: 14px;
+        margin-bottom: 0;
+        line-height: 1.5;
+    }
+
     .modal-header.oc-modal-header {
-        background: #2457C8 !important;
+        background: #2F6FED !important;
         color: white !important;
         border-radius: 15px 15px 0 0;
         border-bottom: none;
     }
 
-    @@media (max-width: 900px) {
-        .months-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    @@media (max-width: 600px) {
+    @@media (max-width: 1100px) {
         .main-layout {
             flex-direction: column;
         }
 
         .sidebar {
             width: 100%;
+            border-right: none;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .content {
+            padding: 25px;
+        }
+    }
+
+    @@media (max-width: 900px) {
+        .months-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .cal-day {
+            min-height: 68px;
+        }
+    }
+
+    @@media (max-width: 650px) {
+        .content {
+            padding: 20px 14px;
+        }
+
+        .content-header h1 {
+            font-size: 24px;
+        }
+
+        .calendar-card-body {
+            padding: 18px;
         }
 
         .months-grid {
             grid-template-columns: 1fr;
+        }
+
+        .view-toggle {
+            flex-direction: column;
+        }
+
+        .toggle-btn {
+            width: 100%;
+        }
+
+        .calendar-nav h3 {
+            font-size: 18px;
+        }
+
+        .cal-day {
+            min-height: 58px;
+            padding: 5px;
+        }
+
+        .holiday-dot {
+            font-size: 9px;
+            padding: 2px 4px;
         }
     }
 </style>
@@ -433,56 +561,67 @@
         <div class="menu-item">
             <a href="/Empleado/CalendarioFeriados" class="menu-link active">
                 <div class="icon">📅</div>
-                Calendario
+                Calendario de Feriados
+            </a>
+        </div>
+
+        <div class="menu-item">
+            <a href="/Empleado/HistorialBonos" class="menu-link">
+                <div class="icon">🏆</div>
+                Mis Bonos
             </a>
         </div>
     </div>
 
     <div class="content">
         <div class="content-header">
-            <h1>📅 Calendario de Feriados</h1>
-            <p>Consulta los feriados nacionales de Costa Rica registrados en el sistema</p>
+            <div>
+                <h1>📅 Calendario de Feriados</h1>
+                <p>Consulte los feriados registrados y revise cuáles son laborables o no laborables.</p>
+            </div>
         </div>
+
+        <div id="messageBox" class="message-box"></div>
 
         <div class="stat-grid">
             <div class="stat-card">
-                <div class="stat-value" id="totalHolidays">-</div>
-                <div class="stat-label">Feriados del Año</div>
+                <div class="stat-value" id="totalHolidays">—</div>
+                <div class="stat-label">Feriados del año</div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-value" id="noLaborables">-</div>
-                <div class="stat-label">No Laborables</div>
+                <div class="stat-value" id="noLaborables">—</div>
+                <div class="stat-label">No laborables</div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-value" id="nextHoliday">-</div>
-                <div class="stat-label">Próximo Feriado</div>
+                <div class="stat-value" id="nextHoliday">—</div>
+                <div class="stat-label">Próximo feriado</div>
             </div>
         </div>
 
         <div class="calendar-card">
             <div class="calendar-card-header">
-                <h2>📆 Calendario Laboral</h2>
+                <h2>📆 Calendario laboral</h2>
                 <span id="holidayCount">Cargando...</span>
             </div>
 
             <div class="calendar-card-body">
                 <div class="view-toggle">
-                    <button class="toggle-btn active" id="btnMensual" onclick="setView('mensual')">
-                        Vista Mensual
+                    <button type="button" class="toggle-btn active" id="btnMensual" onclick="setView('mensual')">
+                        Vista mensual
                     </button>
 
-                    <button class="toggle-btn" id="btnAnual" onclick="setView('anual')">
-                        Vista Anual
+                    <button type="button" class="toggle-btn" id="btnAnual" onclick="setView('anual')">
+                        Vista anual
                     </button>
                 </div>
 
                 <div id="viewMensual">
                     <div class="calendar-nav">
-                        <button class="nav-btn" onclick="changeMonth(-1)">‹</button>
+                        <button type="button" class="nav-btn" onclick="changeMonth(-1)">‹</button>
                         <h3 id="calendarTitle"></h3>
-                        <button class="nav-btn" onclick="changeMonth(1)">›</button>
+                        <button type="button" class="nav-btn" onclick="changeMonth(1)">›</button>
                     </div>
 
                     <div class="calendar-grid" id="calendarGrid">
@@ -498,9 +637,9 @@
 
                 <div id="viewAnual" style="display:none;">
                     <div class="calendar-nav">
-                        <button class="nav-btn" onclick="changeYear(-1)">‹</button>
+                        <button type="button" class="nav-btn" onclick="changeYear(-1)">‹</button>
                         <h3 id="yearTitle"></h3>
-                        <button class="nav-btn" onclick="changeYear(1)">›</button>
+                        <button type="button" class="nav-btn" onclick="changeYear(1)">›</button>
                     </div>
 
                     <div class="months-grid" id="monthsGrid"></div>
@@ -545,19 +684,106 @@
         'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
     ];
 
+    document.addEventListener('DOMContentLoaded', async function () {
+        const anioInicial = currentDate.getFullYear();
+        currentYear = anioInicial;
+        await cargarFeriados(anioInicial);
+    });
+
     async function cargarFeriados(anio) {
         loadedYear = anio;
+        mostrarCargando();
 
-        const res = await fetch('/Feriados/GetAll?anio=' + anio);
+        try {
+            const response = await fetch('/Feriados/GetAll?anio=' + encodeURIComponent(anio));
+            const data = await leerRespuesta(response);
 
-        if (!res.ok) {
-            return;
+            if (!response.ok || !Array.isArray(data)) {
+                holidays = [];
+                updateStats(anio);
+                renderCalendar();
+                mostrarMensaje(data.message || data.mensaje || 'No se pudieron cargar los feriados.', 'error');
+                return;
+            }
+
+            holidays = data;
+            updateStats(anio);
+            renderCalendar();
+
+            if (holidays.length === 0) {
+                mostrarMensaje('No hay feriados registrados para el año seleccionado.', 'info');
+            }
+        } catch {
+            holidays = [];
+            updateStats(anio);
+            renderCalendar();
+            mostrarMensaje('No se pudieron cargar los feriados. Intente nuevamente.', 'error');
+        }
+    }
+
+    async function leerRespuesta(response) {
+        try {
+            const contentType = response.headers.get('content-type') || '';
+
+            if (contentType.includes('application/json')) {
+                return await response.json();
+            }
+
+            const texto = await response.text();
+
+            return {
+                success: response.ok,
+                message: texto,
+                mensaje: texto
+            };
+        } catch {
+            return {
+                success: false,
+                message: 'No se recibió una respuesta válida del sistema.'
+            };
+        }
+    }
+
+    function mostrarCargando() {
+        document.getElementById('holidayCount').textContent = 'Cargando...';
+
+        document.getElementById('calendarGrid').innerHTML = `
+            <div class="cal-header">Dom</div>
+            <div class="cal-header">Lun</div>
+            <div class="cal-header">Mar</div>
+            <div class="cal-header">Mié</div>
+            <div class="cal-header">Jue</div>
+            <div class="cal-header">Vie</div>
+            <div class="cal-header">Sáb</div>
+            <div style="grid-column:1 / -1;">
+                <div class="empty-calendar">
+                    <div class="empty-calendar-icon">⏳</div>
+                    <h3>Cargando calendario</h3>
+                    <p>Estamos consultando los feriados registrados.</p>
+                </div>
+            </div>
+        `;
+    }
+
+    function mostrarMensaje(mensaje, tipo) {
+        const box = document.getElementById('messageBox');
+
+        box.className = 'message-box';
+
+        if (tipo === 'success') {
+            box.classList.add('message-success');
+        } else if (tipo === 'error') {
+            box.classList.add('message-error');
+        } else {
+            box.classList.add('message-info');
         }
 
-        holidays = await res.json();
+        box.textContent = mensaje;
+        box.style.display = 'block';
 
-        updateStats(anio);
-        renderCalendar();
+        setTimeout(() => {
+            box.style.display = 'none';
+        }, 5000);
     }
 
     function updateStats(anio) {
@@ -566,20 +792,20 @@
         const noLaborables = holidays.filter(h => !h.esLaborable).length;
         document.getElementById('noLaborables').textContent = noLaborables;
 
-        document.getElementById('holidayCount').textContent = holidays.length + ' registrados en ' + anio;
+        document.getElementById('holidayCount').textContent = holidays.length + ' registrado(s) en ' + anio;
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
         const proximos = holidays
             .filter(h => new Date(h.fecha + 'T00:00:00') >= today)
-            .sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+            .sort((a, b) => new Date(a.fecha + 'T00:00:00') - new Date(b.fecha + 'T00:00:00'));
 
         if (proximos.length > 0) {
             const d = new Date(proximos[0].fecha + 'T00:00:00');
             document.getElementById('nextHoliday').textContent = d.getDate() + ' ' + MONTHS_SHORT[d.getMonth()];
         } else {
-            document.getElementById('nextHoliday').textContent = '-';
+            document.getElementById('nextHoliday').textContent = '—';
         }
     }
 
@@ -658,9 +884,9 @@
             grid.insertAdjacentHTML('beforeend', '<div class="cal-day empty"></div>');
         }
 
-        for (let d = 1; d <= daysInMonth; d++) {
-            const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
-            const dayDate = new Date(year, month, d);
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+            const dayDate = new Date(year, month, day);
 
             const isToday = dayDate.getTime() === today.getTime();
             const isWeekend = dayDate.getDay() === 0 || dayDate.getDay() === 6;
@@ -679,16 +905,18 @@
             }
 
             const badge = holiday
-                ? '<span class="holiday-dot">🎌 ' + holiday.nombre + '</span>'
+                ? '<span class="holiday-dot">🎌 ' + escapeHtml(holiday.nombre || 'Feriado') + '</span>'
                 : '';
 
             const onclick = holiday
-                ? 'onclick="mostrarDetalle(' + holiday.idFeriado + ')"'
+                ? 'onclick="mostrarDetalle(' + Number(holiday.idFeriado) + ')"'
                 : '';
 
+            const title = holiday ? escapeAttribute(holiday.nombre || 'Feriado') : '';
+
             grid.insertAdjacentHTML('beforeend', `
-                <div class="${cls}" ${onclick} title="${holiday ? holiday.nombre : ''}">
-                    <span class="day-number">${d}</span>
+                <div class="${cls}" ${onclick} title="${title}">
+                    <span class="day-number">${day}</span>
                     ${badge}
                 </div>
             `);
@@ -714,23 +942,23 @@
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        for (let m = 0; m < 12; m++) {
-            const firstDay = new Date(currentYear, m, 1).getDay();
-            const daysInMonth = new Date(currentYear, m + 1, 0).getDate();
+        for (let month = 0; month < 12; month++) {
+            const firstDay = new Date(currentYear, month, 1).getDay();
+            const daysInMonth = new Date(currentYear, month + 1, 0).getDate();
 
             let daysHtml = '';
 
-            ['D', 'L', 'M', 'X', 'J', 'V', 'S'].forEach(h => {
-                daysHtml += '<div class="mini-header">' + h + '</div>';
+            ['D', 'L', 'M', 'X', 'J', 'V', 'S'].forEach(header => {
+                daysHtml += '<div class="mini-header">' + header + '</div>';
             });
 
             for (let i = 0; i < firstDay; i++) {
                 daysHtml += '<div class="mini-day empty-mini"></div>';
             }
 
-            for (let d = 1; d <= daysInMonth; d++) {
-                const dateStr = currentYear + '-' + String(m + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
-                const dayDate = new Date(currentYear, m, d);
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = currentYear + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+                const dayDate = new Date(currentYear, month, day);
 
                 const isToday = dayDate.getTime() === today.getTime();
                 const isWeekend = dayDate.getDay() === 0 || dayDate.getDay() === 6;
@@ -749,15 +977,17 @@
                 }
 
                 const onclick = holiday
-                    ? 'onclick="mostrarDetalle(' + holiday.idFeriado + ')"'
+                    ? 'onclick="mostrarDetalle(' + Number(holiday.idFeriado) + ')"'
                     : '';
 
-                daysHtml += '<div class="' + cls + '" ' + onclick + ' title="' + (holiday ? holiday.nombre : '') + '">' + d + '</div>';
+                const title = holiday ? escapeAttribute(holiday.nombre || 'Feriado') : '';
+
+                daysHtml += '<div class="' + cls + '" ' + onclick + ' title="' + title + '">' + day + '</div>';
             }
 
             container.insertAdjacentHTML('beforeend', `
                 <div class="month-card">
-                    <div class="month-title">${MONTHS[m]}</div>
+                    <div class="month-title">${MONTHS[month]}</div>
                     <div class="mini-grid">${daysHtml}</div>
                 </div>
             `);
@@ -765,33 +995,51 @@
     }
 
     function mostrarDetalle(id) {
-        const h = holidays.find(x => x.idFeriado === id);
+        const holiday = holidays.find(item => Number(item.idFeriado) === Number(id));
 
-        if (!h) {
+        if (!holiday) {
+            mostrarMensaje('No se encontró el detalle del feriado seleccionado.', 'error');
             return;
         }
 
-        const d = new Date(h.fecha + 'T00:00:00');
+        const fecha = new Date(holiday.fecha + 'T00:00:00');
 
-        document.getElementById('detailFecha').textContent = d.getDate() + ' de ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
-        document.getElementById('detailNombre').textContent = h.nombre;
-        document.getElementById('detailLaborable').textContent = h.esLaborable ? 'Laborable' : 'No laborable';
+        document.getElementById('detailFecha').textContent = fecha.getDate() + ' de ' + MONTHS[fecha.getMonth()] + ' ' + fecha.getFullYear();
+        document.getElementById('detailNombre').textContent = holiday.nombre || 'Feriado';
+        document.getElementById('detailLaborable').textContent = holiday.esLaborable ? 'Laborable' : 'No laborable';
 
         const descWrap = document.getElementById('detailDescWrap');
 
-        if (h.descripcion) {
-            document.getElementById('detailDesc').textContent = h.descripcion;
+        if (holiday.descripcion) {
+            document.getElementById('detailDesc').textContent = holiday.descripcion;
             descWrap.style.display = '';
         } else {
             descWrap.style.display = 'none';
         }
 
-        new bootstrap.Modal(document.getElementById('detailModal')).show();
+        const modalElement = document.getElementById('detailModal');
+
+        if (window.bootstrap && bootstrap.Modal) {
+            new bootstrap.Modal(modalElement).show();
+        } else {
+            mostrarMensaje('Detalle: ' + (holiday.nombre || 'Feriado'), 'info');
+        }
     }
 
-    document.addEventListener('DOMContentLoaded', async function () {
-        const anioInicial = currentDate.getFullYear();
-        currentYear = anioInicial;
-        await cargarFeriados(anioInicial);
-    });
+    function escapeHtml(value) {
+        if (value === null || value === undefined) {
+            return '';
+        }
+
+        return value.toString()
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
+    }
+
+    function escapeAttribute(value) {
+        return escapeHtml(value).replaceAll('`', '&#096;');
+    }
 </script>
