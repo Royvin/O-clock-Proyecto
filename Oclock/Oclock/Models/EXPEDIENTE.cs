@@ -23,5 +23,7 @@ public partial class Expediente
 
     public string? TelefonoEmergencia { get; set; }
 
+    public decimal? Salario { get; set; }
+
     public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
 }

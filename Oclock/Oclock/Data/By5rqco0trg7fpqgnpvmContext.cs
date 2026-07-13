@@ -189,6 +189,8 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
             entity.Property(e => e.TelefonoEmergencia)
                 .HasMaxLength(20)
                 .HasColumnName("telefono_emergencia");
+            entity.Property(e => e.Salario)
+            .HasColumnName("Salario");
 
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Expedientes)
                 .HasForeignKey(d => d.IdUsuario)

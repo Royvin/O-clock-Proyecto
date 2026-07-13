@@ -729,8 +729,7 @@
                     </a>
                 </div>
                 <div class="submenu-item">
-                    
-                    class="submenu-link">
+                    <a href="/Bono/AsignarBono" class="submenu-link">
                         🎁 Bonos
                     </a>
                 </div>
@@ -853,6 +852,7 @@
                             }
                         </select>
                     </div>
+
                 </div>
                 <div class="btn-group">
                     <button type="submit" class="btn btn-primary">💾 Guardar Información</button>
@@ -902,6 +902,12 @@
                     <div class="form-group">
                         <label>Teléfono de Emergencia</label>
                         <input type="text" name="telefonoEmergencia" value="@expediente?.TelefonoEmergencia" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Salario</label>
+                        <input type="number" step="0.01" name="salario"
+                               value="@(expediente?.Salario?.ToString(System.Globalization.CultureInfo.InvariantCulture))" />
                     </div>
                 </div>
                 <div class="btn-group">

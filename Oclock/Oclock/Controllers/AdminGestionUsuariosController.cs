@@ -67,7 +67,7 @@ namespace Oclock.Controllers
 
         [HttpPost]
         public IActionResult GuardarExpediente(int idUsuario, string? cedula, string? direccion,
-            string? ciudad, string? estadoCivil, string? contactoEmergencia, string? telefonoEmergencia)
+            string? ciudad, string? estadoCivil, string? contactoEmergencia, string? telefonoEmergencia, decimal? salario)
         {
             var expediente = _context.Expedientes.FirstOrDefault(e => e.IdUsuario == idUsuario);
 
@@ -83,6 +83,7 @@ namespace Oclock.Controllers
             expediente.EstadoCivil = estadoCivil;
             expediente.ContactoEmergencia = contactoEmergencia;
             expediente.TelefonoEmergencia = telefonoEmergencia;
+            expediente.Salario = salario;
 
             _context.SaveChanges();
             TempData["Mensaje"] = "Expediente actualizado correctamente.";
