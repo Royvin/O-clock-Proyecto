@@ -1,25 +1,191 @@
 ﻿@model Oclock.Models.ErrorViewModel
+
 @{
     ViewData["Title"] = "Error";
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<style>
+    .error-page {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        background: #f5f7fa;
+    }
 
-@if (Model.ShowRequestId)
-{
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
-}
+    .error-card {
+        width: 100%;
+        max-width: 720px;
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 38px;
+        box-shadow: 0 8px 28px rgba(0,0,0,0.10);
+        border: 1px solid #e5e7eb;
+        text-align: center;
+    }
 
-<h3>Development Mode</h3>
-<p>
-    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
-</p>
-<p>
-    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
-    It can result in displaying sensitive information from exceptions to end users.
-    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
-    and restarting the app.
-</p>
+    .error-icon {
+        width: 86px;
+        height: 86px;
+        background: #fff5f5;
+        color: #e53e3e;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 42px;
+        margin: 0 auto 22px auto;
+        border: 1px solid #fed7d7;
+    }
+
+    .error-title {
+        color: #2d3748;
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 10px;
+    }
+
+    .error-description {
+        color: #718096;
+        font-size: 15px;
+        line-height: 1.7;
+        margin-bottom: 24px;
+    }
+
+    .error-note {
+        background: #f7fafc;
+        border: 1px solid #e2e8f0;
+        color: #4a5568;
+        padding: 16px;
+        border-radius: 12px;
+        font-size: 13px;
+        line-height: 1.6;
+        margin-bottom: 24px;
+        text-align: left;
+    }
+
+    .error-actions {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .error-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 22px;
+        background: #2F6FED;
+        color: white;
+        text-decoration: none;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+
+        .error-btn:hover {
+            background: #2457C8;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(47,111,237,0.30);
+        }
+
+    .error-btn-secondary {
+        background: #e2e8f0;
+        color: #2d3748;
+    }
+
+        .error-btn-secondary:hover {
+            background: #cbd5e0;
+            color: #2d3748;
+            box-shadow: none;
+        }
+
+    .error-request {
+        margin-top: 22px;
+        color: #718096;
+        font-size: 12px;
+        word-break: break-word;
+    }
+
+        .error-request code {
+            background: #f7fafc;
+            color: #4a5568;
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+    @@media (max-width: 650px) {
+        .error-card {
+            padding: 28px 22px;
+        }
+
+        .error-title {
+            font-size: 24px;
+        }
+
+        .error-actions {
+            flex-direction: column;
+        }
+
+        .error-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="error-page">
+    <div class="error-card">
+        <div class="error-icon">
+            ⚠️
+        </div>
+
+        <h1 class="error-title">Ocurrió un problema</h1>
+
+        <p class="error-description">
+            No se pudo procesar la solicitud en este momento. Puede volver a intentarlo o regresar a la pantalla anterior.
+        </p>
+
+        <div class="error-note">
+            Si el problema continúa, comuníquelo al encargado del sistema indicando qué acción estaba realizando.
+            Esto ayudará a revisar el caso más rápido.
+        </div>
+
+        <div class="error-actions">
+            <button type="button" class="error-btn" onclick="volverAtras()">
+                ⬅️ Volver
+            </button>
+
+            <a href="/Usuario/Index" class="error-btn error-btn-secondary">
+                🔐 Ir al acceso
+            </a>
+        </div>
+
+        @if (Model != null && Model.ShowRequestId)
+        {
+            <div class="error-request">
+                Código de referencia:
+                <code>@Model.RequestId</code>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function volverAtras() {
+        if (window.history.length > 1) {
+            window.history.back();
+            return;
+        }
+
+        window.location.href = '/Usuario/Index';
+    }
+</script>

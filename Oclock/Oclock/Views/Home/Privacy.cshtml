@@ -1,6 +1,266 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Privacidad y Uso de Datos";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<style>
+    .privacy-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px 25px;
+    }
+
+    .privacy-header {
+        background: #2F6FED;
+        color: white;
+        padding: 35px;
+        border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(47, 111, 237, 0.25);
+        margin-bottom: 30px;
+    }
+
+        .privacy-header h1 {
+            font-size: 30px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .privacy-header p {
+            font-size: 15px;
+            opacity: 0.95;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+    .privacy-card {
+        background: white;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        margin-bottom: 22px;
+        border-left: 4px solid #2F6FED;
+    }
+
+        .privacy-card h2 {
+            color: #2d3748;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .privacy-card p {
+            color: #4a5568;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .privacy-card ul {
+            margin: 10px 0 0 20px;
+            color: #4a5568;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+    .privacy-note {
+        background: #f7fafc;
+        border: 1px solid #e2e8f0;
+        color: #4a5568;
+        padding: 18px;
+        border-radius: 12px;
+        font-size: 13px;
+        line-height: 1.6;
+        margin-top: 20px;
+    }
+
+    .privacy-actions {
+        margin-top: 25px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .privacy-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 20px;
+        background: #2F6FED;
+        color: white;
+        text-decoration: none;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+
+        .privacy-btn:hover {
+            background: #2457C8;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(47, 111, 237, 0.35);
+        }
+
+    .privacy-btn-secondary {
+        background: #e2e8f0;
+        color: #2d3748;
+    }
+
+        .privacy-btn-secondary:hover {
+            background: #cbd5e0;
+            color: #2d3748;
+            box-shadow: none;
+        }
+
+    .privacy-footer-note {
+        color: #718096;
+        font-size: 13px;
+        line-height: 1.6;
+        margin-top: 15px;
+    }
+
+    @@media (max-width: 768px) {
+        .privacy-container {
+            padding: 25px 15px;
+        }
+
+        .privacy-header {
+            padding: 25px;
+        }
+
+            .privacy-header h1 {
+                font-size: 24px;
+            }
+
+        .privacy-card {
+            padding: 22px;
+        }
+
+        .privacy-actions {
+            flex-direction: column;
+        }
+
+        .privacy-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="privacy-container">
+    <div class="privacy-header">
+        <h1>🔒 Privacidad y Uso de Datos</h1>
+        <p>
+            O'Clock administra información relacionada con asistencia, solicitudes,
+            marcas laborales y datos básicos de colaboradores. Esta página explica de forma
+            clara cómo se utiliza la información dentro del sistema.
+        </p>
+    </div>
+
+    <div class="privacy-card">
+        <h2>📌 Información que utiliza el sistema</h2>
+        <p>
+            O'Clock registra únicamente la información necesaria para operar correctamente
+            los procesos internos de asistencia y gestión laboral.
+        </p>
+
+        <ul>
+            <li>Nombre, apellido, correo electrónico y teléfono del colaborador.</li>
+            <li>Fecha de contratación y estado del usuario dentro del sistema.</li>
+            <li>Marcas de entrada, salida, almuerzo o descanso.</li>
+            <li>Solicitudes realizadas por el colaborador y su estado de aprobación.</li>
+            <li>Documentos adjuntos cuando una solicitud lo requiere.</li>
+            <li>Historial de bonos asignados y registros asociados.</li>
+        </ul>
+    </div>
+
+    <div class="privacy-card">
+        <h2>🧭 Uso de la información</h2>
+        <p>
+            Los datos registrados se utilizan para permitir que el colaborador pueda consultar
+            su información laboral y para que la administración pueda revisar, aprobar o rechazar
+            solicitudes según corresponda.
+        </p>
+
+        <ul>
+            <li>Controlar marcas de asistencia.</li>
+            <li>Consultar historial de registros laborales.</li>
+            <li>Gestionar solicitudes de permisos, vacaciones, incapacidades u otros casos.</li>
+            <li>Validar documentos de respaldo cuando sean requeridos.</li>
+            <li>Generar información administrativa para reportes internos.</li>
+        </ul>
+    </div>
+
+    <div class="privacy-card">
+        <h2>👥 Acceso a los datos</h2>
+        <p>
+            El acceso a la información depende del rol asignado dentro del sistema.
+            Los colaboradores pueden consultar sus propios datos, mientras que los administradores
+            pueden revisar información necesaria para la gestión de recursos humanos.
+        </p>
+
+        <ul>
+            <li>El colaborador accede a sus marcas, solicitudes, bonos e historial.</li>
+            <li>El administrador revisa solicitudes, usuarios, feriados, reportes y asignaciones.</li>
+            <li>La información no debe utilizarse para fines ajenos a la operación interna del sistema.</li>
+        </ul>
+    </div>
+
+    <div class="privacy-card">
+        <h2>🛡️ Seguridad de la información</h2>
+        <p>
+            El sistema utiliza inicio de sesión y roles para separar las funciones de cada usuario.
+            Las contraseñas se almacenan de forma protegida y las sesiones se manejan de manera
+            controlada para evitar accesos no autorizados.
+        </p>
+
+        <ul>
+            <li>Cada usuario debe utilizar sus propias credenciales.</li>
+            <li>No se recomienda compartir contraseñas ni dejar sesiones abiertas en equipos públicos.</li>
+            <li>Los documentos adjuntos deben corresponder únicamente a la solicitud realizada.</li>
+        </ul>
+    </div>
+
+    <div class="privacy-card">
+        <h2>📄 Responsabilidad del usuario</h2>
+        <p>
+            El usuario es responsable de ingresar información correcta y actualizada.
+            En caso de detectar errores en sus datos, debe comunicarlo al área administrativa
+            o al encargado del sistema para su revisión.
+        </p>
+
+        <div class="privacy-note">
+            Esta página tiene fines informativos dentro del sistema O'Clock. No sustituye políticas
+            legales o institucionales formales de la organización.
+        </div>
+    </div>
+
+    <div class="privacy-actions">
+        <button type="button" class="privacy-btn" onclick="volverAtras()">
+            ⬅️ Volver
+        </button>
+
+        <a href="/Usuario/Index" class="privacy-btn privacy-btn-secondary">
+            🔐 Ir al acceso
+        </a>
+    </div>
+
+    <p class="privacy-footer-note">
+        Si ya tiene una sesión activa y usa el botón volver, regresará a la pantalla anterior dentro del sistema.
+    </p>
+</div>
+
+<script>
+    function volverAtras() {
+        if (window.history.length > 1) {
+            window.history.back();
+            return;
+        }
+
+        window.location.href = '/Usuario/Index';
+    }
+</script>

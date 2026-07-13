@@ -62,6 +62,110 @@ namespace Oclock.Controllers
                 || tipoSolicitud.Contains("constancia salarial");
         }
 
+        private static bool TipoMarcaValido(string tipo)
+        {
+            tipo = NormalizarTexto(tipo);
+
+            return tipo == "entrada"
+                || tipo == "salida"
+                || tipo == "almuerzo"
+                || tipo == "descanso";
+        }
+
+        private static string ObtenerEtiquetaTipoMarca(string tipo)
+        {
+            tipo = NormalizarTexto(tipo);
+
+            if (tipo == "entrada") return "Entrada";
+            if (tipo == "salida") return "Salida";
+            if (tipo == "almuerzo") return "Almuerzo";
+            if (tipo == "descanso") return "Descanso";
+
+            return "Marca";
+        }
+
+        private static string ObtenerComentarioMarca(string tipo)
+        {
+            tipo = NormalizarTexto(tipo);
+
+            if (tipo == "entrada") return "Inicio de jornada laboral";
+            if (tipo == "salida") return "Fin de jornada laboral";
+            if (tipo == "almuerzo") return "Registro de almuerzo";
+            if (tipo == "descanso") return "Registro de descanso";
+
+            return "Registro de marca";
+        }
+
+        private static string? ObtenerHoraMarca(Marca marca)
+        {
+            if (marca.HoraEntrada.HasValue)
+            {
+                return marca.HoraEntrada.Value.ToString("HH:mm:ss");
+            }
+
+            if (marca.HoraSalida.HasValue)
+            {
+                return marca.HoraSalida.Value.ToString("HH:mm:ss");
+            }
+
+            return null;
+        }
+
+        private static string CalcularEstadoActual(List<Marca> marcas)
+        {
+            if (marcas == null || !marcas.Any())
+            {
+                return "Sin jornada iniciada";
+            }
+
+            bool tieneEntrada = marcas.Any(m => NormalizarTexto(m.Nombre) == "entrada");
+            bool tieneSalida = marcas.Any(m => NormalizarTexto(m.Nombre) == "salida");
+
+            if (!tieneEntrada)
+            {
+                return "Sin jornada iniciada";
+            }
+
+            if (tieneSalida)
+            {
+                return "Jornada finalizada";
+            }
+
+            var ultimaMarca = marcas
+                .OrderByDescending(m => m.IdMarca)
+                .FirstOrDefault();
+
+            string ultimoTipo = NormalizarTexto(ultimaMarca?.Nombre);
+
+            if (ultimoTipo == "almuerzo")
+            {
+                return "En almuerzo";
+            }
+
+            if (ultimoTipo == "descanso")
+            {
+                return "En descanso";
+            }
+
+            return "En jornada";
+        }
+
+        private static object ObtenerAccionesDisponibles(List<Marca> marcas)
+        {
+            bool tieneEntrada = marcas.Any(m => NormalizarTexto(m.Nombre) == "entrada");
+            bool tieneSalida = marcas.Any(m => NormalizarTexto(m.Nombre) == "salida");
+            bool tieneAlmuerzo = marcas.Any(m => NormalizarTexto(m.Nombre) == "almuerzo");
+            bool tieneDescanso = marcas.Any(m => NormalizarTexto(m.Nombre) == "descanso");
+
+            return new
+            {
+                entrada = !tieneEntrada,
+                almuerzo = tieneEntrada && !tieneSalida && !tieneAlmuerzo,
+                descanso = tieneEntrada && !tieneSalida && !tieneDescanso,
+                salida = tieneEntrada && !tieneSalida
+            };
+        }
+
         private static string ConstruirDescripcionSolicitud(SolicitudPost model, string tipoSolicitud)
         {
             var partes = new List<string>();
@@ -204,13 +308,16 @@ namespace Oclock.Controllers
                 return RedirectToAction("Index", "Usuario");
             }
 
-            var hoy = DateOnly.FromDateTime(DateTime.Now);
+            var hoy = DateOnly.FromDateTime(AhoraCostaRica());
 
             var marcas = _context.Marcas
                 .Where(m => m.IdUsuario == idUsuario.Value && m.Fecha == hoy)
                 .OrderByDescending(m => m.IdMarca)
                 .Take(20)
                 .ToList();
+
+            ViewBag.EstadoActual = CalcularEstadoActual(marcas);
+            ViewBag.AccionesDisponibles = ObtenerAccionesDisponibles(marcas);
 
             return View(marcas);
         }
@@ -222,10 +329,14 @@ namespace Oclock.Controllers
 
             if (idUsuario == null)
             {
-                return Json(new { success = false, message = "Sesión no válida. Inicie sesión nuevamente." });
+                return Json(new
+                {
+                    success = false,
+                    message = "Sesión no válida. Inicie sesión nuevamente."
+                });
             }
 
-            var hoy = DateOnly.FromDateTime(DateTime.Now);
+            var hoy = DateOnly.FromDateTime(AhoraCostaRica());
 
             var marcas = _context.Marcas
                 .Where(m => m.IdUsuario == idUsuario.Value && m.Fecha == hoy)
@@ -236,13 +347,21 @@ namespace Oclock.Controllers
             return Json(new
             {
                 success = true,
+                estadoActual = CalcularEstadoActual(marcas),
+                accionesDisponibles = ObtenerAccionesDisponibles(marcas),
+                totalMarcas = marcas.Count,
                 marcas = marcas.Select(m => new
                 {
-                    tipo = (m.Nombre ?? "").ToLower(),
+                    idMarca = m.IdMarca,
+                    tipo = NormalizarTexto(m.Nombre),
+                    tipoTexto = ObtenerEtiquetaTipoMarca(m.Nombre ?? ""),
                     horaEntrada = m.HoraEntrada.HasValue ? m.HoraEntrada.Value.ToString("HH:mm:ss") : null,
                     horaSalida = m.HoraSalida.HasValue ? m.HoraSalida.Value.ToString("HH:mm:ss") : null,
+                    hora = ObtenerHoraMarca(m),
                     ubicancia = m.Ubicancia ?? "San José, Costa Rica",
-                    comentario = m.Comentario
+                    comentario = string.IsNullOrWhiteSpace(m.Comentario)
+                        ? ObtenerComentarioMarca(m.Nombre ?? "")
+                        : m.Comentario
                 })
             });
         }
@@ -254,7 +373,11 @@ namespace Oclock.Controllers
 
             if (idUsuario == null)
             {
-                return Json(new { success = false, message = "Sesión no válida. Inicie sesión nuevamente." });
+                return Json(new
+                {
+                    success = false,
+                    message = "Sesión no válida. Inicie sesión nuevamente."
+                });
             }
 
             try
@@ -262,56 +385,112 @@ namespace Oclock.Controllers
                 var ahora = AhoraCostaRica();
                 var hoy = DateOnly.FromDateTime(ahora);
 
-                tipo = (tipo ?? "").Trim().ToLower();
+                tipo = NormalizarTexto(tipo);
+
+                if (!TipoMarcaValido(tipo))
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Tipo de marca inválido."
+                    });
+                }
+
+                var marcasHoy = _context.Marcas
+                    .Where(m => m.IdUsuario == idUsuario.Value && m.Fecha == hoy)
+                    .OrderByDescending(m => m.IdMarca)
+                    .ToList();
+
+                bool tieneEntrada = marcasHoy.Any(m => NormalizarTexto(m.Nombre) == "entrada");
+                bool tieneSalida = marcasHoy.Any(m => NormalizarTexto(m.Nombre) == "salida");
+                bool yaExisteTipo = marcasHoy.Any(m => NormalizarTexto(m.Nombre) == tipo);
+
+                if (yaExisteTipo)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = $"Ya existe una marca de {ObtenerEtiquetaTipoMarca(tipo).ToLower()} registrada para hoy."
+                    });
+                }
+
+                if (tipo != "entrada" && !tieneEntrada)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Primero debe registrar la entrada antes de marcar almuerzo, descanso o salida."
+                    });
+                }
+
+                if ((tipo == "almuerzo" || tipo == "descanso") && tieneSalida)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "No puede registrar esta marca porque la jornada ya fue finalizada."
+                    });
+                }
+
+                if (tipo == "salida" && tieneSalida)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "La salida ya fue registrada para hoy."
+                    });
+                }
 
                 var nuevaMarca = new Marca
                 {
                     IdUsuario = idUsuario.Value,
                     Nombre = tipo,
                     Ubicancia = "San José, Costa Rica",
-                    Fecha = hoy
+                    Fecha = hoy,
+                    Comentario = ObtenerComentarioMarca(tipo)
                 };
 
-                if (tipo == "entrada")
-                {
-                    nuevaMarca.HoraEntrada = TimeOnly.FromDateTime(ahora);
-                }
-                else if (tipo == "salida")
+                if (tipo == "salida")
                 {
                     nuevaMarca.HoraSalida = TimeOnly.FromDateTime(ahora);
                 }
                 else
                 {
-                    nuevaMarca.Comentario = tipo;
                     nuevaMarca.HoraEntrada = TimeOnly.FromDateTime(ahora);
                 }
 
                 _context.Marcas.Add(nuevaMarca);
                 _context.SaveChanges();
 
+                marcasHoy.Insert(0, nuevaMarca);
+
                 return Json(new
                 {
                     success = true,
-                    id_marca = nuevaMarca.IdMarca,
+                    message = $"Marca de {ObtenerEtiquetaTipoMarca(tipo).ToLower()} registrada correctamente a las {ahora:HH:mm:ss}.",
+                    estadoActual = CalcularEstadoActual(marcasHoy),
+                    accionesDisponibles = ObtenerAccionesDisponibles(marcasHoy),
                     marca = new
                     {
+                        idMarca = nuevaMarca.IdMarca,
                         tipo = tipo,
-                        hora = ahora.ToString("HH:mm:ss")
+                        tipoTexto = ObtenerEtiquetaTipoMarca(tipo),
+                        hora = ahora.ToString("HH:mm:ss"),
+                        ubicancia = nuevaMarca.Ubicancia,
+                        comentario = nuevaMarca.Comentario
                     }
                 });
             }
-            catch (Exception ex)
+            catch
             {
                 return Json(new
                 {
                     success = false,
-                    message = "Error al guardar la marca en la base de datos.",
-                    detail = ex.Message
+                    message = "No se pudo guardar la marca. Intente nuevamente."
                 });
             }
         }
 
-        // Se usa por querystring: /Empleado/HistorialMarcas?desde=2026-01-01&hasta=2026-01-31
         public IActionResult HistorialMarcas(DateTime? desde, DateTime? hasta)
         {
             int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
@@ -321,12 +500,10 @@ namespace Oclock.Controllers
                 return RedirectToAction("Index", "Usuario");
             }
 
-            // Si no vienen fechas, por defecto: últimos 30 días (incluyendo hoy)
             DateTime hoyDateTime = AhoraCostaRica().Date;
             DateTime desdeDT = desde?.Date ?? hoyDateTime.AddDays(-30);
             DateTime hastaDT = hasta?.Date ?? hoyDateTime;
 
-            // Convertimos a DateOnly para comparar con Marca.Fecha
             var desdeDO = DateOnly.FromDateTime(desdeDT);
             var hastaDO = DateOnly.FromDateTime(hastaDT);
 
@@ -338,7 +515,14 @@ namespace Oclock.Controllers
                 .ThenByDescending(m => m.IdMarca)
                 .ToList();
 
-            // Para que la vista pueda mantener los filtros en pantalla
+            foreach (var marca in marcas)
+            {
+                if (string.IsNullOrWhiteSpace(marca.Comentario))
+                {
+                    marca.Comentario = ObtenerComentarioMarca(marca.Nombre ?? "");
+                }
+            }
+
             ViewBag.Desde = desdeDT.ToString("yyyy-MM-dd");
             ViewBag.Hasta = hastaDT.ToString("yyyy-MM-dd");
 
@@ -671,7 +855,6 @@ namespace Oclock.Controllers
             return View();
         }
 
-        // Endpoint JSON que alimenta la vista
         [HttpGet]
         public IActionResult ObtenerHistorialBonos()
         {

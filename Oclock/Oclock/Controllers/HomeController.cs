@@ -14,6 +14,23 @@ namespace Oclock.Controllers
             _logger = logger;
         }
 
+        public IActionResult Index()
+        {
+            int? usuarioRol = HttpContext.Session.GetInt32("UsuarioRol");
+
+            if (usuarioRol == 1)
+            {
+                return RedirectToAction("AdminHome", "Home");
+            }
+
+            if (usuarioRol == 2)
+            {
+                return RedirectToAction("Marcas", "Empleado");
+            }
+
+            return RedirectToAction("Index", "Usuario", new { tab = "login" });
+        }
+
         [AuthorizeRole(1)]
         public IActionResult AdminHome()
         {
@@ -34,7 +51,12 @@ namespace Oclock.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var requestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+
+            return View(new ErrorViewModel
+            {
+                RequestId = requestId
+            });
         }
     }
 }

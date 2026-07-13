@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Solicitudes";
+    ViewData["Title"] = "Mis Solicitudes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -21,6 +21,7 @@
         padding: 30px 20px;
         border-right: 1px solid #e0e0e0;
         box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+        flex-shrink: 0;
     }
 
     .menu-item {
@@ -46,15 +47,15 @@
     }
 
         .menu-link:hover {
-            background: #667eea;
+            background: #2F6FED;
             color: white;
             transform: translateX(5px);
         }
 
         .menu-link.active {
-            background: #667eea;
+            background: #2F6FED;
             color: white;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 12px rgba(47,111,237,0.3);
         }
 
             .menu-link.active::before {
@@ -82,93 +83,103 @@
         flex: 1;
         padding: 40px;
         background: #f5f7fa;
+        min-width: 0;
     }
 
     .content-header {
         margin-bottom: 30px;
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
+        gap: 20px;
+        flex-wrap: wrap;
     }
 
         .content-header h1 {
             color: #2d3748;
             font-size: 28px;
             margin-bottom: 8px;
+            font-weight: 800;
         }
 
         .content-header p {
             color: #718096;
             font-size: 14px;
+            margin-bottom: 0;
+            line-height: 1.5;
         }
 
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
         gap: 15px;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
     }
 
     .stat-card {
         background: white;
-        padding: 15px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        padding: 22px;
+        border-radius: 14px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         transition: transform 0.3s;
+        border-left: 4px solid #2F6FED;
     }
 
         .stat-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
         }
 
     .stat-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
     }
 
     .stat-icon {
-        font-size: 20px;
+        font-size: 26px;
     }
 
     .stat-value {
-        font-size: 24px;
-        font-weight: bold;
+        font-size: 28px;
+        font-weight: 800;
         color: #2d3748;
-        margin-bottom: 3px;
+        margin-bottom: 4px;
     }
 
     .stat-label {
         color: #718096;
-        font-size: 11px;
+        font-size: 12px;
         text-transform: uppercase;
-        font-weight: 600;
+        font-weight: 700;
     }
 
     .tabs {
         display: flex;
-        gap: 8px;
-        margin-bottom: 20px;
+        gap: 10px;
+        margin-bottom: 25px;
         background: white;
-        padding: 8px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        padding: 10px;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        flex-wrap: wrap;
     }
 
     .tab {
-        padding: 10px 20px;
-        border-radius: 8px;
+        padding: 12px 24px;
+        border-radius: 10px;
         cursor: pointer;
         transition: all 0.3s;
         color: #4a5568;
-        font-weight: 600;
-        font-size: 13px;
+        font-weight: 700;
+        font-size: 14px;
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
         flex: 1;
         justify-content: center;
+        min-width: 210px;
+        text-align: center;
     }
 
         .tab:hover {
@@ -176,7 +187,7 @@
         }
 
         .tab.active {
-            background: #667eea;
+            background: #2F6FED;
             color: white;
         }
 
@@ -188,40 +199,54 @@
             display: block;
         }
 
-    .form-section {
+    .form-section,
+    .filter-section,
+    .requests-section {
         background: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        margin-bottom: 20px;
+        padding: 26px;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        margin-bottom: 25px;
     }
 
-        .form-section h2 {
+        .form-section h2,
+        .filter-section h2,
+        .filter-section h3,
+        .requests-section h2 {
             color: #2d3748;
-            margin-bottom: 15px;
-            font-size: 16px;
+            margin-bottom: 10px;
+            font-size: 20px;
+            font-weight: 800;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
-    .form-grid {
+    .helper-text {
+        color: #718096;
+        margin-bottom: 20px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .form-grid,
+    .filter-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        margin-bottom: 15px;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 18px;
+        margin-bottom: 18px;
     }
 
     .form-group {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 8px;
     }
 
         .form-group label {
             color: #4a5568;
-            font-weight: 600;
-            font-size: 13px;
+            font-weight: 700;
+            font-size: 14px;
         }
 
             .form-group label .required {
@@ -232,41 +257,46 @@
         .form-group select,
         .form-group input,
         .form-group textarea {
-            padding: 10px 12px;
+            padding: 12px 15px;
             border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 13px;
+            border-radius: 10px;
+            font-size: 14px;
             transition: all 0.3s;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2d3748;
+            background: white;
+            width: 100%;
         }
 
             .form-group select:focus,
             .form-group input:focus,
             .form-group textarea:focus {
                 outline: none;
-                border-color: #667eea;
-                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                border-color: #2F6FED;
+                box-shadow: 0 0 0 3px rgba(47,111,237,0.10);
             }
 
         .form-group.error input,
         .form-group.error select,
         .form-group.error textarea {
             border-color: #e53e3e;
+            box-shadow: 0 0 0 3px rgba(229,62,62,0.10);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
         }
 
     .error-message {
-        color: #e53e3e;
-        font-size: 11px;
+        color: #c53030;
+        font-size: 12px;
+        font-weight: 700;
         margin-top: 3px;
-    }
-
-    .form-group textarea {
-        resize: vertical;
-        min-height: 80px;
-    }
-
-    .form-group.full-width {
-        grid-column: 1 / -1;
     }
 
     .hidden {
@@ -275,61 +305,61 @@
 
     .field-help {
         color: #718096;
-        font-size: 11px;
+        font-size: 12px;
         line-height: 1.4;
     }
 
     .tipo-info {
         background: #ebf8ff;
         color: #2c5282;
-        border-left: 3px solid #4299e1;
-        padding: 12px 15px;
-        border-radius: 8px;
-        font-size: 13px;
+        border-left: 4px solid #2F6FED;
+        padding: 14px 16px;
+        border-radius: 10px;
+        font-size: 14px;
         line-height: 1.5;
     }
 
     .admin-note {
         background: #f7fafc;
         color: #4a5568;
-        border-left: 3px solid #667eea;
-        padding: 10px 12px;
-        border-radius: 8px;
-        font-size: 12px;
-        margin-top: 8px;
+        border-left: 4px solid #2F6FED;
+        padding: 12px 14px;
+        border-radius: 10px;
+        font-size: 13px;
+        margin-top: 14px;
         line-height: 1.5;
     }
 
     .file-upload {
         border: 2px dashed #cbd5e0;
-        border-radius: 8px;
-        padding: 20px;
+        border-radius: 12px;
+        padding: 24px;
         text-align: center;
         cursor: pointer;
         transition: all 0.3s;
     }
 
         .file-upload:hover {
-            border-color: #667eea;
-            background: #f7fafc;
+            border-color: #2F6FED;
+            background: #EEF4FF;
         }
 
     .file-upload-icon {
-        font-size: 32px;
+        font-size: 34px;
         margin-bottom: 10px;
-        opacity: 0.5;
+        opacity: 0.7;
     }
 
     .file-upload-text {
         color: #4a5568;
-        font-weight: 600;
-        font-size: 13px;
+        font-weight: 700;
+        font-size: 14px;
         margin-bottom: 4px;
     }
 
     .file-upload-hint {
         color: #718096;
-        font-size: 11px;
+        font-size: 12px;
     }
 
     .file-input {
@@ -346,39 +376,41 @@
         gap: 12px;
         padding: 12px;
         background: #f7fafc;
-        border-radius: 8px;
+        border-radius: 10px;
         margin-bottom: 8px;
     }
 
     .file-icon {
-        font-size: 20px;
+        font-size: 22px;
     }
 
     .file-info {
         flex: 1;
+        min-width: 0;
     }
 
     .file-name {
         color: #2d3748;
-        font-weight: 600;
+        font-weight: 700;
         font-size: 13px;
         margin-bottom: 3px;
+        word-break: break-word;
     }
 
     .file-size {
         color: #718096;
-        font-size: 11px;
+        font-size: 12px;
     }
 
     .file-remove {
         background: #fed7d7;
         color: #c53030;
         border: none;
-        padding: 6px 10px;
-        border-radius: 6px;
+        padding: 7px 11px;
+        border-radius: 8px;
         cursor: pointer;
-        font-size: 11px;
-        font-weight: 600;
+        font-size: 12px;
+        font-weight: 700;
         transition: all 0.3s;
     }
 
@@ -388,26 +420,30 @@
         }
 
     .btn {
-        padding: 10px 20px;
+        padding: 12px 24px;
         border: none;
-        border-radius: 8px;
-        font-weight: 600;
+        border-radius: 10px;
+        font-weight: 700;
         cursor: pointer;
         transition: all 0.3s;
-        font-size: 13px;
+        font-size: 14px;
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
     }
 
     .btn-primary {
-        background: #667eea;
+        background: #2F6FED;
         color: white;
     }
 
         .btn-primary:hover {
+            background: #2457C8;
+            color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(47,111,237,0.25);
         }
 
     .btn-secondary {
@@ -417,36 +453,47 @@
 
         .btn-secondary:hover {
             background: #cbd5e0;
+            color: #2d3748;
         }
 
     .btn-success {
-        background: #48bb78;
+        background: #2E9B63;
         color: white;
     }
 
         .btn-success:hover {
-            background: #38a169;
+            background: #23784D;
+            color: white;
         }
 
     .btn-danger {
-        background: #e53e3e;
+        background: #D64545;
         color: white;
     }
 
         .btn-danger:hover {
-            background: #c53030;
+            background: #B63838;
+            color: white;
         }
 
     .btn-info {
-        background: #667eea;
+        background: #2F6FED;
         color: white;
-        padding: 6px 12px;
-        font-size: 12px;
+        padding: 8px 16px;
+        font-size: 13px;
     }
 
         .btn-info:hover {
-            background: #5a67d8;
+            background: #2457C8;
+            color: white;
         }
+
+    .btn[disabled] {
+        opacity: 0.65;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+    }
 
     .btn-group {
         display: flex;
@@ -454,69 +501,36 @@
         flex-wrap: wrap;
     }
 
-    .filter-section {
-        background: white;
-        padding: 15px 20px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        margin-bottom: 20px;
-    }
-
-        .filter-section h3 {
-            color: #2d3748;
-            margin-bottom: 12px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-    .filter-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 12px;
-        margin-bottom: 12px;
-    }
-
-    .requests-section {
-        background: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-
     .section-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 12px;
+        margin-bottom: 22px;
+        padding-bottom: 15px;
         border-bottom: 2px solid #f0f0f0;
+        gap: 15px;
+        flex-wrap: wrap;
     }
 
         .section-header h2 {
-            color: #2d3748;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            margin: 0;
         }
 
     .request-card {
         display: flex;
         align-items: center;
-        gap: 15px;
-        padding: 15px;
+        gap: 16px;
+        padding: 18px;
         background: #f8f9fa;
-        border-radius: 10px;
+        border-radius: 12px;
         margin-bottom: 12px;
-        border-left: 3px solid #667eea;
+        border-left: 4px solid #2F6FED;
         transition: all 0.3s;
     }
 
         .request-card:hover {
-            background: #e8edf3;
-            transform: translateX(3px);
+            background: #EEF4FF;
+            transform: translateX(4px);
         }
 
         .request-card.pendiente {
@@ -531,43 +545,41 @@
             border-left-color: #e53e3e;
         }
 
-        .request-card.cancelada {
-            border-left-color: #718096;
-        }
-
+        .request-card.cancelada,
         .request-card.cancelado {
             border-left-color: #718096;
         }
 
     .request-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 20px;
+        font-size: 22px;
         flex-shrink: 0;
     }
 
     .request-info {
         flex: 1;
+        min-width: 0;
     }
 
     .request-title {
         color: #2d3748;
-        font-weight: 700;
-        margin-bottom: 5px;
-        font-size: 14px;
-        text-transform: capitalize;
+        font-weight: 800;
+        margin-bottom: 6px;
+        font-size: 15px;
     }
 
     .request-details {
         color: #718096;
-        font-size: 12px;
+        font-size: 13px;
         display: flex;
         gap: 15px;
         flex-wrap: wrap;
+        line-height: 1.5;
     }
 
     .request-detail-item {
@@ -580,14 +592,16 @@
         display: flex;
         gap: 8px;
         flex-wrap: wrap;
+        justify-content: flex-end;
     }
 
     .badge {
         display: inline-block;
-        padding: 4px 10px;
-        border-radius: 15px;
-        font-size: 11px;
-        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
     }
 
     .badge-warning {
@@ -617,37 +631,38 @@
 
     .empty-state {
         text-align: center;
-        padding: 40px 20px;
+        padding: 50px 20px;
         color: #718096;
     }
 
     .empty-state-icon {
-        font-size: 48px;
-        margin-bottom: 15px;
+        font-size: 54px;
+        margin-bottom: 16px;
         opacity: 0.5;
     }
 
     .empty-state h3 {
         color: #4a5568;
         margin-bottom: 8px;
-        font-size: 16px;
+        font-size: 18px;
+        font-weight: 800;
     }
 
     .empty-state p {
-        font-size: 13px;
+        font-size: 14px;
+        margin-bottom: 0;
+        line-height: 1.5;
     }
 
     .modal {
         display: none;
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        inset: 0;
         background: rgba(0, 0, 0, 0.6);
-        z-index: 1000;
+        z-index: 2000;
         align-items: center;
         justify-content: center;
+        padding: 20px;
     }
 
         .modal.show {
@@ -656,43 +671,51 @@
 
     .modal-content {
         background: white;
-        border-radius: 12px;
-        padding: 25px;
-        max-width: 650px;
-        width: 90%;
+        border-radius: 15px;
+        padding: 30px;
+        max-width: 700px;
+        width: 100%;
         max-height: 90vh;
         overflow-y: auto;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .modal-content-small {
+        max-width: 460px;
     }
 
     .modal-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 12px;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
         border-bottom: 2px solid #f0f0f0;
+        gap: 15px;
     }
 
         .modal-header h3 {
             color: #2d3748;
-            font-size: 18px;
+            font-size: 22px;
+            font-weight: 800;
+            margin: 0;
         }
 
     .btn-close {
         background: none;
         border: none;
-        font-size: 24px;
+        font-size: 28px;
         cursor: pointer;
         color: #718096;
         padding: 0;
-        width: 28px;
-        height: 28px;
+        width: 32px;
+        height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 50%;
         transition: all 0.3s;
+        flex-shrink: 0;
     }
 
         .btn-close:hover {
@@ -702,8 +725,9 @@
 
     .detail-row {
         display: flex;
-        padding: 12px 0;
+        padding: 14px 0;
         border-bottom: 1px solid #f0f0f0;
+        gap: 15px;
     }
 
         .detail-row:last-child {
@@ -711,59 +735,137 @@
         }
 
     .detail-label {
-        font-weight: 700;
+        font-weight: 800;
         color: #4a5568;
-        width: 160px;
+        width: 165px;
         flex-shrink: 0;
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .detail-value {
         color: #2d3748;
         flex: 1;
-        font-size: 13px;
+        font-size: 14px;
         white-space: pre-line;
+        word-break: break-word;
     }
 
     .alert {
-        padding: 12px 15px;
-        border-radius: 8px;
-        margin-bottom: 15px;
+        padding: 14px 16px;
+        border-radius: 10px;
+        margin-bottom: 18px;
         display: flex;
         align-items: center;
         gap: 10px;
-        font-size: 13px;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.5;
     }
 
     .alert-success {
-        background: #c6f6d5;
+        background: #f0fff4;
         color: #22543d;
-        border-left: 3px solid #48bb78;
+        border-left: 4px solid #38a169;
     }
 
     .alert-error {
-        background: #fed7d7;
+        background: #fff5f5;
         color: #742a2a;
-        border-left: 3px solid #e53e3e;
+        border-left: 4px solid #e53e3e;
     }
 
     .alert-warning {
         background: #feebc8;
         color: #7c2d12;
-        border-left: 3px solid #f59e0b;
+        border-left: 4px solid #f59e0b;
     }
 
     .alert-info {
-        background: #bee3f8;
-        color: #2c5282;
-        border-left: 3px solid #4299e1;
+        background: #EEF4FF;
+        color: #1e3a8a;
+        border-left: 4px solid #2F6FED;
+    }
+
+    @@media (max-width: 1100px) {
+        .main-layout {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+            border-right: none;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .content {
+            padding: 25px;
+        }
+
+        .request-card {
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .request-actions {
+            width: 100%;
+            justify-content: flex-start;
+        }
+    }
+
+    @@media (max-width: 650px) {
+        .content {
+            padding: 20px 14px;
+        }
+
+        .content-header h1 {
+            font-size: 24px;
+        }
+
+        .form-section,
+        .filter-section,
+        .requests-section {
+            padding: 22px;
+        }
+
+        .tabs {
+            flex-direction: column;
+        }
+
+        .tab {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .btn-group,
+        .request-actions {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .detail-row {
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .detail-label {
+            width: auto;
+        }
+
+        .modal-content {
+            padding: 22px;
+            width: 95%;
+        }
     }
 </style>
 
 <div class="main-layout">
     <div class="sidebar">
         <div class="menu-item">
-            <a href="/Home/ColaboradorHome" class="menu-link">
+            <a href="/Empleado/Marcas" class="menu-link">
                 <div class="icon">⏰</div>
                 Marcas
             </a>
@@ -801,8 +903,8 @@
     <div class="content">
         <div class="content-header">
             <div>
-                <h1>Mis Solicitudes de Permisos</h1>
-                <p>Gestiona tus solicitudes según el tipo requerido por recursos humanos</p>
+                <h1>Mis Solicitudes</h1>
+                <p>Registre y consulte solicitudes de vacaciones, permisos, incapacidades, constancias y otros trámites.</p>
             </div>
         </div>
 
@@ -814,6 +916,7 @@
                 <div class="stat-value" id="pendingCount">0</div>
                 <div class="stat-label">Pendientes</div>
             </div>
+
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon">✅</div>
@@ -821,6 +924,7 @@
                 <div class="stat-value" id="approvedCount">0</div>
                 <div class="stat-label">Aprobadas</div>
             </div>
+
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon">❌</div>
@@ -828,6 +932,7 @@
                 <div class="stat-value" id="rejectedCount">0</div>
                 <div class="stat-label">Rechazadas</div>
             </div>
+
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon">📊</div>
@@ -837,25 +942,29 @@
             </div>
         </div>
 
+        <div id="alertMessage" style="display: none;"></div>
+
         <div class="tabs">
             <div class="tab active" onclick="switchTab('nueva', this)">
                 ➕ Nueva Solicitud
             </div>
+
             <div class="tab" onclick="switchTab('mis', this)">
                 📄 Mis Solicitudes
             </div>
         </div>
 
         <div id="nuevaTab" class="tab-content active">
-            <div id="alertMessage" style="display: none;"></div>
-
             <div class="form-section">
-                <h2>📝 Registrar Nueva Solicitud</h2>
+                <h2>📝 Registrar nueva solicitud</h2>
+                <p class="helper-text">
+                    Complete los campos según el tipo de solicitud. Algunas solicitudes requieren documento y otras serán definidas por administración.
+                </p>
 
                 <form id="solicitudForm">
                     <div class="form-grid">
                         <div class="form-group full-width">
-                            <label>Tipo de Solicitud <span class="required">*</span></label>
+                            <label for="tipoSolicitud">Tipo de solicitud <span class="required">*</span></label>
                             <select id="tipoSolicitud" required>
                                 <option value="">Seleccione un tipo</option>
                             </select>
@@ -867,63 +976,65 @@
                         </div>
 
                         <div class="form-group hidden" id="grupoPrioridad">
-                            <label>Prioridad</label>
+                            <label for="prioridad">Prioridad</label>
                             <select id="prioridad">
                                 <option value="normal">Normal</option>
                                 <option value="urgente">Urgente</option>
                             </select>
-                            <span class="field-help">Usar urgente solo cuando la solicitud requiera atención rápida.</span>
+                            <span class="field-help">Use urgente solamente cuando requiera atención rápida.</span>
                         </div>
 
                         <div class="form-group hidden" id="grupoFechaInicio">
-                            <label>Fecha Inicio <span class="required">*</span></label>
+                            <label for="fechaInicio">Fecha inicio <span class="required">*</span></label>
                             <input type="date" id="fechaInicio">
                             <span class="error-message" id="fechaInicioError"></span>
                         </div>
 
                         <div class="form-group hidden" id="grupoFechaFin">
-                            <label>Fecha Fin <span class="required">*</span></label>
+                            <label for="fechaFin">Fecha fin <span class="required">*</span></label>
                             <input type="date" id="fechaFin">
                             <span class="error-message" id="fechaFinError"></span>
                         </div>
 
                         <div class="form-group full-width hidden" id="grupoMotivo">
-                            <label id="labelMotivo">Motivo / Descripción</label>
+                            <label id="labelMotivo" for="motivo">Motivo / Descripción</label>
                             <textarea id="motivo" placeholder="Describa el motivo de su solicitud..."></textarea>
                             <span class="error-message" id="motivoError"></span>
                         </div>
 
                         <div class="form-group hidden" id="grupoParentesco">
-                            <label>Parentesco del familiar</label>
+                            <label for="parentescoFamiliar">Parentesco del familiar</label>
                             <input type="text" id="parentescoFamiliar" placeholder="Ejemplo: padre, madre, hermano(a), cónyuge">
                             <span class="field-help">Dato de apoyo para la revisión administrativa.</span>
                         </div>
 
                         <div class="form-group hidden" id="grupoNombreFamiliar">
-                            <label>Nombre del familiar</label>
+                            <label for="nombreFamiliar">Nombre del familiar</label>
                             <input type="text" id="nombreFamiliar" placeholder="Nombre del familiar fallecido">
                             <span class="field-help">Opcional, según el documento presentado.</span>
                         </div>
 
                         <div class="form-group full-width hidden" id="grupoMotivoConstancia">
-                            <label>Motivo de la constancia salarial</label>
+                            <label for="motivoConstancia">Motivo de la constancia salarial</label>
                             <textarea id="motivoConstancia" placeholder="Ejemplo: trámite bancario, alquiler, estudio, otro..."></textarea>
                             <span class="error-message" id="motivoConstanciaError"></span>
                         </div>
 
                         <div class="form-group full-width hidden" id="grupoDetalleOtro">
-                            <label>Detalle adicional</label>
+                            <label for="detalleOtro">Detalle adicional</label>
                             <textarea id="detalleOtro" placeholder="Explique el tipo de solicitud que necesita..."></textarea>
                             <span class="error-message" id="detalleOtroError"></span>
                         </div>
 
                         <div class="form-group full-width hidden" id="grupoDocumento">
-                            <label id="labelDocumento">Adjuntar Documento</label>
+                            <label id="labelDocumento">Adjuntar documento</label>
+
                             <div class="file-upload" onclick="document.getElementById('fileInput').click()">
                                 <div class="file-upload-icon">📎</div>
                                 <div class="file-upload-text" id="textoDocumento">Haz clic para adjuntar archivo</div>
-                                <div class="file-upload-hint">PDF, JPG, PNG (Máximo 5MB)</div>
+                                <div class="file-upload-hint">PDF, JPG o PNG. Máximo 5MB.</div>
                             </div>
+
                             <input type="file" id="fileInput" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileSelect(event)">
                             <span class="error-message" id="fileError"></span>
                             <div id="uploadedFiles" class="uploaded-files"></div>
@@ -931,9 +1042,10 @@
                     </div>
 
                     <div class="btn-group">
-                        <button type="submit" class="btn btn-primary">
-                            ✅ Registrar Solicitud
+                        <button type="submit" class="btn btn-primary" id="btnRegistrarSolicitud">
+                            ✅ Registrar solicitud
                         </button>
+
                         <button type="button" class="btn btn-secondary" onclick="clearForm()">
                             🔄 Limpiar
                         </button>
@@ -944,46 +1056,51 @@
 
         <div id="misTab" class="tab-content">
             <div class="filter-section">
-                <h3>🔍 Filtrar Solicitudes</h3>
+                <h3>🔍 Filtrar solicitudes</h3>
+                <p class="helper-text">
+                    Puede consultar solicitudes por estado, tipo o rango de fechas.
+                </p>
+
                 <div class="filter-grid">
                     <div class="form-group">
-                        <label>Estado</label>
+                        <label for="filterEstado">Estado</label>
                         <select id="filterEstado" onchange="applyFilters()">
                             <option value="">Todos</option>
                             <option value="pendiente">Pendiente</option>
                             <option value="aprobada">Aprobada</option>
                             <option value="rechazada">Rechazada</option>
                             <option value="cancelada">Cancelada</option>
-                            <option value="cancelado">Cancelado</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label>Tipo</label>
+                        <label for="filterTipo">Tipo</label>
                         <select id="filterTipo" onchange="applyFilters()">
                             <option value="">Todos</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label>Desde</label>
+                        <label for="filterDesde">Desde</label>
                         <input type="date" id="filterDesde" onchange="applyFilters()">
                     </div>
 
                     <div class="form-group">
-                        <label>Hasta</label>
+                        <label for="filterHasta">Hasta</label>
                         <input type="date" id="filterHasta" onchange="applyFilters()">
                     </div>
                 </div>
 
-                <button class="btn btn-secondary" onclick="clearFilters()">
-                    🔄 Limpiar Filtros
-                </button>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="clearFilters()">
+                        🔄 Limpiar filtros
+                    </button>
+                </div>
             </div>
 
             <div class="requests-section">
                 <div class="section-header">
-                    <h2>📄 Mis Solicitudes</h2>
+                    <h2>📄 Mis solicitudes</h2>
                     <span class="badge badge-info" id="totalBadge">0 solicitudes</span>
                 </div>
 
@@ -996,9 +1113,10 @@
 <div class="modal" id="detailModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>📋 Detalle de Solicitud</h3>
+            <h3>📋 Detalle de solicitud</h3>
             <button class="btn-close" onclick="closeModal('detailModal')">×</button>
         </div>
+
         <div id="detailContent"></div>
     </div>
 </div>
@@ -1006,7 +1124,7 @@
 <div class="modal" id="editModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>✏️ Editar Solicitud</h3>
+            <h3>✏️ Editar solicitud</h3>
             <button class="btn-close" onclick="closeModal('editModal')">×</button>
         </div>
 
@@ -1014,7 +1132,7 @@
             <form id="editForm">
                 <div class="form-grid">
                     <div class="form-group full-width">
-                        <label>Tipo <span class="required">*</span></label>
+                        <label for="editTipoSolicitud">Tipo <span class="required">*</span></label>
                         <select id="editTipoSolicitud" required>
                             <option value="">Seleccione un tipo</option>
                         </select>
@@ -1025,7 +1143,7 @@
                     </div>
 
                     <div class="form-group hidden" id="editGrupoPrioridad">
-                        <label>Prioridad</label>
+                        <label for="editPrioridad">Prioridad</label>
                         <select id="editPrioridad">
                             <option value="normal">Normal</option>
                             <option value="urgente">Urgente</option>
@@ -1033,42 +1151,42 @@
                     </div>
 
                     <div class="form-group hidden" id="editGrupoFechaInicio">
-                        <label>Fecha Inicio <span class="required">*</span></label>
+                        <label for="editFechaInicio">Fecha inicio <span class="required">*</span></label>
                         <input type="date" id="editFechaInicio">
                     </div>
 
                     <div class="form-group hidden" id="editGrupoFechaFin">
-                        <label>Fecha Fin <span class="required">*</span></label>
+                        <label for="editFechaFin">Fecha fin <span class="required">*</span></label>
                         <input type="date" id="editFechaFin">
                     </div>
 
                     <div class="form-group full-width hidden" id="editGrupoMotivo">
-                        <label id="editLabelMotivo">Motivo / Descripción</label>
+                        <label id="editLabelMotivo" for="editMotivo">Motivo / Descripción</label>
                         <textarea id="editMotivo"></textarea>
                     </div>
 
                     <div class="form-group hidden" id="editGrupoParentesco">
-                        <label>Parentesco del familiar</label>
+                        <label for="editParentescoFamiliar">Parentesco del familiar</label>
                         <input type="text" id="editParentescoFamiliar">
                     </div>
 
                     <div class="form-group hidden" id="editGrupoNombreFamiliar">
-                        <label>Nombre del familiar</label>
+                        <label for="editNombreFamiliar">Nombre del familiar</label>
                         <input type="text" id="editNombreFamiliar">
                     </div>
 
                     <div class="form-group full-width hidden" id="editGrupoMotivoConstancia">
-                        <label>Motivo de la constancia salarial</label>
+                        <label for="editMotivoConstancia">Motivo de la constancia salarial</label>
                         <textarea id="editMotivoConstancia"></textarea>
                     </div>
 
                     <div class="form-group full-width hidden" id="editGrupoDetalleOtro">
-                        <label>Detalle adicional</label>
+                        <label for="editDetalleOtro">Detalle adicional</label>
                         <textarea id="editDetalleOtro"></textarea>
                     </div>
 
                     <div class="form-group full-width hidden" id="editGrupoDocumento">
-                        <label id="editLabelDocumento">Documento de Respaldo</label>
+                        <label id="editLabelDocumento">Documento de respaldo</label>
 
                         <div id="archivoActualContainer" style="margin-bottom:10px; display:none;">
                             <div class="uploaded-file">
@@ -1076,13 +1194,13 @@
                                 <div class="file-info">
                                     <div class="file-name" id="archivoActualNombre"></div>
                                 </div>
+
                                 <button type="button" class="file-remove" onclick="eliminarArchivoActual()">
                                     🗑️
                                 </button>
                             </div>
-                            <button type="button" class="btn btn-info"
-                                    style="margin-top:5px;"
-                                    onclick="descargarArchivoActual()">
+
+                            <button type="button" class="btn btn-info" style="margin-top:5px;" onclick="descargarArchivoActual()">
                                 ⬇️ Descargar
                             </button>
                         </div>
@@ -1090,21 +1208,19 @@
                         <div class="file-upload" onclick="document.getElementById('editFileInput').click()">
                             <div class="file-upload-icon">📎</div>
                             <div class="file-upload-text" id="editTextoDocumento">Haz clic para adjuntar nuevo archivo</div>
-                            <div class="file-upload-hint">PDF, JPG, PNG (Máximo 5MB)</div>
+                            <div class="file-upload-hint">PDF, JPG o PNG. Máximo 5MB.</div>
                         </div>
 
-                        <input type="file" id="editFileInput" class="file-input"
-                               accept=".pdf,.jpg,.jpeg,.png"
-                               onchange="handleEditFileSelect(event)">
-
+                        <input type="file" id="editFileInput" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleEditFileSelect(event)">
                         <div id="editUploadedFiles" class="uploaded-files"></div>
                     </div>
                 </div>
 
                 <div class="btn-group" style="margin-top: 15px;">
-                    <button type="submit" class="btn btn-success">
+                    <button type="submit" class="btn btn-success" id="btnGuardarEdicion">
                         💾 Guardar
                     </button>
+
                     <button type="button" class="btn btn-secondary" onclick="closeModal('editModal')">
                         ❌ Cancelar
                     </button>
@@ -1115,21 +1231,24 @@
 </div>
 
 <div class="modal" id="cancelModal">
-    <div class="modal-content" style="max-width: 450px;">
+    <div class="modal-content modal-content-small">
         <div class="modal-header">
-            <h3>⚠️ Confirmar Cancelación</h3>
+            <h3>⚠️ Confirmar cancelación</h3>
             <button class="btn-close" onclick="closeModal('cancelModal')">×</button>
         </div>
+
         <div style="padding: 15px 0;">
-            <p style="color: #4a5568; margin-bottom: 15px; font-size: 13px;">
+            <p style="color: #4a5568; margin-bottom: 15px; font-size: 14px; line-height:1.5;">
                 ¿Está seguro que desea cancelar esta solicitud? Esta acción no se puede deshacer.
             </p>
+
             <div class="btn-group">
-                <button class="btn btn-danger" onclick="confirmCancel()">
-                    ✅ Sí, Cancelar
+                <button class="btn btn-danger" id="btnConfirmarCancelacion" onclick="confirmCancel()">
+                    ✅ Sí, cancelar
                 </button>
+
                 <button class="btn btn-secondary" onclick="closeModal('cancelModal')">
-                    ❌ No, Mantener
+                    ❌ No, mantener
                 </button>
             </div>
         </div>
@@ -1171,12 +1290,40 @@
 
     function escapeHtml(valor) {
         if (valor === null || valor === undefined) return '';
+
         return valor.toString()
             .replaceAll('&', '&amp;')
             .replaceAll('<', '&lt;')
             .replaceAll('>', '&gt;')
             .replaceAll('"', '&quot;')
             .replaceAll("'", '&#039;');
+    }
+
+    function escapeAttribute(valor) {
+        return escapeHtml(valor).replaceAll('`', '&#096;');
+    }
+
+    async function leerRespuesta(response) {
+        try {
+            const contentType = response.headers.get('content-type') || '';
+
+            if (contentType.includes('application/json')) {
+                return await response.json();
+            }
+
+            const texto = await response.text();
+
+            return {
+                success: response.ok,
+                message: texto,
+                mensaje: texto
+            };
+        } catch {
+            return {
+                success: false,
+                message: 'No se recibió una respuesta válida del sistema.'
+            };
+        }
     }
 
     function obtenerReglasTipo(nombreTipo) {
@@ -1212,12 +1359,15 @@
     }
 
     function obtenerTipoPorId(id) {
-        return tiposSolicitud.find(t => String(t.idTipoSolicitud) === String(id));
+        return tiposSolicitud.find(tipo => String(tipo.idTipoSolicitud) === String(id));
     }
 
     function setVisible(id, visible) {
         const element = document.getElementById(id);
-        if (!element) return;
+
+        if (!element) {
+            return;
+        }
 
         if (visible) {
             element.classList.remove('hidden');
@@ -1228,7 +1378,10 @@
 
     function setRequired(id, required) {
         const element = document.getElementById(id);
-        if (!element) return;
+
+        if (!element) {
+            return;
+        }
 
         if (required) {
             element.setAttribute('required', 'required');
@@ -1243,7 +1396,7 @@
         }
 
         if (reglas.esIncapacidad) {
-            return 'Para incapacidad, el colaborador solo debe adjuntar el documento de respaldo. La administración revisará la validez, fechas y cantidad de días otorgados.';
+            return 'Para incapacidad, adjunte el documento de respaldo. La administración revisará la validez, fechas y cantidad de días otorgados.';
         }
 
         if (reglas.esMaternidad) {
@@ -1251,11 +1404,11 @@
         }
 
         if (reglas.esFallecimiento) {
-            return 'Para permiso por fallecimiento, adjunte el documento de respaldo. Puede indicar parentesco como dato de apoyo, pero la administración determinará los días aplicables.';
+            return 'Para permiso por fallecimiento, adjunte el documento de respaldo. Puede indicar parentesco como dato de apoyo.';
         }
 
         if (reglas.esConstancia) {
-            return 'Para constancia salarial, indique el motivo de la solicitud. La gestión administrativa se encargará de generar el documento correspondiente.';
+            return 'Para constancia salarial, indique el motivo de la solicitud. La gestión administrativa generará el documento correspondiente.';
         }
 
         if (reglas.esVacaciones) {
@@ -1274,7 +1427,6 @@
     }
 
     function actualizarFormularioPorTipo(esEdicion) {
-        const prefijo = esEdicion ? 'edit' : '';
         const selectId = esEdicion ? 'editTipoSolicitud' : 'tipoSolicitud';
         const select = document.getElementById(selectId);
         const tipo = obtenerTipoPorId(select?.value);
@@ -1304,12 +1456,11 @@
         setRequired(esEdicion ? 'editDetalleOtro' : 'detalleOtro', reglas.mostrarOtro);
 
         const labelMotivo = document.getElementById(esEdicion ? 'editLabelMotivo' : 'labelMotivo');
+
         if (labelMotivo) {
-            if (reglas.requiereMotivo) {
-                labelMotivo.innerHTML = 'Motivo / Descripción <span class="required">*</span>';
-            } else {
-                labelMotivo.innerHTML = 'Motivo / Descripción';
-            }
+            labelMotivo.innerHTML = reglas.requiereMotivo
+                ? 'Motivo / Descripción <span class="required">*</span>'
+                : 'Motivo / Descripción';
         }
 
         const labelDocumento = document.getElementById(esEdicion ? 'editLabelDocumento' : 'labelDocumento');
@@ -1317,10 +1468,10 @@
 
         if (labelDocumento && textoDocumento) {
             if (reglas.requiereDocumento) {
-                labelDocumento.innerHTML = 'Documento de Respaldo <span class="required">*</span>';
+                labelDocumento.innerHTML = 'Documento de respaldo <span class="required">*</span>';
                 textoDocumento.textContent = 'Documento obligatorio para este tipo de solicitud';
             } else {
-                labelDocumento.innerHTML = 'Documento de Respaldo';
+                labelDocumento.innerHTML = 'Documento de respaldo';
                 textoDocumento.textContent = 'Documento opcional si aplica';
             }
         }
@@ -1329,7 +1480,14 @@
     async function cargarTiposSolicitud() {
         try {
             const response = await fetch('/Empleado/ObtenerTiposSolicitud');
-            tiposSolicitud = await response.json();
+            const data = await leerRespuesta(response);
+
+            if (!response.ok || !Array.isArray(data)) {
+                showAlert('No se pudieron cargar los tipos de solicitud.', 'error');
+                return;
+            }
+
+            tiposSolicitud = data;
 
             const tipoSelect = document.getElementById('tipoSolicitud');
             const editTipoSelect = document.getElementById('editTipoSolicitud');
@@ -1340,36 +1498,47 @@
             filterTipoSelect.innerHTML = '<option value="">Todos</option>';
 
             tiposSolicitud.forEach(tipo => {
-                tipoSelect.innerHTML += `<option value="${tipo.idTipoSolicitud}">${escapeHtml(tipo.nombreSolicitud)}</option>`;
-                editTipoSelect.innerHTML += `<option value="${tipo.idTipoSolicitud}">${escapeHtml(tipo.nombreSolicitud)}</option>`;
-                filterTipoSelect.innerHTML += `<option value="${normalizarTexto(tipo.nombreSolicitud)}">${escapeHtml(tipo.nombreSolicitud)}</option>`;
+                tipoSelect.innerHTML += `<option value="${escapeAttribute(tipo.idTipoSolicitud)}">${escapeHtml(tipo.nombreSolicitud)}</option>`;
+                editTipoSelect.innerHTML += `<option value="${escapeAttribute(tipo.idTipoSolicitud)}">${escapeHtml(tipo.nombreSolicitud)}</option>`;
+                filterTipoSelect.innerHTML += `<option value="${escapeAttribute(normalizarTexto(tipo.nombreSolicitud))}">${escapeHtml(tipo.nombreSolicitud)}</option>`;
             });
-        } catch (error) {
-            console.error("Error cargando tipos:", error);
-            showAlert("Error al cargar los tipos de solicitud", "error");
+        } catch {
+            showAlert('No se pudieron cargar los tipos de solicitud.', 'error');
         }
     }
 
     async function cargarSolicitudes() {
         try {
             const response = await fetch('/Empleado/SolicitudesEmpleado');
-            const data = await response.json();
+            const data = await leerRespuesta(response);
 
-            if (!Array.isArray(data)) {
-                console.log("No autorizado o error");
+            if (!response.ok || !Array.isArray(data)) {
+                showAlert('No se pudieron cargar las solicitudes. Inicie sesión nuevamente.', 'error');
                 return;
             }
 
             solicitudes = data;
             renderSolicitudes();
             updateCounters();
-        } catch (error) {
-            console.error("Error cargando solicitudes:", error);
+        } catch {
+            showAlert('No se pudieron cargar las solicitudes. Intente nuevamente.', 'error');
         }
     }
 
     function obtenerFechaParaFiltro(sol) {
-        return sol.fechaInicio || sol.fechaInicioAprobada || sol.fechaSolicitud;
+        return sol.fechaInicio || sol.fechaInicioAprobada || sol.fechaSolicitud || '';
+    }
+
+    function validarFiltrosFechas() {
+        const desde = document.getElementById('filterDesde')?.value;
+        const hasta = document.getElementById('filterHasta')?.value;
+
+        if (desde && hasta && desde > hasta) {
+            showAlert('La fecha inicial no puede ser mayor que la fecha final.', 'error');
+            return false;
+        }
+
+        return true;
     }
 
     function renderSolicitudes() {
@@ -1381,8 +1550,16 @@
         const filterDesde = document.getElementById('filterDesde')?.value;
         const filterHasta = document.getElementById('filterHasta')?.value;
 
+        if (!validarFiltrosFechas()) {
+            return;
+        }
+
         if (filterEstado) {
-            filtered = filtered.filter(s => s.estado === filterEstado);
+            if (filterEstado === 'cancelada') {
+                filtered = filtered.filter(s => normalizarTexto(s.estado) === 'cancelada' || normalizarTexto(s.estado) === 'cancelado');
+            } else {
+                filtered = filtered.filter(s => normalizarTexto(s.estado) === filterEstado);
+            }
         }
 
         if (filterTipo) {
@@ -1402,59 +1579,58 @@
                 <div class="empty-state">
                     <div class="empty-state-icon">📭</div>
                     <h3>No se encontraron solicitudes</h3>
-                    <p>No hay solicitudes que coincidan con los filtros</p>
+                    <p>No hay solicitudes que coincidan con los filtros seleccionados.</p>
                 </div>`;
-            document.getElementById('totalBadge').textContent = `0 solicitudes`;
+            document.getElementById('totalBadge').textContent = '0 solicitudes';
             return;
         }
 
-        const estadoColors = {
-            pendiente: '#feebc8',
-            aprobada: '#c6f6d5',
-            rechazada: '#fed7d7',
-            cancelada: '#e2e8f0',
-            cancelado: '#e2e8f0'
-        };
+        filtered.sort((a, b) => new Date(b.fechaSolicitud || '1900-01-01') - new Date(a.fechaSolicitud || '1900-01-01'));
 
-        filtered.sort((a, b) => new Date(b.fechaSolicitud) - new Date(a.fechaSolicitud));
+        container.innerHTML = filtered.map(sol => {
+            const estadoNormalizado = normalizarTexto(sol.estado);
+            const colorEstado = obtenerColorEstado(estadoNormalizado);
 
-        container.innerHTML = filtered.map(sol => `
-            <div class="request-card ${escapeHtml(sol.estado)}">
-                <div class="request-icon" style="background:${estadoColors[sol.estado] || '#e2e8f0'};color:#2d3748;">
-                    ${getTipoIcon(sol.tipoNombre)}
-                </div>
-                <div class="request-info">
-                    <div class="request-title">${escapeHtml(sol.tipoNombre)}</div>
-                    <div class="request-details">
-                        <div class="request-detail-item">
-                            📅 ${obtenerTextoRango(sol)}
-                        </div>
-                        <div class="request-detail-item">${getStatusBadge(sol.estado)}</div>
-                        ${sol.diasOtorgados
-                            ? `<div class="request-detail-item">🗓️ ${sol.diasOtorgados} día(s) otorgado(s)</div>`
-                            : ''}
-                        ${sol.nombreArchivo
-                            ? `<div class="request-detail-item">📎 1 archivo</div>`
-                            : ''}
+            return `
+                <div class="request-card ${obtenerClaseEstado(sol.estado)}">
+                    <div class="request-icon" style="background:${colorEstado};color:#2d3748;">
+                        ${getTipoIcon(sol.tipoNombre)}
                     </div>
-                </div>
-                <div class="request-actions">
-                    <button class="btn btn-info" onclick="viewDetail(${sol.id})">Ver</button>
-                    ${sol.estado === 'pendiente' ? `
-                        <button class="btn btn-success" onclick="editSolicitud(${sol.id})">Editar</button>
-                        <button class="btn btn-danger" onclick="cancelSolicitud(${sol.id})">Cancelar</button>
-                    ` : ''}
-                </div>
-            </div>
-        `).join('');
+
+                    <div class="request-info">
+                        <div class="request-title">${escapeHtml(sol.tipoNombre || 'Solicitud')}</div>
+
+                        <div class="request-details">
+                            <div class="request-detail-item">
+                                📅 ${obtenerTextoRango(sol)}
+                            </div>
+
+                            <div class="request-detail-item">${getStatusBadge(sol.estado)}</div>
+
+                            ${sol.diasOtorgados ? `<div class="request-detail-item">🗓️ ${escapeHtml(sol.diasOtorgados)} día(s) otorgado(s)</div>` : ''}
+
+                            ${sol.nombreArchivo ? `<div class="request-detail-item">📎 1 archivo</div>` : ''}
+                        </div>
+                    </div>
+
+                    <div class="request-actions">
+                        <button class="btn btn-info" onclick="viewDetail(${Number(sol.id)})">Ver</button>
+
+                        ${estadoNormalizado === 'pendiente' ? `
+                            <button class="btn btn-success" onclick="editSolicitud(${Number(sol.id)})">Editar</button>
+                            <button class="btn btn-danger" onclick="cancelSolicitud(${Number(sol.id)})">Cancelar</button>
+                        ` : ''}
+                    </div>
+                </div>`;
+        }).join('');
 
         document.getElementById('totalBadge').textContent = `${filtered.length} solicitud(es)`;
     }
 
     function updateCounters() {
-        const pendientes = solicitudes.filter(s => s.estado === 'pendiente').length;
-        const aprobadas = solicitudes.filter(s => s.estado === 'aprobada').length;
-        const rechazadas = solicitudes.filter(s => s.estado === 'rechazada').length;
+        const pendientes = solicitudes.filter(s => normalizarTexto(s.estado) === 'pendiente').length;
+        const aprobadas = solicitudes.filter(s => normalizarTexto(s.estado) === 'aprobada').length;
+        const rechazadas = solicitudes.filter(s => normalizarTexto(s.estado) === 'rechazada').length;
 
         document.getElementById('pendingCount').textContent = pendientes;
         document.getElementById('approvedCount').textContent = aprobadas;
@@ -1463,29 +1639,51 @@
         document.getElementById('totalBadge').textContent = `${solicitudes.length} solicitudes`;
     }
 
+    function obtenerColorEstado(estado) {
+        if (estado === 'pendiente') return '#feebc8';
+        if (estado === 'aprobada') return '#c6f6d5';
+        if (estado === 'rechazada') return '#fed7d7';
+        if (estado === 'cancelada' || estado === 'cancelado') return '#e2e8f0';
+        return '#e2e8f0';
+    }
+
     function getTipoIcon(tipoNombre) {
         const nombre = normalizarTexto(tipoNombre);
-        if (!nombre) return "📄";
-        if (nombre.includes("vacacion")) return "🏖️";
-        if (nombre.includes("permiso personal")) return "📝";
-        if (nombre.includes("fallecimiento")) return "🕊️";
-        if (nombre.includes("incapacidad")) return "🏥";
-        if (nombre.includes("maternidad")) return "🤱";
-        if (nombre.includes("constancia")) return "📑";
-        if (nombre.includes("otro")) return "📌";
-        return "📄";
+
+        if (!nombre) return '📄';
+        if (nombre.includes('vacacion')) return '🏖️';
+        if (nombre.includes('permiso personal')) return '📝';
+        if (nombre.includes('fallecimiento')) return '🕊️';
+        if (nombre.includes('incapacidad')) return '🏥';
+        if (nombre.includes('maternidad')) return '🤱';
+        if (nombre.includes('constancia')) return '📑';
+        if (nombre.includes('otro')) return '📌';
+
+        return '📄';
+    }
+
+    function obtenerClaseEstado(estado) {
+        const estadoNormalizado = normalizarTexto(estado);
+
+        if (estadoNormalizado === 'cancelado') {
+            return 'cancelada';
+        }
+
+        return estadoNormalizado || 'sin-estado';
     }
 
     function getStatusBadge(estado) {
+        const estadoNormalizado = normalizarTexto(estado);
+
         const badges = {
             pendiente: '<span class="badge badge-warning">Pendiente</span>',
             aprobada: '<span class="badge badge-success">Aprobada</span>',
             rechazada: '<span class="badge badge-danger">Rechazada</span>',
             cancelada: '<span class="badge badge-secondary">Cancelada</span>',
-            cancelado: '<span class="badge badge-secondary">Cancelado</span>'
+            cancelado: '<span class="badge badge-secondary">Cancelada</span>'
         };
 
-        return badges[estado] || '<span class="badge badge-secondary">Sin estado</span>';
+        return badges[estadoNormalizado] || '<span class="badge badge-secondary">Sin estado</span>';
     }
 
     function formatDate(dateStr) {
@@ -1494,7 +1692,16 @@
         }
 
         const date = new Date(dateStr + 'T00:00:00');
-        return date.toLocaleDateString('es-CR', { year: 'numeric', month: 'short', day: 'numeric' });
+
+        if (isNaN(date.getTime())) {
+            return dateStr;
+        }
+
+        return date.toLocaleDateString('es-CR', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
     }
 
     function obtenerTextoRango(sol) {
@@ -1510,6 +1717,7 @@
     }
 
     function formatFileSize(bytes) {
+        if (!bytes) return '0 B';
         if (bytes < 1024) return bytes + ' B';
         if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
         return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
@@ -1517,20 +1725,28 @@
 
     function showAlert(message, type) {
         const alertDiv = document.getElementById('alertMessage');
+
         alertDiv.className = `alert alert-${type}`;
         alertDiv.innerHTML = `
-            <span style="font-size:18px;">${type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️'}</span>
+            <span style="font-size:18px;">${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'info' ? 'ℹ️' : '⚠️'}</span>
             <span>${escapeHtml(message)}</span>
         `;
         alertDiv.style.display = 'flex';
+
         setTimeout(() => alertDiv.style.display = 'none', 5000);
     }
 
     function showError(elementId, message) {
         const errorElement = document.getElementById(elementId);
+
         if (errorElement) {
             errorElement.textContent = message;
-            errorElement.parentElement.classList.add('error');
+
+            const parent = errorElement.parentElement;
+
+            if (parent) {
+                parent.classList.add('error');
+            }
         }
     }
 
@@ -1542,6 +1758,7 @@
     function switchTab(tabName, element) {
         document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
         element.classList.add('active');
+
         document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
         document.getElementById(tabName + 'Tab').classList.add('active');
 
@@ -1567,7 +1784,7 @@
 
         if (!tipoId || !tipo) {
             showError('tipoError', 'Campo obligatorio');
-            showAlert('Seleccione un tipo de solicitud', 'error');
+            showAlert('Seleccione un tipo de solicitud.', 'error');
             return;
         }
 
@@ -1596,7 +1813,7 @@
             }
 
             if (fechaInicio && fechaFin && fechaFin < fechaInicio) {
-                showError('fechaFinError', 'La fecha fin no puede ser menor a la fecha inicio');
+                showError('fechaFinError', 'La fecha fin no puede ser menor a la fecha inicio.');
                 isValid = false;
             }
         }
@@ -1607,42 +1824,46 @@
         }
 
         if (reglas.mostrarConstancia && !motivoConstancia.trim()) {
-            showError('motivoConstanciaError', 'Indique el motivo de la constancia salarial');
+            showError('motivoConstanciaError', 'Indique el motivo de la constancia salarial.');
             isValid = false;
         }
 
         if (reglas.mostrarOtro && !detalleOtro.trim()) {
-            showError('detalleOtroError', 'Indique el detalle de la solicitud');
+            showError('detalleOtroError', 'Indique el detalle de la solicitud.');
             isValid = false;
         }
 
         if (reglas.requiereDocumento && !uploadedFile) {
-            showError('fileError', 'Debe adjuntar un documento de respaldo');
+            showError('fileError', 'Debe adjuntar un documento de respaldo.');
             isValid = false;
         }
 
         if (!isValid) {
-            showAlert('Revise los campos requeridos para este tipo de solicitud', 'error');
+            showAlert('Revise los campos requeridos para este tipo de solicitud.', 'error');
             return;
         }
 
         const formData = new FormData();
-        formData.append("IdTipoSolicitud", parseInt(tipoId));
-        formData.append("Descripcion", motivo);
-        formData.append("Prioridad", prioridad);
-        formData.append("ParentescoFamiliar", parentescoFamiliar);
-        formData.append("NombreFamiliar", nombreFamiliar);
-        formData.append("MotivoConstancia", motivoConstancia);
-        formData.append("DetalleOtro", detalleOtro);
+        formData.append('IdTipoSolicitud', parseInt(tipoId));
+        formData.append('Descripcion', motivo);
+        formData.append('Prioridad', prioridad);
+        formData.append('ParentescoFamiliar', parentescoFamiliar);
+        formData.append('NombreFamiliar', nombreFamiliar);
+        formData.append('MotivoConstancia', motivoConstancia);
+        formData.append('DetalleOtro', detalleOtro);
 
         if (reglas.requiereFechas) {
-            formData.append("FechaInicio", fechaInicio);
-            formData.append("FechaFin", fechaFin);
+            formData.append('FechaInicio', fechaInicio);
+            formData.append('FechaFin', fechaFin);
         }
 
         if (uploadedFile) {
-            formData.append("Archivo", uploadedFile);
+            formData.append('Archivo', uploadedFile);
         }
+
+        const boton = document.getElementById('btnRegistrarSolicitud');
+        boton.disabled = true;
+        boton.textContent = 'Guardando...';
 
         try {
             const response = await fetch('/Empleado/RegistrarSolicitud', {
@@ -1650,18 +1871,21 @@
                 body: formData
             });
 
-            const data = await response.json();
+            const data = await leerRespuesta(response);
 
-            if (data.success) {
-                showAlert(data.message, 'success');
-                clearForm();
-                await cargarSolicitudes();
-            } else {
-                showAlert(data.message || 'No se pudo registrar la solicitud', 'error');
+            if (!response.ok || data.success === false) {
+                showAlert(data.message || data.mensaje || 'No se pudo registrar la solicitud.', 'error');
+                return;
             }
-        } catch (error) {
-            console.error("Error:", error);
-            showAlert('Error al registrar la solicitud', 'error');
+
+            showAlert(data.message || 'Solicitud registrada correctamente.', 'success');
+            clearForm();
+            await cargarSolicitudes();
+        } catch {
+            showAlert('No se pudo registrar la solicitud. Intente nuevamente.', 'error');
+        } finally {
+            boton.disabled = false;
+            boton.textContent = '✅ Registrar solicitud';
         }
     }
 
@@ -1717,89 +1941,102 @@
                     <div class="file-size">${formatFileSize(uploadedFile.size)}</div>
                 </div>
                 <button type="button" class="file-remove" onclick="removeFile()">🗑️</button>
-            </div>
-        `;
+            </div>`;
     }
 
     function removeFile() {
         uploadedFile = null;
-        document.getElementById("fileInput").value = "";
+        document.getElementById('fileInput').value = '';
         renderUploadedFile();
     }
 
     function viewDetail(id) {
-        const sol = solicitudes.find(s => s.id === id);
-        if (!sol) return;
+        const sol = solicitudes.find(s => Number(s.id) === Number(id));
+
+        if (!sol) {
+            showAlert('No se encontró la solicitud seleccionada.', 'error');
+            return;
+        }
+
+        const documentoHtml = sol.rutaArchivo
+            ? `<a href="${escapeAttribute(sol.rutaArchivo)}" target="_blank" class="btn btn-info">📎 Ver documento</a>`
+            : 'N/A';
 
         document.getElementById('detailContent').innerHTML = `
             <div class="detail-row">
                 <div class="detail-label">ID Solicitud</div>
-                <div class="detail-value">#${sol.id}</div>
+                <div class="detail-value">#${escapeHtml(sol.id)}</div>
             </div>
+
             <div class="detail-row">
                 <div class="detail-label">Tipo</div>
                 <div class="detail-value">${escapeHtml(sol.tipoNombre)}</div>
             </div>
+
             <div class="detail-row">
                 <div class="detail-label">Fechas solicitadas</div>
                 <div class="detail-value">${sol.fechaInicio && sol.fechaFin ? `${formatDate(sol.fechaInicio)} al ${formatDate(sol.fechaFin)}` : 'No aplica / por definir por administración'}</div>
             </div>
+
             <div class="detail-row">
                 <div class="detail-label">Fechas aprobadas</div>
                 <div class="detail-value">${sol.fechaInicioAprobada && sol.fechaFinAprobada ? `${formatDate(sol.fechaInicioAprobada)} al ${formatDate(sol.fechaFinAprobada)}` : 'Pendiente de definir'}</div>
             </div>
+
             <div class="detail-row">
                 <div class="detail-label">Días otorgados</div>
-                <div class="detail-value">${sol.diasOtorgados ? `${sol.diasOtorgados} día(s)` : 'Pendiente de definir'}</div>
+                <div class="detail-value">${sol.diasOtorgados ? `${escapeHtml(sol.diasOtorgados)} día(s)` : 'Pendiente de definir'}</div>
             </div>
+
             <div class="detail-row">
                 <div class="detail-label">Detalle días</div>
                 <div class="detail-value">${sol.diasOtorgadosDetalle ? escapeHtml(sol.diasOtorgadosDetalle) : 'Sin detalle registrado'}</div>
             </div>
+
             <div class="detail-row">
                 <div class="detail-label">Motivo / Detalle</div>
                 <div class="detail-value">${sol.motivo ? escapeHtml(sol.motivo) : 'Sin descripción'}</div>
             </div>
+
             <div class="detail-row">
                 <div class="detail-label">Estado</div>
                 <div class="detail-value">${getStatusBadge(sol.estado)}</div>
             </div>
+
             <div class="detail-row">
                 <div class="detail-label">Comentario estado</div>
                 <div class="detail-value">${sol.descripcionEstado ? escapeHtml(sol.descripcionEstado) : 'Sin comentarios'}</div>
             </div>
+
             <div class="detail-row">
-                <div class="detail-label">Fecha Solicitud</div>
+                <div class="detail-label">Fecha solicitud</div>
                 <div class="detail-value">${formatDate(sol.fechaSolicitud)}</div>
             </div>
+
             <div class="detail-row">
                 <div class="detail-label">Documento</div>
-                <div class="detail-value">
-                    ${sol.rutaArchivo
-                        ? `<a href="${sol.rutaArchivo}" target="_blank" class="btn btn-info">📎 Ver documento</a>`
-                        : 'N/A'}
-                </div>
+                <div class="detail-value">${documentoHtml}</div>
             </div>
+
             <div class="admin-note">
                 La cantidad de días otorgados y las fechas finales son definidas por administración según el tipo de solicitud.
-            </div>
-        `;
+            </div>`;
 
         openModal('detailModal');
     }
 
     function editSolicitud(id) {
-        const sol = solicitudes.find(s => s.id === id);
+        const sol = solicitudes.find(s => Number(s.id) === Number(id));
 
-        if (!sol || sol.estado !== 'pendiente') {
-            showAlert('No es posible editar solicitudes ya atendidas', 'error');
+        if (!sol || normalizarTexto(sol.estado) !== 'pendiente') {
+            showAlert('No es posible editar solicitudes ya atendidas.', 'error');
             return;
         }
 
         currentEditId = id;
 
         document.getElementById('editTipoSolicitud').value = sol.tipo;
-        document.getElementById('editPrioridad').value = sol.prioridad ?? "normal";
+        document.getElementById('editPrioridad').value = sol.prioridad ?? 'normal';
         document.getElementById('editFechaInicio').value = sol.fechaInicio || '';
         document.getElementById('editFechaFin').value = sol.fechaFin || '';
         document.getElementById('editMotivo').value = sol.motivo || '';
@@ -1811,19 +2048,19 @@
         editFile = null;
         eliminarArchivo = false;
 
-        const container = document.getElementById("archivoActualContainer");
+        const container = document.getElementById('archivoActualContainer');
         archivoActualRuta = sol.rutaArchivo ?? null;
 
         if (sol.rutaArchivo) {
-            container.style.display = "block";
-            document.getElementById("archivoActualNombre").textContent = sol.nombreArchivo;
+            container.style.display = 'block';
+            document.getElementById('archivoActualNombre').textContent = sol.nombreArchivo || 'Documento adjunto';
             deshabilitarInputArchivo();
         } else {
-            container.style.display = "none";
+            container.style.display = 'none';
             habilitarInputArchivo();
         }
 
-        document.getElementById("editUploadedFiles").innerHTML = "";
+        document.getElementById('editUploadedFiles').innerHTML = '';
         actualizarFormularioPorTipo(true);
         openModal('editModal');
     }
@@ -1835,7 +2072,7 @@
         const tipo = obtenerTipoPorId(tipoId);
 
         if (!tipoId || !tipo) {
-            showAlert("Seleccione un tipo de solicitud válido", "error");
+            showAlert('Seleccione un tipo de solicitud válido.', 'error');
             return;
         }
 
@@ -1850,59 +2087,63 @@
         const detalleOtro = document.getElementById('editDetalleOtro').value;
 
         if (reglas.requiereFechas && (!fechaInicio || !fechaFin)) {
-            showAlert("Debe indicar fecha inicio y fecha fin", "error");
+            showAlert('Debe indicar fecha inicio y fecha fin.', 'error');
             return;
         }
 
         if (reglas.requiereFechas && fechaFin < fechaInicio) {
-            showAlert("La fecha fin no puede ser menor a la fecha inicio", "error");
+            showAlert('La fecha fin no puede ser menor a la fecha inicio.', 'error');
             return;
         }
 
         if (reglas.requiereMotivo && !motivo.trim()) {
-            showAlert("Debe indicar el motivo de la solicitud", "error");
+            showAlert('Debe indicar el motivo de la solicitud.', 'error');
             return;
         }
 
         if (reglas.mostrarConstancia && !motivoConstancia.trim()) {
-            showAlert("Debe indicar el motivo de la constancia salarial", "error");
+            showAlert('Debe indicar el motivo de la constancia salarial.', 'error');
             return;
         }
 
         if (reglas.mostrarOtro && !detalleOtro.trim()) {
-            showAlert("Debe indicar el detalle de la solicitud", "error");
+            showAlert('Debe indicar el detalle de la solicitud.', 'error');
             return;
         }
 
         if (reglas.requiereDocumento && !archivoActualRuta && !editFile && !eliminarArchivo) {
-            showAlert("Este tipo de solicitud requiere documento de respaldo", "error");
+            showAlert('Este tipo de solicitud requiere documento de respaldo.', 'error');
             return;
         }
 
         if (reglas.requiereDocumento && eliminarArchivo && !editFile) {
-            showAlert("Debe adjuntar un nuevo documento de respaldo", "error");
+            showAlert('Debe adjuntar un nuevo documento de respaldo.', 'error');
             return;
         }
 
         const formData = new FormData();
-        formData.append("IdSolicitud", currentEditId);
-        formData.append("IdTipoSolicitud", parseInt(tipoId));
-        formData.append("Descripcion", motivo);
-        formData.append("Prioridad", document.getElementById('editPrioridad').value);
-        formData.append("EliminarArchivo", eliminarArchivo);
-        formData.append("ParentescoFamiliar", parentescoFamiliar);
-        formData.append("NombreFamiliar", nombreFamiliar);
-        formData.append("MotivoConstancia", motivoConstancia);
-        formData.append("DetalleOtro", detalleOtro);
+        formData.append('IdSolicitud', currentEditId);
+        formData.append('IdTipoSolicitud', parseInt(tipoId));
+        formData.append('Descripcion', motivo);
+        formData.append('Prioridad', document.getElementById('editPrioridad').value);
+        formData.append('EliminarArchivo', eliminarArchivo);
+        formData.append('ParentescoFamiliar', parentescoFamiliar);
+        formData.append('NombreFamiliar', nombreFamiliar);
+        formData.append('MotivoConstancia', motivoConstancia);
+        formData.append('DetalleOtro', detalleOtro);
 
         if (reglas.requiereFechas) {
-            formData.append("FechaInicio", fechaInicio);
-            formData.append("FechaFin", fechaFin);
+            formData.append('FechaInicio', fechaInicio);
+            formData.append('FechaFin', fechaFin);
         }
 
         if (editFile) {
-            formData.append("Archivo", editFile);
+            formData.append('Archivo', editFile);
         }
+
+        const boton = document.getElementById('btnGuardarEdicion');
+        boton.disabled = true;
+        boton.textContent = 'Guardando...';
 
         try {
             const response = await fetch('/Empleado/EditarSolicitud', {
@@ -1910,51 +2151,51 @@
                 body: formData
             });
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                showAlert(errorText || "No se pudo actualizar la solicitud", "error");
+            const data = await leerRespuesta(response);
+
+            if (!response.ok || data.success === false) {
+                showAlert(data.message || data.mensaje || 'No se pudo actualizar la solicitud.', 'error');
                 return;
             }
 
-            const data = await response.json();
-
-            if (data.success) {
-                showAlert("Solicitud actualizada correctamente", "success");
-                closeModal('editModal');
-                await cargarSolicitudes();
-            } else {
-                showAlert(data.message || "No se pudo actualizar la solicitud", "error");
-            }
-        } catch (error) {
-            console.error(error);
-            showAlert("Error inesperado", "error");
+            showAlert(data.message || 'Solicitud actualizada correctamente.', 'success');
+            closeModal('editModal');
+            await cargarSolicitudes();
+        } catch {
+            showAlert('No se pudo actualizar la solicitud. Intente nuevamente.', 'error');
+        } finally {
+            boton.disabled = false;
+            boton.textContent = '💾 Guardar';
         }
     }
 
     function deshabilitarInputArchivo() {
-        document.getElementById("editFileInput").disabled = true;
-        document.getElementById("editUploadedFiles").innerHTML = `
+        document.getElementById('editFileInput').disabled = true;
+        document.getElementById('editUploadedFiles').innerHTML = `
             <div class="alert alert-warning">
                 ⚠️ Debe eliminar el documento actual antes de subir uno nuevo.
-            </div>
-        `;
+            </div>`;
     }
 
     function habilitarInputArchivo() {
-        document.getElementById("editFileInput").disabled = false;
-        document.getElementById("editUploadedFiles").innerHTML = "";
+        document.getElementById('editFileInput').disabled = false;
+        document.getElementById('editUploadedFiles').innerHTML = '';
     }
 
     function eliminarArchivoActual() {
         eliminarArchivo = true;
         archivoActualRuta = null;
-        document.getElementById("archivoActualContainer").style.display = "none";
+        document.getElementById('archivoActualContainer').style.display = 'none';
         habilitarInputArchivo();
     }
 
     function descargarArchivoActual() {
-        if (!archivoActualRuta) return;
-        window.open(archivoActualRuta, "_blank");
+        if (!archivoActualRuta) {
+            showAlert('No hay documento disponible para descargar.', 'info');
+            return;
+        }
+
+        window.open(archivoActualRuta, '_blank');
     }
 
     function handleEditFileSelect(event) {
@@ -1968,14 +2209,14 @@
         const maxSize = 5 * 1024 * 1024;
 
         if (!allowedTypes.includes(file.type)) {
-            showAlert("Formato no permitido. Use PDF, JPG o PNG.", "error");
-            event.target.value = "";
+            showAlert('Formato no permitido. Use PDF, JPG o PNG.', 'error');
+            event.target.value = '';
             return;
         }
 
         if (file.size > maxSize) {
-            showAlert("Archivo supera 5MB", "error");
-            event.target.value = "";
+            showAlert('Archivo supera 5MB.', 'error');
+            event.target.value = '';
             return;
         }
 
@@ -1985,10 +2226,10 @@
     }
 
     function renderEditUploadedFile() {
-        const container = document.getElementById("editUploadedFiles");
+        const container = document.getElementById('editUploadedFiles');
 
         if (!editFile) {
-            container.innerHTML = "";
+            container.innerHTML = '';
             return;
         }
 
@@ -2000,21 +2241,20 @@
                     <div class="file-size">${formatFileSize(editFile.size)}</div>
                 </div>
                 <button type="button" class="file-remove" onclick="removeEditFile()">🗑️</button>
-            </div>
-        `;
+            </div>`;
     }
 
     function removeEditFile() {
         editFile = null;
-        document.getElementById("editFileInput").value = "";
+        document.getElementById('editFileInput').value = '';
         renderEditUploadedFile();
     }
 
     function cancelSolicitud(id) {
-        const sol = solicitudes.find(s => s.id === id);
+        const sol = solicitudes.find(s => Number(s.id) === Number(id));
 
-        if (!sol || sol.estado !== 'pendiente') {
-            showAlert('Solo se pueden cancelar solicitudes pendientes', 'error');
+        if (!sol || normalizarTexto(sol.estado) !== 'pendiente') {
+            showAlert('Solo se pueden cancelar solicitudes pendientes.', 'error');
             return;
         }
 
@@ -2023,28 +2263,36 @@
     }
 
     async function confirmCancel() {
+        if (!currentCancelId) {
+            showAlert('No hay solicitud seleccionada para cancelar.', 'error');
+            return;
+        }
+
+        const boton = document.getElementById('btnConfirmarCancelacion');
+        boton.disabled = true;
+        boton.textContent = 'Cancelando...';
+
         try {
-            const response = await fetch(`/Empleado/CancelarSolicitud?id=${currentCancelId}`, {
+            const response = await fetch(`/Empleado/CancelarSolicitud?id=${encodeURIComponent(currentCancelId)}`, {
                 method: 'PUT',
                 credentials: 'same-origin'
             });
 
-            if (!response.ok) {
-                console.log(await response.text());
-                showAlert("Error al cancelar la solicitud", "error");
+            const data = await leerRespuesta(response);
+
+            if (!response.ok || data.success === false) {
+                showAlert(data.message || data.mensaje || 'No se pudo cancelar la solicitud.', 'error');
                 return;
             }
 
-            const data = await response.json();
-
-            if (data.success) {
-                showAlert("Solicitud cancelada correctamente", "success");
-                closeModal('cancelModal');
-                await cargarSolicitudes();
-            }
-        } catch (error) {
-            console.error(error);
-            showAlert("Error inesperado", "error");
+            showAlert(data.message || 'Solicitud cancelada correctamente.', 'success');
+            closeModal('cancelModal');
+            await cargarSolicitudes();
+        } catch {
+            showAlert('No se pudo cancelar la solicitud. Intente nuevamente.', 'error');
+        } finally {
+            boton.disabled = false;
+            boton.textContent = '✅ Sí, cancelar';
         }
     }
 
@@ -2058,5 +2306,6 @@
         document.getElementById('filterDesde').value = '';
         document.getElementById('filterHasta').value = '';
         renderSolicitudes();
+        showAlert('Filtros limpiados correctamente.', 'info');
     }
 </script>

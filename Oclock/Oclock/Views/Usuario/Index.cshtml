@@ -3,7 +3,11 @@
 @{
     ViewData["Title"] = "O'Clock - Acceso";
     Layout = null;
+
     var showRegister = ViewBag.ShowRegister ?? false;
+    var rememberedEmail = ViewBag.RememberedEmail as string ?? "";
+    var rememberMeChecked = ViewBag.RememberMeChecked == true;
+    var fechaSistema = DateTime.Now.ToString("yyyy-MM-dd");
 }
 
 <!DOCTYPE html>
@@ -17,348 +21,437 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <style>
-        :root {
-            --oc-blue: #2F6FED;
-            --oc-blue-700: #2457C8;
-            --oc-bg: #F6F8FB;
-            --oc-surface: #FFFFFF;
-            --oc-text: #1F2937;
-            --oc-muted: #6B7280;
-            --oc-border: #E5E7EB;
-            --oc-radius: 20px;
-            --oc-shadow: 0 10px 28px rgba(17, 24, 39, 0.15);
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            background: var(--oc-bg);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Segoe UI', sans-serif;
-            padding: 2rem 0;
-            color: var(--oc-text);
-        }
-
-        .auth-container {
-            background: var(--oc-surface);
-            width: 850px;
-            max-width: 95%;
-            max-height: 90vh;
-            border-radius: var(--oc-radius);
-            box-shadow: var(--oc-shadow);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--oc-border);
-            animation: fadeIn 0.35s ease-in-out;
-        }
-
-        .brand-bar {
-            background: var(--oc-blue);
-            color: #fff;
-            padding: 14px 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-shrink: 0;
-        }
-
-        .brand-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .clock-icon {
-            width: 26px;
-            height: 26px;
-            border: 2px solid #fff;
-            border-radius: 50%;
-            position: relative;
-            flex-shrink: 0;
-        }
-
-            .clock-icon::before {
-                content: '';
-                position: absolute;
-                width: 2px;
-                height: 8px;
-                background: #fff;
-                top: 4px;
-                left: 50%;
-                transform: translateX(-50%);
+            :root {
+                --oc-blue: #2F6FED;
+                --oc-blue-700: #2457C8;
+                --oc-bg: #F6F8FB;
+                --oc-surface: #FFFFFF;
+                --oc-text: #1F2937;
+                --oc-muted: #6B7280;
+                --oc-border: #E5E7EB;
+                --oc-danger: #E53E3E;
+                --oc-success: #38A169;
+                --oc-radius: 20px;
+                --oc-shadow: 0 10px 28px rgba(17, 24, 39, 0.15);
             }
 
-            .clock-icon::after {
-                content: '';
-                position: absolute;
-                width: 2px;
-                height: 6px;
-                background: #fff;
-                top: 9px;
-                left: 50%;
-                transform: translateX(-50%) rotate(90deg);
-                transform-origin: top;
+            * {
+                box-sizing: border-box;
             }
 
-        .brand-title {
-            font-weight: 800;
-            letter-spacing: .2px;
-            font-size: 16px;
-            margin: 0;
-            line-height: 1;
-        }
-
-        .brand-subtitle {
-            font-size: 12px;
-            opacity: .9;
-            margin: 0;
-            line-height: 1;
-        }
-
-        .brand-right {
-            font-size: 12px;
-            opacity: .92;
-        }
-
-        /* Tabs */
-        .tabs-container {
-            display: flex;
-            background: #ffffff;
-            border-bottom: 1px solid var(--oc-border);
-            flex-shrink: 0;
-        }
-
-        .tab-link {
-            flex: 1;
-            padding: 1rem;
-            text-align: center;
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--oc-muted);
-            transition: all 0.2s;
-            border-bottom: 3px solid transparent;
-            display: block;
-        }
-
-            .tab-link:hover {
-                background: rgba(47,111,237,0.06);
-                color: var(--oc-blue);
+            body {
+                background: var(--oc-bg);
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-family: 'Segoe UI', sans-serif;
+                padding: 2rem 0;
+                color: var(--oc-text);
             }
 
-            .tab-link.active {
-                color: var(--oc-blue);
-                background: #ffffff;
-                border-bottom: 3px solid var(--oc-blue);
+            .auth-container {
+                background: var(--oc-surface);
+                width: 850px;
+                max-width: 95%;
+                max-height: 90vh;
+                border-radius: var(--oc-radius);
+                box-shadow: var(--oc-shadow);
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                border: 1px solid var(--oc-border);
+                animation: fadeIn 0.35s ease-in-out;
             }
 
-        .tab-content {
-            padding: 1.5rem 2rem;
-            overflow-y: auto;
-            flex: 1;
-            animation: fadeIn 0.25s ease-in-out;
-        }
-
-        .auth-title {
-            color: var(--oc-text);
-            font-weight: 800;
-            font-size: 1.35rem;
-            margin-bottom: 1.1rem;
-        }
-
-        .section-title {
-            color: var(--oc-text);
-            font-weight: 800;
-            font-size: 0.95rem;
-            margin-bottom: 0.8rem;
-            padding-bottom: 0.4rem;
-            border-bottom: 2px solid #eef2f7;
-        }
-
-        .form-label {
-            color: var(--oc-muted);
-            font-weight: 700;
-            margin-bottom: 0.3rem;
-            font-size: 0.9rem;
-        }
-
-        .form-control, .form-select {
-            border-radius: 12px;
-            border: 1px solid var(--oc-border);
-            padding: 0.55rem 0.85rem;
-            font-size: 0.95rem;
-        }
-
-            .form-control:focus, .form-select:focus {
-                border-color: var(--oc-blue);
-                box-shadow: 0 0 0 0.2rem rgba(47, 111, 237, 0.18);
-            }
-
-        .text-danger-custom {
-            color: #e53e3e;
-            font-weight: 700;
-        }
-
-        .btn-primary-custom {
-            background: var(--oc-blue);
-            border: none;
-            border-radius: 12px;
-            padding: 0.65rem 1.2rem;
-            font-size: 1rem;
-            font-weight: 800;
-            color: #fff;
-            width: 100%;
-            transition: 0.2s;
-        }
-
-            .btn-primary-custom:hover {
-                background: var(--oc-blue-700);
-                box-shadow: 0 10px 18px rgba(47,111,237,0.18);
-                transform: translateY(-1px);
+            .brand-bar {
+                background: var(--oc-blue);
                 color: #fff;
+                padding: 14px 18px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-shrink: 0;
             }
 
-        .btn-secondary-custom {
-            background: #e9eef7;
-            border: 1px solid var(--oc-border);
-            border-radius: 12px;
-            padding: 0.65rem 1.2rem;
-            font-size: 0.95rem;
-            font-weight: 800;
-            color: #374151;
-            transition: 0.2s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-            .btn-secondary-custom:hover {
-                background: #dde6f5;
-                transform: translateY(-1px);
-                color: #374151;
+            .brand-left {
+                display: flex;
+                align-items: center;
+                gap: 10px;
             }
 
-        .logo-circle {
-            width: 96px;
-            height: 56px;
-            border-radius: 18px;
-            background: #f1f5ff;
-            border: 1px solid rgba(47,111,237,0.18);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto 1rem auto;
-            box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
-        }
-
-        .logo-text {
-            font-size: 1.4rem;
-            color: var(--oc-blue);
-            font-weight: 900;
-            letter-spacing: .2px;
-        }
-
-        .form-check-input:checked {
-            background-color: var(--oc-blue);
-            border-color: var(--oc-blue);
-        }
-
-        .section-container {
-            background: #f8fafc;
-            padding: 1rem;
-            border-radius: 14px;
-            margin-bottom: 1rem;
-            border: 1px solid #eef2f7;
-        }
-
-        .forgot-link {
-            color: var(--oc-muted);
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 0.9rem;
-        }
-
-            .forgot-link:hover {
-                text-decoration: underline;
-                color: var(--oc-blue);
+            .clock-icon {
+                width: 26px;
+                height: 26px;
+                border: 2px solid #fff;
+                border-radius: 50%;
+                position: relative;
+                flex-shrink: 0;
             }
 
-        .validation-message {
-            color: #e53e3e;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-            font-weight: 700;
-        }
+                .clock-icon::before {
+                    content: '';
+                    position: absolute;
+                    width: 2px;
+                    height: 8px;
+                    background: #fff;
+                    top: 4px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
 
-        .password-wrap {
-            position: relative;
-        }
+                .clock-icon::after {
+                    content: '';
+                    position: absolute;
+                    width: 2px;
+                    height: 6px;
+                    background: #fff;
+                    top: 9px;
+                    left: 50%;
+                    transform: translateX(-50%) rotate(90deg);
+                    transform-origin: top;
+                }
 
-        .password-toggle {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            border: none;
-            background: transparent;
-            color: var(--oc-muted);
-            cursor: pointer;
-            padding: 0;
-            line-height: 1;
-        }
-
-            .password-toggle:hover {
-                color: var(--oc-blue);
+            .brand-title {
+                font-weight: 800;
+                letter-spacing: .2px;
+                font-size: 16px;
+                margin: 0;
+                line-height: 1;
             }
 
-            .password-toggle:focus {
-                outline: none;
-            }
-
-        .alert {
-            border-radius: 12px;
-            font-weight: 600;
-        }
-
-        /* Footer inside card */
-        .auth-footer {
-            padding: 14px 18px;
-            border-top: 1px solid var(--oc-border);
-            background: #fff;
-            font-size: 12px;
-            color: var(--oc-muted);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-        }
-
-        @@keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @@media (max-width: 576px) {
-            .tab-content {
-                padding: 1.1rem 1.1rem;
+            .brand-subtitle {
+                font-size: 12px;
+                opacity: .9;
+                margin: 0;
+                line-height: 1;
             }
 
             .brand-right {
+                font-size: 12px;
+                opacity: .92;
+                font-weight: 700;
+            }
+
+            .tabs-container {
+                display: flex;
+                background: #ffffff;
+                border-bottom: 1px solid var(--oc-border);
+                flex-shrink: 0;
+            }
+
+            .tab-link {
+                flex: 1;
+                padding: 1rem;
+                text-align: center;
+                text-decoration: none;
+                font-size: 0.95rem;
+                font-weight: 800;
+                color: var(--oc-muted);
+                transition: all 0.2s;
+                border-bottom: 3px solid transparent;
+                display: block;
+            }
+
+                .tab-link:hover {
+                    background: rgba(47,111,237,0.06);
+                    color: var(--oc-blue);
+                }
+
+                .tab-link.active {
+                    color: var(--oc-blue);
+                    background: #ffffff;
+                    border-bottom: 3px solid var(--oc-blue);
+                }
+
+            .tab-content {
+                padding: 1.5rem 2rem;
+                overflow-y: auto;
+                flex: 1;
+                animation: fadeIn 0.25s ease-in-out;
+            }
+
+            .auth-title {
+                color: var(--oc-text);
+                font-weight: 800;
+                font-size: 1.35rem;
+                margin-bottom: 1.1rem;
+            }
+
+            .section-title {
+                color: var(--oc-text);
+                font-weight: 800;
+                font-size: 0.95rem;
+                margin-bottom: 0.8rem;
+                padding-bottom: 0.4rem;
+                border-bottom: 2px solid #eef2f7;
+            }
+
+            .form-label {
+                color: var(--oc-muted);
+                font-weight: 700;
+                margin-bottom: 0.3rem;
+                font-size: 0.9rem;
+            }
+
+            .form-control,
+            .form-select {
+                border-radius: 12px;
+                border: 1px solid var(--oc-border);
+                padding: 0.55rem 0.85rem;
+                font-size: 0.95rem;
+            }
+
+                .form-control:focus,
+                .form-select:focus {
+                    border-color: var(--oc-blue);
+                    box-shadow: 0 0 0 0.2rem rgba(47, 111, 237, 0.18);
+                }
+
+                .form-control.is-invalid {
+                    border-color: var(--oc-danger);
+                    box-shadow: 0 0 0 0.2rem rgba(229, 62, 62, 0.12);
+                }
+
+            .text-danger-custom {
+                color: var(--oc-danger);
+                font-weight: 800;
+            }
+
+            .btn-primary-custom {
+                background: var(--oc-blue);
+                border: none;
+                border-radius: 12px;
+                padding: 0.65rem 1.2rem;
+                font-size: 1rem;
+                font-weight: 800;
+                color: #fff;
+                width: 100%;
+                transition: 0.2s;
+            }
+
+                .btn-primary-custom:hover {
+                    background: var(--oc-blue-700);
+                    box-shadow: 0 10px 18px rgba(47,111,237,0.18);
+                    transform: translateY(-1px);
+                    color: #fff;
+                }
+
+                .btn-primary-custom:disabled {
+                    opacity: 0.7;
+                    cursor: not-allowed;
+                    transform: none;
+                    box-shadow: none;
+                }
+
+            .btn-secondary-custom {
+                background: #e9eef7;
+                border: 1px solid var(--oc-border);
+                border-radius: 12px;
+                padding: 0.65rem 1.2rem;
+                font-size: 0.95rem;
+                font-weight: 800;
+                color: #374151;
+                transition: 0.2s;
+                text-decoration: none;
+                display: inline-block;
+            }
+
+                .btn-secondary-custom:hover {
+                    background: #dde6f5;
+                    transform: translateY(-1px);
+                    color: #374151;
+                }
+
+            .logo-circle {
+                width: 96px;
+                height: 56px;
+                border-radius: 18px;
+                background: #f1f5ff;
+                border: 1px solid rgba(47,111,237,0.18);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 0 auto 1rem auto;
+                box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
+            }
+
+            .logo-text {
+                font-size: 1.4rem;
+                color: var(--oc-blue);
+                font-weight: 900;
+                letter-spacing: .2px;
+            }
+
+            .form-check-input:checked {
+                background-color: var(--oc-blue);
+                border-color: var(--oc-blue);
+            }
+
+            .section-container {
+                background: #f8fafc;
+                padding: 1rem;
+                border-radius: 14px;
+                margin-bottom: 1rem;
+                border: 1px solid #eef2f7;
+            }
+
+            .forgot-link {
+                color: var(--oc-muted);
+                text-decoration: none;
+                font-weight: 800;
+                font-size: 0.9rem;
+            }
+
+                .forgot-link:hover {
+                    text-decoration: underline;
+                    color: var(--oc-blue);
+                }
+
+            .validation-message {
+                color: var(--oc-danger);
+                font-size: 0.875rem;
+                margin-top: 0.25rem;
+                font-weight: 700;
+                display: block;
+            }
+
+            .field-help {
+                color: var(--oc-muted);
+                font-size: 0.78rem;
+                margin-top: 0.2rem;
+                display: block;
+                line-height: 1.35;
+            }
+
+            .password-wrap {
+                position: relative;
+            }
+
+                .password-wrap .form-control {
+                    padding-right: 2.6rem;
+                }
+
+            .password-toggle {
+                position: absolute;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                border: none;
+                background: transparent;
+                color: var(--oc-muted);
+                cursor: pointer;
+                padding: 0;
+                line-height: 1;
+            }
+
+                .password-toggle:hover {
+                    color: var(--oc-blue);
+                }
+
+                .password-toggle:focus {
+                    outline: none;
+                }
+
+            .alert {
+                border-radius: 12px;
+                font-weight: 700;
+                line-height: 1.5;
+            }
+
+            .validation-summary-valid {
                 display: none;
             }
-        }
+
+            .validation-summary-errors {
+                display: block;
+            }
+
+            .auth-actions {
+                display: flex;
+                justify-content: center;
+                gap: 1rem;
+                flex-wrap: wrap;
+                margin-top: 1.5rem;
+            }
+
+            .auth-footer {
+                padding: 14px 18px;
+                border-top: 1px solid var(--oc-border);
+                background: #fff;
+                font-size: 12px;
+                color: var(--oc-muted);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 12px;
+                flex-shrink: 0;
+                flex-wrap: wrap;
+            }
+
+                .auth-footer a {
+                    color: var(--oc-blue);
+                    text-decoration: none;
+                    font-weight: 800;
+                }
+
+                    .auth-footer a:hover {
+                        text-decoration: underline;
+                    }
+
+            @@keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @@media (max-width: 576px) {
+                body {
+                    padding: 1rem 0;
+                    align-items: flex-start;
+                }
+
+                .auth-container {
+                    max-height: none;
+                }
+
+                .tab-content {
+                    padding: 1.1rem 1.1rem;
+                }
+
+                .brand-right {
+                    display: none;
+                }
+
+                .tabs-container {
+                    flex-direction: column;
+                }
+
+                .tab-link {
+                    border-bottom: 1px solid var(--oc-border);
+                }
+
+                .auth-actions {
+                    flex-direction: column;
+                }
+
+                    .auth-actions .btn-primary-custom,
+                    .auth-actions .btn-secondary-custom {
+                        width: 100% !important;
+                        text-align: center;
+                    }
+
+                .auth-footer {
+                    flex-direction: column;
+                    text-align: center;
+                }
+            }
     </style>
 </head>
 
@@ -372,6 +465,7 @@
                     <p class="brand-subtitle">Sistema de Asistencia</p>
                 </div>
             </div>
+
             <div class="brand-right">
                 Acceso seguro
             </div>
@@ -381,6 +475,7 @@
             <a href="@Url.Action("Index", "Usuario", new { tab = "login" })" class="tab-link @(showRegister ? "" : "active")">
                 <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
             </a>
+
             <a href="@Url.Action("Index", "Usuario", new { tab = "register" })" class="tab-link @(showRegister ? "active" : "")">
                 <i class="fas fa-user-plus me-2"></i>Registrarse
             </a>
@@ -390,7 +485,7 @@
         {
             <div class="tab-content">
                 <div class="logo-circle">
-                    <span class="logo-text">O'clock</span>
+                    <span class="logo-text">O'Clock</span>
                 </div>
 
                 <h2 class="text-center auth-title">Bienvenido de nuevo</h2>
@@ -402,7 +497,9 @@
                     </div>
                 }
 
-                <form asp-action="Login" asp-controller="Usuario" method="post">
+                <form asp-action="Login" asp-controller="Usuario" method="post" id="loginForm">
+                    @Html.AntiForgeryToken()
+
                     @if (ViewBag.ErrorMessage != null)
                     {
                         <div class="alert alert-danger" role="alert">
@@ -411,23 +508,42 @@
                     }
 
                     <div class="mb-3">
-                        <label class="form-label">Correo electrónico</label>
-                        <input type="email" name="email" class="form-control" placeholder="usuario@empresa.com" required />
+                        <label for="loginEmail" class="form-label">Correo electrónico</label>
+                        <input type="email"
+                               id="loginEmail"
+                               name="email"
+                               class="form-control"
+                               placeholder="usuario@empresa.com"
+                               value="@rememberedEmail"
+                               autocomplete="email"
+                               maxlength="100"
+                               required />
                     </div>
 
                     <div class="mb-2">
-                        <label class="form-label">Contraseña</label>
+                        <label for="loginPassword" class="form-label">Contraseña</label>
                         <div class="password-wrap">
-                            <input id="loginPassword" type="password" name="password" class="form-control" placeholder="••••••••" required />
+                            <input id="loginPassword"
+                                   type="password"
+                                   name="password"
+                                   class="form-control"
+                                   placeholder="••••••••"
+                                   autocomplete="current-password"
+                                   required />
                             <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)" aria-label="Mostrar contraseña">
                                 <i class="fa-solid fa-eye"></i>
                             </button>
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   id="rememberMe"
+                                   name="rememberMe"
+                                   value="true"
+                            @(rememberMeChecked ? "checked" : "") />
                             <label class="form-check-label" for="rememberMe">
                                 Recordarme
                             </label>
@@ -438,7 +554,7 @@
                         </a>
                     </div>
 
-                    <button type="submit" class="btn-primary-custom mt-2">
+                    <button type="submit" class="btn-primary-custom mt-2" id="btnLogin">
                         <i class="fas fa-sign-in-alt me-2"></i>Ingresar
                     </button>
                 </form>
@@ -448,18 +564,29 @@
         {
             <div class="tab-content">
                 <div class="logo-circle">
-                    <span class="logo-text">O'clock</span>
+                    <span class="logo-text">O'Clock</span>
                 </div>
 
                 <h2 class="text-center auth-title">Crear cuenta nueva</h2>
 
-                <form asp-action="Register" asp-controller="Usuario" method="post">
+                <form asp-action="Register" asp-controller="Usuario" method="post" id="registerForm">
+                    @Html.AntiForgeryToken()
+
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <div id="clientValidationSummary" class="alert alert-danger" style="display:none;"></div>
 
                     @if (ViewBag.SuccessMessage != null)
                     {
                         <div class="alert alert-success" role="alert">
                             @ViewBag.SuccessMessage
+                        </div>
+                    }
+
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @ViewBag.ErrorMessage
                         </div>
                     }
 
@@ -473,16 +600,30 @@
                                 <label asp-for="Nombre" class="form-label">
                                     Nombre <span class="text-danger-custom">*</span>
                                 </label>
-                                <input asp-for="Nombre" class="form-control" placeholder="Ingrese el nombre" required />
+                                <input asp-for="Nombre"
+                                       id="Nombre"
+                                       class="form-control"
+                                       placeholder="Ingrese el nombre"
+                                       autocomplete="given-name"
+                                       maxlength="100"
+                                       required />
                                 <span asp-validation-for="Nombre" class="validation-message"></span>
+                                <span class="validation-message" id="NombreClientError"></span>
                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label asp-for="Apellido" class="form-label">
                                     Apellido <span class="text-danger-custom">*</span>
                                 </label>
-                                <input asp-for="Apellido" class="form-control" placeholder="Ingrese el apellido" required />
+                                <input asp-for="Apellido"
+                                       id="Apellido"
+                                       class="form-control"
+                                       placeholder="Ingrese el apellido"
+                                       autocomplete="family-name"
+                                       maxlength="100"
+                                       required />
                                 <span asp-validation-for="Apellido" class="validation-message"></span>
+                                <span class="validation-message" id="ApellidoClientError"></span>
                             </div>
                         </div>
 
@@ -491,16 +632,37 @@
                                 <label asp-for="Email" class="form-label">
                                     Correo Electrónico <span class="text-danger-custom">*</span>
                                 </label>
-                                <input asp-for="Email" type="email" class="form-control" placeholder="usuario@empresa.com" required />
+                                <input asp-for="Email"
+                                       id="Email"
+                                       type="email"
+                                       class="form-control"
+                                       placeholder="usuario@empresa.com"
+                                       autocomplete="email"
+                                       maxlength="100"
+                                       required />
                                 <span asp-validation-for="Email" class="validation-message"></span>
+                                <span class="validation-message" id="EmailClientError"></span>
                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label asp-for="Telefono" class="form-label">
-                                    Teléfono
+                                    Teléfono <span class="text-danger-custom">*</span>
                                 </label>
-                                <input asp-for="Telefono" type="tel" class="form-control" placeholder="8888-8888" />
+                                <input asp-for="Telefono"
+                                       id="Telefono"
+                                       type="text"
+                                       class="form-control"
+                                       placeholder="88888888"
+                                       autocomplete="tel"
+                                       inputmode="numeric"
+                                       maxlength="8"
+                                       minlength="8"
+                                       pattern="[0-9]{8}"
+                                       required
+                                       oninput="soloNumerosTelefono(this)" />
                                 <span asp-validation-for="Telefono" class="validation-message"></span>
+                                <span class="validation-message" id="TelefonoClientError"></span>
+                                <small class="field-help">Debe contener exactamente 8 dígitos. No use letras, espacios ni guiones.</small>
                             </div>
                         </div>
                     </div>
@@ -517,14 +679,22 @@
                                 </label>
 
                                 <div class="password-wrap">
-                                    <input id="registerPassword" asp-for="Contraseña" type="password" class="form-control" placeholder="••••••••" required minlength="8" />
+                                    <input id="registerPassword"
+                                           asp-for="Contraseña"
+                                           type="password"
+                                           class="form-control"
+                                           placeholder="••••••••"
+                                           autocomplete="new-password"
+                                           required
+                                           minlength="8" />
                                     <button type="button" class="password-toggle" onclick="togglePassword('registerPassword', this)" aria-label="Mostrar contraseña">
                                         <i class="fa-solid fa-eye"></i>
                                     </button>
                                 </div>
 
                                 <span asp-validation-for="Contraseña" class="validation-message"></span>
-                                <small class="text-muted">Mínimo 8 caracteres</small>
+                                <span class="validation-message" id="PasswordClientError"></span>
+                                <small class="field-help">Mínimo 8 caracteres, con al menos una letra y un número.</small>
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -533,13 +703,21 @@
                                 </label>
 
                                 <div class="password-wrap">
-                                    <input id="confirmPassword" type="password" name="confirmar_contraseña" class="form-control" placeholder="••••••••" required minlength="8" />
+                                    <input id="confirmPassword"
+                                           type="password"
+                                           name="confirmar_contraseña"
+                                           class="form-control"
+                                           placeholder="••••••••"
+                                           autocomplete="new-password"
+                                           required
+                                           minlength="8" />
                                     <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword', this)" aria-label="Mostrar contraseña">
                                         <i class="fa-solid fa-eye"></i>
                                     </button>
                                 </div>
 
-                                <small class="text-muted">Debe coincidir con la contraseña</small>
+                                <span class="validation-message" id="ConfirmPasswordClientError"></span>
+                                <small class="field-help">Debe coincidir con la contraseña.</small>
                             </div>
                         </div>
                     </div>
@@ -552,19 +730,27 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="FechaContratacion" class="form-label">
-                                    Fecha de Contratación
+                                    Fecha de Contratación <span class="text-danger-custom">*</span>
                                 </label>
-                                <input asp-for="FechaContratacion" type="date" class="form-control" />
+                                <input asp-for="FechaContratacion"
+                                       id="FechaContratacion"
+                                       type="date"
+                                       class="form-control"
+                                       max="@fechaSistema"
+                                       required />
                                 <span asp-validation-for="FechaContratacion" class="validation-message"></span>
+                                <span class="validation-message" id="FechaContratacionClientError"></span>
+                                <small class="field-help">Seleccione la fecha real de contratación. No puede ser una fecha futura.</small>
                             </div>
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-center gap-3 mt-4">
-                        <button type="submit" class="btn-primary-custom" style="width: auto;">
+                    <div class="auth-actions">
+                        <button type="submit" class="btn-primary-custom" style="width: auto;" id="btnRegister">
                             <i class="fas fa-save me-2"></i>Registrar Usuario
                         </button>
-                        <button type="reset" class="btn-secondary-custom">
+
+                        <button type="reset" class="btn-secondary-custom" onclick="limpiarValidacionesCliente()">
                             <i class="fas fa-eraser me-2"></i>Limpiar
                         </button>
                     </div>
@@ -573,28 +759,245 @@
         }
 
         <div class="auth-footer">
-            <span>&copy; @DateTime.Now.Year O'Clock</span>
+            <span>&copy; @DateTime.Now.Year O'Clock Sistema de Asistencia</span>
+            <span>
+                <a href="@Url.Action("Privacy", "Home")">Privacidad y uso de datos</a>
+            </span>
             <span>Soporte interno</span>
         </div>
     </div>
 
     <script>
-        function togglePassword(inputId, btn) {
-            const input = document.getElementById(inputId);
-            if (!input) return;
+            function togglePassword(inputId, btn) {
+                const input = document.getElementById(inputId);
 
-            const icon = btn.querySelector('i');
-            const isHidden = input.type === 'password';
+                if (!input) {
+                    return;
+                }
 
-            input.type = isHidden ? 'text' : 'password';
+                const icon = btn.querySelector('i');
+                const isHidden = input.type === 'password';
 
-            if (icon) {
-                icon.classList.toggle('fa-eye', !isHidden);
-                icon.classList.toggle('fa-eye-slash', isHidden);
+                input.type = isHidden ? 'text' : 'password';
+
+                if (icon) {
+                    icon.classList.toggle('fa-eye', !isHidden);
+                    icon.classList.toggle('fa-eye-slash', isHidden);
+                }
+
+                btn.setAttribute('aria-label', isHidden ? 'Ocultar contraseña' : 'Mostrar contraseña');
             }
 
-            btn.setAttribute('aria-label', isHidden ? 'Ocultar contraseña' : 'Mostrar contraseña');
-        }
+            function soloNumerosTelefono(input) {
+                input.value = input.value.replace(/\D/g, '').substring(0, 8);
+            }
+
+            function limpiarValidacionesCliente() {
+                const summary = document.getElementById('clientValidationSummary');
+
+                if (summary) {
+                    summary.style.display = 'none';
+                    summary.innerHTML = '';
+                }
+
+                document.querySelectorAll('.validation-message[id$="ClientError"]').forEach(element => {
+                    element.textContent = '';
+                });
+
+                document.querySelectorAll('.form-control').forEach(element => {
+                    element.classList.remove('is-invalid');
+                });
+            }
+
+            function marcarError(inputId, errorId, mensaje) {
+                const input = document.getElementById(inputId);
+                const error = document.getElementById(errorId);
+
+                if (input) {
+                    input.classList.add('is-invalid');
+                }
+
+                if (error) {
+                    error.textContent = mensaje;
+                }
+            }
+
+            function escapeHtml(valor) {
+                if (valor === null || valor === undefined) {
+                    return '';
+                }
+
+                return valor.toString()
+                    .replaceAll('&', '&amp;')
+                    .replaceAll('<', '&lt;')
+                    .replaceAll('>', '&gt;')
+                    .replaceAll('"', '&quot;')
+                    .replaceAll("'", '&#039;');
+            }
+
+            function mostrarResumenErrores(errores) {
+                const summary = document.getElementById('clientValidationSummary');
+
+                if (!summary) {
+                    return;
+                }
+
+                if (!errores || errores.length === 0) {
+                    summary.style.display = 'none';
+                    summary.innerHTML = '';
+                    return;
+                }
+
+                summary.innerHTML = `
+                    <strong>Revise los siguientes datos:</strong>
+                    <ul class="mb-0 mt-2">
+                        ${errores.map(e => `<li>${escapeHtml(e)}</li>`).join('')}
+                    </ul>
+                `;
+                summary.style.display = 'block';
+            }
+
+            function textoNombreValido(valor) {
+                return /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s'-]+$/.test(valor);
+            }
+
+            function emailValido(valor) {
+                return /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/.test(valor);
+            }
+
+            function passwordValida(valor) {
+                if (!valor || valor.length < 8) {
+                    return false;
+                }
+
+                const tieneLetra = /[A-Za-zÁÉÍÓÚáéíóúÑñÜü]/.test(valor);
+                const tieneNumero = /\d/.test(valor);
+
+                return tieneLetra && tieneNumero;
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const loginForm = document.getElementById('loginForm');
+
+                if (loginForm) {
+                    loginForm.addEventListener('submit', function () {
+                        const btn = document.getElementById('btnLogin');
+
+                        if (btn) {
+                            btn.disabled = true;
+                            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Ingresando...';
+                        }
+                    });
+                }
+
+                const registerForm = document.getElementById('registerForm');
+
+                if (!registerForm) {
+                    return;
+                }
+
+                const telefono = document.getElementById('Telefono');
+
+                if (telefono) {
+                    telefono.addEventListener('paste', function () {
+                        setTimeout(() => soloNumerosTelefono(telefono), 0);
+                    });
+                }
+
+                registerForm.addEventListener('submit', function (event) {
+                    limpiarValidacionesCliente();
+
+                    const errores = [];
+
+                    const nombre = document.getElementById('Nombre')?.value.trim() || '';
+                    const apellido = document.getElementById('Apellido')?.value.trim() || '';
+                    const email = document.getElementById('Email')?.value.trim() || '';
+                    const telefonoValor = document.getElementById('Telefono')?.value.trim() || '';
+                    const fechaContratacion = document.getElementById('FechaContratacion')?.value || '';
+                    const fechaMaxima = '@fechaSistema';
+                    const password = document.getElementById('registerPassword')?.value || '';
+                    const confirmPassword = document.getElementById('confirmPassword')?.value || '';
+
+                    if (!nombre) {
+                        errores.push('El nombre es obligatorio.');
+                        marcarError('Nombre', 'NombreClientError', 'El nombre es obligatorio.');
+                    } else if (!textoNombreValido(nombre)) {
+                        errores.push('El nombre solo debe contener letras y espacios.');
+                        marcarError('Nombre', 'NombreClientError', 'El nombre solo debe contener letras y espacios.');
+                    }
+
+                    if (!apellido) {
+                        errores.push('El apellido es obligatorio.');
+                        marcarError('Apellido', 'ApellidoClientError', 'El apellido es obligatorio.');
+                    } else if (!textoNombreValido(apellido)) {
+                        errores.push('El apellido solo debe contener letras y espacios.');
+                        marcarError('Apellido', 'ApellidoClientError', 'El apellido solo debe contener letras y espacios.');
+                    }
+
+                    if (!email) {
+                        errores.push('El correo electrónico es obligatorio.');
+                        marcarError('Email', 'EmailClientError', 'El correo electrónico es obligatorio.');
+                    } else if (!emailValido(email)) {
+                        errores.push('Ingrese un correo electrónico válido.');
+                        marcarError('Email', 'EmailClientError', 'Ingrese un correo electrónico válido.');
+                    }
+
+                    if (!telefonoValor) {
+                        errores.push('El teléfono es obligatorio.');
+                        marcarError('Telefono', 'TelefonoClientError', 'El teléfono es obligatorio.');
+                    } else if (!/^\d{8}$/.test(telefonoValor)) {
+                        errores.push('El teléfono debe contener exactamente 8 dígitos numéricos.');
+                        marcarError('Telefono', 'TelefonoClientError', 'El teléfono debe contener exactamente 8 dígitos numéricos.');
+                    }
+
+                    if (!fechaContratacion) {
+                        errores.push('La fecha de contratación es obligatoria.');
+                        marcarError('FechaContratacion', 'FechaContratacionClientError', 'La fecha de contratación es obligatoria.');
+                    } else if (fechaContratacion > fechaMaxima) {
+                        errores.push('La fecha de contratación no puede ser futura.');
+                        marcarError('FechaContratacion', 'FechaContratacionClientError', 'La fecha de contratación no puede ser futura.');
+                    }
+
+                    if (!password) {
+                        errores.push('La contraseña es obligatoria.');
+                        marcarError('registerPassword', 'PasswordClientError', 'La contraseña es obligatoria.');
+                    } else if (!passwordValida(password)) {
+                        errores.push('La contraseña debe tener al menos 8 caracteres e incluir letras y números.');
+                        marcarError('registerPassword', 'PasswordClientError', 'La contraseña debe tener al menos 8 caracteres e incluir letras y números.');
+                    }
+
+                    if (!confirmPassword) {
+                        errores.push('Debe confirmar la contraseña.');
+                        marcarError('confirmPassword', 'ConfirmPasswordClientError', 'Debe confirmar la contraseña.');
+                    } else if (password !== confirmPassword) {
+                        errores.push('Las contraseñas no coinciden.');
+                        marcarError('confirmPassword', 'ConfirmPasswordClientError', 'Las contraseñas no coinciden.');
+                    }
+
+                    if (errores.length > 0) {
+                        event.preventDefault();
+                        mostrarResumenErrores(errores);
+
+                        const primerError = document.querySelector('.is-invalid');
+
+                        if (primerError) {
+                            primerError.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            });
+                        }
+
+                        return;
+                    }
+
+                    const btn = document.getElementById('btnRegister');
+
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Registrando...';
+                    }
+                });
+            });
     </script>
 </body>
 </html>
