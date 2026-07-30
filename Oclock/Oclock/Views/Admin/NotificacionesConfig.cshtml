@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Configuracion de Notificaciones";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -15,12 +15,18 @@
     }
 
     /* SIDEBAR */
-    .sidebar {
-        width: 280px;
-        background: #ffffff;
+        .sidebar {
+        width: 300px;
+        flex-shrink: 0;
+        background: #FFFFFF;
         padding: 30px 20px;
-        border-right: 1px solid #e0e0e0;
+        border-right: 1px solid #E0E0E0;
         box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+        position: sticky;
+        top: 70px;
+        align-self: flex-start;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
     }
 
     .menu-item {
@@ -33,10 +39,10 @@
 
     .menu-link {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 12px;
-        padding: 15px 20px;
-        color: #4a5568;
+        padding: 15px 16px;
+        color: #455A64;
         text-decoration: none;
         font-weight: 500;
         border-radius: 10px;
@@ -45,15 +51,20 @@
     }
 
         .menu-link:hover {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
             transform: translateX(5px);
         }
 
+        .menu-link:focus-visible {
+            outline: 2px solid #1565C0;
+            outline-offset: 2px;
+        }
+
         .menu-link.active {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
         }
 
             .menu-link.active::before {
@@ -84,23 +95,23 @@
 
     .menu-expandable-header {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
-        padding: 15px 20px;
-        color: #4a5568;
+        padding: 15px 16px;
+        color: #455A64;
         font-weight: 500;
         border-radius: 10px;
         transition: all 0.3s;
     }
 
         .menu-expandable-header:hover {
-            background: #f0f0f0;
-            color: #667eea;
+            background: #E0E0E0;
+            color: #1565C0;
         }
 
         .menu-expandable-header.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            color: #667eea;
+            background: linear-gradient(135deg, rgba(21, 101, 192, 0.1) 0%, rgba(13, 71, 161, 0.1) 100%);
+            color: #1565C0;
             font-weight: 600;
         }
 
@@ -142,7 +153,7 @@
         gap: 10px;
         padding: 12px 16px;
         padding-left: 40px;
-        color: #718096;
+        color: #78909C;
         text-decoration: none;
         font-weight: 500;
         font-size: 14px;
@@ -159,30 +170,30 @@
             transform: translateY(-50%);
             width: 6px;
             height: 6px;
-            background: #cbd5e0;
+            background: #E0E0E0;
             border-radius: 50%;
             transition: all 0.3s;
         }
 
         .submenu-link:hover {
-            background: #f7fafc;
-            color: #667eea;
+            background: #F5F7FA;
+            color: #1565C0;
             transform: translateX(3px);
         }
 
             .submenu-link:hover::before {
-                background: #667eea;
+                background: #1565C0;
                 transform: translateY(-50%) scale(1.3);
             }
 
         .submenu-link.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-            color: #667eea;
+            background: linear-gradient(135deg, rgba(21, 101, 192, 0.15) 0%, rgba(13, 71, 161, 0.15) 100%);
+            color: #1565C0;
             font-weight: 600;
         }
 
             .submenu-link.active::before {
-                background: #667eea;
+                background: #1565C0;
                 width: 8px;
                 height: 8px;
             }
@@ -191,7 +202,7 @@
     .content {
         flex: 1;
         padding: 40px;
-        background: #f5f7fa;
+        background: #F5F7FA;
     }
 
     .content-header {
@@ -199,13 +210,13 @@
     }
 
         .content-header h1 {
-            color: #2d3748;
+            color: #263238;
             font-size: 28px;
             margin-bottom: 8px;
         }
 
         .content-header p {
-            color: #718096;
+            color: #78909C;
             font-size: 14px;
         }
 
@@ -224,7 +235,7 @@
         gap: 12px;
         margin-bottom: 25px;
         padding-bottom: 15px;
-        border-bottom: 2px solid #f0f0f0;
+        border-bottom: 2px solid #E0E0E0;
     }
 
     .section-icon {
@@ -235,7 +246,7 @@
         align-items: center;
         justify-content: center;
         font-size: 24px;
-        background: #2F6FED;
+        background: #1565C0;
     }
 
     .section-title {
@@ -243,13 +254,13 @@
     }
 
         .section-title h2 {
-            color: #2d3748;
+            color: #263238;
             font-size: 20px;
             margin-bottom: 4px;
         }
 
         .section-title p {
-            color: #718096;
+            color: #78909C;
             font-size: 13px;
         }
 
@@ -261,12 +272,12 @@
         padding: 20px;
         margin: 12px 0;
         border-radius: 12px;
-        background: #f8f9fa;
+        background: #F5F7FA;
         transition: all 0.3s;
     }
 
         .notification-item:hover {
-            background: #e8edf3;
+            background: rgba(21, 101, 192, 0.08);
             transform: translateX(5px);
         }
 
@@ -275,14 +286,14 @@
     }
 
         .notification-info h3 {
-            color: #2d3748;
+            color: #263238;
             font-size: 16px;
             font-weight: 600;
             margin-bottom: 4px;
         }
 
         .notification-info p {
-            color: #718096;
+            color: #78909C;
             font-size: 13px;
         }
 
@@ -306,7 +317,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #cbd5e0;
+        background-color: #E0E0E0;
         border-radius: 28px;
         transition: 0.3s;
     }
@@ -325,7 +336,7 @@
         }
 
     .toggle-switch input:checked + .toggle-slider {
-        background: #2F6FED;
+        background: #1565C0;
     }
 
         .toggle-switch input:checked + .toggle-slider:before {
@@ -350,7 +361,7 @@
 
     .frequency-card {
         padding: 20px;
-        border: 2px solid #e2e8f0;
+        border: 2px solid #E0E0E0;
         border-radius: 12px;
         cursor: pointer;
         transition: all 0.3s;
@@ -358,14 +369,14 @@
     }
 
         .frequency-card:hover {
-            border-color: #667eea;
+            border-color: #1565C0;
             transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.2);
         }
 
         .frequency-card.selected {
-            border-color: #667eea;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-color: #1565C0;
+            background: linear-gradient(135deg, rgba(21, 101, 192, 0.1) 0%, rgba(13, 71, 161, 0.1) 100%);
         }
 
     .frequency-card-icon {
@@ -374,13 +385,13 @@
     }
 
     .frequency-card-title {
-        color: #2d3748;
+        color: #263238;
         font-weight: 600;
         margin-bottom: 6px;
     }
 
     .frequency-card-desc {
-        color: #718096;
+        color: #78909C;
         font-size: 13px;
     }
 
@@ -412,32 +423,32 @@
     }
 
     .btn-primary {
-        background: #2F6FED;
+        background: #1565C0;
         color: white;
     }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(21, 101, 192, 0.4);
         }
 
     .btn-secondary {
-        background: #e2e8f0;
-        color: #4a5568;
+        background: #E0E0E0;
+        color: #455A64;
     }
 
         .btn-secondary:hover {
-            background: #cbd5e0;
+            background: #E0E0E0;
         }
 
     .btn-outline {
         background: white;
-        color: #667eea;
-        border: 2px solid #667eea;
+        color: #1565C0;
+        border: 2px solid #1565C0;
     }
 
         .btn-outline:hover {
-            background: #667eea;
+            background: #1565C0;
             color: white;
         }
 
@@ -476,9 +487,9 @@
     }
 
     .alert-info {
-        background: #bee3f8;
-        color: #2c5282;
-        border-left: 4px solid #3182ce;
+        background: #DCEEFB;
+        color: #0D47A1;
+        border-left: 4px solid #1565C0;
     }
 
     .alert-warning {
@@ -497,24 +508,24 @@
     }
 
     .preview-content {
-        background: #f8f9fa;
+        background: #F5F7FA;
         padding: 25px;
         border-radius: 10px;
-        border: 2px dashed #cbd5e0;
+        border: 2px dashed #E0E0E0;
         margin-top: 20px;
     }
 
     .preview-subject {
-        color: #2d3748;
+        color: #263238;
         font-weight: 700;
         font-size: 16px;
         margin-bottom: 15px;
         padding-bottom: 15px;
-        border-bottom: 1px solid #e2e8f0;
+        border-bottom: 1px solid #E0E0E0;
     }
 
     .preview-body {
-        color: #4a5568;
+        color: #455A64;
         line-height: 1.6;
     }
 
@@ -541,12 +552,12 @@
     .stat-value {
         font-size: 32px;
         font-weight: bold;
-        color: #667eea;
+        color: #1565C0;
         margin: 10px 0;
     }
 
     .stat-label {
-        color: #718096;
+        color: #78909C;
         font-size: 13px;
         text-transform: uppercase;
         font-weight: 600;
@@ -555,6 +566,7 @@
     .stat-icon {
         font-size: 24px;
     }
+
 </style>
 <!-- Main Layout -->
 <div class="main-layout">

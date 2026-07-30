@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Mis Bonos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -16,12 +16,17 @@
     }
 
     .sidebar {
-        width: 280px;
-        background: #ffffff;
-        padding: 30px 20px;
-        border-right: 1px solid #e0e0e0;
-        box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+        width: 300px;
         flex-shrink: 0;
+        position: sticky;
+        top: 70px;
+        align-self: flex-start;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
+        background: #FFFFFF;
+        padding: 30px 20px;
+        border-right: 1px solid #E0E0E0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.03);
     }
 
     .menu-item {
@@ -34,28 +39,32 @@
 
     .menu-link {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 12px;
-        padding: 15px 20px;
-        color: #4a5568;
+        padding: 15px 16px;
+        color: #455A64;
         text-decoration: none;
         font-weight: 500;
-        font-size: 15px;
         border-radius: 10px;
         transition: all 0.3s;
         position: relative;
     }
 
         .menu-link:hover {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
             transform: translateX(5px);
         }
 
+        .menu-link:focus-visible {
+            outline: 2px solid #1565C0;
+            outline-offset: 2px;
+        }
+
         .menu-link.active {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
-            box-shadow: 0 4px 12px rgba(47,111,237,0.3);
+            box-shadow: 0 4px 12px rgba(21, 101, 192,0.3);
         }
 
             .menu-link.active::before {
@@ -82,7 +91,7 @@
     .content {
         flex: 1;
         padding: 40px;
-        background: #f5f7fa;
+        background: #F5F7FA;
         min-width: 0;
     }
 
@@ -96,14 +105,14 @@
     }
 
         .content-header h1 {
-            color: #2d3748;
+            color: #263238;
             font-size: 28px;
             margin-bottom: 8px;
             font-weight: 800;
         }
 
         .content-header p {
-            color: #718096;
+            color: #78909C;
             font-size: 14px;
             margin-bottom: 0;
             line-height: 1.5;
@@ -120,15 +129,15 @@
     }
 
     .message-error {
-        background: #fff5f5;
-        color: #742a2a;
-        border-left: 4px solid #e53e3e;
+        background: #FCE4E4;
+        color: #B71C1C;
+        border-left: 4px solid #D32F2F;
     }
 
     .message-info {
-        background: #EEF4FF;
-        color: #1e3a8a;
-        border-left: 4px solid #2F6FED;
+        background: rgba(21, 101, 192, 0.12);
+        color: #0D47A1;
+        border-left: 4px solid #1565C0;
     }
 
     .message-success {
@@ -150,7 +159,7 @@
         border-radius: 14px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         transition: transform 0.3s;
-        border-left: 4px solid #2F6FED;
+        border-left: 4px solid #1565C0;
     }
 
         .stat-card:hover {
@@ -171,13 +180,13 @@
     .stat-value {
         font-size: 28px;
         font-weight: 800;
-        color: #2d3748;
+        color: #263238;
         margin-bottom: 4px;
         word-break: break-word;
     }
 
     .stat-label {
-        color: #718096;
+        color: #78909C;
         font-size: 12px;
         text-transform: uppercase;
         font-weight: 700;
@@ -192,7 +201,7 @@
     }
 
         .filter-section h2 {
-            color: #2d3748;
+            color: #263238;
             margin-bottom: 10px;
             font-size: 20px;
             font-weight: 800;
@@ -202,7 +211,7 @@
         }
 
     .helper-text {
-        color: #718096;
+        color: #78909C;
         margin-bottom: 20px;
         font-size: 14px;
         line-height: 1.5;
@@ -222,7 +231,7 @@
     }
 
         .form-group label {
-            color: #4a5568;
+            color: #455A64;
             font-weight: 700;
             font-size: 14px;
         }
@@ -230,20 +239,20 @@
         .form-group input,
         .form-group select {
             padding: 12px 15px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #E0E0E0;
             border-radius: 10px;
             font-size: 14px;
             transition: all 0.3s;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #2d3748;
+            color: #263238;
             background: white;
         }
 
             .form-group input:focus,
             .form-group select:focus {
                 outline: none;
-                border-color: #2F6FED;
-                box-shadow: 0 0 0 3px rgba(47,111,237,0.10);
+                border-color: #1565C0;
+                box-shadow: 0 0 0 3px rgba(21, 101, 192,0.10);
             }
 
     .btn-group {
@@ -268,25 +277,25 @@
     }
 
     .btn-primary {
-        background: #2F6FED;
+        background: #1565C0;
         color: white;
     }
 
         .btn-primary:hover {
-            background: #2457C8;
+            background: #0D47A1;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(47,111,237,0.25);
+            box-shadow: 0 5px 15px rgba(21, 101, 192,0.25);
         }
 
     .btn-secondary {
-        background: #e2e8f0;
-        color: #4a5568;
+        background: #E0E0E0;
+        color: #455A64;
     }
 
         .btn-secondary:hover {
-            background: #cbd5e0;
-            color: #2d3748;
+            background: #E0E0E0;
+            color: #263238;
         }
 
     .bonos-section {
@@ -302,13 +311,13 @@
         align-items: center;
         margin-bottom: 20px;
         padding-bottom: 15px;
-        border-bottom: 2px solid #f0f0f0;
+        border-bottom: 2px solid #E0E0E0;
         gap: 15px;
         flex-wrap: wrap;
     }
 
         .section-header h2 {
-            color: #2d3748;
+            color: #263238;
             font-size: 20px;
             font-weight: 800;
             display: flex;
@@ -322,7 +331,7 @@
         align-items: center;
         gap: 16px;
         padding: 18px;
-        background: #f8f9fa;
+        background: #F5F7FA;
         border-radius: 12px;
         margin-bottom: 12px;
         border-left: 4px solid #f59e0b;
@@ -330,7 +339,7 @@
     }
 
         .bono-card:hover {
-            background: #EEF4FF;
+            background: rgba(21, 101, 192, 0.12);
             transform: translateX(4px);
         }
 
@@ -352,7 +361,7 @@
     }
 
     .bono-title {
-        color: #2d3748;
+        color: #263238;
         font-weight: 800;
         font-size: 15px;
         margin-bottom: 6px;
@@ -360,7 +369,7 @@
     }
 
     .bono-details {
-        color: #718096;
+        color: #78909C;
         font-size: 13px;
         display: flex;
         gap: 15px;
@@ -394,8 +403,8 @@
     }
 
     .badge-info {
-        background: #bee3f8;
-        color: #2c5282;
+        background: #DCEEFB;
+        color: #0D47A1;
     }
 
     .badge-success {
@@ -407,7 +416,7 @@
     .loading-state {
         text-align: center;
         padding: 50px 20px;
-        color: #718096;
+        color: #78909C;
     }
 
     .empty-state-icon,
@@ -419,7 +428,7 @@
 
     .empty-state h3,
     .loading-state h3 {
-        color: #4a5568;
+        color: #455A64;
         margin-bottom: 8px;
         font-size: 18px;
         font-weight: 800;
@@ -439,8 +448,10 @@
 
         .sidebar {
             width: 100%;
+            position: static;
+            max-height: none;
             border-right: none;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E0E0E0;
         }
 
         .content {
@@ -481,6 +492,7 @@
             text-align: center;
         }
     }
+
 </style>
 
 <div class="main-layout">

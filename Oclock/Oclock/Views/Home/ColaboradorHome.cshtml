@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Inicio Colaborador";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -16,12 +16,17 @@
     }
 
     .sidebar {
-        width: 280px;
-        background: #ffffff;
-        padding: 30px 20px;
-        border-right: 1px solid #e0e0e0;
-        box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+        width: 300px;
         flex-shrink: 0;
+        position: sticky;
+        top: 70px;
+        align-self: flex-start;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
+        background: #FFFFFF;
+        padding: 30px 20px;
+        border-right: 1px solid #E0E0E0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.03);
     }
 
     .menu-item {
@@ -34,10 +39,10 @@
 
     .menu-link {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 12px;
-        padding: 15px 20px;
-        color: #4a5568;
+        padding: 15px 16px;
+        color: #455A64;
         text-decoration: none;
         font-weight: 500;
         border-radius: 10px;
@@ -46,15 +51,20 @@
     }
 
         .menu-link:hover {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
             transform: translateX(5px);
         }
 
+        .menu-link:focus-visible {
+            outline: 2px solid #1565C0;
+            outline-offset: 2px;
+        }
+
         .menu-link.active {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
-            box-shadow: 0 4px 12px rgba(47,111,237,0.3);
+            box-shadow: 0 4px 12px rgba(21, 101, 192,0.3);
         }
 
             .menu-link.active::before {
@@ -81,7 +91,7 @@
     .content {
         flex: 1;
         padding: 40px;
-        background: #f5f7fa;
+        background: #F5F7FA;
         min-width: 0;
     }
 
@@ -95,14 +105,14 @@
     }
 
         .content-header h1 {
-            color: #2d3748;
+            color: #263238;
             font-size: 28px;
             margin-bottom: 8px;
             font-weight: 800;
         }
 
         .content-header p {
-            color: #718096;
+            color: #78909C;
             font-size: 14px;
             margin-bottom: 0;
             line-height: 1.5;
@@ -126,23 +136,23 @@
     }
 
     .alert-error {
-        background: #fff5f5;
-        color: #742a2a;
-        border-left: 4px solid #e53e3e;
+        background: #FCE4E4;
+        color: #B71C1C;
+        border-left: 4px solid #D32F2F;
     }
 
     .alert-info {
-        background: #EEF4FF;
-        color: #1e3a8a;
-        border-left: 4px solid #2F6FED;
+        background: rgba(21, 101, 192, 0.12);
+        color: #0D47A1;
+        border-left: 4px solid #1565C0;
     }
 
     .time-display {
-        background: #2F6FED;
+        background: #1565C0;
         color: white;
         padding: 42px;
         border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(47,111,237,0.28);
+        box-shadow: 0 10px 30px rgba(21, 101, 192,0.28);
         margin-bottom: 30px;
         text-align: center;
     }
@@ -169,7 +179,7 @@
 
     .marking-button {
         background: white;
-        border: 3px solid #e2e8f0;
+        border: 3px solid #E0E0E0;
         border-radius: 15px;
         padding: 30px;
         cursor: pointer;
@@ -195,11 +205,11 @@
             }
 
         .marking-button.salida {
-            border-color: #e53e3e;
+            border-color: #D32F2F;
         }
 
             .marking-button.salida:hover {
-                background: #e53e3e;
+                background: #D32F2F;
                 color: white;
             }
 
@@ -213,11 +223,11 @@
             }
 
         .marking-button.descanso {
-            border-color: #4299e1;
+            border-color: #1565C0;
         }
 
             .marking-button.descanso:hover {
-                background: #4299e1;
+                background: #1565C0;
                 color: white;
             }
 
@@ -233,8 +243,8 @@
                 position: absolute;
                 top: 12px;
                 right: 12px;
-                background: #e2e8f0;
-                color: #4a5568;
+                background: #E0E0E0;
+                color: #455A64;
                 font-size: 11px;
                 font-weight: 800;
                 padding: 5px 10px;
@@ -250,12 +260,12 @@
         font-size: 19px;
         font-weight: 800;
         margin-bottom: 8px;
-        color: #2d3748;
+        color: #263238;
     }
 
     .marking-description {
         font-size: 14px;
-        color: #718096;
+        color: #78909C;
         line-height: 1.5;
     }
 
@@ -265,11 +275,11 @@
     }
 
     .marking-button.disabled:hover .marking-label {
-        color: #2d3748;
+        color: #263238;
     }
 
     .marking-button.disabled:hover .marking-description {
-        color: #718096;
+        color: #78909C;
     }
 
     .status-section,
@@ -283,7 +293,7 @@
 
         .status-section h2,
         .history-section h2 {
-            color: #2d3748;
+            color: #263238;
             font-size: 20px;
             font-weight: 800;
             margin-bottom: 20px;
@@ -294,7 +304,7 @@
 
         .history-section h2 {
             padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px solid #E0E0E0;
         }
 
     .status-grid {
@@ -304,14 +314,14 @@
     }
 
     .status-item {
-        background: #f7fafc;
+        background: #F5F7FA;
         padding: 22px;
         border-radius: 12px;
-        border-left: 4px solid #2F6FED;
+        border-left: 4px solid #1565C0;
     }
 
     .status-item-label {
-        color: #718096;
+        color: #78909C;
         font-size: 13px;
         font-weight: 700;
         text-transform: uppercase;
@@ -319,7 +329,7 @@
     }
 
     .status-item-value {
-        color: #2d3748;
+        color: #263238;
         font-size: 24px;
         font-weight: 800;
         word-break: break-word;
@@ -330,15 +340,15 @@
         align-items: center;
         gap: 18px;
         padding: 18px;
-        background: #f8f9fa;
+        background: #F5F7FA;
         border-radius: 12px;
         margin-bottom: 12px;
-        border-left: 4px solid #2F6FED;
+        border-left: 4px solid #1565C0;
         transition: all 0.3s;
     }
 
         .history-item:hover {
-            background: #EEF4FF;
+            background: rgba(21, 101, 192, 0.12);
             transform: translateX(4px);
         }
 
@@ -359,14 +369,14 @@
     }
 
     .history-title {
-        color: #2d3748;
+        color: #263238;
         font-weight: 800;
         margin-bottom: 6px;
         font-size: 16px;
     }
 
     .history-details {
-        color: #718096;
+        color: #78909C;
         font-size: 13px;
         display: flex;
         gap: 16px;
@@ -396,8 +406,8 @@
     }
 
     .badge-info {
-        background: #bee3f8;
-        color: #2c5282;
+        background: #DCEEFB;
+        color: #0D47A1;
     }
 
     .badge-warning {
@@ -406,14 +416,14 @@
     }
 
     .badge-danger {
-        background: #fed7d7;
-        color: #742a2a;
+        background: #FCE4E4;
+        color: #B71C1C;
     }
 
     .empty-state {
         text-align: center;
         padding: 55px 20px;
-        color: #718096;
+        color: #78909C;
     }
 
     .empty-state-icon {
@@ -423,7 +433,7 @@
     }
 
     .empty-state h3 {
-        color: #4a5568;
+        color: #455A64;
         margin-bottom: 8px;
         font-size: 18px;
         font-weight: 800;
@@ -465,11 +475,11 @@
         align-items: center;
         margin-bottom: 22px;
         padding-bottom: 14px;
-        border-bottom: 2px solid #f0f0f0;
+        border-bottom: 2px solid #E0E0E0;
     }
 
         .modal-header-custom h3 {
-            color: #2d3748;
+            color: #263238;
             font-size: 19px;
             font-weight: 800;
             margin: 0;
@@ -480,7 +490,7 @@
         border: none;
         font-size: 24px;
         cursor: pointer;
-        color: #718096;
+        color: #78909C;
         padding: 0;
         width: 30px;
         height: 30px;
@@ -492,8 +502,8 @@
     }
 
         .btn-close-custom:hover {
-            background: #e2e8f0;
-            color: #2d3748;
+            background: #E0E0E0;
+            color: #263238;
         }
 
     .success-icon {
@@ -514,20 +524,20 @@
     }
 
         .modal-message h4 {
-            color: #2d3748;
+            color: #263238;
             font-size: 18px;
             font-weight: 800;
             margin-bottom: 8px;
         }
 
         .modal-message p {
-            color: #718096;
+            color: #78909C;
             font-size: 13px;
             margin-bottom: 0;
         }
 
     .modal-details {
-        background: #f7fafc;
+        background: #F5F7FA;
         padding: 16px;
         border-radius: 10px;
         margin-bottom: 18px;
@@ -538,7 +548,7 @@
         justify-content: space-between;
         gap: 12px;
         padding: 9px 0;
-        border-bottom: 1px solid #e2e8f0;
+        border-bottom: 1px solid #E0E0E0;
     }
 
         .detail-row:last-child {
@@ -546,13 +556,13 @@
         }
 
     .detail-label {
-        color: #718096;
+        color: #78909C;
         font-weight: 700;
         font-size: 13px;
     }
 
     .detail-value {
-        color: #2d3748;
+        color: #263238;
         font-weight: 800;
         font-size: 13px;
         text-align: right;
@@ -571,13 +581,13 @@
         gap: 6px;
         width: 100%;
         justify-content: center;
-        background: #2F6FED;
+        background: #1565C0;
         color: white;
     }
 
         .btn-primary-custom:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(47,111,237,0.35);
+            box-shadow: 0 4px 12px rgba(21, 101, 192,0.35);
         }
 
     @@media (max-width: 1100px) {
@@ -587,8 +597,10 @@
 
         .sidebar {
             width: 100%;
+            position: static;
+            max-height: none;
             border-right: none;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E0E0E0;
         }
 
         .content {
@@ -639,6 +651,7 @@
             text-align: left;
         }
     }
+
 </style>
 
 <div class="main-layout">
@@ -804,8 +817,8 @@
         },
         salida: {
             icon: '🏠',
-            color: '#fed7d7',
-            text: '#742a2a',
+            color: '#FCE4E4',
+            text: '#B71C1C',
             label: 'Salida',
             comentarioDefault: 'Fin de jornada laboral',
             status: '<span class="badge badge-danger">Fuera de turno</span>'
@@ -820,8 +833,8 @@
         },
         descanso: {
             icon: '☕',
-            color: '#bee3f8',
-            text: '#2c5282',
+            color: '#DCEEFB',
+            text: '#0D47A1',
             label: 'Descanso',
             comentarioDefault: 'Registro de descanso',
             status: '<span class="badge badge-info">En descanso</span>'
@@ -1107,8 +1120,8 @@
             const tipo = normalizarTipo(mark.tipo || mark.nombre || mark.tipoTexto);
             const config = markConfig[tipo] || {
                 icon: '⏰',
-                color: '#edf2f7',
-                text: '#4a5568',
+                color: '#F5F7FA',
+                text: '#455A64',
                 label: mark.tipoTexto || mark.tipo || mark.nombre || 'Marca',
                 comentarioDefault: 'Marca registrada correctamente'
             };

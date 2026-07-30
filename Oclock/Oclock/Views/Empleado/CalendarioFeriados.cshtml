@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Calendario de Feriados";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -16,12 +16,17 @@
     }
 
     .sidebar {
-        width: 280px;
-        background: #ffffff;
-        padding: 30px 20px;
-        border-right: 1px solid #e0e0e0;
-        box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+        width: 300px;
         flex-shrink: 0;
+        position: sticky;
+        top: 70px;
+        align-self: flex-start;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
+        background: #FFFFFF;
+        padding: 30px 20px;
+        border-right: 1px solid #E0E0E0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.03);
     }
 
     .menu-item {
@@ -34,28 +39,32 @@
 
     .menu-link {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 12px;
-        padding: 15px 20px;
-        color: #4a5568;
+        padding: 15px 16px;
+        color: #455A64;
         text-decoration: none;
         font-weight: 500;
-        font-size: 15px;
         border-radius: 10px;
         transition: all 0.3s;
         position: relative;
     }
 
         .menu-link:hover {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
             transform: translateX(5px);
         }
 
+        .menu-link:focus-visible {
+            outline: 2px solid #1565C0;
+            outline-offset: 2px;
+        }
+
         .menu-link.active {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
-            box-shadow: 0 4px 12px rgba(47,111,237,0.3);
+            box-shadow: 0 4px 12px rgba(21, 101, 192,0.3);
         }
 
             .menu-link.active::before {
@@ -82,7 +91,7 @@
     .content {
         flex: 1;
         padding: 40px;
-        background: #f5f7fa;
+        background: #F5F7FA;
         min-width: 0;
     }
 
@@ -96,14 +105,14 @@
     }
 
         .content-header h1 {
-            color: #2d3748;
+            color: #263238;
             font-size: 28px;
             margin-bottom: 8px;
             font-weight: 800;
         }
 
         .content-header p {
-            color: #718096;
+            color: #78909C;
             font-size: 14px;
             margin-bottom: 0;
             line-height: 1.5;
@@ -120,15 +129,15 @@
     }
 
     .message-error {
-        background: #fff5f5;
-        color: #742a2a;
-        border-left: 4px solid #e53e3e;
+        background: #FCE4E4;
+        color: #B71C1C;
+        border-left: 4px solid #D32F2F;
     }
 
     .message-info {
-        background: #EEF4FF;
-        color: #1e3a8a;
-        border-left: 4px solid #2F6FED;
+        background: rgba(21, 101, 192, 0.12);
+        color: #0D47A1;
+        border-left: 4px solid #1565C0;
     }
 
     .message-success {
@@ -145,10 +154,10 @@
     }
 
     .stat-card {
-        background: #ffffff;
+        background: #FFFFFF;
         border-radius: 14px;
         padding: 22px;
-        border-left: 4px solid #2F6FED;
+        border-left: 4px solid #1565C0;
         box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         transition: transform 0.3s;
     }
@@ -158,7 +167,7 @@
         }
 
     .stat-value {
-        color: #2d3748;
+        color: #263238;
         font-size: 30px;
         font-weight: 800;
         margin-bottom: 4px;
@@ -166,22 +175,22 @@
     }
 
     .stat-label {
-        color: #718096;
+        color: #78909C;
         font-size: 12px;
         font-weight: 700;
         text-transform: uppercase;
     }
 
     .calendar-card {
-        background: #ffffff;
+        background: #FFFFFF;
         border-radius: 15px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        border: 1px solid #E5E7EB;
+        border: 1px solid #E0E0E0;
         overflow: hidden;
     }
 
     .calendar-card-header {
-        background: #2F6FED;
+        background: #1565C0;
         color: white;
         padding: 20px 24px;
         display: flex;
@@ -219,20 +228,20 @@
     .toggle-btn {
         padding: 10px 22px;
         border-radius: 10px;
-        border: 2px solid #2F6FED;
+        border: 2px solid #1565C0;
         background: white;
-        color: #2F6FED;
+        color: #1565C0;
         font-weight: 700;
         cursor: pointer;
         transition: all 0.2s;
     }
 
         .toggle-btn:hover {
-            background: #EEF4FF;
+            background: rgba(21, 101, 192, 0.12);
         }
 
         .toggle-btn.active {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
         }
 
@@ -246,16 +255,16 @@
 
         .calendar-nav h3 {
             font-size: 22px;
-            color: #2d3748;
+            color: #263238;
             font-weight: 800;
             margin: 0;
             text-align: center;
         }
 
     .nav-btn {
-        background: #EEF4FF;
+        background: rgba(21, 101, 192, 0.12);
         border: none;
-        color: #2F6FED;
+        color: #1565C0;
         font-weight: 800;
         width: 40px;
         height: 40px;
@@ -270,7 +279,7 @@
     }
 
         .nav-btn:hover {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
             transform: scale(1.08);
         }
@@ -286,14 +295,14 @@
         padding: 10px 4px;
         font-size: 12px;
         font-weight: 800;
-        color: #718096;
+        color: #78909C;
         letter-spacing: 0.05em;
     }
 
     .cal-day {
         min-height: 78px;
         border-radius: 10px;
-        border: 1px solid #f0f0f0;
+        border: 1px solid #E0E0E0;
         padding: 7px;
         cursor: default;
         transition: all 0.2s;
@@ -308,8 +317,8 @@
         }
 
         .cal-day.today {
-            border: 2px solid #2F6FED;
-            background: #EEF4FF;
+            border: 2px solid #1565C0;
+            background: rgba(21, 101, 192, 0.12);
         }
 
         .cal-day.holiday {
@@ -325,19 +334,19 @@
             }
 
         .cal-day.weekend {
-            background: #fafafa;
+            background: #F5F7FA;
         }
 
     .day-number {
         font-size: 13px;
         font-weight: 700;
-        color: #4a5568;
+        color: #455A64;
         margin-bottom: 4px;
         display: block;
     }
 
     .cal-day.today .day-number {
-        color: #2F6FED;
+        color: #1565C0;
     }
 
     .cal-day.holiday .day-number {
@@ -369,7 +378,7 @@
     .month-card {
         background: white;
         border-radius: 12px;
-        border: 1px solid #e2e8f0;
+        border: 1px solid #E0E0E0;
         padding: 16px;
         transition: box-shadow 0.2s;
     }
@@ -382,7 +391,7 @@
         text-align: center;
         font-weight: 800;
         font-size: 14px;
-        color: #2F6FED;
+        color: #1565C0;
         margin-bottom: 10px;
         text-transform: uppercase;
         letter-spacing: 0.04em;
@@ -397,7 +406,7 @@
     .mini-header {
         font-size: 9px;
         text-align: center;
-        color: #a0aec0;
+        color: #78909C;
         font-weight: 800;
         padding: 2px 0;
     }
@@ -408,7 +417,7 @@
         padding: 4px 1px;
         border-radius: 4px;
         cursor: default;
-        color: #4a5568;
+        color: #455A64;
     }
 
         .mini-day.holiday-mini {
@@ -424,12 +433,12 @@
             }
 
         .mini-day.today-mini {
-            outline: 2px solid #2F6FED;
+            outline: 2px solid #1565C0;
             border-radius: 50%;
         }
 
         .mini-day.weekend-mini {
-            color: #a0aec0;
+            color: #78909C;
         }
 
         .mini-day.empty-mini {
@@ -439,7 +448,7 @@
     .empty-calendar {
         text-align: center;
         padding: 45px 20px;
-        color: #718096;
+        color: #78909C;
     }
 
     .empty-calendar-icon {
@@ -449,7 +458,7 @@
     }
 
     .empty-calendar h3 {
-        color: #4a5568;
+        color: #455A64;
         font-size: 18px;
         font-weight: 800;
         margin-bottom: 8px;
@@ -462,7 +471,7 @@
     }
 
     .modal-header.oc-modal-header {
-        background: #2F6FED !important;
+        background: #1565C0 !important;
         color: white !important;
         border-radius: 15px 15px 0 0;
         border-bottom: none;
@@ -475,8 +484,10 @@
 
         .sidebar {
             width: 100%;
+            position: static;
+            max-height: none;
             border-right: none;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E0E0E0;
         }
 
         .content {
@@ -533,6 +544,7 @@
             padding: 2px 4px;
         }
     }
+
 </style>
 
 <div class="main-layout">
