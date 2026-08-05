@@ -645,11 +645,9 @@
                 </div>
 
                 <div class="submenu-item">
-<<<<<<< HEAD
+
                     <a href="/Bono/AsignarBono" class="submenu-link">
-=======
-                    <a href="/Bono/GestionBonos" class="submenu-link">
->>>>>>> af95c51c5b37301b04aba22ce5809d465742c73b
+
                         🎁 Bonos
                     </a>
                 </div>
@@ -711,6 +709,7 @@
             </div>
         }
 
+        html
         <div class="profile-card">
             <div class="profile-avatar">@iniciales</div>
 
@@ -720,6 +719,7 @@
                 <div class="profile-meta">
                     <span>📧 @(string.IsNullOrWhiteSpace(Model.Email) ? "Correo no registrado" : Model.Email)</span>
                     <span>🎭 @(Model.IdRolNavigation?.NombreRol ?? "Rol no asignado")</span>
+                    <span class="badge badge-info">🌴 @ViewBag.DiasVacaciones día(s) de vacaciones</span>
                     @if (Model.Activo == true)
                     {
                         <span class="badge badge-success">Activo</span>

@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Oclock.Data;
 using Oclock.Filters;
+using Oclock.Helpers;
 using Oclock.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Oclock.Controllers
 {
@@ -42,6 +43,7 @@ namespace Oclock.Controllers
             if (usuario == null) return NotFound();
 
             ViewBag.Roles = _context.Rols.ToList();
+            ViewBag.DiasVacaciones = VacacionesHelper.AcumularYObtenerSaldo(_context, usuario);
 
             return View(usuario);
         }

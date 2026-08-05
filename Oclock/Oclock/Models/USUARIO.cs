@@ -24,6 +24,9 @@ public partial class Usuario
     public bool? Activo { get; set; }
 
     public int IdRol { get; set; }
+    public decimal DiasVacaciones { get; set; }
+
+    public DateOnly? FechaUltimoAcumuloVacaciones { get; set; }
 
     public virtual ICollection<BonoAsignado> BonosAsignados { get; set; } = new List<BonoAsignado>();
 

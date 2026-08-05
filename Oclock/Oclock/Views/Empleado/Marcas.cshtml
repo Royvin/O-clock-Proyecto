@@ -467,6 +467,88 @@
         }
     }
 
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .modal.show {
+            display: flex;
+        }
+
+    .modal-content {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .modal-icon {
+        font-size: 60px;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .modal-title {
+        font-size: 22px;
+        font-weight: 800;
+        color: #2d3748;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .modal-message {
+        font-size: 15px;
+        color: #718096;
+        text-align: center;
+        margin-bottom: 25px;
+        line-height: 1.5;
+    }
+
+    .modal-buttons {
+        display: flex;
+        gap: 15px;
+    }
+
+    .modal-btn {
+        flex: 1;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .modal-btn-cancel {
+        background: #e2e8f0;
+        color: #4a5568;
+    }
+
+        .modal-btn-cancel:hover {
+            background: #cbd5e0;
+        }
+
+    .modal-btn-confirm {
+        background: #2F6FED;
+        color: white;
+    }
+
+        .modal-btn-confirm:hover {
+            background: #2558c4;
+        }
+
     @@media (max-width: 650px) {
         .content {
             padding: 20px 14px;
@@ -499,62 +581,6 @@
             height: 46px;
         }
     }
-
-    .modal-icon {
-    font-size: 60px;
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-.modal-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: #2d3748;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.modal-message {
-    font-size: 15px;
-    color: #718096;
-    text-align: center;
-    margin-bottom: 25px;
-}
-
-.modal-buttons {
-    display: flex;
-    gap: 15px;
-}
-
-.modal-btn {
-    flex: 1;
-    padding: 14px;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.modal-btn-cancel {
-    background: #e2e8f0;
-    color: #4a5568;
-}
-
-    .modal-btn-cancel:hover {
-        background: #cbd5e0;
-    }
-
-.modal-btn-confirm {
-    background: #667eea;
-    color: white;
-}
-
-    .modal-btn-confirm:hover {
-        background: #5a67d8;
-    }
-
 </style>
 
 <div class="main-layout">
@@ -613,41 +639,25 @@
         </div>
 
         <div class="marking-grid">
-<<<<<<< HEAD
-            <div class="marking-button entrada" onclick="confirmarMarca('entrada')">
-=======
-            <div class="marking-button entrada" id="btnEntrada" onclick="registrarMarca('entrada')">
->>>>>>> af95c51c5b37301b04aba22ce5809d465742c73b
+            <div class="marking-button entrada" id="btnEntrada" onclick="confirmarMarca('entrada')">
                 <div class="marking-icon">🚪</div>
                 <div class="marking-label">Entrada</div>
                 <div class="marking-description">Registra tu hora de entrada</div>
             </div>
 
-<<<<<<< HEAD
-            <div class="marking-button salida" onclick="confirmarMarca('salida')">
-=======
-            <div class="marking-button salida" id="btnSalida" onclick="registrarMarca('salida')">
->>>>>>> af95c51c5b37301b04aba22ce5809d465742c73b
+            <div class="marking-button salida" id="btnSalida" onclick="confirmarMarca('salida')">
                 <div class="marking-icon">🏠</div>
                 <div class="marking-label">Salida</div>
                 <div class="marking-description">Registra tu hora de salida</div>
             </div>
 
-<<<<<<< HEAD
-            <div class="marking-button almuerzo" onclick="confirmarMarca('almuerzo')">
-=======
-            <div class="marking-button almuerzo" id="btnAlmuerzo" onclick="registrarMarca('almuerzo')">
->>>>>>> af95c51c5b37301b04aba22ce5809d465742c73b
+            <div class="marking-button almuerzo" id="btnAlmuerzo" onclick="confirmarMarca('almuerzo')">
                 <div class="marking-icon">🍽️</div>
                 <div class="marking-label">Almuerzo</div>
                 <div class="marking-description">Registra tu almuerzo</div>
             </div>
 
-<<<<<<< HEAD
-            <div class="marking-button descanso" onclick="confirmarMarca('descanso')">
-=======
-            <div class="marking-button descanso" id="btnDescanso" onclick="registrarMarca('descanso')">
->>>>>>> af95c51c5b37301b04aba22ce5809d465742c73b
+            <div class="marking-button descanso" id="btnDescanso" onclick="confirmarMarca('descanso')">
                 <div class="marking-icon">☕</div>
                 <div class="marking-label">Descanso</div>
                 <div class="marking-description">Registra tu descanso</div>
@@ -693,58 +703,61 @@
         </div>
 
         <div class="modal" id="confirmModal">
-    <div class="modal-content">
-        <div class="modal-icon" id="modalIcon">⏰</div>
-        <div class="modal-title" id="modalTitle">Confirmar marca</div>
-        <div class="modal-message" id="modalMessage">¿Estás seguro que deseas registrar esta marca?</div>
-        <div class="modal-buttons">
-            <button class="modal-btn modal-btn-cancel" onclick="cerrarModal()">Cancelar</button>
-            <button class="modal-btn modal-btn-confirm" onclick="confirmarYRegistrar()">Sí, confirmar</button>
+            <div class="modal-content">
+                <div class="modal-icon" id="modalIcon">⏰</div>
+                <div class="modal-title" id="modalTitle">Confirmar marca</div>
+                <div class="modal-message" id="modalMessage">¿Estás seguro que deseas registrar esta marca?</div>
+                <div class="modal-buttons">
+                    <button class="modal-btn modal-btn-cancel" onclick="cerrarModal()">Cancelar</button>
+                    <button class="modal-btn modal-btn-confirm" onclick="confirmarYRegistrar()">Sí, confirmar</button>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
     </div>
 </div>
 
 <script>
-<<<<<<< HEAD
-
-    const marcaInfo = {
-    entrada:  { icon: '🚪', label: 'Entrada',  msg: '¿Estás seguro que deseas registrar tu hora de ENTRADA?' },
-    salida:   { icon: '🏠', label: 'Salida',   msg: '¿Estás seguro que deseas registrar tu hora de SALIDA?' },
-    almuerzo: { icon: '🍽️', label: 'Almuerzo', msg: '¿Estás seguro que deseas registrar tu ALMUERZO?' },
-    descanso: { icon: '☕', label: 'Descanso', msg: '¿Estás seguro que deseas registrar tu DESCANSO?' }
-};
-
-let tipoPendiente = null;
-
-function confirmarMarca(tipo) {
-    tipoPendiente = tipo;
-    const info = marcaInfo[tipo];
-
-    document.getElementById('modalIcon').textContent = info.icon;
-    document.getElementById('modalTitle').textContent = `Registrar ${info.label}`;
-    document.getElementById('modalMessage').textContent = info.msg;
-
-    document.getElementById('confirmModal').classList.add('show');
-}
-
-function cerrarModal() {
-    tipoPendiente = null;
-    document.getElementById('confirmModal').classList.remove('show');
-}
-
-function confirmarYRegistrar() {
-    const tipo = tipoPendiente;
-    cerrarModal();
-    if (tipo) {
-        registrarMarca(tipo);
-    }
-}
-
-=======
     let marcasActuales = [];
     let registrandoMarca = false;
+    let tipoPendiente = null;
+
+    const marcaInfo = {
+        entrada: { icon: '🚪', label: 'Entrada', msg: '¿Estás seguro que deseas registrar tu hora de ENTRADA?' },
+        salida: { icon: '🏠', label: 'Salida', msg: '¿Estás seguro que deseas registrar tu hora de SALIDA?' },
+        almuerzo: { icon: '🍽️', label: 'Almuerzo', msg: '¿Estás seguro que deseas registrar tu ALMUERZO?' },
+        descanso: { icon: '☕', label: 'Descanso', msg: '¿Estás seguro que deseas registrar tu DESCANSO?' }
+    };
+
+    function confirmarMarca(tipo) {
+        const btn = document.getElementById('btn' + tipo.charAt(0).toUpperCase() + tipo.slice(1));
+
+        if (btn && btn.classList.contains('disabled')) {
+            return;
+        }
+
+        tipoPendiente = tipo;
+        const info = marcaInfo[tipo];
+
+        document.getElementById('modalIcon').textContent = info.icon;
+        document.getElementById('modalTitle').textContent = `Registrar ${info.label}`;
+        document.getElementById('modalMessage').textContent = info.msg;
+
+        document.getElementById('confirmModal').classList.add('show');
+    }
+
+    function cerrarModal() {
+        tipoPendiente = null;
+        document.getElementById('confirmModal').classList.remove('show');
+    }
+
+    function confirmarYRegistrar() {
+        const tipo = tipoPendiente;
+        cerrarModal();
+
+        if (tipo) {
+            registrarMarca(tipo);
+        }
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
         updateClock();
@@ -753,7 +766,6 @@ function confirmarYRegistrar() {
         cargarMarcasDelDia();
         setInterval(actualizarTiempoTrabajado, 60000);
     });
->>>>>>> af95c51c5b37301b04aba22ce5809d465742c73b
 
     function updateClock() {
         const now = new Date();
@@ -970,15 +982,20 @@ function confirmarYRegistrar() {
 
             if (!response.ok || data.success === false) {
                 mostrarMensaje('error', data.message || data.mensaje || 'No se pudo registrar la marca.');
+                registrandoMarca = false;
                 await cargarMarcasDelDia(false);
                 return;
             }
 
             mostrarMensaje('success', data.message || 'Marca registrada correctamente.');
+            registrandoMarca = false;
             await cargarMarcasDelDia(false);
+            return;
         } catch {
             mostrarMensaje('error', 'No se pudo registrar la marca. Intente nuevamente.');
+            registrandoMarca = false;
             await cargarMarcasDelDia(false);
+            return;
         } finally {
             registrandoMarca = false;
         }

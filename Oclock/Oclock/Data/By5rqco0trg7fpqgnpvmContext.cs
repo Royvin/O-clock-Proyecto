@@ -401,6 +401,11 @@ public partial class By5rqco0trg7fpqgnpvmContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("estado");
             entity.Property(e => e.FechaContratacion).HasColumnName("fecha_contratacion");
+            entity.Property(e => e.DiasVacaciones)
+                .HasColumnType("decimal(6,2)")
+                .HasDefaultValueSql("'0'")
+                .HasColumnName("dias_vacaciones");
+            entity.Property(e => e.FechaUltimoAcumuloVacaciones).HasColumnName("fecha_ultimo_acumulo_vacaciones");
             entity.Property(e => e.IdRol).HasColumnName("id_rol");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(100)

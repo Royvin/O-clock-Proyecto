@@ -390,6 +390,27 @@ namespace Oclock.Controllers
                     solicitud.DiasOtorgadosDetalle = !string.IsNullOrWhiteSpace(diasOtorgadosDetalle)
                         ? diasOtorgadosDetalle.Trim()
                         : $"Días aprobados del {FormatearFecha(inicioFinal.Value)} al {FormatearFecha(finFinal.Value)}. Total: {diasOtorgados.Value} día(s).";
+
+                    if (ObtenerCategoriaAusencia(NormalizarTexto(nombreTipo)) == "vacaciones")
+                    {
+                        var empleado = _context.Usuarios.FirstOrDefault(u => u.IdUsuario == solicitud.IdUsuario);
+
+                        if (empleado != null)
+                        {
+                            decimal saldoActual = VacacionesHelper.AcumularYObtenerSaldo(_context, empleado);
+
+                            if (saldoActual < diasOtorgados.Value)
+                            {
+                                return BadRequest(new
+                                {
+                                    success = false,
+                                    message = $"El empleado solo tiene {saldoActual} día(s) de vacaciones disponibles y se están otorgando {diasOtorgados.Value}."
+                                });
+                            }
+
+                            empleado.DiasVacaciones -= diasOtorgados.Value;
+                        }
+                    }
                 }
                 else
                 {

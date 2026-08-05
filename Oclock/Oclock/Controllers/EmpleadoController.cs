@@ -531,23 +531,40 @@ namespace Oclock.Controllers
 
         public IActionResult Solicitudes()
         {
+            int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
+
+            if (idUsuario == null)
+            {
+                return RedirectToAction("Index", "Usuario");
+            }
+
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.IdUsuario == idUsuario.Value);
+
+            if (usuario == null)
+            {
+                return RedirectToAction("Index", "Usuario");
+            }
+
+            ViewBag.DiasVacaciones = VacacionesHelper.AcumularYObtenerSaldo(_context, usuario);
+
             return View();
         }
 
         [HttpGet]
-        public IActionResult ObtenerTiposSolicitud()
+        public IActionResult ObtenerSaldoVacaciones()
         {
-            var tipos = _context.TipoSolicituds
-                .OrderBy(t => t.NombreSolicitud)
-                .Select(t => new
-                {
-                    idTipoSolicitud = t.IdTipoSolicitud,
-                    nombreSolicitud = t.NombreSolicitud
-                })
-                .ToList();
+            int? idUsuario = HttpContext.Session.GetInt32("UsuarioId");
+            if (idUsuario == null)
+                return Json(new { success = false });
 
-            return Json(tipos);
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.IdUsuario == idUsuario.Value);
+            if (usuario == null)
+                return Json(new { success = false });
+
+            var saldo = VacacionesHelper.AcumularYObtenerSaldo(_context, usuario);
+            return Json(new { success = true, diasVacaciones = saldo });
         }
+
 
         [HttpPost]
         public async Task<IActionResult> RegistrarSolicitud(SolicitudPost model)
