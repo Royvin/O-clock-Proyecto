@@ -701,14 +701,14 @@
     <div class="sidebar">
         <div class="menu-item">
             <a href="/Home/AdminHome" class="menu-link">
-                <div class="icon">📊</div>
+                <div class="icon">    <i class="fa-solid fa-chart-line"></i></div>
                 Dashboard
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/VerMarcas" class="menu-link">
-                <div class="icon">⏰</div>
+                <div class="icon">    <i class="fa-solid fa-clock"></i></div>
                 Marcas de Asistencia
             </a>
         </div>
@@ -716,7 +716,7 @@
         <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
             <div class="menu-expandable-header active">
                 <div class="menu-expandable-left">
-                    <div class="icon">⚙️</div>
+                    <div class="icon">    <i class="fa-solid fa-gears"></i></div>
                     <span>Configuración y Políticas</span>
                 </div>
                 <div class="menu-arrow">▶</div>
@@ -725,19 +725,19 @@
             <div class="submenu show">
                 <div class="submenu-item">
                     <a href="/Horarios/HorariosConfig" class="submenu-link">
-                        ⏰ Horarios
+<i class="fa-solid fa-clock me-2 fa-fw"></i> Horarios
                     </a>
                 </div>
 
                 <div class="submenu-item">
                     <a href="/Feriados/FeriadosConfig" class="submenu-link">
-                        📅 Feriados
+    <i class="fa-solid fa-calendar-days me-2 fa-fw"></i> Feriados
                     </a>
                 </div>
 
                 <div class="submenu-item">
                     <a href="/Bono/GestionBonos" class="submenu-link active">
-                        🎁 Bonos
+    <i class="fa-solid fa-gift me-2 fa-fw"></i> Bonos
                     </a>
                 </div>
             </div>
@@ -745,28 +745,28 @@
 
         <div class="menu-item">
             <a href="/Bono/AsignarBono" class="menu-link">
-                <div class="icon">💵</div>
+                <div class="icon">    <i class="fa-solid fa-money-bill-wave"></i></div>
                 Asignación de Bonos
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link">
-                <div class="icon">📝</div>
+                <div class="icon">    <i class="fa-solid fa-users"></i></div>
                 Gestión de Empleados
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/RankingPuntualidad" class="menu-link">
-                <div class="icon">⏱️</div>
+                <div class="icon">    <i class="fa-solid fa-stopwatch"></i></div>
                 Indicadores de Puntualidad
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/Reportes" class="menu-link">
-                <div class="icon">📄</div>
+                <div class="icon">    <i class="fa-solid fa-chart-column"></i></div>
                 Reportes
             </a>
         </div>
@@ -783,30 +783,33 @@
         @if (ViewBag.SuccessMessage != null)
         {
             <div class="alert alert-success show">
-                ✅ @ViewBag.SuccessMessage
+                <i class="fas fa-circle-check"></i> @ViewBag.SuccessMessage
             </div>
         }
 
         @if (ViewBag.ErrorMessage != null)
         {
             <div class="alert alert-error show">
-                ⚠️ @ViewBag.ErrorMessage
+                <i class="fas fa-triangle-exclamation"></i> @ViewBag.ErrorMessage
             </div>
         }
 
         @if (!ViewData.ModelState.IsValid)
         {
             <div class="alert alert-error show">
-                ⚠️ Revise los datos ingresados. El bono no se pudo guardar.
+                <i class="fas fa-triangle-exclamation"></i> Revise los datos ingresados. El bono no se pudo guardar.
             </div>
         }
 
         <div id="clientAlert" class="alert alert-error">
-            ⚠️ <span id="clientAlertText"></span>
+            <i class="fas fa-triangle-exclamation"></i> <span id="clientAlertText"></span>
         </div>
 
         <div class="form-card">
-            <h2>🎁 Crear nuevo bono</h2>
+            <h2>
+                <i class="fas fa-plus-circle"></i>
+                Crear nuevo bono
+            </h2>
             <p class="helper-text">
                 Configure el nombre, tipo, monto y condición mínima del bono. El monto debe ser mayor a cero.
             </p>
@@ -885,11 +888,13 @@
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">
-                        💾 Guardar bono
+                        <i class="fas fa-floppy-disk"></i>
+                        Guardar bono
                     </button>
 
                     <button type="reset" class="btn btn-secondary" onclick="limpiarFormularioCrear()">
-                        🔄 Limpiar
+                        <i class="fas fa-eraser"></i>
+                        Limpiar
                     </button>
                 </div>
             </form>
@@ -897,7 +902,10 @@
 
         <div class="rules-card">
             <div class="section-header">
-                <h2>📋 Bonos registrados</h2>
+                <h2>
+                    <i class="fas fa-list-check"></i>
+                    Bonos registrados
+                </h2>
                 <span class="rules-count">@totalBonos bono(s)</span>
             </div>
 
@@ -932,11 +940,17 @@
                                     <td>
                                         @if (bono.Activo == true)
                                         {
-                                            <span class="badge badge-success">Activo</span>
+                                            <span class="badge badge-success">
+                                                <i class="fas fa-circle-check"></i>
+                                                Activo
+                                            </span>
                                         }
                                         else
                                         {
-                                            <span class="badge badge-danger">Inactivo</span>
+                                            <span class="badge badge-danger">
+                                                <i class="fas fa-circle-xmark"></i>
+                                                Inactivo
+                                            </span>
                                         }
                                     </td>
                                     <td>
@@ -950,7 +964,7 @@
                                                     data-monto="@montoParaInput"
                                                     data-descripcion="@descripcion"
                                                     onclick="abrirEditarDesdeBoton(this)">
-                                                ✏️
+                                                <i class="fas fa-pen-to-square"></i>
                                             </button>
 
                                             @if (bono.Activo == true)
@@ -964,7 +978,7 @@
                                                     @Html.AntiForgeryToken()
                                                     <input type="hidden" name="id" value="@bono.IdBono" />
                                                     <button type="submit" class="btn-icon btn-deactivate" title="Desactivar bono">
-                                                        🚫
+                                                        <i class="fas fa-ban"></i>
                                                     </button>
                                                 </form>
                                             }
@@ -979,7 +993,7 @@
                                                     @Html.AntiForgeryToken()
                                                     <input type="hidden" name="id" value="@bono.IdBono" />
                                                     <button type="submit" class="btn-icon btn-activate" title="Activar bono">
-                                                        ✅
+                                                        <i class="fas fa-circle-check"></i>
                                                     </button>
                                                 </form>
                                             }
@@ -994,7 +1008,9 @@
             else
             {
                 <div class="empty-state">
-                    <div class="empty-state-icon">🎁</div>
+                    <div class="empty-state-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
                     <h3>No hay bonos registrados</h3>
                     <p>Puede crear el primer bono desde el formulario superior.</p>
                 </div>
@@ -1006,7 +1022,10 @@
 <div class="modal" id="editModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>✏️ Editar bono</h3>
+            <h3>
+                <i class="fas fa-pen-to-square"></i>
+                Editar bono
+            </h3>
             <button type="button" class="btn-close" onclick="cerrarModal()">×</button>
         </div>
 
@@ -1055,11 +1074,13 @@
 
             <div class="form-actions" style="margin-top:25px">
                 <button type="submit" class="btn btn-primary">
-                    💾 Actualizar
+                    <i class="fas fa-floppy-disk"></i>
+                    Actualizar
                 </button>
 
                 <button type="button" class="btn btn-secondary" onclick="cerrarModal()">
-                    ❌ Cancelar
+                    <i class="fas fa-xmark"></i>
+                    Cancelar
                 </button>
             </div>
         </form>

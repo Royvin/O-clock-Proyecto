@@ -505,35 +505,35 @@
     <div class="sidebar">
         <div class="menu-item">
             <a href="/Empleado/Marcas" class="menu-link">
-                <div class="icon">⏰</div>
+                <div class="icon"><i class="fa-solid fa-clock"></i></div>
                 Marcas
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Empleado/HistorialMarcas" class="menu-link active">
-                <div class="icon">📝</div>
+                <div class="icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
                 Mi Historial
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Empleado/Solicitudes" class="menu-link">
-                <div class="icon">🗂️</div>
+                <div class="icon"><i class="fa-solid fa-folder-open"></i></div>
                 Mis Solicitudes
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Empleado/CalendarioFeriados" class="menu-link">
-                <div class="icon">📅</div>
+                <div class="icon"><i class="fa-solid fa-calendar-days"></i></div>
                 Calendario de Feriados
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Empleado/HistorialBonos" class="menu-link">
-                <div class="icon">🏆</div>
+                <div class="icon"><i class="fa-solid fa-trophy"></i></div>
                 Mis Bonos
             </a>
         </div>
@@ -551,25 +551,27 @@
 
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-icon">📊</div>
+                <div class="stat-icon">
+                    <i class="fa-solid fa-chart-column"></i>
+                </div>
                 <div class="stat-value">@marcas.Count</div>
                 <div class="stat-label">Registros mostrados</div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-icon">🟢</div>
+                <div class="stat-icon">    <i class="fa-solid fa-right-to-bracket"></i></div>
                 <div class="stat-value">@totalEntradas</div>
                 <div class="stat-label">Entradas</div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-icon">🔴</div>
+                <div class="stat-icon">    <i class="fa-solid fa-right-from-bracket"></i></div>
                 <div class="stat-value">@totalSalidas</div>
                 <div class="stat-label">Salidas</div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-icon">☕</div>
+                <div class="stat-icon">    <i class="fa-solid fa-mug-hot"></i></div>
                 <div class="stat-value">@(totalAlmuerzos + totalDescansos)</div>
                 <div class="stat-label">Almuerzos / Descansos</div>
             </div>
@@ -577,7 +579,7 @@
 
         <div class="history-section">
             <div class="section-header">
-                <h2>📋 Historial de marcas</h2>
+                <h2>    <i class="fa-solid fa-clipboard-list me-2"></i> Historial de marcas</h2>
             </div>
 
             <p class="helper-text">
@@ -599,18 +601,21 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">
-                    🔍 Filtrar
+                    <i class="fa-solid fa-magnifying-glass me-2"></i> Filtrar
                 </button>
 
                 <a href="/Empleado/HistorialMarcas" class="btn btn-secondary">
-                    🔄 Limpiar
+                    <i class="fa-solid fa-rotate-right me-2"></i>
+                    Limpiar
                 </a>
             </form>
 
             @if (!marcas.Any())
             {
                 <div class="empty-state">
-                    <div class="empty-state-icon">📝</div>
+                    <div class="empty-state-icon">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
                     <h3>Sin registros</h3>
                     <p>No hay marcas en el rango seleccionado.</p>
                 </div>

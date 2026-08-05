@@ -955,14 +955,14 @@
     <div class="sidebar">
         <div class="menu-item">
             <a href="/Home/AdminHome" class="menu-link">
-                <div class="icon">📊</div>
+                <div class="icon">    <i class="fa-solid fa-chart-line"></i></div>
                 Dashboard
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/VerMarcas" class="menu-link">
-                <div class="icon">⏰</div>
+                <div class="icon">    <i class="fa-solid fa-clock"></i></div>
                 Marcas de Asistencia
             </a>
         </div>
@@ -970,7 +970,7 @@
         <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
             <div class="menu-expandable-header active">
                 <div class="menu-expandable-left">
-                    <div class="icon">⚙️</div>
+                    <div class="icon">    <i class="fa-solid fa-gears"></i></div>
                     <span>Configuración y Políticas</span>
                 </div>
                 <div class="menu-arrow">▶</div>
@@ -979,19 +979,19 @@
             <div class="submenu show">
                 <div class="submenu-item">
                     <a href="/Horarios/HorariosConfig" class="submenu-link active">
-                        ⏰ Horarios
+<i class="fa-solid fa-clock me-2 fa-fw"></i> Horarios
                     </a>
                 </div>
 
                 <div class="submenu-item">
                     <a href="/Feriados/FeriadosConfig" class="submenu-link">
-                        📅 Feriados
+    <i class="fa-solid fa-calendar-days me-2 fa-fw"></i> Feriados
                     </a>
                 </div>
 
                 <div class="submenu-item">
                     <a href="/Bono/GestionBonos" class="submenu-link">
-                        🎁 Bonos
+    <i class="fa-solid fa-gift me-2 fa-fw"></i> Bonos
                     </a>
                 </div>
             </div>
@@ -999,28 +999,28 @@
 
         <div class="menu-item">
             <a href="/Bono/AsignarBono" class="menu-link">
-                <div class="icon">💵</div>
+                <div class="icon">    <i class="fa-solid fa-money-bill-wave"></i></div>
                 Asignación de Bonos
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link">
-                <div class="icon">📝</div>
+                <div class="icon">    <i class="fa-solid fa-users"></i></div>
                 Gestión de Empleados
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/RankingPuntualidad" class="menu-link">
-                <div class="icon">⏱️</div>
+                <div class="icon">    <i class="fa-solid fa-stopwatch"></i></div>
                 Indicadores de Puntualidad
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/Reportes" class="menu-link">
-                <div class="icon">📄</div>
+                <div class="icon">    <i class="fa-solid fa-chart-column"></i></div>
                 Reportes
             </a>
         </div>
@@ -1028,7 +1028,10 @@
 
     <div class="content">
         <div class="content-header fade-in">
-            <h1>⏰ Configuración de Horarios</h1>
+            <h1>
+                <i class="fa-solid fa-clock"></i>
+                Configuración de Horarios
+            </h1>
             <p>Gestione horarios laborales y asigne colaboradores a cada turno.</p>
         </div>
 
@@ -1063,7 +1066,10 @@
 
         <div class="config-card fade-in">
             <div class="card-header-custom">
-                <h2>➕ Nuevo horario</h2>
+                <h2>
+                    <i class="fa-solid fa-calendar-plus"></i>
+                    Nuevo horario
+                </h2>
                 <span class="badge-custom">Configuración</span>
             </div>
 
@@ -1076,7 +1082,10 @@
                     @Html.AntiForgeryToken()
 
                     <div class="form-group-full">
-                        <label class="form-label" for="crearNombreHorario">📝 Nombre del horario</label>
+                        <label class="form-label" for="crearNombreHorario">
+                            <i class="fa-solid fa-tag"></i>
+                            Nombre del horario
+                        </label>
                         <input type="text"
                                id="crearNombreHorario"
                                name="nombreHorario"
@@ -1089,7 +1098,10 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="crearHoraEntrada">🟢 Hora de entrada</label>
+                            <label class="form-label" for="crearHoraEntrada">
+                                <i class="fa-solid fa-right-to-bracket"></i>
+                                Hora de entrada
+                            </label>
                             <input type="time"
                                    id="crearHoraEntrada"
                                    name="horaEntrada"
@@ -1100,7 +1112,10 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" for="crearHoraSalida">🔴 Hora de salida</label>
+                            <label class="form-label" for="crearHoraSalida">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                Hora de salida
+                            </label>
                             <input type="time"
                                    id="crearHoraSalida"
                                    name="horaSalida"
@@ -1111,7 +1126,10 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" for="crearDias">📅 Días laborales</label>
+                            <label class="form-label" for="crearDias">
+                                <i class="fa-solid fa-calendar-week"></i>
+                                Días laborales
+                            </label>
                             <select id="crearDias" name="dias" class="form-select">
                                 <option value="Lunes a Viernes">Lunes a Viernes</option>
                                 <option value="Lunes a Sábado">Lunes a Sábado</option>
@@ -1123,7 +1141,8 @@
 
                     <div class="btn-actions">
                         <button type="submit" class="btn-primary-custom">
-                            💾 Crear horario
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            Crear horario
                         </button>
                     </div>
                 </form>
@@ -1132,7 +1151,10 @@
 
         <div class="config-card fade-in">
             <div class="card-header-custom">
-                <h2>📋 Horarios configurados</h2>
+                <h2>
+                    <i class="fa-solid fa-table"></i>
+                    Horarios configurados
+                </h2>
                 <span class="badge-custom">@horarios.Count registro(s)</span>
             </div>
 
@@ -1140,7 +1162,7 @@
                 @if (!horarios.Any())
                 {
                     <div class="empty-state">
-                        <div class="empty-icon">⏰</div>
+                        <div class="empty-icon"><i class="fa-regular fa-clock"></i></div>
                         <h3>No hay horarios configurados</h3>
                         <p>Cree el primer horario desde el formulario superior.</p>
                     </div>
@@ -1182,20 +1204,21 @@
                                         <td>
                                             <a href="/Horarios/HorariosConfig?asignarId=@h.IdHorario"
                                                class="badge-count">
-                                                👥 @h.UsuarioHorarios.Count
+                                                <i class="fa-solid fa-users"></i>
+                                                @h.UsuarioHorarios.Count
                                             </a>
                                         </td>
                                         <td style="white-space:nowrap">
                                             <a href="/Horarios/HorariosConfig?editarId=@h.IdHorario"
                                                class="btn-icon btn-edit"
                                                title="Editar horario">
-                                                ✏️
+                                                <i class="fa-solid fa-pen-to-square"></i>
                                             </a>
 
                                             <a href="/Horarios/HorariosConfig?asignarId=@h.IdHorario"
                                                class="btn-icon btn-assign"
                                                title="Asignar colaboradores">
-                                                👥
+                                                <i class="fa-solid fa-user-plus"></i>
                                             </a>
 
                                             <form method="post"
@@ -1206,7 +1229,7 @@
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="idHorario" value="@h.IdHorario" />
                                                 <button type="submit" class="btn-icon btn-del" title="Eliminar horario">
-                                                    🗑️
+                                                    <i class="fa-solid fa-trash"></i>
                                                 </button>
                                             </form>
                                         </td>
@@ -1227,7 +1250,8 @@
                                                         }
 
                                                         <span class="chip">
-                                                            👤 @nombreUsuario
+                                                            <i class="fa-solid fa-user"></i>
+                                                            @nombreUsuario
 
                                                             <form method="post"
                                                                   action="/Horarios/DesasignarUsuario"
@@ -1260,7 +1284,10 @@
 <div class="modal-overlay @(editarId.HasValue ? "open" : "")" id="modalEditarHorario">
     <div class="modal-box">
         <div class="modal-head">
-            <h3>✏️ Editar horario</h3>
+            <h3>
+                <i class="fa-solid fa-pen-to-square"></i>
+                Editar horario
+            </h3>
             <a href="/Horarios/HorariosConfig" class="modal-close">✕</a>
         </div>
 
@@ -1342,7 +1369,8 @@
                     </a>
 
                     <button type="submit" class="btn-primary-custom">
-                        💾 Guardar cambios
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Guardar cambios
                     </button>
                 </div>
             </form>
@@ -1353,7 +1381,10 @@
 <div class="modal-overlay @(asignarId.HasValue ? "open" : "")" id="modalAsignarHorario">
     <div class="modal-box modal-box-lg">
         <div class="modal-head">
-            <h3>👥 Asignar colaboradores — @(horarioAsignando?.NombreHorario ?? "")</h3>
+            <h3>
+                <i class="fa-solid fa-user-plus"></i>
+                Asignar colaboradores — @(horarioAsignando?.NombreHorario ?? "")
+            </h3>
             <a href="/Horarios/HorariosConfig" class="modal-close">✕</a>
         </div>
 
@@ -1370,7 +1401,9 @@
                     </div>
 
                     <div class="user-filter">
-                        <span class="user-filter-icon">🔍</span>
+                        <span class="user-filter-icon">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
                         <input type="text"
                                class="form-control"
                                placeholder="Buscar colaborador..."
@@ -1416,7 +1449,7 @@
                         @if (!usuarios.Any())
                         {
                             <div class="empty-state">
-                                <div class="empty-icon">👤</div>
+                                <div class="empty-icon"><i class="fa-solid fa-users-slash"></i></div>
                                 <h3>No hay colaboradores activos</h3>
                                 <p>No hay usuarios disponibles para asignar a este horario.</p>
                             </div>
@@ -1424,7 +1457,8 @@
                     </div>
 
                     <div class="alert-info">
-                        ℹ️ Al guardar, las asignaciones seleccionadas reemplazarán las asignaciones actuales de este horario.
+                        <i class="fa-solid fa-circle-info"></i>
+                        Al guardar, las asignaciones seleccionadas reemplazarán las asignaciones actuales de este horario.
                     </div>
                 </div>
 
@@ -1434,7 +1468,8 @@
                     </a>
 
                     <button type="submit" class="btn-primary-custom">
-                        💾 Guardar asignaciones
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Guardar asignaciones
                     </button>
                 </div>
             </form>

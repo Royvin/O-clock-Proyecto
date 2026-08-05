@@ -499,35 +499,35 @@
     <div class="sidebar">
         <div class="menu-item">
             <a href="/Empleado/Marcas" class="menu-link">
-                <div class="icon">⏰</div>
+                <div class="icon"><i class="fa-solid fa-clock"></i></div>
                 Marcas
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Empleado/HistorialMarcas" class="menu-link">
-                <div class="icon">📝</div>
+                <div class="icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
                 Mi Historial
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Empleado/Solicitudes" class="menu-link">
-                <div class="icon">🗂️</div>
+                <div class="icon"><i class="fa-solid fa-folder-open"></i></div>
                 Mis Solicitudes
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Empleado/CalendarioFeriados" class="menu-link">
-                <div class="icon">📅</div>
+                <div class="icon"><i class="fa-solid fa-calendar-days"></i></div>
                 Calendario de Feriados
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Empleado/HistorialBonos" class="menu-link active">
-                <div class="icon">🏆</div>
+                <div class="icon"><i class="fa-solid fa-trophy"></i></div>
                 Mis Bonos
             </a>
         </div>
@@ -546,7 +546,9 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-header">
-                    <div class="stat-icon">🏆</div>
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
                 </div>
                 <div class="stat-value" id="statTotal">—</div>
                 <div class="stat-label">Total bonos</div>
@@ -554,7 +556,9 @@
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <div class="stat-icon">💰</div>
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-money-bill-wave text-success"></i>
+                    </div>
                 </div>
                 <div class="stat-value" id="statMonto">—</div>
                 <div class="stat-label">Monto acumulado</div>
@@ -562,7 +566,9 @@
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <div class="stat-icon">📅</div>
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-money-bill-wave text-success"></i>
+                    </div>
                 </div>
                 <div class="stat-value" id="statPeriodos">—</div>
                 <div class="stat-label">Períodos con bono</div>
@@ -570,7 +576,10 @@
         </div>
 
         <div class="filter-section">
-            <h2>🔍 Filtrar bonos</h2>
+            <h2>
+                <i class="fa-solid fa-filter me-2"></i>
+                Filtrar bonos
+            </h2>
             <p class="helper-text">
                 Seleccione un período específico para consultar los bonos asignados en ese mes.
             </p>
@@ -584,24 +593,31 @@
 
             <div class="btn-group">
                 <button type="button" class="btn btn-primary" onclick="aplicarFiltros()">
-                    🔍 Aplicar filtro
+                    <i class="fa-solid fa-magnifying-glass me-2"></i>
+                    Aplicar filtro
                 </button>
 
                 <button type="button" class="btn btn-secondary" onclick="limpiarFiltros()">
-                    🔄 Limpiar filtros
+                    <i class="fa-solid fa-rotate-right me-2"></i>
+                    Limpiar filtros
                 </button>
             </div>
         </div>
 
         <div class="bonos-section">
             <div class="section-header">
-                <h2>🏆 Historial de Bonos</h2>
+                <h2>
+                    <i class="fa-solid fa-award me-2"></i>
+                    Historial de Bonos
+                </h2>
                 <span class="badge badge-info" id="totalBadge">0 bonos</span>
             </div>
 
             <div id="bonosList">
                 <div class="loading-state">
-                    <div class="loading-state-icon">⏳</div>
+                    <div class="loading-state-icon">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                    </div>
                     <h3>Cargando bonos</h3>
                     <p>Estamos consultando sus bonos asignados.</p>
                 </div>
@@ -684,7 +700,7 @@
         if (!bonos || bonos.length === 0) {
             list.innerHTML = `
                 <div class="empty-state">
-                    <div class="empty-state-icon">🏆</div>
+                    <div class="empty-state-icon"><i class="fa-solid fa-award"></i></div>
                     <h3>Sin bonos registrados</h3>
                     <p>No hay bonos asignados para el filtro seleccionado.</p>
                 </div>`;
@@ -698,18 +714,21 @@
 
             return `
                 <div class="bono-card">
-                    <div class="bono-icon">🏆</div>
+                        <div class="bono-icon">    <i class="fa-solid fa-award"></i>
+    </div>
 
                     <div class="bono-info">
                         <div class="bono-title">${escapeHtml(nombre)}</div>
 
                         <div class="bono-details">
                             <div class="bono-detail-item">
-                                📅 <strong>Período:</strong> ${escapeHtml(formatPeriodo(periodo))}
+                                   <i class="fa-solid fa-calendar-days me-2 text-primary"></i>
+                 <strong>Período:</strong> ${escapeHtml(formatPeriodo(periodo))}
                             </div>
 
                             <div class="bono-detail-item">
-                                🗓️ <strong>Asignado:</strong> ${escapeHtml(formatFecha(fecha))}
+                                   <i class="fa-solid fa-calendar-check me-2 text-success"></i>
+                <strong>Asignado:</strong> ${escapeHtml(formatFecha(fecha))}
                             </div>
                         </div>
                     </div>
@@ -799,7 +818,8 @@
 
         document.getElementById('bonosList').innerHTML = `
             <div class="empty-state">
-                <div class="empty-state-icon">⚠️</div>
+                    <div class="empty-state-icon">    <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
                 <h3>No se pudieron cargar los bonos</h3>
                 <p>${escapeHtml(mensaje || 'Intente nuevamente.')}</p>
             </div>`;

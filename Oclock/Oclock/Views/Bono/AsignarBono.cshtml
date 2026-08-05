@@ -674,14 +674,14 @@
     <div class="sidebar">
         <div class="menu-item">
             <a href="/Home/AdminHome" class="menu-link">
-                <div class="icon">📊</div>
+                <div class="icon">    <i class="fa-solid fa-chart-line"></i></div>
                 Dashboard
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/VerMarcas" class="menu-link">
-                <div class="icon">⏰</div>
+                <div class="icon">    <i class="fa-solid fa-clock"></i></div>
                 Marcas de Asistencia
             </a>
         </div>
@@ -689,7 +689,7 @@
         <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
             <div class="menu-expandable-header">
                 <div class="menu-expandable-left">
-                    <div class="icon">⚙️</div>
+                    <div class="icon">    <i class="fa-solid fa-gears"></i></div>
                     <span>Configuración y Políticas</span>
                 </div>
                 <div class="menu-arrow">▶</div>
@@ -698,19 +698,19 @@
             <div class="submenu show">
                 <div class="submenu-item">
                     <a href="/Horarios/HorariosConfig" class="submenu-link">
-                        ⏰ Horarios
+<i class="fa-solid fa-clock me-2 fa-fw"></i> Horarios
                     </a>
                 </div>
 
                 <div class="submenu-item">
                     <a href="/Feriados/FeriadosConfig" class="submenu-link">
-                        📅 Feriados
+    <i class="fa-solid fa-calendar-days me-2 fa-fw"></i> Feriados
                     </a>
                 </div>
 
                 <div class="submenu-item">
                     <a href="/Bono/GestionBonos" class="submenu-link">
-                        🎁 Bonos
+    <i class="fa-solid fa-gift me-2 fa-fw"></i> Bonos
                     </a>
                 </div>
             </div>
@@ -718,28 +718,28 @@
 
         <div class="menu-item">
             <a href="/Bono/AsignarBono" class="menu-link active">
-                <div class="icon">💵</div>
+                <div class="icon">    <i class="fa-solid fa-money-bill-wave"></i></div>
                 Asignación de Bonos
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link">
-                <div class="icon">📝</div>
+                <div class="icon">    <i class="fa-solid fa-users"></i></div>
                 Gestión de Empleados
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/RankingPuntualidad" class="menu-link">
-                <div class="icon">⏱️</div>
+                <div class="icon">    <i class="fa-solid fa-stopwatch"></i></div>
                 Indicadores de Puntualidad
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/Reportes" class="menu-link">
-                <div class="icon">📄</div>
+                <div class="icon">    <i class="fa-solid fa-chart-column"></i></div>
                 Reportes
             </a>
         </div>
@@ -756,7 +756,10 @@
         <div id="messageBox" class="message-box"></div>
 
         <div class="card-section">
-            <h2>🔍 Buscar colaborador</h2>
+            <h2>
+                <i class="fa-solid fa-magnifying-glass"></i>
+                Buscar colaborador
+            </h2>
             <p class="helper-text">
                 El sistema revisará las métricas del colaborador en el período seleccionado y mostrará únicamente los bonos que aplican.
             </p>
@@ -791,11 +794,13 @@
 
             <div class="btn-group">
                 <button type="button" class="btn btn-primary" onclick="buscarBonosManual()">
-                    🔍 Consultar bonos
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    Consultar bonos
                 </button>
 
                 <button type="button" class="btn btn-secondary" onclick="limpiarConsulta()">
-                    🔄 Limpiar consulta
+                    <i class="fa-solid fa-rotate-right"></i>
+                    Limpiar consulta
                 </button>
             </div>
         </div>
@@ -804,7 +809,9 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-header">
-                        <div class="stat-icon">🏅</div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-medal"></i>
+                        </div>
                     </div>
                     <div class="stat-value" id="metricaPuntualidad">—</div>
                     <div class="stat-label">Puntualidad</div>
@@ -812,7 +819,9 @@
 
                 <div class="stat-card">
                     <div class="stat-header">
-                        <div class="stat-icon">📅</div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
                     </div>
                     <div class="stat-value" id="metricaDias">—</div>
                     <div class="stat-label">Días trabajados</div>
@@ -820,7 +829,9 @@
 
                 <div class="stat-card">
                     <div class="stat-header">
-                        <div class="stat-icon">⏱️</div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
                     </div>
                     <div class="stat-value" id="metricaHoras">—</div>
                     <div class="stat-label">Horas trabajadas</div>
@@ -828,7 +839,9 @@
 
                 <div class="stat-card">
                     <div class="stat-header">
-                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
                     </div>
                     <div class="stat-value" id="metricaTardanzas">—</div>
                     <div class="stat-label">Tardanzas</div>
@@ -837,7 +850,10 @@
         </div>
 
         <div id="seccionBonos" class="card-section" style="display:none">
-            <h2>🎁 Bonos disponibles</h2>
+            <h2>
+                <i class="fa-solid fa-gift"></i>
+                Bonos disponibles
+            </h2>
             <p class="helper-text">
                 Estos bonos cumplen con las condiciones configuradas para el colaborador seleccionado.
             </p>
@@ -862,14 +878,19 @@
 
         <div id="seccionSinBonos" class="card-section" style="display:none">
             <div class="empty-state">
-                <div class="empty-state-icon">🎁</div>
+                <div class="empty-state-icon">
+                    <i class="fa-solid fa-gift"></i>
+                </div>
                 <h3>No hay bonos disponibles</h3>
                 <p>El colaborador no aplica para bonos en el período seleccionado o ya fueron asignados.</p>
             </div>
         </div>
 
         <div class="card-section">
-            <h2>📋 Bonos asignados recientemente</h2>
+            <h2>
+                <i class="fa-solid fa-clipboard-list"></i>
+                Bonos asignados recientemente
+            </h2>
             <p class="helper-text">
                 Historial reciente de bonos asignados a colaboradores.
             </p>
@@ -890,7 +911,9 @@
                         <tr>
                             <td colspan="5">
                                 <div class="empty-state">
-                                    <div class="empty-state-icon">⏳</div>
+                                    <div class="empty-state-icon">
+                                        <i class="fa-solid fa-spinner fa-spin"></i>
+                                    </div>
                                     <h3>Cargando historial</h3>
                                     <p>Estamos consultando los bonos asignados recientemente.</p>
                                 </div>
@@ -906,7 +929,10 @@
 <div class="modal" id="confirmModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>✅ Confirmar asignación</h3>
+            <h3>
+                <i class="fa-solid fa-circle-check"></i>
+                Confirmar asignación
+            </h3>
             <button class="btn-close" onclick="cerrarModalConfirmacion()">×</button>
         </div>
 
@@ -914,7 +940,8 @@
 
         <div class="btn-group" style="margin-top: 20px;">
             <button type="button" id="btnConfirmarAsignacion" class="btn btn-success" onclick="confirmarAsignacionBono()">
-                ✅ Asignar bono
+                <i class="fa-solid fa-check"></i>
+                Asignar bono
             </button>
 
             <button type="button" class="btn btn-secondary" onclick="cerrarModalConfirmacion()">
@@ -1162,8 +1189,7 @@
 
         const boton = document.getElementById('btnConfirmarAsignacion');
         boton.disabled = true;
-        boton.textContent = 'Guardando...';
-
+    boton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando...';
         try {
             const response = await fetch('/Bono/AsignarBono', {
                 method: 'POST',
@@ -1192,8 +1218,7 @@
             mostrarMensaje('No se pudo asignar el bono. Intente nuevamente.', 'error');
         } finally {
             boton.disabled = false;
-            boton.textContent = '✅ Asignar bono';
-        }
+    boton.innerHTML = '<i class="fa-solid fa-check"></i> Asignar bono';        }
     }
 
     async function cargarHistorial() {

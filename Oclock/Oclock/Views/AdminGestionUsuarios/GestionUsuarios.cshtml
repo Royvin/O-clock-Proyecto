@@ -569,14 +569,14 @@
     <div class="sidebar">
         <div class="menu-item">
             <a href="/Home/AdminHome" class="menu-link">
-                <div class="icon">📊</div>
+                <div class="icon">    <i class="fa-solid fa-chart-line"></i></div>
                 Dashboard
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/VerMarcas" class="menu-link">
-                <div class="icon">⏰</div>
+                <div class="icon">    <i class="fa-solid fa-clock"></i></div>
                 Marcas de Asistencia
             </a>
         </div>
@@ -584,7 +584,7 @@
         <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
             <div class="menu-expandable-header">
                 <div class="menu-expandable-left">
-                    <div class="icon">⚙️</div>
+                    <div class="icon">    <i class="fa-solid fa-gears"></i></div>
                     <span>Configuración y Políticas</span>
                 </div>
                 <div class="menu-arrow">▶</div>
@@ -593,19 +593,19 @@
             <div class="submenu show">
                 <div class="submenu-item">
                     <a href="/Horarios/HorariosConfig" class="submenu-link">
-                        ⏰ Horarios
+<i class="fa-solid fa-clock me-2 fa-fw"></i> Horarios
                     </a>
                 </div>
 
                 <div class="submenu-item">
                     <a href="/Feriados/FeriadosConfig" class="submenu-link">
-                        📅 Feriados
+    <i class="fa-solid fa-calendar-days me-2 fa-fw"></i> Feriados
                     </a>
                 </div>
 
                 <div class="submenu-item">
                     <a href="/Bono/GestionBonos" class="submenu-link">
-                        🎁 Bonos
+    <i class="fa-solid fa-gift me-2 fa-fw"></i> Bonos
                     </a>
                 </div>
             </div>
@@ -613,28 +613,28 @@
 
         <div class="menu-item">
             <a href="/Bono/AsignarBono" class="menu-link">
-                <div class="icon">💵</div>
+                <div class="icon">    <i class="fa-solid fa-money-bill-wave"></i></div>
                 Asignación de Bonos
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link active">
-                <div class="icon">📝</div>
+                <div class="icon">    <i class="fa-solid fa-users"></i></div>
                 Gestión de Empleados
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/RankingPuntualidad" class="menu-link">
-                <div class="icon">⏱️</div>
+                <div class="icon">    <i class="fa-solid fa-stopwatch"></i></div>
                 Indicadores de Puntualidad
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/Reportes" class="menu-link">
-                <div class="icon">📄</div>
+                <div class="icon"> <i class="fa-solid fa-chart-column"></i></div>
                 Reportes
             </a>
         </div>
@@ -643,7 +643,10 @@
     <div class="content">
         <div class="content-header">
             <div>
-                <h1>👥 Gestión de Empleados</h1>
+                <h1>
+                    <i class="fa-solid fa-users"></i>
+                    Gestión de Empleados
+                </h1>
                 <p>Seleccione un colaborador para consultar y editar su expediente completo.</p>
             </div>
         </div>
@@ -651,25 +654,32 @@
         @if (TempData["Mensaje"] != null)
         {
             <div class="message-box message-success">
-                ✅ @TempData["Mensaje"]
+                <i class="fa-solid fa-circle-check"></i>
+                @TempData["Mensaje"]
             </div>
         }
 
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-icon">👥</div>
+                <div class="stat-icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
                 <div class="stat-value">@usuariosListado.Count</div>
                 <div class="stat-label">Empleados en esta página</div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-icon">📄</div>
+                <div class="stat-icon">
+                    <i class="fa-solid fa-file-lines"></i>
+                </div>
                 <div class="stat-value">@paginaActual</div>
                 <div class="stat-label">Página actual</div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-icon">📚</div>
+                <div class="stat-icon">
+                    <i class="fa-solid fa-book"></i>
+                </div>
                 <div class="stat-value">@totalPaginas</div>
                 <div class="stat-label">Total de páginas</div>
             </div>
@@ -678,14 +688,17 @@
         <div class="card-section">
             <div class="section-header">
                 <div>
-                    <h2>📋 Empleados</h2>
+                    <h2>
+                        <i class="fa-solid fa-clipboard-user"></i>
+                        Empleados
+                    </h2>
                 </div>
 
                 <div class="section-actions">
                     <input type="text"
                            id="busquedaEmpleado"
                            class="search-box"
-                           placeholder="🔍 Buscar en esta página..."
+                           placeholder="Buscar en esta página..."
                            oninput="filtrarEmpleados()" />
 
                     <span class="badge badge-info">
@@ -726,14 +739,23 @@
                             <div class="empleado-name">@nombreCompleto</div>
 
                             <div class="empleado-meta">
-                                <span>📧 @email</span>
-                                <span>🎭 @rol</span>
+                                <span>
+                                    <i class="fa-solid fa-envelope"></i>
+                                    @email
+                                </span>
+                                <span>
+                                    <i class="fa-solid fa-user-tag"></i>
+                                    @rol
+                                </span>
                                 <span class="badge @estadoBadge">@estadoTexto</span>
                             </div>
                         </div>
 
                         <div class="empleado-action">
-                            <span class="badge badge-info">Ver expediente →</span>
+                            <span class="badge badge-info">
+                                <i class="fa-solid fa-folder-open"></i>
+                                Ver expediente
+                            </span>
                         </div>
                     </a>
                 }
@@ -742,14 +764,18 @@
             @if (!usuariosListado.Any())
             {
                 <div class="empty-state">
-                    <div class="empty-state-icon">👤</div>
+                    <div class="empty-state-icon">
+                        <i class="fa-solid fa-user-slash"></i>
+                    </div>
                     <h3>No hay usuarios registrados</h3>
                     <p>Aún no existen empleados para mostrar.</p>
                 </div>
             }
 
             <div id="sinResultadosBusqueda" class="empty-state sin-resultados-busqueda">
-                <div class="empty-state-icon">🔍</div>
+                <div class="empty-state-icon">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
                 <h3>Sin resultados</h3>
                 <p>No se encontraron empleados en esta página con ese texto.</p>
             </div>
@@ -765,13 +791,15 @@
                         @if (paginaActual > 1)
                         {
                             <a href="/AdminGestionUsuarios/GestionUsuarios?pagina=@(paginaActual - 1)" class="pag-btn">
-                                ← Anterior
+                                <i class="fa-solid fa-chevron-left"></i>
+                                Anterior
                             </a>
                         }
                         else
                         {
                             <span class="pag-btn deshabilitado">
-                                ← Anterior
+                                <i class="fa-solid fa-chevron-left"></i>
+                                Anterior
                             </span>
                         }
 
@@ -815,13 +843,15 @@
                         @if (paginaActual < totalPaginas)
                         {
                             <a href="/AdminGestionUsuarios/GestionUsuarios?pagina=@(paginaActual + 1)" class="pag-btn">
-                                Siguiente →
+                                <i class="fa-solid fa-chevron-right"></i>
+                                Siguiente
                             </a>
                         }
                         else
                         {
                             <span class="pag-btn deshabilitado">
-                                Siguiente →
+                                <i class="fa-solid fa-chevron-right"></i>
+                                Siguiente
                             </span>
                         }
                     </div>

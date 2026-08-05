@@ -935,14 +935,14 @@
     <div class="sidebar">
         <div class="menu-item">
             <a href="/Home/AdminHome" class="menu-link active">
-                <div class="icon">📊</div>
+                <div class="icon">    <i class="fa-solid fa-chart-line"></i></div>
                 Dashboard
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/VerMarcas" class="menu-link">
-                <div class="icon">⏰</div>
+                <div class="icon">    <i class="fa-solid fa-clock"></i></div>
                 Marcas de Asistencia
             </a>
         </div>
@@ -950,7 +950,7 @@
         <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
             <div class="menu-expandable-header">
                 <div class="menu-expandable-left">
-                    <div class="icon">⚙️</div>
+                    <div class="icon">    <i class="fa-solid fa-gears"></i></div>
                     <span>Configuración y Políticas</span>
                 </div>
                 <div class="menu-arrow">▶</div>
@@ -959,19 +959,19 @@
             <div class="submenu show">
                 <div class="submenu-item">
                     <a href="/Horarios/HorariosConfig" class="submenu-link">
-                        ⏰ Horarios
+<i class="fa-solid fa-clock me-2 fa-fw"></i> Horarios
                     </a>
                 </div>
 
                 <div class="submenu-item">
                     <a href="/Feriados/FeriadosConfig" class="submenu-link">
-                        📅 Feriados
+    <i class="fa-solid fa-calendar-days me-2 fa-fw"></i> Feriados
                     </a>
                 </div>
 
                 <div class="submenu-item">
                     <a href="/Bono/GestionBonos" class="submenu-link">
-                        🎁 Bonos
+    <i class="fa-solid fa-gift me-2 fa-fw"></i> Bonos
                     </a>
                 </div>
             </div>
@@ -979,28 +979,28 @@
 
         <div class="menu-item">
             <a href="/Bono/AsignarBono" class="menu-link">
-                <div class="icon">💵</div>
+                <div class="icon">    <i class="fa-solid fa-money-bill-wave"></i></div>
                 Asignación de Bonos
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link">
-                <div class="icon">📝</div>
+                <div class="icon">    <i class="fa-solid fa-users"></i></div>
                 Gestión de Empleados
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/RankingPuntualidad" class="menu-link">
-                <div class="icon">⏱️</div>
+                <div class="icon">    <i class="fa-solid fa-stopwatch"></i></div>
                 Indicadores de Puntualidad
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/Reportes" class="menu-link">
-                <div class="icon">📄</div>
+                <div class="icon">    <i class="fa-solid fa-chart-column"></i></div>
                 Reportes
             </a>
         </div>
@@ -1019,7 +1019,9 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-header">
-                    <div class="stat-icon">📌</div>
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                    </div>
                 </div>
                 <div class="stat-value" id="pendingCount">0</div>
                 <div class="stat-label">Pendientes</div>
@@ -1027,7 +1029,9 @@
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <div class="stat-icon">✅</div>
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-circle-check text-success"></i>
+                    </div>
                 </div>
                 <div class="stat-value" id="approvedCount">0</div>
                 <div class="stat-label">Aprobadas este mes</div>
@@ -1035,7 +1039,9 @@
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <div class="stat-icon">❌</div>
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-circle-xmark text-danger"></i>
+                    </div>
                 </div>
                 <div class="stat-value" id="rejectedCount">0</div>
                 <div class="stat-label">Rechazadas</div>
@@ -1043,7 +1049,9 @@
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <div class="stat-icon">📊</div>
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-chart-column"></i>
+                    </div>
                 </div>
                 <div class="stat-value" id="totalCount">0</div>
                 <div class="stat-label">Total solicitudes</div>
@@ -1051,7 +1059,10 @@
         </div>
 
         <div class="filter-section">
-            <h2>🔍 Filtros de búsqueda</h2>
+            <h2>
+                <i class="fa-solid fa-magnifying-glass"></i>
+                Filtros de búsqueda
+            </h2>
             <p class="helper-text">
                 Use estos filtros para buscar solicitudes por estado, colaborador o rango de fechas.
                 En la pestaña de pendientes se muestran únicamente solicitudes pendientes.
@@ -1088,34 +1099,43 @@
 
             <div class="btn-group">
                 <button class="btn btn-primary" onclick="applyFilters()">
-                    🔍 Aplicar filtros
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    Aplicar filtros
                 </button>
 
                 <button class="btn btn-secondary" onclick="clearFilters()">
-                    🔄 Limpiar filtros
+                    <i class="fa-solid fa-rotate-right"></i>
+                    Limpiar filtros
                 </button>
             </div>
         </div>
 
         <div class="tabs">
             <div class="tab active" onclick="switchTab('pendientes', this)">
-                📌 Solicitudes pendientes
+                <i class="fa-solid fa-hourglass-half"></i>
+                Solicitudes pendientes
             </div>
 
             <div class="tab" onclick="switchTab('historial', this)">
-                📚 Historial
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                Historial
             </div>
         </div>
 
         <div id="pendientesTab" class="tab-content active">
             <div class="requests-section">
                 <div class="section-header">
-                    <h2>📌 Solicitudes pendientes</h2>
+                    <h2>
+                        <i class="fa-solid fa-hourglass-half"></i>
+                        Solicitudes pendientes
+                    </h2>
                 </div>
 
                 <div id="pendingRequests">
                     <div class="empty-state">
-                        <div class="empty-state-icon">⏳</div>
+                        <div class="empty-state-icon">
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+                        </div>
                         <h3>Cargando solicitudes</h3>
                         <p>Estamos consultando las solicitudes pendientes.</p>
                     </div>
@@ -1128,7 +1148,10 @@
         <div id="historialTab" class="tab-content">
             <div class="requests-section">
                 <div class="section-header">
-                    <h2>📚 Historial de solicitudes</h2>
+                    <h2>
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        Historial de solicitudes
+                    </h2>
                 </div>
 
                 <div class="table-container">
@@ -1153,7 +1176,10 @@
         </div>
 
         <div class="filter-section">
-            <h2>📊 Reportes</h2>
+            <h2>
+                <i class="fa-solid fa-chart-column"></i>
+                Reportes
+            </h2>
             <p class="helper-text">
                 Para generar reportes completos en PDF o Excel, ingrese a la pantalla formal de reportes.
                 También puede descargar un CSV rápido con las solicitudes mostradas actualmente.
@@ -1161,11 +1187,13 @@
 
             <div class="btn-group">
                 <a class="btn btn-primary" href="/Admin/Reportes">
-                    📄 Ir a Reportes
+                    <i class="fa-solid fa-file-lines"></i>
+                    Ir a Reportes
                 </a>
 
                 <button class="btn btn-secondary" onclick="downloadReport()">
-                    💾 Descargar CSV de esta vista
+                    <i class="fa-solid fa-download"></i>
+                    Descargar CSV de esta vista
                 </button>
             </div>
         </div>
@@ -1175,7 +1203,10 @@
 <div class="modal" id="detailModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>📋 Detalle de solicitud</h3>
+            <h3>
+                <i class="fa-solid fa-circle-info"></i>
+                Detalle de solicitud
+            </h3>
             <button class="btn-close" onclick="closeModal('detailModal')">×</button>
         </div>
 
@@ -1186,7 +1217,10 @@
 <div class="modal" id="approveModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>✅ Aprobar solicitud</h3>
+            <h3>
+                <i class="fa-solid fa-circle-check"></i>
+                Aprobar solicitud
+            </h3>
             <button class="btn-close" onclick="closeModal('approveModal')">×</button>
         </div>
 
@@ -1227,7 +1261,8 @@
 
         <div class="btn-group" style="margin-top: 20px;">
             <button id="btnConfirmarAprobacion" class="btn btn-success" onclick="confirmarAprobacion()">
-                ✅ Confirmar aprobación
+                <i class="fa-solid fa-check"></i>
+                Confirmar aprobación
             </button>
 
             <button class="btn btn-secondary" onclick="closeModal('approveModal')">
@@ -1240,7 +1275,10 @@
 <div class="modal" id="rejectModal">
     <div class="modal-content modal-content-small">
         <div class="modal-header">
-            <h3>❌ Rechazar solicitud</h3>
+            <h3>
+                <i class="fa-solid fa-circle-xmark"></i>
+                Rechazar solicitud
+            </h3>
             <button class="btn-close" onclick="closeModal('rejectModal')">×</button>
         </div>
 
@@ -1255,7 +1293,8 @@
 
         <div class="btn-group" style="margin-top: 20px;">
             <button id="btnConfirmarRechazo" class="btn btn-danger" onclick="confirmarRechazo()">
-                ❌ Confirmar rechazo
+                <i class="fa-solid fa-xmark"></i>
+                Confirmar rechazo
             </button>
 
             <button class="btn btn-secondary" onclick="closeModal('rejectModal')">
@@ -1453,7 +1492,8 @@
             if (data.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <div class="empty-state-icon">📭</div>
+                            <div class="empty-state-icon">    <i class="fa-solid fa-inbox"></i>
+    </div>
                         <h3>No hay solicitudes pendientes</h3>
                         <p>Todas las solicitudes pendientes han sido procesadas o no coinciden con los filtros seleccionados.</p>
                     </div>`;
@@ -1665,8 +1705,7 @@
 
         const boton = document.getElementById("btnConfirmarAprobacion");
         boton.disabled = true;
-        boton.textContent = "Guardando...";
-
+    boton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando...';
         try {
             const body = new URLSearchParams();
             body.append("idSolicitud", solicitudGestionActual.idSolicitud);
@@ -1702,8 +1741,7 @@
             mostrarMensaje("No se pudo aprobar la solicitud. Intente nuevamente.", "error");
         } finally {
             boton.disabled = false;
-            boton.textContent = "✅ Confirmar aprobación";
-        }
+    boton.innerHTML = '<i class="fa-solid fa-check text-success"></i> Confirmar aprobación';        }
     }
 
     function abrirModalRechazo(id) {
@@ -1734,8 +1772,7 @@
 
         const boton = document.getElementById("btnConfirmarRechazo");
         boton.disabled = true;
-        boton.textContent = "Guardando...";
-
+    boton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando...';
         try {
             const body = new URLSearchParams();
             body.append("idSolicitud", solicitudGestionActual.idSolicitud);
@@ -1766,8 +1803,7 @@
             mostrarMensaje("No se pudo rechazar la solicitud. Intente nuevamente.", "error");
         } finally {
             boton.disabled = false;
-            boton.textContent = "❌ Confirmar rechazo";
-        }
+    boton.innerHTML = '<i class="fa-solid fa-xmark"></i> Confirmar rechazo';        }
     }
 
     function verSolicitud(id) {

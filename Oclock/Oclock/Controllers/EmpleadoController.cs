@@ -566,6 +566,21 @@ namespace Oclock.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult ObtenerTiposSolicitud()
+        {
+            var tipos = _context.TipoSolicituds
+                .OrderBy(t => t.NombreSolicitud)
+                .Select(t => new
+                {
+                    idTipoSolicitud = t.IdTipoSolicitud,
+                    nombreSolicitud = t.NombreSolicitud
+                })
+                .ToList();
+
+            return Json(tipos);
+        }
+
         [HttpPost]
         public async Task<IActionResult> RegistrarSolicitud(SolicitudPost model)
         {

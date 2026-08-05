@@ -666,14 +666,18 @@
     <div class="sidebar">
         <div class="menu-item">
             <a href="/Home/AdminHome" class="menu-link">
-                <div class="icon">📊</div>
+                <div class="icon">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
                 Dashboard
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/VerMarcas" class="menu-link active">
-                <div class="icon">⏰</div>
+                <div class="icon">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
                 Marcas de Asistencia
             </a>
         </div>
@@ -681,54 +685,69 @@
         <div class="menu-item menu-expandable expanded" onclick="toggleSubmenu(this)">
             <div class="menu-expandable-header">
                 <div class="menu-expandable-left">
-                    <div class="icon">⚙️</div>
+                    <div class="icon">
+                        <i class="fa-solid fa-gears"></i>
+                    </div>
                     <span>Configuración y Políticas</span>
                 </div>
                 <div class="menu-arrow">▶</div>
             </div>
-
             <div class="submenu show">
                 <div class="submenu-item">
-                    <a href="/Horarios/HorariosConfig" class="submenu-link">⏰ Horarios</a>
+                    <a href="/Horarios/HorariosConfig" class="submenu-link">
+                        <i class="fa-solid fa-clock me-2 fa-fw"></i>
+                        Horarios
+                    </a>
                 </div>
-
                 <div class="submenu-item">
-                    <a href="/Feriados/FeriadosConfig" class="submenu-link">📅 Feriados</a>
+                    <a href="/Feriados/FeriadosConfig" class="submenu-link">
+                        <i class="fa-solid fa-calendar-days me-2 fa-fw"></i>
+                        Feriados
+                    </a>
                 </div>
-
                 <div class="submenu-item">
-                    <a href="/Bono/GestionBonos" class="submenu-link">🎁 Bonos</a>
+                    <a href="/Bono/GestionBonos" class="submenu-link">
+                        <i class="fa-solid fa-gift me-2 fa-fw"></i>
+                        Bonos
+                    </a>
                 </div>
             </div>
         </div>
 
         <div class="menu-item">
             <a href="/Bono/AsignarBono" class="menu-link">
-                <div class="icon">💵</div>
+                <div class="icon">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                </div>
                 Asignación de Bonos
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/AdminGestionUsuarios/GestionUsuarios" class="menu-link">
-                <div class="icon">📝</div>
-                Gestión de Empleados
+                <div class="icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                Gestion de Empleados
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/RankingPuntualidad" class="menu-link">
-                <div class="icon">⏱️</div>
+                <div class="icon">
+                    <i class="fa-solid fa-stopwatch"></i>
+                </div>
                 Indicadores de Puntualidad
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Admin/Reportes" class="menu-link">
-                <div class="icon">📄</div>
+                <div class="icon">    <i class="fa-solid fa-chart-column"></i></div>
                 Reportes
             </a>
         </div>
+
     </div>
 
     <div class="content">
@@ -740,7 +759,10 @@
         <div id="messageBox" class="message-box"></div>
 
         <div class="card-section">
-            <h2>🔍 Filtros de búsqueda</h2>
+            <h2>
+                <i class="fa-solid fa-magnifying-glass"></i>
+                Filtros de búsqueda
+            </h2>
             <p class="helper-text">
                 Puede consultar marcas por colaborador, rango de fechas o tipo de marca.
                 Si no selecciona filtros, se mostrarán las marcas más recientes.
@@ -840,11 +862,13 @@
 
                 <div class="btn-group">
                     <button type="submit" class="btn btn-primary">
-                        🔍 Aplicar filtros
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        Aplicar filtros
                     </button>
 
                     <a href="/Admin/VerMarcas" class="btn btn-secondary">
-                        🔄 Limpiar filtros
+                        <i class="fa-solid fa-rotate-right"></i>
+                        Limpiar filtros
                     </a>
                 </div>
             </form>
@@ -873,7 +897,10 @@
         </div>
 
         <div class="card-section">
-            <h2>⏰ Marcas registradas</h2>
+            <h2>
+                <i class="fa-solid fa-clock"></i>
+                Marcas registradas
+            </h2>
             <p class="helper-text">
                 La tabla muestra las marcas que coinciden con los filtros seleccionados.
             </p>
@@ -958,7 +985,9 @@
             @if (Model == null || Model.Count == 0)
             {
                 <div class="empty-state">
-                    <div class="empty-state-icon">📭</div>
+                    <div class="empty-state-icon">
+                        <i class="fa-solid fa-inbox"></i>
+                    </div>
                     <h3>No hay marcas para mostrar</h3>
                     <p>No se encontraron marcas con los filtros seleccionados.</p>
                 </div>
@@ -1032,7 +1061,10 @@
         </div>
 
         <div class="card-section">
-            <h2>💾 Exportar resultados</h2>
+            <h2>
+                <i class="fa-solid fa-download"></i>
+                Exportar resultados
+            </h2>
             <p class="helper-text">
                 Descargue en CSV las marcas que coinciden con los filtros actuales.
             </p>
@@ -1041,13 +1073,15 @@
                 @if (hayDatos)
                 {
                     <a href="@exportUrl" class="btn btn-primary">
-                        💾 Exportar CSV
+                        <i class="fa-solid fa-file-csv"></i>
+                        Exportar CSV
                     </a>
                 }
                 else
                 {
                     <span class="btn btn-disabled">
-                        💾 Exportar CSV
+                        <i class="fa-solid fa-file-csv"></i>
+                        Exportar CSV
                     </span>
                 }
             </div>
@@ -1055,7 +1089,9 @@
             @if (!hayDatos)
             {
                 <div class="empty-state" style="padding-bottom: 0;">
-                    <div class="empty-state-icon">📄</div>
+                    <div class="empty-state-icon">
+                        <i class="fa-solid fa-file-circle-xmark"></i>
+                    </div>
                     <h3>No hay marcas para exportar</h3>
                     <p>Aplique otros filtros o seleccione un rango diferente para generar el archivo.</p>
                 </div>

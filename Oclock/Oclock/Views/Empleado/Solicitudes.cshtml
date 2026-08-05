@@ -878,35 +878,35 @@
     <div class="sidebar">
         <div class="menu-item">
             <a href="/Empleado/Marcas" class="menu-link">
-                <div class="icon">⏰</div>
+                <div class="icon"><i class="fa-solid fa-clock"></i></div>
                 Marcas
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Empleado/HistorialMarcas" class="menu-link">
-                <div class="icon">📝</div>
+                <div class="icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
                 Mi Historial
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Empleado/Solicitudes" class="menu-link active">
-                <div class="icon">🗂️</div>
+                <div class="icon"><i class="fa-solid fa-folder-open"></i></div>
                 Mis Solicitudes
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Empleado/CalendarioFeriados" class="menu-link">
-                <div class="icon">📅</div>
+                <div class="icon"><i class="fa-solid fa-calendar-days"></i></div>
                 Calendario de Feriados
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Empleado/HistorialBonos" class="menu-link">
-                <div class="icon">🏆</div>
+                <div class="icon"><i class="fa-solid fa-trophy"></i></div>
                 Mis Bonos
             </a>
         </div>
@@ -923,7 +923,7 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-header">
-                    <div class="stat-icon">📌</div>
+                    <div class="stat-icon"><i class="fa-solid fa-hourglass-half"></i></div>
                 </div>
                 <div class="stat-value" id="pendingCount">0</div>
                 <div class="stat-label">Pendientes</div>
@@ -931,7 +931,7 @@
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <div class="stat-icon">✅</div>
+                    <div class="stat-icon"><i class="fa-solid fa-circle-check text-success"></i></div>
                 </div>
                 <div class="stat-value" id="approvedCount">0</div>
                 <div class="stat-label">Aprobadas</div>
@@ -939,7 +939,7 @@
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <div class="stat-icon">❌</div>
+                    <div class="stat-icon"><i class="fa-solid fa-circle-xmark text-danger"></i></div>
                 </div>
                 <div class="stat-value" id="rejectedCount">0</div>
                 <div class="stat-label">Rechazadas</div>
@@ -947,7 +947,7 @@
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <div class="stat-icon">📊</div>
+                    <div class="stat-icon"><i class="fa-solid fa-chart-column"></i></div>
                 </div>
                 <div class="stat-value" id="totalCount">0</div>
                 <div class="stat-label">Total</div>
@@ -956,7 +956,7 @@
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <div class="stat-icon">🌴</div>
+                    <div class="stat-icon"><i class="fa-solid fa-umbrella-beach"></i></div>
                 </div>
                 <div class="stat-value" id="vacationDaysCount">@ViewBag.DiasVacaciones</div>
                 <div class="stat-label">Vacaciones disponibles</div>
@@ -967,17 +967,17 @@
 
         <div class="tabs">
             <div class="tab active" onclick="switchTab('nueva', this)">
-                ➕ Nueva Solicitud
+                <i class="fa-solid fa-circle-plus me-2"></i>Nueva Solicitud
             </div>
 
             <div class="tab" onclick="switchTab('mis', this)">
-                📄 Mis Solicitudes
+                <i class="fa-solid fa-file-lines me-2"></i>Mis Solicitudes
             </div>
         </div>
 
         <div id="nuevaTab" class="tab-content active">
             <div class="form-section">
-                <h2>📝 Registrar nueva solicitud</h2>
+                <h2><i class="fa-solid fa-file-pen me-2"></i> Registrar nueva solicitud</h2>
                 <p class="helper-text">
                     Complete los campos según el tipo de solicitud. Algunas solicitudes requieren documento y otras serán definidas por administración.
                 </p>
@@ -1064,7 +1064,7 @@
 
                     <div class="btn-group">
                         <button type="submit" class="btn btn-primary" id="btnRegistrarSolicitud">
-                            ✅ Registrar solicitud
+                            <i class="fa-solid fa-circle-check"></i> Registrar solicitud
                         </button>
 
                         <button type="button" class="btn btn-secondary" onclick="clearForm()">
@@ -1077,7 +1077,10 @@
 
         <div id="misTab" class="tab-content">
             <div class="filter-section">
-                <h3>🔍 Filtrar solicitudes</h3>
+                <h3>
+                    <i class="fa-solid fa-filter me-2"></i>
+                    Filtrar solicitudes
+                </h3>
                 <p class="helper-text">
                     Puede consultar solicitudes por estado, tipo o rango de fechas.
                 </p>
@@ -1114,14 +1117,15 @@
 
                 <div class="btn-group">
                     <button type="button" class="btn btn-secondary" onclick="clearFilters()">
-                        🔄 Limpiar filtros
+                        <i class="fa-solid fa-filter-circle-xmark me-2"></i>
+                        Limpiar filtros
                     </button>
                 </div>
             </div>
 
             <div class="requests-section">
                 <div class="section-header">
-                    <h2>📄 Mis solicitudes</h2>
+                    <h2><i class="fa-solid fa-file-lines me-2"></i> Mis solicitudes</h2>
                     <span class="badge badge-info" id="totalBadge">0 solicitudes</span>
                 </div>
 
@@ -1134,7 +1138,7 @@
 <div class="modal" id="detailModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>📋 Detalle de solicitud</h3>
+            <h3><i class="fa-solid fa-clipboard-list me-2"></i> Detalle de solicitud</h3>
             <button class="btn-close" onclick="closeModal('detailModal')">×</button>
         </div>
 
@@ -1145,7 +1149,7 @@
 <div class="modal" id="editModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>✏️ Editar solicitud</h3>
+            <h3><i class="fa-solid fa-pen-to-square me-2"></i> Editar solicitud</h3>
             <button class="btn-close" onclick="closeModal('editModal')">×</button>
         </div>
 
@@ -1211,18 +1215,19 @@
 
                         <div id="archivoActualContainer" style="margin-bottom:10px; display:none;">
                             <div class="uploaded-file">
-                                <div class="file-icon">📄</div>
+                                <div class="file-icon"><i class="fa-solid fa-file-lines me-2"></i></div>
                                 <div class="file-info">
                                     <div class="file-name" id="archivoActualNombre"></div>
                                 </div>
 
                                 <button type="button" class="file-remove" onclick="eliminarArchivoActual()">
-                                    🗑️
+                                    <i class="fa-solid fa-trash"></i>
                                 </button>
                             </div>
 
                             <button type="button" class="btn btn-info" style="margin-top:5px;" onclick="descargarArchivoActual()">
-                                ⬇️ Descargar
+                                <i class="fa-solid fa-download me-2"></i>
+                                Descargar
                             </button>
                         </div>
 
@@ -1239,11 +1244,12 @@
 
                 <div class="btn-group" style="margin-top: 15px;">
                     <button type="submit" class="btn btn-success" id="btnGuardarEdicion">
-                        💾 Guardar
+                        <i class="fa-solid fa-floppy-disk me-2"></i>
+                        Guardar
                     </button>
 
                     <button type="button" class="btn btn-secondary" onclick="closeModal('editModal')">
-                        ❌ Cancelar
+                        <i class="fa-solid fa-circle-xmark"></i> Cancelar
                     </button>
                 </div>
             </form>
@@ -1254,7 +1260,7 @@
 <div class="modal" id="cancelModal">
     <div class="modal-content modal-content-small">
         <div class="modal-header">
-            <h3>⚠️ Confirmar cancelación</h3>
+            <h3><i class="fa-solid fa-triangle-exclamation me-2"></i> Confirmar cancelación</h3>
             <button class="btn-close" onclick="closeModal('cancelModal')">×</button>
         </div>
 
@@ -1265,11 +1271,12 @@
 
             <div class="btn-group">
                 <button class="btn btn-danger" id="btnConfirmarCancelacion" onclick="confirmCancel()">
-                    ✅ Sí, cancelar
+                    <i class="fa-solid fa-circle-check text-success"></i> Sí, cancelar
                 </button>
 
                 <button class="btn btn-secondary" onclick="closeModal('cancelModal')">
-                    ❌ No, mantener
+                    <i class="fa-solid fa-arrow-rotate-left me-2"></i>
+                    No, mantener
                 </button>
             </div>
         </div>
@@ -1671,7 +1678,7 @@
     function getTipoIcon(tipoNombre) {
         const nombre = normalizarTexto(tipoNombre);
 
-        if (!nombre) return '📄';
+        if (!nombre) return '<i class="fa-solid fa-file-lines me-2"></i>';
         if (nombre.includes('vacacion')) return '🏖️';
         if (nombre.includes('permiso personal')) return '📝';
         if (nombre.includes('fallecimiento')) return '🕊️';
@@ -1680,7 +1687,7 @@
         if (nombre.includes('constancia')) return '📑';
         if (nombre.includes('otro')) return '📌';
 
-        return '📄';
+        return '<i class="fa-solid fa-file-lines me-2"></i>';
     }
 
     function obtenerClaseEstado(estado) {
@@ -1749,7 +1756,7 @@
 
         alertDiv.className = `alert alert-${type}`;
         alertDiv.innerHTML = `
-            <span style="font-size:18px;">${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'info' ? 'ℹ️' : '⚠️'}</span>
+            <span style="font-size:18px;">${type === 'success' ? '<i class="fa-solid fa-circle-check text-success"></i>' : type === 'error' ? '<i class="fa-solid fa-circle-xmark"></i>' : type === 'info' ? 'ℹ️' : '<i class="fa-solid fa-triangle-exclamation me-2"></i>'}</span>
             <span>${escapeHtml(message)}</span>
         `;
         alertDiv.style.display = 'flex';
@@ -1906,7 +1913,7 @@
             showAlert('No se pudo registrar la solicitud. Intente nuevamente.', 'error');
         } finally {
             boton.disabled = false;
-            boton.textContent = '✅ Registrar solicitud';
+            boton.textContent = '<i class="fa-solid fa-circle-check text-success"></i> Registrar solicitud';
         }
     }
 
@@ -1956,12 +1963,12 @@
 
         container.innerHTML = `
             <div class="uploaded-file">
-                <div class="file-icon">📄</div>
+                <div class="file-icon"><i class="fa-solid fa-file-lines me-2"></i></div>
                 <div class="file-info">
                     <div class="file-name">${escapeHtml(uploadedFile.name)}</div>
                     <div class="file-size">${formatFileSize(uploadedFile.size)}</div>
                 </div>
-                <button type="button" class="file-remove" onclick="removeFile()">🗑️</button>
+                <button type="button" class="file-remove" onclick="removeFile()"><i class="fa-solid fa-trash"></i></button>
             </div>`;
     }
 
@@ -2186,7 +2193,7 @@
             showAlert('No se pudo actualizar la solicitud. Intente nuevamente.', 'error');
         } finally {
             boton.disabled = false;
-            boton.textContent = '💾 Guardar';
+                boton.innerHTML = '<i class="fa-solid fa-floppy-disk me-2"></i>Guardar';
         }
     }
 
@@ -2194,7 +2201,7 @@
         document.getElementById('editFileInput').disabled = true;
         document.getElementById('editUploadedFiles').innerHTML = `
             <div class="alert alert-warning">
-                ⚠️ Debe eliminar el documento actual antes de subir uno nuevo.
+                <i class="fa-solid fa-triangle-exclamation me-2"></i> Debe eliminar el documento actual antes de subir uno nuevo.
             </div>`;
     }
 
@@ -2256,12 +2263,12 @@
 
         container.innerHTML = `
             <div class="uploaded-file">
-                <div class="file-icon">📄</div>
+                <div class="file-icon"><i class="fa-solid fa-file-lines me-2"></i></div>
                 <div class="file-info">
                     <div class="file-name">${escapeHtml(editFile.name)}</div>
                     <div class="file-size">${formatFileSize(editFile.size)}</div>
                 </div>
-                <button type="button" class="file-remove" onclick="removeEditFile()">🗑️</button>
+                <button type="button" class="file-remove" onclick="removeEditFile()"><i class="fa-solid fa-trash"></i></button>
             </div>`;
     }
 
@@ -2313,7 +2320,7 @@
             showAlert('No se pudo cancelar la solicitud. Intente nuevamente.', 'error');
         } finally {
             boton.disabled = false;
-            boton.textContent = '✅ Sí, cancelar';
+            boton.textContent = '<i class="fa-solid fa-circle-check text-success"></i> Sí, cancelar';
         }
     }
 

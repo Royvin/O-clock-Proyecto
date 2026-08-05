@@ -593,101 +593,98 @@
             height: 46px;
         }
     }
-<<<<<<< HEAD
-=======
+
 
     .modal-icon {
-    font-size: 60px;
-    text-align: center;
-    margin-bottom: 15px;
-}
+        font-size: 60px;
+        text-align: center;
+        margin-bottom: 15px;
+    }
 
-.modal-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: #263238;
-    text-align: center;
-    margin-bottom: 10px;
-}
+    .modal-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #263238;
+        text-align: center;
+        margin-bottom: 10px;
+    }
 
-.modal-message {
-    font-size: 15px;
-    color: #78909C;
-    text-align: center;
-    margin-bottom: 25px;
-}
+    .modal-message {
+        font-size: 15px;
+        color: #78909C;
+        text-align: center;
+        margin-bottom: 25px;
+    }
 
-.modal-buttons {
-    display: flex;
-    gap: 15px;
-}
+    .modal-buttons {
+        display: flex;
+        gap: 15px;
+    }
 
-.modal-btn {
-    flex: 1;
-    padding: 14px;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-}
+    .modal-btn {
+        flex: 1;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
 
-.modal-btn-cancel {
-    background: #E0E0E0;
-    color: #455A64;
-}
-
-    .modal-btn-cancel:hover {
+    .modal-btn-cancel {
         background: #E0E0E0;
+        color: #455A64;
     }
 
-.modal-btn-confirm {
-    background: #1565C0;
-    color: white;
-}
+        .modal-btn-cancel:hover {
+            background: #E0E0E0;
+        }
 
-    .modal-btn-confirm:hover {
-        background: #0D47A1;
+    .modal-btn-confirm {
+        background: #1565C0;
+        color: white;
     }
 
+        .modal-btn-confirm:hover {
+            background: #0D47A1;
+        }
 
->>>>>>> a047e133eb0b859d0eae5e3a8ef8f47b646dfb23
 </style>
 
 <div class="main-layout">
     <div class="sidebar">
         <div class="menu-item">
             <a href="/Empleado/Marcas" class="menu-link active">
-                <div class="icon">⏰</div>
+                <div class="icon"><i class="fa-solid fa-clock"></i></div>
                 Marcas
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Empleado/HistorialMarcas" class="menu-link">
-                <div class="icon">📝</div>
+                <div class="icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
                 Mi Historial
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Empleado/Solicitudes" class="menu-link">
-                <div class="icon">🗂️</div>
+                <div class="icon"><i class="fa-solid fa-folder-open"></i></div>
                 Mis Solicitudes
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Empleado/CalendarioFeriados" class="menu-link">
-                <div class="icon">📅</div>
+                <div class="icon"><i class="fa-solid fa-calendar-days"></i></div>
                 Calendario de Feriados
             </a>
         </div>
 
         <div class="menu-item">
             <a href="/Empleado/HistorialBonos" class="menu-link">
-                <div class="icon">🏆</div>
+                <div class="icon"><i class="fa-solid fa-trophy"></i></div>
                 Mis Bonos
             </a>
         </div>
@@ -711,49 +708,41 @@
         </div>
 
         <div class="marking-grid">
-<<<<<<< HEAD
+
             <div class="marking-button entrada" id="btnEntrada" onclick="confirmarMarca('entrada')">
-=======
-            <div class="marking-button entrada" id="btnEntrada" onclick="registrarMarca('entrada')">
->>>>>>> a047e133eb0b859d0eae5e3a8ef8f47b646dfb23
-                <div class="marking-icon">🚪</div>
+
+                <div class="marking-icon"><i class="fa-solid fa-right-to-bracket"></i></div>
                 <div class="marking-label">Entrada</div>
                 <div class="marking-description">Registra tu hora de entrada</div>
             </div>
 
-<<<<<<< HEAD
+
             <div class="marking-button salida" id="btnSalida" onclick="confirmarMarca('salida')">
-=======
-            <div class="marking-button salida" id="btnSalida" onclick="registrarMarca('salida')">
->>>>>>> a047e133eb0b859d0eae5e3a8ef8f47b646dfb23
-                <div class="marking-icon">🏠</div>
+
+                <div class="marking-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
                 <div class="marking-label">Salida</div>
                 <div class="marking-description">Registra tu hora de salida</div>
             </div>
 
-<<<<<<< HEAD
+
             <div class="marking-button almuerzo" id="btnAlmuerzo" onclick="confirmarMarca('almuerzo')">
-=======
-            <div class="marking-button almuerzo" id="btnAlmuerzo" onclick="registrarMarca('almuerzo')">
->>>>>>> a047e133eb0b859d0eae5e3a8ef8f47b646dfb23
-                <div class="marking-icon">🍽️</div>
+
+                <div class="marking-icon"><i class="fa-solid fa-utensils"></i></div>
                 <div class="marking-label">Almuerzo</div>
                 <div class="marking-description">Registra tu almuerzo</div>
             </div>
 
-<<<<<<< HEAD
+
             <div class="marking-button descanso" id="btnDescanso" onclick="confirmarMarca('descanso')">
-=======
-            <div class="marking-button descanso" id="btnDescanso" onclick="registrarMarca('descanso')">
->>>>>>> a047e133eb0b859d0eae5e3a8ef8f47b646dfb23
-                <div class="marking-icon">☕</div>
+
+                <div class="marking-icon"><i class="fa-solid fa-mug-hot"></i></div>
                 <div class="marking-label">Descanso</div>
                 <div class="marking-description">Registra tu descanso</div>
             </div>
         </div>
 
         <div class="status-section">
-            <h2>📌 Estado actual</h2>
+            <h2><i class="fa-solid fa-thumbtack"></i> Estado actual</h2>
 
             <div class="status-grid">
                 <div class="status-item">
@@ -781,19 +770,19 @@
         </div>
 
         <div class="history-section">
-            <h2>📋 Marcas de hoy</h2>
+            <h2><i class="fa-solid fa-clipboard-list"></i> Marcas de hoy</h2>
 
             <div id="todayHistory">
                 <div class="loading-state">
-                    ⏳ Cargando marcas del día...
+                    <i class="fa-solid fa-spinner fa-spin"></i> Cargando marcas del día...
                 </div>
             </div>
         </div>
 
-<<<<<<< HEAD
+
         <div class="modal" id="confirmModal">
             <div class="modal-content">
-                <div class="modal-icon" id="modalIcon">⏰</div>
+                <div class="modal-icon" id="modalIcon"><i class="fa-solid fa-clock"></i></div>
                 <div class="modal-title" id="modalTitle">Confirmar marca</div>
                 <div class="modal-message" id="modalMessage">¿Estás seguro que deseas registrar esta marca?</div>
                 <div class="modal-buttons">
@@ -802,8 +791,7 @@
                 </div>
             </div>
         </div>
-=======
->>>>>>> a047e133eb0b859d0eae5e3a8ef8f47b646dfb23
+
     </div>
 </div>
 
@@ -813,10 +801,10 @@
     let tipoPendiente = null;
 
     const marcaInfo = {
-        entrada: { icon: '🚪', label: 'Entrada', msg: '¿Estás seguro que deseas registrar tu hora de ENTRADA?' },
-        salida: { icon: '🏠', label: 'Salida', msg: '¿Estás seguro que deseas registrar tu hora de SALIDA?' },
-        almuerzo: { icon: '🍽️', label: 'Almuerzo', msg: '¿Estás seguro que deseas registrar tu ALMUERZO?' },
-        descanso: { icon: '☕', label: 'Descanso', msg: '¿Estás seguro que deseas registrar tu DESCANSO?' }
+        entrada: { icon: '<i class="fa-solid fa-right-to-bracket"></i>', label: 'Entrada', msg: '¿Estás seguro que deseas registrar tu hora de ENTRADA?' },
+        salida: { icon: '<i class="fa-solid fa-right-from-bracket"></i>', label: 'Salida', msg: '¿Estás seguro que deseas registrar tu hora de SALIDA?' },
+        almuerzo: { icon: '<i class="fa-solid fa-utensils"></i>', label: 'Almuerzo', msg: '¿Estás seguro que deseas registrar tu ALMUERZO?' },
+        descanso: { icon: '<i class="fa-solid fa-mug-hot"></i>', label: 'Descanso', msg: '¿Estás seguro que deseas registrar tu DESCANSO?' }
     };
 
     function confirmarMarca(tipo) {
@@ -829,7 +817,7 @@
         tipoPendiente = tipo;
         const info = marcaInfo[tipo];
 
-        document.getElementById('modalIcon').textContent = info.icon;
+        document.getElementById('modalIcon').innerHTML = info.icon;
         document.getElementById('modalTitle').textContent = `Registrar ${info.label}`;
         document.getElementById('modalMessage').textContent = info.msg;
 
@@ -910,13 +898,13 @@
 
         if (tipo === 'success') {
             box.classList.add('alert-success');
-            text.textContent = '✅ ' + mensaje;
+            text.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + escapeHtml(mensaje);
         } else if (tipo === 'info') {
             box.classList.add('alert-info');
-            text.textContent = 'ℹ️ ' + mensaje;
+            text.innerHTML = '<i class="fa-solid fa-circle-info"></i> ' + escapeHtml(mensaje);
         } else {
             box.classList.add('alert-error');
-            text.textContent = '⚠️ ' + mensaje;
+            text.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + escapeHtml(mensaje);
         }
 
         window.scrollTo({
@@ -960,12 +948,12 @@
     function obtenerIconoTipo(tipo) {
         tipo = normalizarTexto(tipo);
 
-        if (tipo === 'entrada') return '🚪';
-        if (tipo === 'salida') return '🏠';
-        if (tipo === 'almuerzo') return '🍽️';
-        if (tipo === 'descanso') return '☕';
+        if (tipo === 'entrada') return '<i class="fa-solid fa-right-to-bracket"></i>';
+        if (tipo === 'salida') return '<i class="fa-solid fa-right-from-bracket"></i>';
+        if (tipo === 'almuerzo') return '<i class="fa-solid fa-utensils"></i>';
+        if (tipo === 'descanso') return '<i class="fa-solid fa-mug-hot"></i>';
 
-        return '⏰';
+        return '<i class="fa-solid fa-clock"></i>';
     }
 
     function obtenerEstilosTipo(tipo) {
@@ -1149,7 +1137,7 @@
         if (!Array.isArray(marcas) || marcas.length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
-                    <div class="empty-state-icon">⏰</div>
+                    <div class="empty-state-icon"><i class="fa-solid fa-clock"></i></div>
                     <h3>Sin marcas registradas</h3>
                     <p>Todavía no hay marcas registradas para el día de hoy.</p>
                 </div>`;
@@ -1182,15 +1170,15 @@
 
                         <div class="history-details">
                             <div class="history-detail-item">
-                                🕐 <strong>${escapeHtml(hora)}</strong>
+                                <i class="fa-solid fa-clock"></i> <strong>${escapeHtml(hora)}</strong>
                             </div>
 
                             <div class="history-detail-item">
-                                📍 ${escapeHtml(ubicacion)}
+                                <i class="fa-solid fa-location-dot"></i> ${escapeHtml(ubicacion)}
                             </div>
 
                             <div class="history-detail-item">
-                                📝 ${escapeHtml(comentario)}
+                                <i class="fa-solid fa-note-sticky"></i> ${escapeHtml(comentario)}
                             </div>
                         </div>
                     </div>
