@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Ranking de Puntualidad";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -15,12 +15,18 @@
         min-height: 600px;
     }
 
-    .sidebar {
-        width: 280px;
-        background: #ffffff;
+        .sidebar {
+        width: 300px;
+        flex-shrink: 0;
+        background: #FFFFFF;
         padding: 30px 20px;
-        border-right: 1px solid #e0e0e0;
+        border-right: 1px solid #E0E0E0;
         box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+        position: sticky;
+        top: 70px;
+        align-self: flex-start;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
     }
 
     .menu-item {
@@ -33,10 +39,10 @@
 
     .menu-link {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 12px;
-        padding: 15px 20px;
-        color: #4a5568;
+        padding: 15px 16px;
+        color: #455A64;
         text-decoration: none;
         font-weight: 500;
         border-radius: 10px;
@@ -45,15 +51,20 @@
     }
 
         .menu-link:hover {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
             transform: translateX(5px);
         }
 
+        .menu-link:focus-visible {
+            outline: 2px solid #1565C0;
+            outline-offset: 2px;
+        }
+
         .menu-link.active {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
-            box-shadow: 0 4px 12px rgba(47,111,237,0.3);
+            box-shadow: 0 4px 12px rgba(21, 101, 192,0.3);
         }
 
             .menu-link.active::before {
@@ -83,23 +94,23 @@
 
     .menu-expandable-header {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
-        padding: 15px 20px;
-        color: #4a5568;
+        padding: 15px 16px;
+        color: #455A64;
         font-weight: 500;
         border-radius: 10px;
         transition: all 0.3s;
     }
 
         .menu-expandable-header:hover {
-            background: #EEF4FF;
-            color: #2F6FED;
+            background: rgba(21, 101, 192, 0.12);
+            color: #1565C0;
         }
 
         .menu-expandable-header.active {
-            background: rgba(47,111,237,0.10);
-            color: #2F6FED;
+            background: rgba(21, 101, 192,0.10);
+            color: #1565C0;
             font-weight: 600;
         }
 
@@ -141,7 +152,7 @@
         gap: 10px;
         padding: 12px 16px;
         padding-left: 40px;
-        color: #718096;
+        color: #78909C;
         text-decoration: none;
         font-weight: 500;
         font-size: 14px;
@@ -158,30 +169,30 @@
             transform: translateY(-50%);
             width: 6px;
             height: 6px;
-            background: #cbd5e0;
+            background: #E0E0E0;
             border-radius: 50%;
             transition: all 0.3s;
         }
 
         .submenu-link:hover {
-            background: #f7fafc;
-            color: #2F6FED;
+            background: #F5F7FA;
+            color: #1565C0;
             transform: translateX(3px);
         }
 
             .submenu-link:hover::before {
-                background: #2F6FED;
+                background: #1565C0;
                 transform: translateY(-50%) scale(1.3);
             }
 
         .submenu-link.active {
-            background: rgba(47,111,237,0.12);
-            color: #2F6FED;
+            background: rgba(21, 101, 192,0.12);
+            color: #1565C0;
             font-weight: 600;
         }
 
             .submenu-link.active::before {
-                background: #2F6FED;
+                background: #1565C0;
                 width: 8px;
                 height: 8px;
             }
@@ -189,7 +200,7 @@
     .content {
         flex: 1;
         padding: 40px;
-        background: #f5f7fa;
+        background: #F5F7FA;
     }
 
     .content-header {
@@ -202,14 +213,14 @@
     }
 
         .content-header h1 {
-            color: #2d3748;
+            color: #263238;
             font-size: 28px;
             margin-bottom: 8px;
             font-weight: 800;
         }
 
         .content-header p {
-            color: #718096;
+            color: #78909C;
             font-size: 14px;
             margin-bottom: 0;
             line-height: 1.5;
@@ -226,15 +237,15 @@
     }
 
     .message-error {
-        background: #fff5f5;
-        color: #742a2a;
-        border-left: 4px solid #e53e3e;
+        background: #FCE4E4;
+        color: #B71C1C;
+        border-left: 4px solid #D32F2F;
     }
 
     .message-info {
-        background: #EEF4FF;
-        color: #1e3a8a;
-        border-left: 4px solid #2F6FED;
+        background: rgba(21, 101, 192, 0.12);
+        color: #0D47A1;
+        border-left: 4px solid #1565C0;
     }
 
     .period-selector {
@@ -251,25 +262,25 @@
         .period-selector label {
             font-size: 13px;
             font-weight: 700;
-            color: #4a5568;
+            color: #455A64;
         }
 
         .period-selector select {
             padding: 10px 12px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #E0E0E0;
             border-radius: 8px;
             font-size: 13px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             cursor: pointer;
             outline: none;
             transition: all 0.2s;
-            color: #2d3748;
+            color: #263238;
             background: white;
         }
 
             .period-selector select:focus {
-                border-color: #2F6FED;
-                box-shadow: 0 0 0 3px rgba(47,111,237,0.10);
+                border-color: #1565C0;
+                box-shadow: 0 0 0 3px rgba(21, 101, 192,0.10);
             }
 
     .stats-grid {
@@ -285,7 +296,7 @@
         border-radius: 14px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         transition: transform 0.3s;
-        border-left: 4px solid #2F6FED;
+        border-left: 4px solid #1565C0;
     }
 
         .stat-card:hover {
@@ -297,7 +308,7 @@
         }
 
         .stat-card.red {
-            border-left-color: #e53e3e;
+            border-left-color: #D32F2F;
         }
 
         .stat-card.yellow {
@@ -312,13 +323,13 @@
     .stat-value {
         font-size: 26px;
         font-weight: 800;
-        color: #2d3748;
+        color: #263238;
         margin-bottom: 4px;
         word-break: break-word;
     }
 
     .stat-label {
-        color: #718096;
+        color: #78909C;
         font-size: 11px;
         text-transform: uppercase;
         font-weight: 700;
@@ -337,13 +348,13 @@
         align-items: center;
         margin-bottom: 20px;
         padding-bottom: 15px;
-        border-bottom: 2px solid #f0f0f0;
+        border-bottom: 2px solid #E0E0E0;
         flex-wrap: wrap;
         gap: 15px;
     }
 
         .section-header h2 {
-            color: #2d3748;
+            color: #263238;
             font-size: 20px;
             font-weight: 800;
             display: flex;
@@ -353,7 +364,7 @@
         }
 
     .helper-text {
-        color: #718096;
+        color: #78909C;
         font-size: 14px;
         line-height: 1.5;
         margin-bottom: 20px;
@@ -361,25 +372,25 @@
 
     .search-box {
         padding: 11px 14px;
-        border: 2px solid #e2e8f0;
+        border: 2px solid #E0E0E0;
         border-radius: 10px;
         font-size: 13px;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         outline: none;
         transition: all 0.2s;
         width: 260px;
-        color: #2d3748;
+        color: #263238;
     }
 
         .search-box:focus {
-            border-color: #2F6FED;
-            box-shadow: 0 0 0 3px rgba(47,111,237,0.10);
+            border-color: #1565C0;
+            box-shadow: 0 0 0 3px rgba(21, 101, 192,0.10);
         }
 
     .table-wrapper {
         overflow-x: auto;
         border-radius: 12px;
-        border: 1px solid #edf2f7;
+        border: 1px solid #F5F7FA;
     }
 
     .ranking-table {
@@ -390,25 +401,25 @@
     }
 
         .ranking-table thead tr {
-            background: #f8faff;
+            background: rgba(21, 101, 192, 0.05);
         }
 
         .ranking-table th {
             padding: 14px 16px;
             text-align: left;
             font-weight: 800;
-            color: #4a5568;
+            color: #455A64;
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border-bottom: 2px solid #e2e8f0;
+            border-bottom: 2px solid #E0E0E0;
             cursor: pointer;
             user-select: none;
             white-space: nowrap;
         }
 
             .ranking-table th:hover {
-                color: #2F6FED;
+                color: #1565C0;
             }
 
             .ranking-table th .sort-icon {
@@ -419,16 +430,16 @@
 
             .ranking-table th.sorted .sort-icon {
                 opacity: 1;
-                color: #2F6FED;
+                color: #1565C0;
             }
 
         .ranking-table tbody tr {
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid #E0E0E0;
             transition: background 0.15s;
         }
 
             .ranking-table tbody tr:hover {
-                background: #f7f9ff;
+                background: rgba(21, 101, 192, 0.05);
             }
 
             .ranking-table tbody tr:last-child {
@@ -437,7 +448,7 @@
 
         .ranking-table td {
             padding: 14px 16px;
-            color: #2d3748;
+            color: #263238;
             vertical-align: middle;
         }
 
@@ -451,8 +462,8 @@
         width: 36px;
         height: 36px;
         border-radius: 50%;
-        background: #EBF2FF;
-        color: #2F6FED;
+        background: rgba(21, 101, 192, 0.08);
+        color: #1565C0;
         font-weight: 800;
         font-size: 12px;
         display: flex;
@@ -463,7 +474,7 @@
 
     .empleado-name {
         font-weight: 700;
-        color: #2d3748;
+        color: #263238;
     }
 
     .progress-wrap {
@@ -476,7 +487,7 @@
     .progress-bar-bg {
         flex: 1;
         height: 8px;
-        background: #e2e8f0;
+        background: #E0E0E0;
         border-radius: 4px;
         overflow: hidden;
     }
@@ -514,31 +525,31 @@
     }
 
     .badge-danger {
-        background: #fed7d7;
-        color: #742a2a;
+        background: #FCE4E4;
+        color: #B71C1C;
     }
 
     .badge-info {
-        background: #bee3f8;
-        color: #2c5282;
+        background: #DCEEFB;
+        color: #0D47A1;
     }
 
     .hora-chip {
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        background: #f1f5f9;
+        background: #F5F7FA;
         padding: 5px 11px;
         border-radius: 20px;
         font-size: 12px;
         font-weight: 700;
-        color: #4a5568;
+        color: #455A64;
     }
 
     .empty-state {
         text-align: center;
         padding: 55px 20px;
-        color: #718096;
+        color: #78909C;
     }
 
     .empty-state-icon {
@@ -548,7 +559,7 @@
     }
 
     .empty-state h3 {
-        color: #4a5568;
+        color: #455A64;
         margin-bottom: 8px;
         font-size: 18px;
         font-weight: 800;
@@ -567,8 +578,10 @@
 
         .sidebar {
             width: 100%;
+            position: static;
+            max-height: none;
             border-right: none;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E0E0E0;
         }
 
         .content {
@@ -609,6 +622,7 @@
             grid-template-columns: 1fr;
         }
     }
+
 </style>
 
 <div class="main-layout">
@@ -1161,7 +1175,7 @@
             return '#f59e0b';
         }
 
-        return '#e53e3e';
+        return '#D32F2F';
     }
 
     function obtenerBadgeTardanzas(tardanzas) {

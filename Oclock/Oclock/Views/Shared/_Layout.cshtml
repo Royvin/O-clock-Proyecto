@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
@@ -14,78 +14,80 @@
                 margin: 0;
                 padding: 0;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: #f5f7fa;
-                color: #1f2937;
+                background: #F5F7FA;
+                color: #263238;
             }
 
             .app-header {
-                background: #2F6FED;
+                background: #1565C0;
                 color: white;
-                padding: 15px 25px;
+                padding: 0;
                 display: flex;
-                justify-content: space-between;
-                align-items: center;
+                align-items: stretch;
+                min-height: 70px;
                 box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-                position: relative;
+                position: sticky;
+                top: 0;
                 z-index: 1000;
             }
 
-            .header-logo {
-                font-size: 22px;
-                font-weight: 800;
+            .app-header-brand {
+                width: 300px;
+                flex-shrink: 0;
+                background: #FFFFFF;
                 display: flex;
                 align-items: center;
-                gap: 8px;
-                text-decoration: none !important;
-                color: white !important;
-                transition: all 0.3s;
-                white-space: nowrap;
+                justify-content: center;
+                padding: 6px 18px;
             }
 
-                .header-logo:hover {
-                    color: rgba(255,255,255,0.85) !important;
-                }
+            .app-header-brand-img {
+                max-width: 100%;
+                max-height: 58px;
+                width: auto;
+                height: auto;
+                display: block;
+            }
 
-                .header-logo:visited {
-                    color: white !important;
-                }
-
-            .clock-icon {
-                width: 28px;
-                height: 28px;
-                border: 2px solid white;
-                border-radius: 50%;
-                position: relative;
+            .app-header-toggle {
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 5px;
+                padding: 0 20px;
                 flex-shrink: 0;
             }
 
-                .clock-icon::before {
-                    content: '';
-                    position: absolute;
-                    width: 2px;
-                    height: 9px;
+                .app-header-toggle span {
+                    display: block;
+                    width: 22px;
+                    height: 2.5px;
                     background: white;
-                    top: 4px;
-                    left: 50%;
-                    transform: translateX(-50%);
+                    border-radius: 2px;
+                    transition: background 0.2s;
                 }
 
-                .clock-icon::after {
-                    content: '';
-                    position: absolute;
-                    width: 2px;
-                    height: 6px;
-                    background: white;
-                    top: 9px;
-                    left: 50%;
-                    transform: translateX(-50%) rotate(90deg);
-                    transform-origin: top;
+                .app-header-toggle:hover span {
+                    background: rgba(255,255,255,0.8);
                 }
+
+            /* Works across every view: each page's own sidebar shares this class name */
+            body.sidebar-collapsed .main-layout .sidebar {
+                display: none !important;
+            }
 
             .hdr-user-info {
+                flex: 1;
                 display: flex;
                 align-items: center;
+                justify-content: flex-end;
                 gap: 12px;
+                padding: 14px 25px 14px 16px;
+                min-width: 0;
             }
 
             .hdr-user-details {
@@ -113,7 +115,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                color: #2F6FED;
+                color: #1565C0;
                 font-weight: 800;
                 font-size: 13px;
                 flex-shrink: 0;
@@ -138,7 +140,7 @@
 
                 .logout-btn:hover {
                     background: white !important;
-                    color: #2F6FED !important;
+                    color: #1565C0 !important;
                     transform: translateY(-1px);
                 }
 
@@ -147,7 +149,7 @@
                 }
 
                     .logout-btn:visited:hover {
-                        color: #2F6FED !important;
+                        color: #1565C0 !important;
                     }
 
             .notif-wrapper {
@@ -185,7 +187,7 @@
                 position: absolute;
                 top: 0;
                 right: 0;
-                background: #FF4757;
+                background: #D32F2F;
                 color: white;
                 font-size: 10px;
                 font-weight: 800;
@@ -195,7 +197,7 @@
                 align-items: center;
                 justify-content: center;
                 padding: 0 4px;
-                border: 2px solid #2F6FED;
+                border: 2px solid #1565C0;
                 line-height: 1;
                 display: none;
             }
@@ -218,7 +220,7 @@
                 }
 
             .notif-header {
-                background: #2F6FED;
+                background: #1565C0;
                 color: white;
                 padding: 12px 16px;
                 display: flex;
@@ -257,7 +259,7 @@
                 align-items: flex-start;
                 gap: 12px;
                 padding: 12px 16px;
-                border-bottom: 1px solid #f0f0f0;
+                border-bottom: 1px solid #E0E0E0;
                 cursor: pointer;
                 transition: background 0.15s;
                 text-decoration: none;
@@ -265,7 +267,7 @@
             }
 
                 .notif-item:hover {
-                    background: #f7f9ff;
+                    background: rgba(21, 101, 192, 0.05);
                 }
 
                 .notif-item:last-child {
@@ -284,7 +286,7 @@
             }
 
                 .notif-item-icon.tipo-solicitud {
-                    background: #EBF2FF;
+                    background: rgba(21, 101, 192, 0.08);
                 }
 
                 .notif-item-icon.tipo-bono {
@@ -302,14 +304,14 @@
 
             .notif-item-msg {
                 font-size: 13px;
-                color: #333;
+                color: #263238;
                 line-height: 1.4;
                 margin-bottom: 4px;
             }
 
             .notif-item-count {
                 display: inline-block;
-                background: #2F6FED;
+                background: #1565C0;
                 color: white;
                 font-size: 10px;
                 font-weight: 800;
@@ -320,13 +322,13 @@
 
             .notif-item-time {
                 font-size: 11px;
-                color: #718096;
+                color: #78909C;
             }
 
             .notif-empty {
                 padding: 32px 16px;
                 text-align: center;
-                color: #718096;
+                color: #78909C;
                 font-size: 13px;
                 line-height: 1.5;
             }
@@ -342,17 +344,17 @@
             }
 
             .footer {
-                background: #ffffff;
+                background: #FFFFFF;
                 padding: 16px 0;
                 text-align: center;
-                border-top: 1px solid #e0e0e0;
+                border-top: 1px solid #E0E0E0;
                 margin-top: 30px;
-                color: #4a5568;
+                color: #455A64;
                 font-size: 13px;
             }
 
                 .footer a {
-                    color: #2F6FED;
+                    color: #1565C0;
                     font-weight: 800;
                     text-decoration: none;
                 }
@@ -371,7 +373,7 @@
             }
 
             .footer-separator {
-                color: #a0aec0;
+                color: #78909C;
             }
 
             @@media (max-width: 768px) {
@@ -424,7 +426,8 @@
                     display: none;
                 }
             }
-    </style>
+    
+</style>
 </head>
 
 <body>
@@ -484,10 +487,18 @@
     @if (usuarioId.HasValue)
     {
         <header class="app-header">
-            <a href="@rutaInicio" class="header-logo" title="Ir al inicio">
-                <div class="clock-icon"></div>
-                O'Clock
-            </a>
+            <div class="app-header-brand">
+                <a href="@rutaInicio" title="Ir al inicio" style="display:flex;">
+                    <img src="~/images/el-grillo-logo.jpeg" alt="El Grillo - Más que repuestos" class="app-header-brand-img" />
+                </a>
+            </div>
+
+            <button class="app-header-toggle" id="sidebarToggleBtn" type="button" title="Mostrar/ocultar menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
 
             <div class="hdr-user-info">
                 <div class="hdr-user-details">
@@ -553,6 +564,22 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        (function () {
+            var toggleBtn = document.getElementById('sidebarToggleBtn');
+            if (!toggleBtn) return;
+
+            if (localStorage.getItem('oc-sidebar-collapsed') === '1') {
+                document.body.classList.add('sidebar-collapsed');
+            }
+
+            toggleBtn.addEventListener('click', function () {
+                document.body.classList.toggle('sidebar-collapsed');
+                localStorage.setItem('oc-sidebar-collapsed', document.body.classList.contains('sidebar-collapsed') ? '1' : '0');
+            });
+        })();
+    </script>
 
     @if (usuarioId.HasValue)
     {

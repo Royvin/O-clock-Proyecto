@@ -1,4 +1,4 @@
-﻿@model List<Oclock.Models.Marca>
+@model List<Oclock.Models.Marca>
 
 @{
     ViewData["Title"] = "Marcas";
@@ -18,12 +18,17 @@
     }
 
     .sidebar {
-        width: 280px;
-        background: #ffffff;
-        padding: 30px 20px;
-        border-right: 1px solid #e0e0e0;
-        box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+        width: 300px;
         flex-shrink: 0;
+        position: sticky;
+        top: 70px;
+        align-self: flex-start;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
+        background: #FFFFFF;
+        padding: 30px 20px;
+        border-right: 1px solid #E0E0E0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.03);
     }
 
     .menu-item {
@@ -36,10 +41,10 @@
 
     .menu-link {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 12px;
-        padding: 15px 20px;
-        color: #4a5568;
+        padding: 15px 16px;
+        color: #455A64;
         text-decoration: none;
         font-weight: 500;
         border-radius: 10px;
@@ -48,15 +53,20 @@
     }
 
         .menu-link:hover {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
             transform: translateX(5px);
         }
 
+        .menu-link:focus-visible {
+            outline: 2px solid #1565C0;
+            outline-offset: 2px;
+        }
+
         .menu-link.active {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
-            box-shadow: 0 4px 12px rgba(47,111,237,0.3);
+            box-shadow: 0 4px 12px rgba(21, 101, 192,0.3);
         }
 
             .menu-link.active::before {
@@ -83,7 +93,7 @@
     .content {
         flex: 1;
         padding: 40px;
-        background: #f5f7fa;
+        background: #F5F7FA;
         min-width: 0;
     }
 
@@ -97,14 +107,14 @@
     }
 
         .content-header h1 {
-            color: #2d3748;
+            color: #263238;
             font-size: 28px;
             margin-bottom: 8px;
             font-weight: 800;
         }
 
         .content-header p {
-            color: #718096;
+            color: #78909C;
             font-size: 14px;
             margin-bottom: 0;
             line-height: 1.5;
@@ -134,23 +144,23 @@
     }
 
     .alert-error {
-        background: #fff5f5;
-        color: #742a2a;
-        border-left: 4px solid #e53e3e;
+        background: #FCE4E4;
+        color: #B71C1C;
+        border-left: 4px solid #D32F2F;
     }
 
     .alert-info {
-        background: #EEF4FF;
-        color: #1e3a8a;
-        border-left: 4px solid #2F6FED;
+        background: rgba(21, 101, 192, 0.12);
+        color: #0D47A1;
+        border-left: 4px solid #1565C0;
     }
 
     .time-display {
-        background: #2F6FED;
+        background: #1565C0;
         color: white;
         padding: 42px;
         border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(47,111,237,0.28);
+        box-shadow: 0 10px 30px rgba(21, 101, 192,0.28);
         margin-bottom: 30px;
         text-align: center;
     }
@@ -177,7 +187,7 @@
 
     .marking-button {
         background: white;
-        border: 3px solid #e2e8f0;
+        border: 3px solid #E0E0E0;
         border-radius: 15px;
         padding: 30px;
         cursor: pointer;
@@ -203,11 +213,11 @@
             }
 
         .marking-button.salida {
-            border-color: #e53e3e;
+            border-color: #D32F2F;
         }
 
             .marking-button.salida:hover {
-                background: #e53e3e;
+                background: #D32F2F;
                 color: white;
             }
 
@@ -221,11 +231,11 @@
             }
 
         .marking-button.descanso {
-            border-color: #4299e1;
+            border-color: #1565C0;
         }
 
             .marking-button.descanso:hover {
-                background: #4299e1;
+                background: #1565C0;
                 color: white;
             }
 
@@ -241,8 +251,8 @@
                 position: absolute;
                 top: 12px;
                 right: 12px;
-                background: #e2e8f0;
-                color: #4a5568;
+                background: #E0E0E0;
+                color: #455A64;
                 font-size: 11px;
                 font-weight: 800;
                 padding: 5px 10px;
@@ -258,12 +268,12 @@
         font-size: 19px;
         font-weight: 800;
         margin-bottom: 8px;
-        color: #2d3748;
+        color: #263238;
     }
 
     .marking-description {
         font-size: 14px;
-        color: #718096;
+        color: #78909C;
         line-height: 1.5;
     }
 
@@ -273,11 +283,11 @@
     }
 
     .marking-button.disabled:hover .marking-label {
-        color: #2d3748;
+        color: #263238;
     }
 
     .marking-button.disabled:hover .marking-description {
-        color: #718096;
+        color: #78909C;
     }
 
     .status-section,
@@ -291,7 +301,7 @@
 
         .status-section h2,
         .history-section h2 {
-            color: #2d3748;
+            color: #263238;
             font-size: 20px;
             font-weight: 800;
             margin-bottom: 20px;
@@ -302,7 +312,7 @@
 
         .history-section h2 {
             padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px solid #E0E0E0;
         }
 
     .status-grid {
@@ -312,14 +322,14 @@
     }
 
     .status-item {
-        background: #f7fafc;
+        background: #F5F7FA;
         padding: 22px;
         border-radius: 12px;
-        border-left: 4px solid #2F6FED;
+        border-left: 4px solid #1565C0;
     }
 
     .status-item-label {
-        color: #718096;
+        color: #78909C;
         font-size: 13px;
         font-weight: 700;
         text-transform: uppercase;
@@ -327,7 +337,7 @@
     }
 
     .status-item-value {
-        color: #2d3748;
+        color: #263238;
         font-size: 24px;
         font-weight: 800;
         word-break: break-word;
@@ -338,15 +348,15 @@
         align-items: center;
         gap: 18px;
         padding: 18px;
-        background: #f8f9fa;
+        background: #F5F7FA;
         border-radius: 12px;
         margin-bottom: 12px;
-        border-left: 4px solid #2F6FED;
+        border-left: 4px solid #1565C0;
         transition: all 0.3s;
     }
 
         .history-item:hover {
-            background: #EEF4FF;
+            background: rgba(21, 101, 192, 0.12);
             transform: translateX(4px);
         }
 
@@ -367,14 +377,14 @@
     }
 
     .history-title {
-        color: #2d3748;
+        color: #263238;
         font-weight: 800;
         margin-bottom: 6px;
         font-size: 16px;
     }
 
     .history-details {
-        color: #718096;
+        color: #78909C;
         font-size: 13px;
         display: flex;
         gap: 16px;
@@ -404,8 +414,8 @@
     }
 
     .badge-info {
-        background: #bee3f8;
-        color: #2c5282;
+        background: #DCEEFB;
+        color: #0D47A1;
     }
 
     .badge-warning {
@@ -414,14 +424,14 @@
     }
 
     .badge-danger {
-        background: #fed7d7;
-        color: #742a2a;
+        background: #FCE4E4;
+        color: #B71C1C;
     }
 
     .empty-state {
         text-align: center;
         padding: 55px 20px;
-        color: #718096;
+        color: #78909C;
     }
 
     .empty-state-icon {
@@ -431,7 +441,7 @@
     }
 
     .empty-state h3 {
-        color: #4a5568;
+        color: #455A64;
         margin-bottom: 8px;
         font-size: 18px;
         font-weight: 800;
@@ -446,7 +456,7 @@
     .loading-state {
         text-align: center;
         padding: 45px 20px;
-        color: #718096;
+        color: #78909C;
         font-weight: 700;
         line-height: 1.5;
     }
@@ -458,8 +468,10 @@
 
         .sidebar {
             width: 100%;
+            position: static;
+            max-height: none;
             border-right: none;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E0E0E0;
         }
 
         .content {
@@ -581,6 +593,66 @@
             height: 46px;
         }
     }
+<<<<<<< HEAD
+=======
+
+    .modal-icon {
+    font-size: 60px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.modal-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #263238;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.modal-message {
+    font-size: 15px;
+    color: #78909C;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.modal-btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.modal-btn-cancel {
+    background: #E0E0E0;
+    color: #455A64;
+}
+
+    .modal-btn-cancel:hover {
+        background: #E0E0E0;
+    }
+
+.modal-btn-confirm {
+    background: #1565C0;
+    color: white;
+}
+
+    .modal-btn-confirm:hover {
+        background: #0D47A1;
+    }
+
+
+>>>>>>> a047e133eb0b859d0eae5e3a8ef8f47b646dfb23
 </style>
 
 <div class="main-layout">
@@ -639,25 +711,41 @@
         </div>
 
         <div class="marking-grid">
+<<<<<<< HEAD
             <div class="marking-button entrada" id="btnEntrada" onclick="confirmarMarca('entrada')">
+=======
+            <div class="marking-button entrada" id="btnEntrada" onclick="registrarMarca('entrada')">
+>>>>>>> a047e133eb0b859d0eae5e3a8ef8f47b646dfb23
                 <div class="marking-icon">🚪</div>
                 <div class="marking-label">Entrada</div>
                 <div class="marking-description">Registra tu hora de entrada</div>
             </div>
 
+<<<<<<< HEAD
             <div class="marking-button salida" id="btnSalida" onclick="confirmarMarca('salida')">
+=======
+            <div class="marking-button salida" id="btnSalida" onclick="registrarMarca('salida')">
+>>>>>>> a047e133eb0b859d0eae5e3a8ef8f47b646dfb23
                 <div class="marking-icon">🏠</div>
                 <div class="marking-label">Salida</div>
                 <div class="marking-description">Registra tu hora de salida</div>
             </div>
 
+<<<<<<< HEAD
             <div class="marking-button almuerzo" id="btnAlmuerzo" onclick="confirmarMarca('almuerzo')">
+=======
+            <div class="marking-button almuerzo" id="btnAlmuerzo" onclick="registrarMarca('almuerzo')">
+>>>>>>> a047e133eb0b859d0eae5e3a8ef8f47b646dfb23
                 <div class="marking-icon">🍽️</div>
                 <div class="marking-label">Almuerzo</div>
                 <div class="marking-description">Registra tu almuerzo</div>
             </div>
 
+<<<<<<< HEAD
             <div class="marking-button descanso" id="btnDescanso" onclick="confirmarMarca('descanso')">
+=======
+            <div class="marking-button descanso" id="btnDescanso" onclick="registrarMarca('descanso')">
+>>>>>>> a047e133eb0b859d0eae5e3a8ef8f47b646dfb23
                 <div class="marking-icon">☕</div>
                 <div class="marking-label">Descanso</div>
                 <div class="marking-description">Registra tu descanso</div>
@@ -702,6 +790,7 @@
             </div>
         </div>
 
+<<<<<<< HEAD
         <div class="modal" id="confirmModal">
             <div class="modal-content">
                 <div class="modal-icon" id="modalIcon">⏰</div>
@@ -713,6 +802,8 @@
                 </div>
             </div>
         </div>
+=======
+>>>>>>> a047e133eb0b859d0eae5e3a8ef8f47b646dfb23
     </div>
 </div>
 
@@ -891,8 +982,8 @@
 
         if (tipo === 'salida') {
             return {
-                bg: '#fed7d7',
-                tx: '#742a2a',
+                bg: '#FCE4E4',
+                tx: '#B71C1C',
                 label: 'Salida',
                 comentarioDefault: 'Fin de jornada laboral'
             };
@@ -909,16 +1000,16 @@
 
         if (tipo === 'descanso') {
             return {
-                bg: '#bee3f8',
-                tx: '#2c5282',
+                bg: '#DCEEFB',
+                tx: '#0D47A1',
                 label: 'Descanso',
                 comentarioDefault: 'Registro de descanso'
             };
         }
 
         return {
-            bg: '#e2e8f0',
-            tx: '#2d3748',
+            bg: '#E0E0E0',
+            tx: '#263238',
             label: 'Marca',
             comentarioDefault: 'Marca registrada correctamente'
         };

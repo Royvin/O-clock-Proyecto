@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Reportes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -15,12 +15,18 @@
         min-height: 600px;
     }
 
-    .sidebar {
-        width: 280px;
-        background: #ffffff;
+        .sidebar {
+        width: 300px;
+        flex-shrink: 0;
+        background: #FFFFFF;
         padding: 30px 20px;
-        border-right: 1px solid #e0e0e0;
+        border-right: 1px solid #E0E0E0;
         box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+        position: sticky;
+        top: 70px;
+        align-self: flex-start;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
     }
 
     .menu-item {
@@ -33,10 +39,10 @@
 
     .menu-link {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 12px;
-        padding: 15px 20px;
-        color: #4a5568;
+        padding: 15px 16px;
+        color: #455A64;
         text-decoration: none;
         font-weight: 500;
         border-radius: 10px;
@@ -45,15 +51,20 @@
     }
 
         .menu-link:hover {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
             transform: translateX(5px);
         }
 
+        .menu-link:focus-visible {
+            outline: 2px solid #1565C0;
+            outline-offset: 2px;
+        }
+
         .menu-link.active {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
-            box-shadow: 0 4px 12px rgba(47, 111, 237, 0.3);
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
         }
 
             .menu-link.active::before {
@@ -83,23 +94,23 @@
 
     .menu-expandable-header {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
-        padding: 15px 20px;
-        color: #4a5568;
+        padding: 15px 16px;
+        color: #455A64;
         font-weight: 500;
         border-radius: 10px;
         transition: all 0.3s;
     }
 
         .menu-expandable-header:hover {
-            background: #EEF4FF;
-            color: #2F6FED;
+            background: rgba(21, 101, 192, 0.12);
+            color: #1565C0;
         }
 
         .menu-expandable-header.active {
-            background: rgba(47, 111, 237, 0.10);
-            color: #2F6FED;
+            background: rgba(21, 101, 192, 0.10);
+            color: #1565C0;
             font-weight: 600;
         }
 
@@ -141,7 +152,7 @@
         gap: 10px;
         padding: 12px 16px;
         padding-left: 40px;
-        color: #718096;
+        color: #78909C;
         text-decoration: none;
         font-weight: 500;
         font-size: 14px;
@@ -158,30 +169,30 @@
             transform: translateY(-50%);
             width: 6px;
             height: 6px;
-            background: #cbd5e0;
+            background: #E0E0E0;
             border-radius: 50%;
             transition: all 0.3s;
         }
 
         .submenu-link:hover {
-            background: #f7fafc;
-            color: #2F6FED;
+            background: #F5F7FA;
+            color: #1565C0;
             transform: translateX(3px);
         }
 
             .submenu-link:hover::before {
-                background: #2F6FED;
+                background: #1565C0;
                 transform: translateY(-50%) scale(1.3);
             }
 
         .submenu-link.active {
-            background: rgba(47, 111, 237, 0.12);
-            color: #2F6FED;
+            background: rgba(21, 101, 192, 0.12);
+            color: #1565C0;
             font-weight: 600;
         }
 
             .submenu-link.active::before {
-                background: #2F6FED;
+                background: #1565C0;
                 width: 8px;
                 height: 8px;
             }
@@ -189,7 +200,7 @@
     .content {
         flex: 1;
         padding: 40px;
-        background: #f5f7fa;
+        background: #F5F7FA;
     }
 
     .content-header {
@@ -200,33 +211,33 @@
     }
 
         .content-header h1 {
-            color: #2d3748;
+            color: #263238;
             font-size: 28px;
             margin-bottom: 8px;
             font-weight: 800;
         }
 
         .content-header p {
-            color: #718096;
+            color: #78909C;
             font-size: 14px;
             margin-bottom: 0;
         }
 
     .guide-section {
-        background: #EEF4FF;
-        border: 1px solid #d6e4ff;
-        border-left: 5px solid #2F6FED;
+        background: rgba(21, 101, 192, 0.12);
+        border: 1px solid #DCEEFB;
+        border-left: 5px solid #1565C0;
         padding: 20px 24px;
         border-radius: 14px;
         margin-bottom: 25px;
-        color: #1e3a8a;
+        color: #0D47A1;
     }
 
         .guide-section h2 {
             font-size: 18px;
             font-weight: 800;
             margin-bottom: 10px;
-            color: #1e3a8a;
+            color: #0D47A1;
         }
 
         .guide-section p {
@@ -246,13 +257,13 @@
         background: white;
         border-radius: 12px;
         padding: 14px;
-        border: 1px solid #dbeafe;
+        border: 1px solid #DCEEFB;
         font-size: 13px;
-        color: #2d3748;
+        color: #263238;
     }
 
         .guide-item strong {
-            color: #2F6FED;
+            color: #1565C0;
             display: block;
             margin-bottom: 5px;
         }
@@ -268,7 +279,7 @@
 
         .filter-section h2,
         .preview-section h2 {
-            color: #2d3748;
+            color: #263238;
             margin-bottom: 10px;
             font-size: 20px;
             display: flex;
@@ -278,7 +289,7 @@
 
         .filter-section .helper-text,
         .preview-section .helper-text {
-            color: #718096;
+            color: #78909C;
             margin-bottom: 20px;
             font-size: 14px;
             line-height: 1.5;
@@ -298,7 +309,7 @@
     }
 
         .form-group label {
-            color: #4a5568;
+            color: #455A64;
             font-weight: 600;
             font-size: 14px;
         }
@@ -306,23 +317,23 @@
         .form-group select,
         .form-group input {
             padding: 12px 15px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #E0E0E0;
             border-radius: 8px;
             font-size: 14px;
             transition: all 0.3s;
-            background: #fff;
-            color: #2d3748;
+            background: #FFFFFF;
+            color: #263238;
         }
 
             .form-group select:focus,
             .form-group input:focus {
                 outline: none;
-                border-color: #2F6FED;
-                box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.10);
+                border-color: #1565C0;
+                box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.10);
             }
 
     .field-help {
-        color: #718096;
+        color: #78909C;
         font-size: 12px;
         line-height: 1.4;
     }
@@ -343,7 +354,7 @@
         border-radius: 10px;
         cursor: pointer;
         transition: all 0.3s;
-        color: #4a5568;
+        color: #455A64;
         font-weight: 600;
         display: flex;
         align-items: center;
@@ -355,11 +366,11 @@
     }
 
         .tab:hover {
-            background: #f7fafc;
+            background: #F5F7FA;
         }
 
         .tab.active {
-            background: #2F6FED;
+            background: #1565C0;
             color: white;
         }
 
@@ -379,24 +390,24 @@
     }
 
     .btn-primary {
-        background: #2F6FED;
+        background: #1565C0;
         color: white;
     }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(47, 111, 237, 0.35);
+            box-shadow: 0 5px 15px rgba(21, 101, 192, 0.35);
             color: white;
         }
 
     .btn-secondary {
-        background: #e2e8f0;
-        color: #4a5568;
+        background: #E0E0E0;
+        color: #455A64;
     }
 
         .btn-secondary:hover {
-            background: #cbd5e0;
-            color: #2d3748;
+            background: #E0E0E0;
+            color: #263238;
         }
 
     .btn-group {
@@ -428,21 +439,21 @@
     }
 
     .summary-card {
-        background: #f8fbff;
-        border: 1px solid #e4eefc;
+        background: rgba(21, 101, 192, 0.05);
+        border: 1px solid rgba(21, 101, 192, 0.08);
         border-radius: 14px;
         padding: 18px;
     }
 
     .summary-card-label {
-        color: #718096;
+        color: #78909C;
         font-size: 13px;
         margin-bottom: 8px;
         font-weight: 600;
     }
 
     .summary-card-value {
-        color: #2d3748;
+        color: #263238;
         font-size: 24px;
         font-weight: 700;
     }
@@ -450,7 +461,7 @@
     .table-responsive {
         overflow-x: auto;
         border-radius: 12px;
-        border: 1px solid #edf2f7;
+        border: 1px solid #F5F7FA;
     }
 
     .report-table {
@@ -460,7 +471,7 @@
     }
 
         .report-table thead tr {
-            background: #2F6FED;
+            background: #1565C0;
         }
 
         .report-table th {
@@ -474,18 +485,18 @@
 
         .report-table td {
             padding: 14px 16px;
-            border-bottom: 1px solid #edf2f7;
+            border-bottom: 1px solid #F5F7FA;
             font-size: 14px;
-            color: #2d3748;
+            color: #263238;
             vertical-align: top;
         }
 
         .report-table tbody tr:nth-child(even) {
-            background: #fafcff;
+            background: rgba(21, 101, 192, 0.05);
         }
 
         .report-table tbody tr:hover {
-            background: #f2f7ff;
+            background: rgba(21, 101, 192, 0.06);
         }
 
     .badge-status {
@@ -510,19 +521,19 @@
     }
 
     .badge-rechazada {
-        background: #fef2f2;
-        color: #c53030;
+        background: #FCE4E4;
+        color: #B71C1C;
     }
 
     .badge-cancelada {
-        background: #edf2f7;
-        color: #4a5568;
+        background: #F5F7FA;
+        color: #455A64;
     }
 
     .empty-state {
         text-align: center;
         padding: 60px 20px;
-        color: #718096;
+        color: #78909C;
     }
 
     .empty-state-icon {
@@ -532,7 +543,7 @@
     }
 
     .empty-state h3 {
-        color: #4a5568;
+        color: #455A64;
         margin-bottom: 10px;
         font-size: 18px;
     }
@@ -545,7 +556,7 @@
     .loading-state {
         text-align: center;
         padding: 40px 20px;
-        color: #718096;
+        color: #78909C;
         font-weight: 600;
     }
 
@@ -563,7 +574,7 @@
     }
 
     .preview-meta {
-        color: #718096;
+        color: #78909C;
         font-size: 14px;
         margin-bottom: 18px;
         line-height: 1.5;
@@ -580,9 +591,9 @@
     }
 
     .message-error {
-        background: #fef2f2;
-        color: #b91c1c;
-        border: 1px solid #fecaca;
+        background: #FCE4E4;
+        color: #B71C1C;
+        border: 1px solid #EF9A9A;
     }
 
     .message-success {
@@ -592,9 +603,9 @@
     }
 
     .message-info {
-        background: #eff6ff;
-        color: #1d4ed8;
-        border: 1px solid #bfdbfe;
+        background: rgba(21, 101, 192, 0.06);
+        color: #1565C0;
+        border: 1px solid #DCEEFB;
     }
 
     .modal {
@@ -631,11 +642,11 @@
         align-items: center;
         margin-bottom: 25px;
         padding-bottom: 15px;
-        border-bottom: 2px solid #f0f0f0;
+        border-bottom: 2px solid #E0E0E0;
     }
 
         .modal-header h3 {
-            color: #2d3748;
+            color: #263238;
             font-size: 22px;
         }
 
@@ -644,7 +655,7 @@
         border: none;
         font-size: 28px;
         cursor: pointer;
-        color: #718096;
+        color: #78909C;
         padding: 0;
         width: 32px;
         height: 32px;
@@ -656,8 +667,8 @@
     }
 
         .btn-close:hover {
-            background: #e2e8f0;
-            color: #2d3748;
+            background: #E0E0E0;
+            color: #263238;
         }
 
     @@media (max-width: 1100px) {
@@ -667,8 +678,10 @@
 
         .sidebar {
             width: 100%;
+            position: static;
+            max-height: none;
             border-right: none;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #E0E0E0;
         }
 
         .content {
@@ -694,6 +707,7 @@
             width: 100%;
         }
     }
+
 </style>
 
 <div class="main-layout">

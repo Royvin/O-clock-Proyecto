@@ -1,4 +1,4 @@
-﻿@model Oclock.Models.Usuario
+@model Oclock.Models.Usuario
 
 @{
     ViewData["Title"] = "O'Clock - Acceso";
@@ -22,17 +22,17 @@
 
     <style>
             :root {
-                --oc-blue: #2F6FED;
-                --oc-blue-700: #2457C8;
-                --oc-bg: #F6F8FB;
+                --oc-blue: #1565C0;
+                --oc-blue-700: #0D47A1;
+                --oc-bg: #F5F7FA;
                 --oc-surface: #FFFFFF;
-                --oc-text: #1F2937;
-                --oc-muted: #6B7280;
-                --oc-border: #E5E7EB;
-                --oc-danger: #E53E3E;
+                --oc-text: #263238;
+                --oc-muted: #78909C;
+                --oc-border: #E0E0E0;
+                --oc-danger: #D32F2F;
                 --oc-success: #38A169;
                 --oc-radius: 20px;
-                --oc-shadow: 0 10px 28px rgba(17, 24, 39, 0.15);
+                --oc-shadow: 0 10px 28px rgba(38, 50, 56, 0.15);
             }
 
             * {
@@ -66,7 +66,7 @@
 
             .brand-bar {
                 background: var(--oc-blue);
-                color: #fff;
+                color: #FFFFFF;
                 padding: 14px 18px;
                 display: flex;
                 align-items: center;
@@ -83,7 +83,7 @@
             .clock-icon {
                 width: 26px;
                 height: 26px;
-                border: 2px solid #fff;
+                border: 2px solid #FFFFFF;
                 border-radius: 50%;
                 position: relative;
                 flex-shrink: 0;
@@ -94,7 +94,7 @@
                     position: absolute;
                     width: 2px;
                     height: 8px;
-                    background: #fff;
+                    background: #FFFFFF;
                     top: 4px;
                     left: 50%;
                     transform: translateX(-50%);
@@ -105,7 +105,7 @@
                     position: absolute;
                     width: 2px;
                     height: 6px;
-                    background: #fff;
+                    background: #FFFFFF;
                     top: 9px;
                     left: 50%;
                     transform: translateX(-50%) rotate(90deg);
@@ -135,7 +135,7 @@
 
             .tabs-container {
                 display: flex;
-                background: #ffffff;
+                background: #FFFFFF;
                 border-bottom: 1px solid var(--oc-border);
                 flex-shrink: 0;
             }
@@ -154,13 +154,13 @@
             }
 
                 .tab-link:hover {
-                    background: rgba(47,111,237,0.06);
+                    background: rgba(21, 101, 192,0.06);
                     color: var(--oc-blue);
                 }
 
                 .tab-link.active {
                     color: var(--oc-blue);
-                    background: #ffffff;
+                    background: #FFFFFF;
                     border-bottom: 3px solid var(--oc-blue);
                 }
 
@@ -184,7 +184,7 @@
                 font-size: 0.95rem;
                 margin-bottom: 0.8rem;
                 padding-bottom: 0.4rem;
-                border-bottom: 2px solid #eef2f7;
+                border-bottom: 2px solid #F5F7FA;
             }
 
             .form-label {
@@ -205,12 +205,12 @@
                 .form-control:focus,
                 .form-select:focus {
                     border-color: var(--oc-blue);
-                    box-shadow: 0 0 0 0.2rem rgba(47, 111, 237, 0.18);
+                    box-shadow: 0 0 0 0.2rem rgba(21, 101, 192, 0.18);
                 }
 
                 .form-control.is-invalid {
                     border-color: var(--oc-danger);
-                    box-shadow: 0 0 0 0.2rem rgba(229, 62, 62, 0.12);
+                    box-shadow: 0 0 0 0.2rem rgba(211, 47, 47, 0.12);
                 }
 
             .text-danger-custom {
@@ -225,16 +225,16 @@
                 padding: 0.65rem 1.2rem;
                 font-size: 1rem;
                 font-weight: 800;
-                color: #fff;
+                color: #FFFFFF;
                 width: 100%;
                 transition: 0.2s;
             }
 
                 .btn-primary-custom:hover {
                     background: var(--oc-blue-700);
-                    box-shadow: 0 10px 18px rgba(47,111,237,0.18);
+                    box-shadow: 0 10px 18px rgba(21, 101, 192,0.18);
                     transform: translateY(-1px);
-                    color: #fff;
+                    color: #FFFFFF;
                 }
 
                 .btn-primary-custom:disabled {
@@ -245,42 +245,44 @@
                 }
 
             .btn-secondary-custom {
-                background: #e9eef7;
+                background: rgba(21, 101, 192, 0.08);
                 border: 1px solid var(--oc-border);
                 border-radius: 12px;
                 padding: 0.65rem 1.2rem;
                 font-size: 0.95rem;
                 font-weight: 800;
-                color: #374151;
+                color: #455A64;
                 transition: 0.2s;
                 text-decoration: none;
                 display: inline-block;
             }
 
                 .btn-secondary-custom:hover {
-                    background: #dde6f5;
+                    background: rgba(21, 101, 192, 0.08);
                     transform: translateY(-1px);
-                    color: #374151;
+                    color: #455A64;
                 }
 
             .logo-circle {
-                width: 96px;
-                height: 56px;
+                width: 156px;
+                height: 148px;
                 border-radius: 18px;
-                background: #f1f5ff;
-                border: 1px solid rgba(47,111,237,0.18);
+                background: #FFFFFF;
+                border: 1px solid rgba(21, 101, 192,0.18);
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 margin: 0 auto 1rem auto;
-                box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
+                box-shadow: 0 6px 18px rgba(38, 50, 56, 0.06);
+                padding: 10px;
             }
 
-            .logo-text {
-                font-size: 1.4rem;
-                color: var(--oc-blue);
-                font-weight: 900;
-                letter-spacing: .2px;
+            .logo-circle-img {
+                max-width: 100%;
+                max-height: 100%;
+                width: auto;
+                height: auto;
+                display: block;
             }
 
             .form-check-input:checked {
@@ -289,11 +291,11 @@
             }
 
             .section-container {
-                background: #f8fafc;
+                background: #F5F7FA;
                 padding: 1rem;
                 border-radius: 14px;
                 margin-bottom: 1rem;
-                border: 1px solid #eef2f7;
+                border: 1px solid #F5F7FA;
             }
 
             .forgot-link {
@@ -378,7 +380,7 @@
             .auth-footer {
                 padding: 14px 18px;
                 border-top: 1px solid var(--oc-border);
-                background: #fff;
+                background: #FFFFFF;
                 font-size: 12px;
                 color: var(--oc-muted);
                 display: flex;
@@ -452,7 +454,8 @@
                     text-align: center;
                 }
             }
-    </style>
+    
+</style>
 </head>
 
 <body>
@@ -485,7 +488,7 @@
         {
             <div class="tab-content">
                 <div class="logo-circle">
-                    <span class="logo-text">O'Clock</span>
+                    <img src="~/images/el-grillo-logo.jpeg" alt="El Grillo - Más que repuestos" class="logo-circle-img" />
                 </div>
 
                 <h2 class="text-center auth-title">Bienvenido de nuevo</h2>
@@ -564,7 +567,7 @@
         {
             <div class="tab-content">
                 <div class="logo-circle">
-                    <span class="logo-text">O'Clock</span>
+                    <img src="~/images/el-grillo-logo.jpeg" alt="El Grillo - Más que repuestos" class="logo-circle-img" />
                 </div>
 
                 <h2 class="text-center auth-title">Crear cuenta nueva</h2>
