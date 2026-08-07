@@ -150,6 +150,7 @@ namespace Oclock.Controllers
             }
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(Usuario model, string confirmar_contraseña)
@@ -157,6 +158,24 @@ namespace Oclock.Controllers
             try
             {
                 PrepararModeloRegistro(model);
+                var navKeys = new[]
+                {
+                    nameof(model.IdRolNavigation),
+                    nameof(model.BonosAsignados),
+                    nameof(model.Capacitacions),
+                    nameof(model.Documentos),
+                    nameof(model.Expedientes),
+                    nameof(model.Marcas),
+                    nameof(model.Notificacions),
+                    nameof(model.Solicituds),
+                    nameof(model.UsuarioHorarios),
+                };
+
+                foreach (var key in navKeys)
+                {
+                    if (ModelState.ContainsKey(key))
+                        ModelState.Remove(key);
+                }
 
                 ValidarRegistro(model, confirmar_contraseña);
 
